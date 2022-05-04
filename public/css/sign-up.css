@@ -1,99 +1,104 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap%27');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap%27");
 
 body {
-    font-size: 18pt;
-    margin: 0%;
-    padding: 0px;
-    height: 100vh;
-    display: grid;
-    font-family: 'Montserrat';
-    grid-template-columns: repeat(5, 20%);
-    grid-template-rows: repeat(5, 20%);
-    align-items: end;
-  }
-  
-  #errorMsg {
-    color: red;
-  }
-  
-  #signUpPanel {
-    grid-row: 3 / span 1;
-    grid-column: 3 / span 1;
-    padding-left: 2em;
-    padding-right: 2em;
-    border-radius: 1em;
-    backdrop-filter: blur(6px);
-  }
-  
-  footer {
-    grid-row: 5 / 5;
-    grid-column: 1 / span 5;
-    background-color: black;
-    padding: 1em;
-  }
-  
-  #signUpForm {
-    color: #40403e;
-    text-align: center;
-  }
-  
-  #signUpForm > input {
-    font-size:12pt;
-    font-family: 'Montserrat';
-    padding: 0%;
-    margin: 0%;
-    background-color:rgba(255,255,255,0.7);;
-  }
-
-  #signUpForm > input[type="text"] {
-      border-radius: 20px;
-      border: 1px solid #b1b1b1;
-      height:30px;
-  }
-
-  #signUpForm > input[type="email"] {
-      border-radius: 20px;
-      border: 1px solid #b1b1b1;
-      height:30px;
-  }
-
-  #signUpForm > input[type="password"] {
-    border-radius: 20px;
-    border: 1px solid #b1b1b1;
-    height:30px;
+  font-size: 18pt;
+  margin: 0%;
+  padding: 0px;
+  height: 100vh;
+  display: grid;
+  font-family: "Montserrat";
+  grid-template-columns: repeat(5, 20%);
+  grid-template-rows: repeat(5, 20%);
+  align-items: end;
 }
-  
-  #signUpForm > input[type="button"] {
-    font-size: 15pt;  
-    background-color: #3477f9;
-    border: 1px solid #3477f9;
-    border-radius: 20px;
-    color: #fff;
-    cursor: pointer;
-    width:300px;
-    height:50px;
-  }
 
-  .label {
-      font-size: 12pt;
-  }
+#errorMsg {
+  color: red;
+}
 
-  #signUpTitle {
-      color: #3477f9;
-      font-weight: bold;
-  }
-  
-  #signUpForm > input[type="button"]:hover {
-    color: white;
-    border-color: white;
-    opacity:0.7;
-  }
+#signUpPanel {
+  grid-row: 3 / span 1;
+  grid-column: 3 / span 1;
+  padding-left: 2em;
+  padding-right: 2em;
+  border-radius: 1em;
+  backdrop-filter: blur(6px);
+}
 
-  #haveAccount {
-      font-size:11pt;
-  }
+footer {
+  grid-row: 5 / 5;
+  grid-column: 1 / span 5;
+  background-color: black;
+  padding: 1em;
+}
 
-  #logInNow {
-      font-size:11pt;
-      color:#3477f9;
-  }
+#signUpForm {
+  color: #40403e;
+}
+
+#signUpForm > input {
+  font-size: 12pt;
+  font-family: "Montserrat";
+  padding: 0%;
+  margin: 0%;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+#signUpForm > input[type="text"] {
+  border-radius: 20px;
+  border: 1px solid #b1b1b1;
+  height: 30px;
+  width:300px;
+}
+
+#signUpForm > input[type="email"] {
+  border-radius: 20px;
+  border: 1px solid #b1b1b1;
+  height: 30px;
+  width:300px;
+}
+
+#signUpForm > input[type="password"] {
+  border-radius: 20px;
+  border: 1px solid #b1b1b1;
+  height: 30px;
+  width:300px;
+}
+
+#signUpForm > input[type="button"] {
+  font-size: 15pt;
+  background-color: #3477f9;
+  border: 1px solid #3477f9;
+  border-radius: 20px;
+  color: #fff;
+  cursor: pointer;
+  width: 300px;
+  height: 50px;
+}
+
+.label {
+  font-size: 12pt;
+}
+
+#signUpTitle {
+  color: #3477f9;
+  font-weight: bold;
+  text-align: center;
+}
+
+#signUpForm > input[type="button"]:hover {
+  color: white;
+  border-color: white;
+  opacity: 0.7;
+}
+
+#haveAccount {
+  font-size: 11pt;
+  text-align: center;
+}
+
+#logInNow {
+  font-size: 11pt;
+  color: #3477f9;
+  text-align: center;
+}
