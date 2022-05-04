@@ -40,7 +40,7 @@ app.get('/', function (req, res) {
 
 app.get("/main", function (req, res) {
     if (req.session.loggedIn) {
-        let doc = fs.readFileSync("./app/data/main.html", "utf8");
+        let doc = fs.readFileSync("./app/html/main.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
     } else {
@@ -52,7 +52,7 @@ app.get("/main", function (req, res) {
 
 app.get("/dashboard", function (req, res) {
     if (req.session.loggedIn) {
-        let doc = fs.readFileSync("./app/data/dashboard.html", "utf8");
+        let doc = fs.readFileSync("./app/html/dashboard.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
     } else {
