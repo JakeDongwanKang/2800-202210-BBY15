@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap%27');
+
 body {
     font-size: 18pt;
     margin: 0%;
-    font-family: "VT323", monospace;
     padding: 0px;
     height: 100vh;
     display: grid;
+    font-family: 'Montserrat';
     grid-template-columns: repeat(5, 20%);
     grid-template-rows: repeat(5, 20%);
     align-items: end;
@@ -37,6 +39,7 @@ body {
   
   #signUpForm > input {
     font-size:12pt;
+    font-family: 'Montserrat';
     padding: 0%;
     margin: 0%;
     background-color:rgba(255,255,255,0.7);;
@@ -73,6 +76,11 @@ body {
 
   .label {
       font-size: 12pt;
+  }
+
+  #signUpTitle {
+      color: #3477f9;
+      font-weight: bold;
   }
   
   #signUpForm > input[type="button"]:hover {
