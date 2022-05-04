@@ -21,9 +21,12 @@ app.use(express.urlencoded({
 
 
 app.get('/', function (req, res) {
-    if (req.session.loggedIn) {
-        // if user has logged in, redirect to main page
+    if (req.session.loggedIn && !req.session.isAdmin) {
+        // if user has logged in and is not an admin, redirect to main page
         res.redirect("/main");
+    } else if (req.session.loggedIn && !req.session.isAdmin) {
+        // if user has logged in and is an admin, redirect to main page
+        res.redirect("/dashboard");
     } else {
         let doc = fs.readFileSync("./app/html/login.html", "utf8");
 
@@ -76,7 +79,6 @@ app.post("/login", function (req, res) {
 
     let email = req.body.email;
     let pwd = req.body.password;
-    let isAdmin;
 
     connection.execute(
         "SELECT * FROM BBY_15_User WHERE email = ? AND user_password = ?",
@@ -92,6 +94,7 @@ app.post("/login", function (req, res) {
                 // user authenticated, create a session
                 req.session.loggedIn = true;
                 req.session.email = email;
+                req.session.isAdmin = results[0].admin_role;
                 if (results[0].admin_role) {
                     res.send({
                         status: "success",
