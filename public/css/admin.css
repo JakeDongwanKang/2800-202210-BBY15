@@ -1,0 +1,177 @@
+/**
+* I found this font on this website https://fonts.google.com/specimen/Montserrat
+* The CSS decor that I learned from 1537 course and also I found more information on this website
+* https://www.w3schools.com/css/css_navbar.asp
+* https://www.w3schools.com/howto/howto_css_switch.asp
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background: white;
+    color: #000;
+    background-image: url('/public/assets/weather.gif');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.navbar {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    background-color: none;
+    color: black;
+    text-decoration: solid;
+}
+
+.brand-title {
+    font-size: 1.5rem;
+    margin: .5rem;
+    color: #3477F9;
+    cursor: pointer;
+}
+
+.navbar-links {
+    height: 100%;
+}
+
+.navbar-links ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-links li {
+    list-style: none;
+    padding-top: 10px;
+}
+
+.navbar-links li a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    padding: 1rem;
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease 0s;
+}
+
+.navbar-links li a:hover {
+    color: rgba(52, 119, 249, 1.5);
+}
+
+
+.toggle-button {
+    position: absolute;
+    top: .75rem;
+    right: 1rem;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+}
+
+.toggle-button .bar {
+    height: 3px;
+    width: 100%;
+    background-color: black;
+    border-radius: 10px;
+}
+
+button {
+    margin-top: -10px;
+    padding: 9px 25px;
+    background-color: rgba(52, 119, 249, 0.7);
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease 0s;
+    letter-spacing: 1.5px;
+}
+
+button:hover {
+    background-color: rgba(52, 119, 249, 0.3);
+}
+
+/*For the view under 800px*/
+
+@media (max-width: 800px) {
+
+    body {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        background: white;
+        color: #000;
+        background-image: url('/public/assets/weather.gif');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        font-family: 'Montserrat', sans-serif;
+        background-position: center;
+    }
+
+    .brand-title {
+        color: rgba(52, 119, 249, 1.5);
+        text-decoration: solid;
+        font-size: 28px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        color: #000;
+        background-color: lightblue;
+    }
+
+    .toggle-button {
+        display: flex;
+    }
+
+    .navbar-links {
+        display: none;
+        width: 100%;
+    }
+
+    .navbar-links ul {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .navbar-links ul li {
+        text-align: center;
+        font-size: 18px;
+
+    }
+
+    .navbar-links ul li a {
+        padding: 1rem 1rem;
+        color: #000;
+        font-size: 18px;
+
+    }
+
+    .navbar-links.active {
+        display: flex;
+    }
+
+    button {
+        padding: 9px 30px;
+        background-color: rgba(52, 119, 249, 0.7);
+        border: none;
+        border-radius: 50px;
+        font-size: 18px;
+        cursor: pointer;
+        color: white;
+        transition: all 0.3s ease 0s;
+    }
+}
