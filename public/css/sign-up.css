@@ -8,8 +8,9 @@ body{
     margin: 5% 20% auto 20%;
 }
 
-#errorMsg {
+.errorMsg{
   color: red;
+  margin: 0 0 20px 0;
 }
 
 input{
@@ -58,7 +59,7 @@ input{
   text-align: center;
 }
 
-#sign-up-link{
+#log-in-link{
   text-decoration: none;
   color: #3477f9;
   font-weight: 600;
