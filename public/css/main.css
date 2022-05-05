@@ -13,7 +13,7 @@ body {
     padding: 0;
     background: white;
     color: #000;
-    background-image: url('/assets/weather.gif');
+    background-image: url('/assets/picture2.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -103,6 +103,70 @@ button:hover {
     background-color: rgba(52, 119, 249, 0.3);
 }
 
+.main-button {
+    margin-top: 2rem;
+}
+
+.um-subtitle {
+    font-weight: 500;
+    letter-spacing: 0.5rem;
+    font-size: 15px;
+}
+
+.branch {
+    font-size: 5rem;
+    font-weight: 700;
+}
+
+.container {
+    padding: 0;
+    text-align: center;
+}
+
+.createPost {
+    display: inline-block;
+    padding: 15px 15px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: rgba(52, 119, 249, 0.9);
+    border: none;
+    border-radius: 15px;
+
+}
+
+.createPost:hover {
+    background-color: rgba(52, 119, 249, 0.7);
+}
+
+.forecastButton {
+    display: inline-block;
+    padding: 15px 15px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: black;
+    background-color: bisque;
+    border: none;
+    border-radius: 15px;
+    margin-left: 20px;
+    border: 2px solid #3477F9;
+}
+
+.forecastButton:hover {
+    background-color: rgba(52, 119, 249, 0.7);
+}
+
+.howitwork {
+    font-size: 20px;
+    word-spacing: 2px;
+}
+
 /*For the view under 800px*/
 
 @media (max-width: 800px) {
@@ -113,7 +177,7 @@ button:hover {
         padding: 0;
         background: white;
         color: #000;
-        background-image: url('/assets/weather.gif');
+        background-image: url('/assets/picture2.jpg');
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: cover;
@@ -175,5 +239,82 @@ button:hover {
         color: white;
         transition: all 0.3s ease 0s;
         margin-bottom: 30px;
+    }
+
+    .branch {
+        font-size: 4rem;
+    }
+
+    .main-button {
+        margin-top: 1rem;
+    }
+
+    .um-subtitle {
+        font-weight: 500;
+        letter-spacing: 0.5rem;
+        font-size: 12px;
+    }
+
+    .branch {
+        font-size: 3rem;
+        font-weight: 700;
+    }
+
+    .container {
+        padding: 0;
+        text-align: center;
+        align-items: center;
+
+
+    }
+
+    .createPost {
+        display: inline-block;
+        padding: 15px 15px;
+        font-size: 18px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #fff;
+        background-color: rgba(52, 119, 249, 0.9);
+        border: none;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        text-align: center;
+        margin-right: 20px;
+
+    }
+
+    .createPost:hover {
+        background-color: rgba(52, 119, 249, 0.7);
+    }
+
+    .forecastButton {
+        display: inline-block;
+        padding: 15px 15px;
+        font-size: 18px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: black;
+        background-color: lightyellow;
+        border: none;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        border: 2px solid #3477F9;
+        text-align: center;
+        margin-left: 20px;
+    }
+
+    .forecastButton:hover {
+        background-color: rgba(52, 119, 249, 0.7);
+    }
+
+    .howitwork {
+        font-size: 20px;
+        word-spacing: 2px;
+        color: black;
     }
 }
