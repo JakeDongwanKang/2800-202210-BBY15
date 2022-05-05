@@ -42,7 +42,7 @@ app.get('/', function (req, res) {
 
 app.get("/main", function (req, res) {
     if (req.session.loggedIn) {
-        let doc = fs.readFileSync("./app/data/main.html", "utf8");
+        let doc = fs.readFileSync("./app/html/main.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
     } else {
@@ -54,7 +54,7 @@ app.get("/main", function (req, res) {
 
 app.get("/dashboard", function (req, res) {
     if (req.session.loggedIn) {
-        let doc = fs.readFileSync("./app/data/dashboard.html", "utf8");
+        let doc = fs.readFileSync("./app/html/dashboard.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
     } else {
@@ -109,7 +109,7 @@ app.post("/login", function (req, res) {
                         msg: "Logged in.",
                         isAdmin: true
                     });
-                    
+
                 } else {
                     res.send({
                         status: "success",
@@ -120,7 +120,7 @@ app.post("/login", function (req, res) {
                 req.session.save(function (err) {
                     //session saved
                 });
-               
+
             } else {
                 res.send({
                     status: "fail",
@@ -162,6 +162,24 @@ app.post("/add-user", function (req, res) {
     connection.end();
 
 });
+/**
+ * Anh added the logout function
+ * I learned how to write do it from Arron course (Comp1537).
+ * These codes provided by Arron on his examples.
+ */
+app.get("/logout", function (req, res) {
+    if (req.session) {
+        req.session.destroy(function (error) {
+            if (error) {
+                res.status(400).send("Unable to log out")
+            } else {
+                res.redirect("/");
+            }
+        });
+    }
+});
+
+
 
 // RUN SERVER
 let port = 8000;

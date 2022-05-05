@@ -13,7 +13,7 @@ body {
     padding: 0;
     background: white;
     color: #000;
-    background-image: url('/public/assets/weather.gif');
+    background-image: url('/assets/weather.gif');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -39,6 +39,7 @@ body {
 
 .navbar-links {
     height: 100%;
+    margin-right: 15px;
 }
 
 .navbar-links ul {
@@ -85,8 +86,8 @@ body {
     border-radius: 10px;
 }
 
-button {
-    margin-top: -10px;
+.singin {
+    margin-top: 8px;
     padding: 9px 25px;
     background-color: rgba(52, 119, 249, 0.7);
     border: none;
@@ -112,7 +113,7 @@ button:hover {
         padding: 0;
         background: white;
         color: #000;
-        background-image: url('/public/assets/weather.gif');
+        background-image: url('/assets/weather.gif');
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: cover;
@@ -164,7 +165,7 @@ button:hover {
         display: flex;
     }
 
-    button {
+    .singin {
         padding: 9px 30px;
         background-color: rgba(52, 119, 249, 0.7);
         border: none;
@@ -173,5 +174,6 @@ button:hover {
         cursor: pointer;
         color: white;
         transition: all 0.3s ease 0s;
+        margin-bottom: 30px;
     }
 }
