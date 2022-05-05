@@ -170,7 +170,6 @@ app.post("/add-user", function (req, res) {
       res.send({ status: "success", msg: "Record added." });
       req.session.loggedIn = true;
       req.session.save(function(err){
-
       });
     });
     connection.end();
