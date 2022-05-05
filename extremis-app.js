@@ -101,7 +101,7 @@ app.post("/login", function (req, res) {
                         msg: "Logged in.",
                         isAdmin: true
                     });
-                    
+
                 } else {
                     res.send({
                         status: "success",
@@ -112,7 +112,7 @@ app.post("/login", function (req, res) {
                 req.session.save(function (err) {
                     //session saved
                 });
-               
+
             } else {
                 res.send({
                     status: "fail",
@@ -124,6 +124,24 @@ app.post("/login", function (req, res) {
         }
     )
 })
+
+/**
+ * Anh added the logout function
+ * I learned how to write do it from Arron course (Comp1537).
+ * These codes provided by Arron on his examples.
+ */
+app.get("/logout", function (req, res) {
+    if (req.session) {
+        req.session.destroy(function (error) {
+            if (error) {
+                res.status(400).send("Unable to log out")
+            } else {
+                res.redirect("/");
+            }
+        });
+    }
+});
+
 
 
 // RUN SERVER

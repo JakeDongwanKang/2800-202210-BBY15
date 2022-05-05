@@ -14,16 +14,19 @@
         <h2><span>Login</span></h2>
         <div class="form-box">
             <label>Email</label>
-            <input type="email" id="userEmail" required="required" onfocus="removeErrorMsg()" placeholder="Enter your email" value="admin@email.ca">
+            <input type="email" id="userEmail" required="required" onfocus="removeErrorMsg()"
+                placeholder="Enter your email" value="admin@email.ca">
             <p class="errorMsg" id="emailError"></p>
         </div>
         <div class="form-box">
             <label>Password</label>
             <!-- Add function to validate user password in onblur() function later -->
-            <input type="password" id="userPassword" required="required" onfocus="removeErrorMsg()" placeholder="Enter your password" value="password">
+            <input type="password" id="userPassword" required="required" onfocus="removeErrorMsg()"
+                placeholder="Enter your password" value="password">
             <p class="errorMsg" id="passwordError"></p>
         </div>
         <input type="button" value="Login" id="submit"></input>
+
         <p id="text">Don't have an account yet? <a href="#" id="sign-up-link">Join Extremis now!</a></p>
     </form>
 
