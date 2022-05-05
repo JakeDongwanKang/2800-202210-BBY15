@@ -8,7 +8,7 @@
     <title>Admin dashboard</title>
 
     <!-- CSS goes here -->
-    <link rel="stylesheet" href="/public/css/dashboard.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 
 <body>
@@ -26,7 +26,12 @@
             <ul>
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Profile</a></li>
-                <li class="logout"><a href="#"><button>Sign out</button></a></li>
+                <li>
+                    <form action="/logout" method="get">
+                        <input type="submit" class="singin" value="Sign out" />
+                    </form>
+                </li>
+
             </ul>
         </div>
     </nav>
@@ -39,6 +44,6 @@
 </body>
 
 <!-- Javascript goes here-->
-<script src="/public/js/dashboard.js"></script>
+<script src="/js/dashboard.js"></script>
 
 </html>
