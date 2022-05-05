@@ -1,79 +1,41 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap%27");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap%27');
 
-body {
-  font-size: 18pt;
-  margin: 0%;
-  padding: 0px;
-  height: 100vh;
-  display: grid;
-  font-family: "Montserrat";
-  grid-template-columns: repeat(5, 20%);
-  grid-template-rows: repeat(5, 20%);
-  align-items: end;
+body{
+    font-family: 'Montserrat';
+}
+
+#signUpForm {
+    margin: 5% 20% auto 20%;
 }
 
 #errorMsg {
   color: red;
 }
 
-#signUpPanel {
-  grid-row: 3 / span 1;
-  grid-column: 3 / span 1;
-  padding-left: 2em;
-  padding-right: 2em;
-  border-radius: 1em;
-  backdrop-filter: blur(6px);
-}
-
-footer {
-  grid-row: 5 / 5;
-  grid-column: 1 / span 5;
-  background-color: black;
-  padding: 1em;
+input{
+  display: block;
+  width: 100%;
+  border-radius: 15px;
+  border: solid 0.5px #484848;
+  font-size: 18px;
+  margin-top: 10px;
+  padding-left: 10px;
+  height: 40px;
+  font-family: 'Montserrat';
 }
 
 #signUpForm {
   color: #40403e;
 }
 
-#signUpForm > input {
-  font-size: 12pt;
-  font-family: "Montserrat";
-  padding: 0%;
-  margin: 0%;
-  background-color: rgba(255, 255, 255, 0.7);
-}
-
-#signUpForm > input[type="text"] {
-  border-radius: 20px;
-  border: 1px solid #b1b1b1;
-  height: 30px;
-  width:300px;
-}
-
-#signUpForm > input[type="email"] {
-  border-radius: 20px;
-  border: 1px solid #b1b1b1;
-  height: 30px;
-  width:300px;
-}
-
-#signUpForm > input[type="password"] {
-  border-radius: 20px;
-  border: 1px solid #b1b1b1;
-  height: 30px;
-  width:300px;
-}
-
 #signUpForm > input[type="button"] {
-  font-size: 15pt;
-  background-color: #3477f9;
-  border: 1px solid #3477f9;
-  border-radius: 20px;
-  color: #fff;
-  cursor: pointer;
-  width: 300px;
-  height: 50px;
+  width: 50%;
+    margin: 30px auto 20px auto;
+    cursor: pointer;
+    background-color: #3477f9;
+    color: #ffffff;
+    font-size: 20px;
+    border-color: transparent;
 }
 
 .label {
@@ -92,15 +54,12 @@ footer {
   opacity: 0.7;
 }
 
-#haveAccount {
-  font-size: 11pt;
+#text{
   text-align: center;
 }
 
-#logInNow {
-  font-size: 11pt;
+#sign-up-link{
+  text-decoration: none;
   color: #3477f9;
-  text-align: center;
-  margin: auto;
-  display: block;
+  font-weight: 600;
 }

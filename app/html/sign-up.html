@@ -3,12 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <title>Extremis - Sign Up!</title>
-    <link href="/public/css/sign-up.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/css/sign-up.css" rel="stylesheet" />
   </head>
   <body>
     <div id="signUpPanel">
       <form id="signUpForm">
-        <p id="signUpTitle">Create an Account!</p>
+        <h2 id="signUpTitle">Create an Account!</h2>
         <label for="firstName" class="label">&nbspFirst Name</label><br />
         <input
           id="firstName"
@@ -27,7 +28,7 @@
         <br />
         <label for="email" class="label">&nbspE-mail</label><br />
         <input
-          id="email"
+          id="userEmail"
           type="email"
           required="required"
           placeholder="Email"
@@ -35,19 +36,20 @@
         <br />
         <label for="password" class="label">&nbspPassword</label><br />
         <input
-          id="password"
+          id="userPassword"
           type="password"
           required="required"
           placeholder="Password"
         />
         <br />
         <br />
-        <input type="button" value="Create Account" id="SignUpButton" />
+        <input type="button" value="Create Account" id="signUpButton" />
         <br />
         <br />
-        <p id="haveAccount">Already have an account?</p>
-        <a id="logInNow" href="login.html">Login Now!</a>
+        <p id="text">Already have an account? <a href="#" id="sign-up-link">Login Now!</a></p>
       </form>
     </div>
+    <!-- Javascript goes here -->
+    <script src="/js/sign-up.js"></script>
   </body>
 </html>

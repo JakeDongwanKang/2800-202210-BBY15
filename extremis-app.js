@@ -1,8 +1,8 @@
 const express = require('express');
 const session = require("express-session");
+const mysql = require("mysql2");
 const app = express();
 const fs = require("fs");
-
 
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
@@ -24,9 +24,11 @@ app.get('/', function (req, res) {
     if (req.session.loggedIn && !req.session.isAdmin) {
         // if user has logged in and is not an admin, redirect to main page
         res.redirect("/main");
-    } else if (req.session.loggedIn && !req.session.isAdmin) {
+    } else if (req.session.loggedIn && req.session.isAdmin) {
         // if user has logged in and is an admin, redirect to main page
         res.redirect("/dashboard");
+    } else if (!req.session.loggedIn) {
+        res.redirect("/sign-up");
     } else {
         let doc = fs.readFileSync("./app/html/login.html", "utf8");
 
@@ -60,6 +62,12 @@ app.get("/dashboard", function (req, res) {
         res.redirect("/");
     }
 
+});
+
+app.get("/sign-up", function(req, res) {
+    let doc = fs.readFileSync("./app/html/sign-up.html", "utf8");
+    res.setHeader("Content-Type", "text/html");
+    res.send(doc);
 });
 
 //Authenticate user
@@ -125,6 +133,35 @@ app.post("/login", function (req, res) {
     )
 })
 
+// Notice that this is a 'POST'
+app.post("/add-user", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    console.log("First Name", req.body.firstName);
+    console.log("Last Name", req.body.lastName);
+    console.log("Email", req.body.email);
+    console.log("Password", req.body.password);
+
+    let connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'COMP2800'
+    });
+    connection.connect();
+    connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
+          [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
+          function (error, results, fields) {
+      if (error) {
+          console.log(error);
+      }
+      //console.log('Rows returned are: ', results);
+      res.send({ status: "success", msg: "Record added." });
+
+    });
+    connection.end();
+
+});
 
 // RUN SERVER
 let port = 8000;
