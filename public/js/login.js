@@ -1,4 +1,11 @@
-//Send data to server
+/**
+ * Send data from client side to server for authentication.
+ * If user has an account and is an admin, redirect to Admin Dashboard.
+ * If user has an account and is not an admin, redirect to the Main page.
+ * Otherwise, send an error message to user. 
+ * @author Arron_Ferguson (1537 instructor), Linh_Nguyen (BBY15)
+ * @param {*} data user input
+ */
 async function sendData(data) {
     try {
         let responseObject = await fetch("/login", {
@@ -35,7 +42,15 @@ document.getElementById("submit").addEventListener("click", function (e) {
     });
 });
 
+/**
+ * Removes the error message when user enters input.
+ */
 function removeErrorMsg() {
     document.getElementById("emailError").innerHTML = "";
     document.getElementById("passwordError").innerHTML = "";
 }
+
+// Go to sign-up when user clicks on "Join Extremis now!"
+document.getElementById("sign-up-link").addEventListener("click", function(e) {
+    window.location.replace("/sign-up");
+})

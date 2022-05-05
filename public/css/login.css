@@ -18,16 +18,17 @@ input{
     display: block;
     width: 100%;
     border-radius: 15px;
-    border: solid 0.5px #484848;
+    outline: solid 0.5px #484848;
     font-size: 18px;
     margin-top: 10px;
     padding-left: 10px;
     height: 40px;
     font-family: 'Montserrat';
+    border: none;
 }
 
 input:hover{
-    border: solid 1px #3477f9;
+    outline: solid 1px #3477f9;
     text-transform: none;
 }
 
@@ -43,7 +44,7 @@ input:hover{
     background-color: #3477f9;
     color: #ffffff;
     font-size: 20px;
-    border-color: transparent;
+    outline: transparent;
 }
 
 #text{
@@ -55,3 +56,20 @@ input:hover{
     color: #3477f9;
     font-weight: 600;
 }
+
+/*For the view under 800px*/
+@media (max-width: 800px) {
+    #loginForm {
+        margin: 35% 10% auto 10%;
+    }
+
+    input{
+        margin-bottom: 50px;
+    }
+
+    #sign-up-link {
+        display: block;
+        line-height: 30px;
+    }
+}
+
