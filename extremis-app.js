@@ -63,6 +63,19 @@ app.get("/dashboard", function (req, res) {
 
 });
 
+//function needed for redirecting to manage users lists in dahboard
+app.get("/user-list", function (req, res) {
+    if (req.session.loggedIn) {
+        let doc = fs.readFileSync("./app/html/user-list.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        res.send(doc);
+    } else {
+        // if user has not logged in, redirect to login page
+        res.redirect("/");
+    }
+
+});
+
 //function needed for redirecting into the sign-up page.
 app.get("/sign-up", function(req, res) {
     let doc = fs.readFileSync("./app/html/sign-up.html", "utf8");
