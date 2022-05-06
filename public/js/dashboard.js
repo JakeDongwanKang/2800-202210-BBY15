@@ -9,3 +9,7 @@ const navbarLinks = document.getElementsByClassName('navbar-links')[0]
 toggleButton.addEventListener('click', () => {
     navbarLinks.classList.toggle('active')
 })
+
+document.getElementById("manage-useres").addEventListener("click", function(e) {
+    window.location.replace("/user-list");
+})
