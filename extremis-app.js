@@ -20,6 +20,12 @@ app.use(express.urlencoded({
 }));
 
 
+/**
+ * Redirect users to the main page if user has logged in and is not an admin.
+ * Redirect users to the admin dashboard page if user has logged in and is an admin.
+ * Redirect users to the login page if user has not logged in.
+ * @author Arron_Ferguson (1537 instructor), Linh_Nguyen (BBY15)
+ */
 app.get('/', function (req, res) {
     if (req.session.loggedIn && !req.session.isAdmin) {
         // if user has logged in and is not an admin, redirect to main page
@@ -38,6 +44,7 @@ app.get('/', function (req, res) {
 });
 
 
+//Redirect users to the main page
 app.get("/main", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/main.html", "utf8");
@@ -50,6 +57,8 @@ app.get("/main", function (req, res) {
 
 });
 
+
+//Redirect users to the admin dashboard page
 app.get("/dashboard", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/dashboard.html", "utf8");
@@ -86,7 +95,7 @@ app.get("/sign-up", function (req, res) {
 app.post("/login", function (req, res) {
     res.setHeader("Content-Type", "application/json");
 
-    console.log("What was sent", req.body.email, req.body.password); //Delete later
+    console.log("What was sent", req.body.email, req.body.password);
 
     // check to see if the user email and password match with data in database
     const mysql = require("mysql2");
