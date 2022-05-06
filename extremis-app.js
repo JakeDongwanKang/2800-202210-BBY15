@@ -108,7 +108,7 @@ app.post("/login", function (req, res) {
                         msg: "Logged in.",
                         isAdmin: false
                     });
-                };
+                }
                 req.session.save(function (err) {
                     //session saved
                 });
@@ -122,8 +122,8 @@ app.post("/login", function (req, res) {
             connection.end();
 
         }
-    )
-})
+    );
+});
 
 /**
  * Anh added the logout function
@@ -134,7 +134,7 @@ app.get("/logout", function (req, res) {
     if (req.session) {
         req.session.destroy(function (error) {
             if (error) {
-                res.status(400).send("Unable to log out")
+                res.status(400).send("Unable to log out");
             } else {
                 res.redirect("/");
             }

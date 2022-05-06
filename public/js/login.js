@@ -24,8 +24,10 @@ async function sendData(data) {
             document.getElementById("passwordError").innerHTML = "<small>*Please check your password</small>";
         } else {
             if (parsedJSON.isAdmin) {
+                //if user is an admin, redirect to the admin dashboard page
                 window.location.replace("/dashboard");
             } else {
+                //if user is an admin, redirect to the main page
                 window.location.replace("/main");
             }
         }
@@ -53,4 +55,4 @@ function removeErrorMsg() {
 // Go to sign-up when user clicks on "Join Extremis now!"
 document.getElementById("sign-up-link").addEventListener("click", function(e) {
     window.location.replace("/sign-up");
-})
+});
