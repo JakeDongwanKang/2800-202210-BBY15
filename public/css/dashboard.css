@@ -7,14 +7,18 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+body {
+    background-image: url('/assets/picture2.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
 .dashboard {
     font-family: 'Montserrat';
     height: 50vh;
     width: 100%;
     align-items: center;
-    /* display: grid; */
-    /* grid-template-columns: 20% 60% 20%;
-    grid-template-rows: 15% 10% 50% 25%; */
 }
 
 h1 {
@@ -55,6 +59,7 @@ a {
     padding: 8px 16px;
     font-size: 16px;
     border-radius: 15px;
+    background-color: bisque;
     border: 0.5px solid #484848;
     text-align: center;
     text-decoration: none;
@@ -373,5 +378,26 @@ button:hover {
         font-size: 20px;
         word-spacing: 2px;
         color: black;
+    }
+
+    #content {
+        display: grid;
+        grid-template-rows: 20% 20% 20% 20% 20%;
+    }
+
+    #manage-users {
+        grid-row: 1;
+    }
+
+    #manage-admins {
+        grid-row: 2;
+    }
+
+    #manage-posts {
+        grid-row: 3;
+    }
+
+    #manage-events {
+        grid-row: 4;
     }
 }
