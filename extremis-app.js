@@ -98,7 +98,6 @@ app.post("/login", function (req, res) {
     console.log("What was sent", req.body.email, req.body.password);
 
     // check to see if the user email and password match with data in database
-    const mysql = require("mysql2");
     const connection = mysql.createConnection({
         host: "localhost",
         user: "root",
@@ -137,7 +136,7 @@ app.post("/login", function (req, res) {
                         msg: "Logged in.",
                         isAdmin: false
                     });
-                };
+                }
                 req.session.save(function (err) {
                     //session saved
                 });
@@ -151,8 +150,8 @@ app.post("/login", function (req, res) {
             connection.end();
 
         }
-    )
-})
+    );
+});
 
 //Authenticating user, checks if they can be added to the database, then creates and add the user info into the database.
 app.post("/add-user", function (req, res) {

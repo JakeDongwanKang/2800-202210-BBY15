@@ -24,8 +24,10 @@ async function sendData(data) {
             document.getElementById("passwordError").innerHTML = "<small>*Please check your password</small>";
         } else {
             if (parsedJSON.isAdmin) {
+                //if user is an admin, redirect to the admin dashboard page
                 window.location.replace("/dashboard");
             } else {
+                //if user is not an admin, redirect to the main page
                 window.location.replace("/main");
             }
         }
@@ -42,15 +44,14 @@ document.getElementById("submit").addEventListener("click", function (e) {
     });
 });
 
-/**
- * Removes the error message when user enters input.
- */
+
+//Removes the error message when user enters input.
 function removeErrorMsg() {
     document.getElementById("emailError").innerHTML = "";
     document.getElementById("passwordError").innerHTML = "";
 }
 
 // Go to sign-up when user clicks on "Join Extremis now!"
-document.getElementById("sign-up-link").addEventListener("click", function(e) {
+document.getElementById("sign-up-link").addEventListener("click", function (e) {
     window.location.replace("/sign-up");
-})
+});
