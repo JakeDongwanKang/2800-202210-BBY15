@@ -6,6 +6,30 @@
 </head>
 
 <body>
+    <!-- Navbar area -->
+    <nav class="navbar">
+        <div class="brand-title">Extremis</div>
+
+        <!-- Create a hamburger menu  -->
+        <a href="#" class="toggle-button">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="navbar-links">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">About Us</a></li>
+                <li>
+                    <form action="/logout" method="get">
+                        <input type="submit" class="singin" value="Sign out" />
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
     <h1>Admin Dashboard</h1>
     <div id="content">
         <div class="button" id="manage-users"><p>Total Users</p></div>
