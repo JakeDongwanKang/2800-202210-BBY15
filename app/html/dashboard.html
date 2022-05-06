@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <head>
     <title>Admin Dashboard</title>
     <meta content="width=device-width, initial-scale=1" name="viewport" />
@@ -29,12 +30,26 @@
             </ul>
         </div>
     </nav>
-    
+
     <h1>Admin Dashboard</h1>
-    <div id="content">
-        <div class="button" id="manage-users"><p>Total Users</p></div>
-        <div class="button" id="manage-admins"><p>Admins</p></div>
-        <div class="button" id="manage-posts"><p>Posts</p></div>
-        <div class="button" id="manage-events"><p>Events</p></div>
+    <div class="dashboard">
+        <div id="content">
+            <div class="button" id="manage-users">
+                <p> <a href="/user-list/" role="button">Total Users</a></p>
+            </div>
+            <div class="button" id="manage-admins">
+                <p>Admins</p>
+            </div>
+            <div class="button" id="manage-posts">
+                <p>Posts</p>
+            </div>
+            <div class="button" id="manage-events">
+                <p>Events</p>
+            </div>
+        </div>
     </div>
 </body>
+<!-- Javascript goes here-->
+<script src="/js/dashboard.js"></script>
+
+</html>
