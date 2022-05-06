@@ -152,6 +152,7 @@ app.post("/login", function (req, res) {
         }
     );
 });
+<<<<<<< HEAD
 
 //Authenticating user, checks if they can be added to the database, then creates and add the user info into the database.
 app.post("/add-user", function (req, res) {
@@ -196,6 +197,8 @@ app.post("/add-user", function (req, res) {
         connection.end();
     }
 });
+=======
+>>>>>>> Linh_Login_RedirectPages
 
 /**
  * Anh added the logout function
@@ -206,7 +209,7 @@ app.get("/logout", function (req, res) {
     if (req.session) {
         req.session.destroy(function (error) {
             if (error) {
-                res.status(400).send("Unable to log out")
+                res.status(400).send("Unable to log out");
             } else {
                 res.redirect("/");
             }
