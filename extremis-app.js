@@ -3,7 +3,6 @@ const session = require("express-session");
 const mysql = require("mysql2");
 const app = express();
 const fs = require("fs");
-const mysql = require("mysql2");
 
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
