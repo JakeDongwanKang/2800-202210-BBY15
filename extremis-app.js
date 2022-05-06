@@ -26,7 +26,7 @@ app.get('/', function (req, res) {
         res.redirect("/main");
     } else if (req.session.loggedIn && req.session.isAdmin) {
         // if user has logged in and is an admin, redirect to main page
-        res.redirect("/dashboard"); 
+        res.redirect("/dashboard");
     } else {
         let doc = fs.readFileSync("./app/html/login.html", "utf8");
 
@@ -43,8 +43,7 @@ app.get("/main", function (req, res) {
         let doc = fs.readFileSync("./app/html/main.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
-    }
-    else {
+    } else {
         // if user has not logged in, redirect to login page
         res.redirect("/");
     }
@@ -77,7 +76,7 @@ app.get("/user-list", function (req, res) {
 });
 
 //function needed for redirecting into the sign-up page.
-app.get("/sign-up", function(req, res) {
+app.get("/sign-up", function (req, res) {
     let doc = fs.readFileSync("./app/html/sign-up.html", "utf8");
     res.setHeader("Content-Type", "text/html");
     res.send(doc);
@@ -152,10 +151,10 @@ app.post("/add-user", function (req, res) {
 
     //Authenticating user.
     let connection = mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'COMP2800'
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
     });
 
     let firstName = req.body.firstName;
@@ -163,30 +162,31 @@ app.post("/add-user", function (req, res) {
     let signupemail = req.body.email;
     let signuppassword = req.body.password;
 
-//Checking to see if any columns in the sign-up page is NULL : if they are, the account cannot be made.
-    if(!firstName || !lastName || !signupemail || !signuppassword) {
+    //Checking to see if any columns in the sign-up page is NULL : if they are, the account cannot be made.
+    if (!firstName || !lastName || !signupemail || !signuppassword) {
         res.send({
             status: "fail",
             msg: "Every column has to be filled."
         });
+    } else {
+        //connecting to the database, then creating and adding the user info into the database.
+        connection.connect();
+        connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
+            [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
+            function (error, results, fields) {
+                if (error) {
+                    console.log(error);
+                }
+                //console.log('Rows returned are: ', results);
+                res.send({
+                    status: "success",
+                    msg: "Record added."
+                });
+                req.session.loggedIn = true;
+                req.session.save(function (err) {});
+            });
+        connection.end();
     }
-    else {
-//connecting to the database, then creating and adding the user info into the database.
-    connection.connect();
-    connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
-          [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
-          function (error, results, fields) {
-      if (error) {
-          console.log(error);
-      }
-      //console.log('Rows returned are: ', results);
-      res.send({ status: "success", msg: "Record added." });
-      req.session.loggedIn = true;
-      req.session.save(function(err){
-      });
-    });
-    connection.end();
-}
 });
 
 /**
