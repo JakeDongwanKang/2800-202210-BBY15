@@ -10,6 +10,6 @@ toggleButton.addEventListener('click', () => {
     navbarLinks.classList.toggle('active')
 })
 
-document.getElementById("manage-useres").addEventListener("click", function(e) {
+document.getElementById("manage-users").addEventListener("click", function(e) {
     window.location.replace("/user-list");
 })
