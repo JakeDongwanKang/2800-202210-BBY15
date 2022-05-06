@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Extremis - Sign Up!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/css/sign-up.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="signUpPanel">
+      <form id="signUpForm">
+        <h2 id="signUpTitle">Create an Account!</h2>
+        <label for="firstName" class="label">First Name</label><br />
+        <input
+          id="firstName"
+          type="text"
+          required="required"
+          onfocus="removeErrorMsg()"
+          placeholder="First Name"
+        />
+        <br />
+        <label for="lastName" class="label">Last Name</label><br />
+        <input
+          id="lastName"
+          type="text"
+          required="required"
+          onfocus="removeErrorMsg()"
+          placeholder="Last Name"
+        />
+        <br />
+        <label for="userEmail" class="label">E-mail</label><br />
+        <input
+          id="userEmail"
+          type="email"
+          required="required"
+          onfocus="removeErrorMsg()"
+          placeholder="Email"
+        />
+        <br />
+        <label for="userPassword" class="label">Password</label><br />
+        <input
+          id="userPassword"
+          type="password"
+          required="required"
+          onfocus="removeErrorMsg()"
+          placeholder="Password"
+        />
+        <br />
+        <br />
+        <p class = "errorMsg" id="emptyError"></p>
+        <input type="button" value="Create Account" id="signUpButton" />
+        <br />
+        <br />
+        <p id="text">Already have an account? <a href="#" id="log-in-link">Login Now!</a></p>
+      </form>
+    </div>
+    <!-- Javascript goes here -->
+    <script src="/js/sign-up.js"></script>
+  </body>
+</html>

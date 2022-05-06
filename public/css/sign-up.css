@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap%27');
+
+body{
+    font-family: 'Montserrat';
+}
+
+#signUpForm {
+    margin: 5% 20% auto 20%;
+}
+
+.errorMsg{
+  color: red;
+  margin: 0 0 20px 0;
+}
+
+input{
+  display: block;
+  width: 100%;
+  border-radius: 15px;
+  border: solid 0.5px #484848;
+  font-size: 18px;
+  margin-top: 10px;
+  padding-left: 10px;
+  height: 40px;
+  font-family: 'Montserrat';
+}
+
+#signUpForm {
+  color: #40403e;
+}
+
+#signUpForm > input[type="button"] {
+  width: 50%;
+    margin: 30px auto 20px auto;
+    cursor: pointer;
+    background-color: #3477f9;
+    color: #ffffff;
+    font-size: 20px;
+    border-color: transparent;
+}
+
+.label {
+  font-size: 12pt;
+}
+
+#signUpTitle {
+  color: #3477f9;
+  font-weight: bold;
+  text-align: center;
+}
+
+#signUpForm > input[type="button"]:hover {
+  color: white;
+  border-color: white;
+  opacity: 0.7;
+}
+
+#text{
+  text-align: center;
+}
+
+#log-in-link{
+  text-decoration: none;
+  color: #3477f9;
+  font-weight: 600;
+}
+
+/*For the view under 800px*/
+@media (max-width: 800px) {
+  #signUpForm > input[type="button"] {
+    width : 100%;
+  }
+}

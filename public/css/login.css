@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap%27');
+
+body{
+    font-family: 'Montserrat';
+}
+
+#loginForm {
+    margin: 10% 20% auto 20%;
+}
+
+h2{
+    text-align: center;
+    font-size: 30px;
+    color: #3477f9;
+}
+
+input{
+    display: block;
+    width: 100%;
+    border-radius: 15px;
+    outline: solid 0.5px #484848;
+    font-size: 18px;
+    margin-top: 10px;
+    padding-left: 10px;
+    height: 40px;
+    font-family: 'Montserrat';
+    border: none;
+}
+
+input:hover{
+    outline: solid 1px #3477f9;
+    text-transform: none;
+}
+
+.errorMsg{
+    color: red;
+    margin: 0 0 20px 0;
+}
+
+#submit{
+    width: 50%;
+    margin: 30px auto 20px auto;
+    cursor: pointer;
+    background-color: #3477f9;
+    color: #ffffff;
+    font-size: 20px;
+    outline: transparent;
+}
+
+#text{
+    text-align: center;
+}
+
+#sign-up-link{
+    text-decoration: none;
+    color: #3477f9;
+    font-weight: 600;
+}
+
+/*For the view under 800px*/
+@media (max-width: 800px) {
+    #loginForm {
+        margin: 35% 10% auto 10%;
+    }
+
+    input{
+        margin-bottom: 50px;
+    }
+
+    #sign-up-link {
+        display: block;
+        line-height: 30px;
+    }
+}
+

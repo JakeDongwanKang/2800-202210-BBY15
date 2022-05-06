@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Admin Dashboard</title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+
+<body>
+    <!-- Navbar area -->
+    <nav class="navbar">
+        <div class="brand-title">Extremis</div>
+
+        <!-- Create a hamburger menu  -->
+        <a href="#" class="toggle-button">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="navbar-links">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">About Us</a></li>
+                <li>
+                    <form action="/logout" method="get">
+                        <input type="submit" class="singin" value="Sign out" />
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <h1>Admin Dashboard</h1>
+    <div class="dashboard">
+        <div id="content">
+            <div class="button" id="manage-users">
+                <p> <a href="/user-list/" role="button">Total Users</a></p>
+            </div>
+            <div class="button" id="manage-admins">
+                <p>Admins</p>
+            </div>
+            <div class="button" id="manage-posts">
+                <p>Posts</p>
+            </div>
+            <div class="button" id="manage-events">
+                <p>Events</p>
+            </div>
+        </div>
+    </div>
+    <!-- Javascript goes here-->
+    <script src="/js/dashboard.js"></script>
+</body>
+
+</html>

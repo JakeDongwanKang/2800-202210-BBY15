@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Login</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/login.css" />
+</head>
+
+<body>
+    <!-- Log in form goes here -->
+    <form id="loginForm">
+        <h2><span>Login</span></h2>
+        <div class="form-box">
+            <label>Email</label>
+            <input type="email" id="userEmail" required="required" onfocus="removeErrorMsg()"
+                placeholder="Enter your email">
+            <p class="errorMsg" id="emailError"></p>
+        </div>
+        <div class="form-box">
+            <label>Password</label>
+            <input type="password" id="userPassword" required="required" onfocus="removeErrorMsg()"
+                placeholder="Enter your password">
+            <p class="errorMsg" id="passwordError"></p>
+        </div>
+        <input type="button" value="Login" id="submit">
+
+        <p id="text">Don't have an account yet? <a href="#" id="sign-up-link">Join Extremis now!</a></p>
+    </form>
+
+    <!-- Javascript goes here -->
+    <script src="/js/login.js"></script>
+</body>
+
+
+</html>
