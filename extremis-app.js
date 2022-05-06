@@ -3,6 +3,7 @@ const session = require("express-session");
 const mysql = require("mysql2");
 const app = express();
 const fs = require("fs");
+const mysql = require("mysql2");
 
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
@@ -21,10 +22,9 @@ app.use(express.urlencoded({
 
 
 /**
- * Redirect users to the main page if user has logged in and is not an admin.
- * Redirect users to the admin dashboard page if user has logged in and is an admin.
- * Redirect users to the login page if user has not logged in.
- * @author Arron_Ferguson (1537 instructor), Linh_Nguyen (BBY15)
+ * Redirect users to main page if they have logged in and are not admin.
+ * Redirect users to admin dashboard page if they have logged in and are admin.
+ * Otherwise, redirect users to login page.
  */
 app.get('/', function (req, res) {
     if (req.session.loggedIn && !req.session.isAdmin) {
@@ -44,28 +44,26 @@ app.get('/', function (req, res) {
 });
 
 
-//Redirect users to the main page
+//Redirect users to the main page if they have logged in. Otherwise, redirect to login page.
 app.get("/main", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/main.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
     } else {
-        // if user has not logged in, redirect to login page
         res.redirect("/");
     }
 
 });
 
 
-//Redirect users to the admin dashboard page
+//Redirect admin users to the admin dashboard page if they have logged in. Otherwise, redirect to login page.
 app.get("/dashboard", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/dashboard.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
     } else {
-        // if user has not logged in, redirect to login page
         res.redirect("/");
     }
 
@@ -152,7 +150,6 @@ app.post("/login", function (req, res) {
         }
     );
 });
-<<<<<<< HEAD
 
 //Authenticating user, checks if they can be added to the database, then creates and add the user info into the database.
 app.post("/add-user", function (req, res) {
@@ -197,8 +194,6 @@ app.post("/add-user", function (req, res) {
         connection.end();
     }
 });
-=======
->>>>>>> Linh_Login_RedirectPages
 
 /**
  * Anh added the logout function
