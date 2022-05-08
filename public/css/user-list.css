@@ -7,9 +7,12 @@ body {
     grid-template-columns: 20% 60% 20%;
 }
 
+header {
+    grid-column: 2;
+}
+
 h1 {
     color: #3477f9;
-    grid-column: 2;
     float: left;
 }
 
@@ -47,7 +50,7 @@ h3 {
     body {
         grid-template-columns: 5% 90% 5%;
     }
-
+    
     .user-card {
         width: 100%;
     }

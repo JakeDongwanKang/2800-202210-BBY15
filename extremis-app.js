@@ -52,7 +52,7 @@ app.get("/main", function (req, res) {
         let doc = fs.readFileSync("./app/html/main.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         let profile_jsdom = new JSDOM(doc);
-        profile_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Hello " + req.session.firstName + ", welcome to</h5>";
+        profile_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Hello " + req.session.firstName + ". Welcome to</h5>";
         res.write(profile_jsdom.serialize());
         res.end();
     } else {

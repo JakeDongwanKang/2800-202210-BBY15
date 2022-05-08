@@ -21,13 +21,16 @@ body {
     align-items: center;
 }
 
-.branch {
+header {
     grid-column: 2;
     grid-row: 2;
-    color: #3477f9;
     border: 1px solid #484848;
     border-radius: 15px 15px 0 0;
     border-bottom: hidden;
+}
+
+.branch {
+    color: #3477f9;
     margin: 0;
     padding: 4%;
     text-align: center;
