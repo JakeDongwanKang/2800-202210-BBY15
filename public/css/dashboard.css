@@ -21,7 +21,7 @@ body {
     align-items: center;
 }
 
-h1 {
+.branch {
     grid-column: 2;
     grid-row: 2;
     color: #3477f9;
@@ -31,6 +31,15 @@ h1 {
     margin: 0;
     padding: 4%;
     text-align: center;
+    font-size: 5rem;
+    font-weight: 700;
+}
+
+.um-subtitle {
+    text-align: center;
+    font-weight: 500;
+    letter-spacing: 0.5rem;
+    font-size: 15px;
 }
 
 a {
