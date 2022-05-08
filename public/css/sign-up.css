@@ -65,6 +65,16 @@ input{
   font-weight: 600;
 }
 
+footer {
+  overflow-x: hidden;
+  position: absolute;
+  top: 98%;
+  width: 99%;
+  text-align: center;
+  color: #ffffff;
+  background-color: #484848;
+}
+
 /*For the view under 800px*/
 @media (max-width: 800px) {
   #signUpForm > input[type="button"] {
