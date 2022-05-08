@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * Sends the user data from the client side to the server side for authentication.
  * If user puts in a valid information in the signup page columns, sign-up is complete, then gets redirected to the log-in page.
@@ -16,17 +18,13 @@ async function sendData(data) {
             },
             body: JSON.stringify(data)
         });
-        console.log("Response object", responseObject);
         let parsedJSON = await responseObject.json();
-        console.log("From the server", parsedJSON);
         if(parsedJSON.status == "fail") {
             document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
         } else {
             window.location.replace("/main");
         }
-    } catch(error) {
-        console.log(error);
-    }
+    } catch(error) {}
 }
 
 
