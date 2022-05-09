@@ -9,6 +9,7 @@ body{
 }
 
 h2{
+    margin-top: 5%;
     text-align: center;
     font-size: 30px;
     color: #3477f9;
@@ -55,6 +56,16 @@ input:hover{
     text-decoration: none;
     color: #3477f9;
     font-weight: 600;
+}
+
+footer {
+    overflow-x: hidden;
+    position: absolute;
+    top: 98%;
+    width: 99%;
+    text-align: center;
+    color: #ffffff;
+    background-color: #484848;
 }
 
 /*For the view under 800px*/

@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * Send data from client side to server for authentication.
  * If user has an account and is an admin, redirect to Admin Dashboard.
@@ -16,9 +18,7 @@ async function sendData(data) {
             },
             body: JSON.stringify(data)
         });
-        console.log("Response object", responseObject);
         let parsedJSON = await responseObject.json();
-        console.log("From the server", parsedJSON);
         if (parsedJSON.status == "fail") {
             document.getElementById("emailError").innerHTML = "<small>*Please check your email</small>";
             document.getElementById("passwordError").innerHTML = "<small>*Please check your password</small>";
@@ -31,9 +31,7 @@ async function sendData(data) {
                 window.location.replace("/main");
             }
         }
-    } catch (error) {
-        console.log(error);
-    }
+    } catch (error) {}
 }
 
 //Send user's email and password to server for authentication

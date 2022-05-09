@@ -1,9 +1,11 @@
+"use strict";
+
 const express = require('express');
 const session = require("express-session");
 const mysql = require("mysql2");
 const app = express();
 const fs = require("fs");
-const mysql = require("mysql2");
+const { JSDOM } = require('jsdom');
 
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
@@ -49,7 +51,10 @@ app.get("/main", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/main.html", "utf8");
         res.setHeader("Content-Type", "text/html");
-        res.send(doc);
+        let profile_jsdom = new JSDOM(doc);
+        profile_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Hello " + req.session.firstName + ". Welcome to</h5>";
+        res.write(profile_jsdom.serialize());
+        res.end();
     } else {
         res.redirect("/");
     }
@@ -62,7 +67,10 @@ app.get("/dashboard", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/dashboard.html", "utf8");
         res.setHeader("Content-Type", "text/html");
-        res.send(doc);
+        let profile_jsdom = new JSDOM(doc);
+        profile_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Welcome " + req.session.firstName + "</h5>";
+        res.write(profile_jsdom.serialize());
+        res.end();
     } else {
         res.redirect("/");
     }
@@ -93,8 +101,6 @@ app.get("/sign-up", function (req, res) {
 app.post("/login", function (req, res) {
     res.setHeader("Content-Type", "application/json");
 
-    console.log("What was sent", req.body.email, req.body.password);
-
     // check to see if the user email and password match with data in database
     const connection = mysql.createConnection({
         host: "localhost",
@@ -110,15 +116,11 @@ app.post("/login", function (req, res) {
         "SELECT * FROM BBY_15_User WHERE email = ? AND user_password = ?",
         [email, pwd],
         function (error, results, fields) {
-            console.log("results: ", results);
-
-            if (error) {
-                console.log(error);
-            }
 
             if (results.length > 0) {
                 // user authenticated, create a session
                 req.session.loggedIn = true;
+                req.session.firstName = results[0].first_name;
                 req.session.email = email;
                 req.session.isAdmin = results[0].admin_role;
                 if (results[0].admin_role) {
@@ -180,10 +182,6 @@ app.post("/add-user", function (req, res) {
         connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
             [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
             function (error, results, fields) {
-                if (error) {
-                    console.log(error);
-                }
-                //console.log('Rows returned are: ', results);
                 res.send({
                     status: "success",
                     msg: "Record added."
@@ -215,5 +213,5 @@ app.get("/logout", function (req, res) {
 // RUN SERVER
 let port = 8000;
 app.listen(port, function () {
-    console.log('Listening on port ' + port + '!');
+    
 });
