@@ -57,7 +57,6 @@ a {
     border-radius: 0 0 15px 15px;
     border-top: hidden;
     padding: 3%;
-    padding: auto;
     display: flex;
     justify-content: center;
 
@@ -99,7 +98,6 @@ body {
     position: relative;
     justify-content: space-between;
     align-items: center;
-    background-color: none;
     color: black;
     text-decoration: solid;
 }
