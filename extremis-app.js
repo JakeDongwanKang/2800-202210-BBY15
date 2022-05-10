@@ -5,11 +5,18 @@ const session = require("express-session");
 const mysql = require("mysql2");
 const app = express();
 const fs = require("fs");
-const { JSDOM } = require('jsdom');
+const {
+    JSDOM
+} = require('jsdom');
+const multer = require("multer");
+
+
 
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
 app.use("/js", express.static("./public/js"));
+
+
 
 app.use(session({
     secret: "what is the point of this secret",
@@ -17,6 +24,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
@@ -55,6 +63,7 @@ app.get("/main", function (req, res) {
         profile_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Hello " + req.session.firstName + ". Welcome to</h5>";
         res.write(profile_jsdom.serialize());
         res.end();
+
     } else {
         res.redirect("/");
     }
@@ -193,6 +202,185 @@ app.post("/add-user", function (req, res) {
     }
 });
 
+async function getdata(callback) {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.connect();
+    connection.query(
+        "SELECT * FROM BBY_15_User where",
+        function (error, results, fields) {
+            if (results.length > 0) {
+                return callback(results);
+            }
+        }
+    )
+};
+
+
+//Get the user 's information from the database
+app.get("/profile", function (req, res) {
+
+    // res.setHeader("Content-Type", "application/json");
+
+    // check to see if the user email and password match with data in database
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+
+    console.log(req.body)
+    let email = req.session.email;
+
+    // check for a session first!
+    if (req.session.loggedIn) {
+        connection.connect();
+
+        connection.query(
+            "SELECT * FROM BBY_15_User WHERE email = ?",
+            [email],
+            function (error, results, fields) {
+                let profile = fs.readFileSync("./app/html/profile.html", "utf8");
+                let profileDOM = new JSDOM(profile);
+                if (results.length > 0) {
+                    for (var i = 0; i < results.length; i++) {
+
+                        console.log(results[i]);
+                        let firstname = results[i].first_name;
+                        let lastname = results[i].last_name;
+                        let useremail = results[i].email;
+                        let password = results[i].user_password;
+                        let userprofile = results[i].profile;
+                        var template = `   
+
+                        </br>  
+
+
+                        <div class="account-body"> 
+
+                        <div class='profile-pic-div'>
+                        <img class='profile-pic' src='${userprofile}'</div>
+
+                            <div id="user_title">
+                            <h2>${firstname} ${lastname} </h2>
+                            </div>
+
+                            <div id="user_content">
+
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" class="um-input" id="firstName" placeholder=${firstname}>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" class="um-input" id="lastName" placeholder=${lastname}>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="um-input" id="userEmail" placeholder=${useremail}>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="um-input" id="userPassword" placeholder=${password}>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="picture">Upload profile picture</label>
+                                    <input id="image-upload" type="file" value="Upload Image" accept="image/png, image/gif, image/jpeg"multiple="multiple" />
+                                    <input id="submit" type="submit" value="Submit" />
+                                </div>
+                            </div>  
+
+                        </div>
+                    `;
+                        let area = profileDOM.window.document.querySelector('#user_content');
+                        console.log(template);
+                        area.innerHTML += template;
+                    }
+                    res.send(profileDOM.serialize());
+                }
+
+            }
+        )
+        console.log(req.session.useremail);
+        res.set("Server", "Wazubi Engine");
+        res.set("X-Powered-By", "Wazubi");
+    } else {
+        res.redirect("/");
+    }
+});
+
+
+
+//Request to change the update
+app.put("/profile", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    //Authenticating user.
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+
+    //connecting to the database, then creating and adding the user info into the database.
+    connection.connect();
+
+    connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE id_user=?',
+        [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.body.user_id],
+        function (error, results, fields) {
+            res.send({
+                status: "success",
+                msg: "Record added."
+            });
+            req.session.loggedIn = true;
+            req.session.save(function (err) {});
+        });
+    connection.end();
+
+});
+
+
+
+
+const storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, "/assets")
+    },
+    filename: function (req, file, callback) {
+        callback(null, "my-app-" + file.originalname.split('/').pop().trim());
+    }
+});
+const upload = multer({
+    storage: storage
+});
+
+
+app.post('/upload-images', upload.array("files"), function (req, res) {
+
+    //console.log(req.body);
+    console.log(req.files);
+
+    for (let i = 0; i < req.files.length; i++) {
+        req.files[i].filename = req.files[i].originalname;
+    }
+
+});
+
+
+
+
 /**
  * Anh added the logout function
  * I learned how to write do it from Arron course (Comp1537).
@@ -213,5 +401,5 @@ app.get("/logout", function (req, res) {
 // RUN SERVER
 let port = 8000;
 app.listen(port, function () {
-    
+    console.log('Listening on port ' + port + '!');
 });

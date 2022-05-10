@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap%27');
+
+body {
+    font-family: 'Montserrat';
+    align-items: center;
+    justify-content: center;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.profile {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+
+h2 {
+    text-align: center;
+    text-transform: uppercase;
+}
+
+input {
+    display: block;
+    align-items: center;
+    width: 100%;
+    border-radius: 20px;
+    border: solid 0.5px #484848;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    height: 40px;
+    font-family: 'Montserrat';
+}
+
+.user_content {
+    padding-bottom: 20px;
+}
+
+
+.updateAccount {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: rgba(52, 119, 249, 0.9);
+    border: none;
+    border-radius: 8px;
+    margin-right: 15px;
+    margin-left: 40%;
+    font-family: 'Montserrat';
+}
+
+.updateAccount:hover {
+    background-color: rgba(52, 119, 249, 0.7);
+}
+
+.canncelUpdate {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: black;
+    background-color: lightgrey;
+    border: none;
+    border-radius: 8px;
+    margin-right: 15px;
+    font-family: 'Montserrat';
+}
+
+.canncelUpdate:hover {
+    background-color: red;
+}
+
+.profile-pic {
+    width: 150px;
+    border-radius: 50%;
+    border-color: rebeccapurple;
+    margin-left: 25%;
+
+}
+
+/* #image-upload {
+    display: inline-block;
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: black;
+    background-color: lightgrey;
+    border: none;
+    margin-left: 30px;
+    margin-right: 15px;
+    font-family: 'Montserrat';
+
+}
+
+#submit {
+    display: inline-block;
+    padding: 8px 12px;
+    font-size: 10px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: black;
+    background-color: lightblue;
+    border: none;
+    margin-right: 15px;
+    font-family: 'Montserrat';
+
+} */
+
+/* #upload-images-form {
+    display: block;
+    display: block;
+    align-items: center;
+    width: 30%;
+    border-radius: 20px;
+    border: none;
+    font-size: 16px;
+    height: 40px;
+    font-family: 'Montserrat';
+} */
+
+/*For the view under 800px*/
+@media (max-width: 800px) {
+    #signUpForm>input[type="button"] {
+        width: 100%;
+    }
+}

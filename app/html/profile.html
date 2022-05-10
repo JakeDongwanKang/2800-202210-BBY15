@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Login</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/profile.css" />
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <div id="customers"></div>
+        <nav id="navTemplate"></nav>
+
+        <div class="profile-pic-div">
+            <div class="profile-pic"></div>
+        </div>
+        <div class="account-body">
+            <div id="user_title" class="user_title"></div>
+            <div id="user_content" class="user_content"></div>
+            <div>
+                <form id="upload-images-form">
+                    <button id="image-upload" type="file" accept="image/png, image/gif, image/jpeg"
+                        multiple="multiple">Choose file</button>
+                    <button id="submit" type="submit">Upload</button>
+                </form>
+            </div>
+
+            <button href="/update-profile" type="button" class="updateAccount" onclick="updateProfile">Save</button>
+            <button type="button" class="canncelUpdate">Cancel</button>
+
+        </div>
+        <footer>&copy 2022 Burnaby-15</footer>
+
+        <!-- Javascript goes here-->
+        <script src="/js/profile.js"></script>
+    </div>
+
+
+</body>
+
+</html>
