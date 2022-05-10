@@ -6,6 +6,7 @@ const mysql = require("mysql2");
 const app = express();
 const fs = require("fs");
 const { JSDOM } = require('jsdom');
+const e = require('express');
 
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
@@ -51,9 +52,9 @@ app.get("/main", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/main.html", "utf8");
         res.setHeader("Content-Type", "text/html");
-        let profile_jsdom = new JSDOM(doc);
-        profile_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Hello " + req.session.firstName + ". Welcome to</h5>";
-        res.write(profile_jsdom.serialize());
+        let main_jsdom = new JSDOM(doc);
+        main_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Hello " + req.session.firstName + ". Welcome to</h5>";
+        res.write(main_jsdom.serialize());
         res.end();
     } else {
         res.redirect("/");
@@ -67,9 +68,9 @@ app.get("/dashboard", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/dashboard.html", "utf8");
         res.setHeader("Content-Type", "text/html");
-        let profile_jsdom = new JSDOM(doc);
-        profile_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Welcome " + req.session.firstName + "</h5>";
-        res.write(profile_jsdom.serialize());
+        let dashboard_jsdom = new JSDOM(doc);
+        dashboard_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Welcome " + req.session.firstName + "</h5>";
+        res.write(dashboard_jsdom.serialize());
         res.end();
     } else {
         res.redirect("/");
@@ -77,17 +78,86 @@ app.get("/dashboard", function (req, res) {
 
 });
 
-//function needed for redirecting to manage users lists in dahboard
+//function needed for getting list of all users in user-list
 app.get("/user-list", function (req, res) {
     if (req.session.loggedIn) {
+        const connection = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "",
+            database: "COMP2800"
+        });
+
         let doc = fs.readFileSync("./app/html/user-list.html", "utf8");
+        let user_list_jsdom = new JSDOM(doc);
         res.setHeader("Content-Type", "text/html");
-        res.send(doc);
+
+        connection.query(
+            "SELECT * FROM BBY_15_User",
+            function(error, results, fields) {
+                
+                let user_list = "";
+                for (let i = 0; i < results.length; i++) {
+                    if (results[i]['admin_role']) {
+                        var role = 'Admin';
+                    } else {
+                        var role = 'User';
+                    }
+
+                    user_list += "<div class='user-card'><div class='profile-pic-div'><img class='profile-pic' src='" + results[i]['profile_picture'] + "'></div>"
+                    + "<div class='user-content'><h3>" + results[i]['first_name'] + " " + results[i]['last_name'] + "</h3>"
+                    + "<p>" + role + "<br>" + results[i]['email'] + "<br>" + results[i]['num_posts'] + " posts <br> Joined " + results[i]['join_date'] + "</p>"
+                    + "<div class='user-list-button' id='toggle-admin'>Make Admin&ensp;</div>"
+                    + "<div class='user-list-button' id='edit'> Edit User&ensp;</div>"
+                    + "<div class='user-list-button' id='delete'> Delete User</div></div></div>";
+                }
+                user_list_jsdom.window.document.getElementById("user-container").innerHTML = user_list;
+                res.write(user_list_jsdom.serialize());
+                res.end;
+            }
+        )
     } else {
         // if user has not logged in, redirect to login page
         res.redirect("/");
     }
+});
 
+// function for getting all admins for admin-list
+app.get("/admin-list", function (req, res) {
+    if (req.session.loggedIn) {
+        const connection = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "",
+            database: "COMP2800"
+        });
+
+        let doc = fs.readFileSync("./app/html/admin-list.html", "utf8");
+        let admin_list_jsdom = new JSDOM(doc);
+        res.setHeader("Content-Type", "text/html");
+
+        connection.query(
+            "SELECT * FROM BBY_15_User WHERE admin_role = 1",
+            function(error, results, fields) {
+                
+                let admin_list = "";
+                for (let i = 0; i < results.length; i++) {
+                    admin_list += "<div class='user-card'><div class='profile-pic-div'><img class='profile-pic' src='" + results[i]['profile_picture'] + "'></div>"
+                    + "<div class='user-content'><h3>" + results[i]['first_name'] + " " + results[i]['last_name'] + "</h3>"
+                    + "<p>" + results[i]['email'] + "<br>" + results[i]['num_posts'] + " posts <br> Joined " + results[i]['join_date'] + "</p>"
+                    + "<div class='user-list-button' id='toggle-admin'>Remove Admin&ensp;</div>"
+                    + "<div class='user-list-button' id='edit'> Edit User&ensp;</div>"
+                    + "<div class='user-list-button' id='delete'> Delete User</div></div></div>";
+                }
+                admin_list_jsdom.window.document.getElementById("user-container").innerHTML = admin_list;
+                res.write(admin_list_jsdom.serialize());
+                res.end;
+            }
+        )
+    } else {
+        // if user has not logged in, redirect to login page
+        res.redirect("/");
+    }
 });
 
 //function needed for redirecting into the sign-up page.
