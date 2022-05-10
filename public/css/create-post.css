@@ -207,6 +207,11 @@ body{
     background-color: #3477F9;
 }
 
+#choiceDisabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 .menu-open {
     display: block;
     opacity: 1;
