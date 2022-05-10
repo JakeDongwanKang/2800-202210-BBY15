@@ -13,9 +13,15 @@ let dropdownButtonClicks = 0;
 */ 
 select.addEventListener('click', () => {
     dropdownButtonClicks += 1;
-    console.log(dropdownButtonClicks);
     if (dropdownButtonClicks % 2 != 0) {
-        document.querySelector('.form-box.title').style.marginTop = '30%';
+        // Make space for dropdown menu in 2 different viewport according to media queries.
+        var x = window.matchMedia("(max-width: 800px)");
+        if (x.matches) {
+            document.querySelector('.form-box.title').style.marginTop = '75%';
+        } else {
+            document.querySelector('.form-box.title').style.marginTop = '35%';
+        }
+        
         select.classList.toggle('select-clicked');
         caret.classList.toggle('caret-rotate');
         menu.classList.toggle('menu-open');
