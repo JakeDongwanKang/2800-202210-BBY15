@@ -210,6 +210,22 @@ app.get("/logout", function (req, res) {
     }
 });
 
+/**
+ * Redirect to the create-a-post page if user is a regular user and has logged in.
+ * Otherwise, not allow accessing this site.
+ */
+app.get("/create-post", function (req, res) {
+    if (req.session.loggedIn && !req.session.isAdmin) {
+        let doc = fs.readFileSync("./app/html/create-post.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        res.send(doc);
+    } else {
+        res.redirect("/");
+    }
+
+});
+
+
 // RUN SERVER
 let port = 8000;
 app.listen(port, function () {
