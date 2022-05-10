@@ -77,10 +77,23 @@ app.get("/dashboard", function (req, res) {
 
 });
 
-//function needed for redirecting to manage users lists in dahboard
+//function needed for redirecting to manage users lists in dashboard
 app.get("/user-list", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/user-list.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        res.send(doc);
+    } else {
+        // if user has not logged in, redirect to login page
+        res.redirect("/");
+    }
+
+});
+
+//function needed for redirecting to manage admins list in dashboard
+app.get("/admin-list", function (req, res) {
+    if (req.session.loggedIn) {
+        let doc = fs.readFileSync("./app/html/admin-list.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
     } else {
@@ -208,6 +221,28 @@ app.get("/logout", function (req, res) {
             }
         });
     }
+});
+
+
+//Function needed to get admin users from the database
+app.get('/get-admin-list', function (req, res) {
+
+    let connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'COMP2800'
+    });
+    connection.connect();
+    connection.query('SELECT * FROM BBY_15_User WHERE admin_role = TRUE', function (error, results, fields) {
+        if (error) {
+            console.log(error);
+        }
+        console.log('Rows returned are: ', results);
+        res.send({ status: "success", rows: results });
+
+    });
+    connection.end();
 });
 
 // RUN SERVER
