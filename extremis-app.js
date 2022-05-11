@@ -119,6 +119,7 @@ app.post("/login", function (req, res) {
 
             if (results.length > 0) {
                 // user authenticated, create a session
+                req.session.userID = results[0].user_id;
                 req.session.loggedIn = true;
                 req.session.firstName = results[0].first_name;
                 req.session.email = email;
@@ -187,7 +188,7 @@ app.post("/add-user", function (req, res) {
                     msg: "Record added."
                 });
                 req.session.loggedIn = true;
-                req.session.save(function (err) {});
+                req.session.save(function (err) { });
             });
         connection.end();
     }
@@ -210,6 +211,7 @@ app.get("/logout", function (req, res) {
     }
 });
 
+
 /**
  * Redirect to the create-a-post page if user is a regular user and has logged in.
  * Otherwise, not allow accessing this site.
@@ -226,8 +228,44 @@ app.get("/create-post", function (req, res) {
 });
 
 
+/**
+ * Store text data of user's post into the database.
+ */
+app.post("/add-post", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+
+    let post_type = req.body.postType;
+    let post_title = req.body.postTitle;
+    let post_location = req.body.postLocation;
+    let post_content = req.body.postContent;
+    let weather_type = req.body.weatherType;
+    let userID = req.session.userID;
+    let post_time = req.body.postTime;
+    let post_status = "pending";
+
+    connection.connect();
+    connection.query('INSERT INTO BBY_15_post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [userID, post_time, post_content, post_title, post_type, post_location, post_status, weather_type],
+        function (error, results, fields) {
+            res.send({
+                status: "success",
+                msg: "Record added."
+            });
+            req.session.save(function (err) { });
+        });
+    connection.end();
+});
+
+
 // RUN SERVER
 let port = 8000;
 app.listen(port, function () {
-    
+
 });

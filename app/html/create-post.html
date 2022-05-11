@@ -43,7 +43,7 @@
         <div class="form-box">
             <label>Type*</label>
             <div class="dropdown" required="required">
-                <div class="select">
+                <div class="select" onfocus="removeErrorMsg()">
                     <span class="selected" id="postType">Select type</span>
                     <div class="caret"></div>
                 </div>
@@ -57,27 +57,29 @@
             </div>
         </div>
 
-        <div class="form-box" id="weather-type"></div>
+        <div class="form-box" id="weather-type" onfocus="removeErrorMsg()"></div>
 
         <div class="form-box title">
-            <label>Title</label>
-            <input class="form-input" id="postTitle" placeholder="Enter the title">
+            <label>Title*</label>
+            <input class="form-input" id="postTitle" onfocus="removeErrorMsg()" required="required" placeholder="Enter the title">
         </div>
 
         <div class="form-box">
-            <label>Location</label>
-            <input class="form-input" id="postLocation" placeholder="Enter the location">
+            <label>Location*</label>
+            <input class="form-input" id="postLocation" onfocus="removeErrorMsg()" required="required" placeholder="Enter the location">
         </div>
 
         <div class="form-box">
             <label>Description*</label>
-            <textarea class="form-input" id="postContent" rows="7" required="required" placeholder="Write a description"></textarea>
+            <textarea class="form-input" id="postContent" rows="7" onfocus="removeErrorMsg()" required="required" placeholder="Write a description"></textarea>
         </div>
 
         <div class="form-box">
             <label>Upload pictures</label>
             <button class="btn" id="selectFile">Select file</button>
         </div>
+
+        <p class = "errorMsg"></p>
 
         <div class="form-box" id="btn">
             <input class="form-input" type="button" value="Create post" id="create">

@@ -1,3 +1,5 @@
+"use strict";
+
 const dropdown = document.querySelector(".dropdown");
 const select = document.querySelector(".select");
 const caret = document.querySelector(".caret");
@@ -10,7 +12,7 @@ let dropdownButtonClicks = 0;
 /**
  * Open the dropdown menu if the number of clicks on dropdown menu is odd.
  * Close the dropdown menu if that number is even (for example, when user wants to select type later).
-*/ 
+*/
 select.addEventListener('click', () => {
     dropdownButtonClicks += 1;
     if (dropdownButtonClicks % 2 != 0) {
@@ -21,7 +23,7 @@ select.addEventListener('click', () => {
         } else {
             document.querySelector('.form-box.title').style.marginTop = '35%';
         }
-        
+
         select.classList.toggle('select-clicked');
         caret.classList.toggle('caret-rotate');
         menu.classList.toggle('menu-open');
@@ -67,3 +69,78 @@ function closeDropdown() {
     caret.classList.remove('caret-rotate');
     menu.classList.remove('menu-open');
 }
+
+
+/**
+ * Send data from client side to server.
+ * If text data of the post has been stored into database, redirect to Timeline.
+ * Otherwise, display an error message to user. 
+ * @author Arron_Ferguson (1537 instructor), Linh_Nguyen (BBY15)
+ * @param {*} data user input
+ */
+async function sendData(data) {
+    try {
+        let responseObject = await fetch("/add-post", {
+            method: 'POST',
+            headers: {
+                "Accept": 'application/json',
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        let parsedJSON = await responseObject.json();
+        if (parsedJSON.status == "fail") {
+            // Display error message if data of the post has not been stored into database
+            document.getElementById("emptyError").innerHTML = "<small>*All required fields have to be filled*</small>";
+        } else {
+            // Redirect to timeline page if data of the post has been stored into database
+            window.location.replace("/timeline");
+        }
+    } catch (error) { }
+}
+
+/**
+ * Send user's text input to server to store these data into database.
+ * Display an error message if user did not fill in required fields.
+*/
+document.getElementById("create").addEventListener("click", function (e) {
+    let postType = document.getElementById("postType").innerText;
+    let weatherType;
+    let postTitle = document.getElementById("postTitle").value;
+    let postLocation = document.getElementById("postLocation").value;
+    let postContent = document.getElementById("postContent").value;
+    let postTime = new Date();
+
+    if (!document.getElementById("weatherType")) {
+        // Set weatherType as "none" if user does not create a post about weather condition
+        weatherType = "none";
+    } else {
+        weatherType = document.getElementById("weatherType").value;
+    }
+
+    if (!postType || !postTitle || !postLocation || !postContent) {
+        // Display error message if user does not fill in required fields.
+        document.querySelector(".errorMsg").innerHTML = "<small>*All required fields have to be filled*</small>";
+    } else {
+        sendData({
+            postType: postType,
+            postTitle: postTitle,
+            postLocation: postLocation,
+            postContent: postContent,
+            weatherType: weatherType,
+            postTime: postTime
+        });
+    }
+});
+
+/**
+ * Removes the error message when user enters input.
+ */
+function removeErrorMsg() {
+    document.querySelector(".errorMsg").innerHTML = "";
+}
+
+// Go to timeline when user clicks on "Cancel"
+document.getElementById("cancel").addEventListener("click", function (e) {
+    window.location.replace("/timeline");
+})

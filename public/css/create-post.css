@@ -227,6 +227,11 @@ body{
     box-shadow: 0 0 5px #3477F9;
 }
 
+.errorMsg{
+    color: red;
+    margin-left: inherit;
+}
+
 #btn {
     display: inline-flex;
     width: 100%;
