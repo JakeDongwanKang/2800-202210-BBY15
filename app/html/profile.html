@@ -6,30 +6,41 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/profile.css" />
+
 </head>
 
 <body>
-
+    <!-- Navbar area -->
+    <nav class="navbar">
+        <logo class="brand-title">Extremis</logo>
+        <!-- Create a hamburger menu  -->
+        <a href="#" class="toggle-button">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="navbar-links">
+            <ul>
+                <li><a href="/main">Home</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="#">About Us</a></li>
+                <li>
+                    <form action="/logout" method="get">
+                        <input type="submit" class="singin" value="Sign out" />
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <div class="wrapper">
-        <div id="customers"></div>
-        <nav id="navTemplate"></nav>
-
         <div class="profile-pic-div">
             <div class="profile-pic"></div>
         </div>
         <div class="account-body">
             <div id="user_title" class="user_title"></div>
             <div id="user_content" class="user_content"></div>
-            <div>
-                <form id="upload-images-form">
-                    <button id="image-upload" type="file" accept="image/png, image/gif, image/jpeg"
-                        multiple="multiple">Choose file</button>
-                    <button id="submit" type="submit">Upload</button>
-                </form>
-            </div>
-
-            <button href="/update-profile" type="button" class="updateAccount" onclick="updateProfile">Save</button>
-            <button type="button" class="canncelUpdate">Cancel</button>
+            <button href="/update-profile" type="button" id="updateAccount">Save</button>
+            <a href="/main" type="button" class="canncelUpdate">Cancel</a>
 
         </div>
         <footer>&copy 2022 Burnaby-15</footer>

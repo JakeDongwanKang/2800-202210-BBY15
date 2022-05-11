@@ -132,6 +132,7 @@ app.post("/login", function (req, res) {
                 req.session.firstName = results[0].first_name;
                 req.session.email = email;
                 req.session.isAdmin = results[0].admin_role;
+                req.session.user_id = results[0].user_id;
                 if (results[0].admin_role) {
                     res.send({
                         status: "success",
@@ -161,6 +162,7 @@ app.post("/login", function (req, res) {
         }
     );
 });
+
 
 //Authenticating user, checks if they can be added to the database, then creates and add the user info into the database.
 app.post("/add-user", function (req, res) {
@@ -196,6 +198,8 @@ app.post("/add-user", function (req, res) {
                     msg: "Record added."
                 });
                 req.session.loggedIn = true;
+                req.session.firstName = req.body.firstName;
+                req.session.email = req.body.email;
                 req.session.save(function (err) {});
             });
         connection.end();
@@ -224,9 +228,6 @@ async function getdata(callback) {
 
 //Get the user 's information from the database
 app.get("/profile", function (req, res) {
-
-    // res.setHeader("Content-Type", "application/json");
-
     // check to see if the user email and password match with data in database
     const mysql = require("mysql2");
     const connection = mysql.createConnection({
@@ -235,84 +236,58 @@ app.get("/profile", function (req, res) {
         password: "",
         database: "COMP2800"
     });
-
-    console.log(req.body)
     let email = req.session.email;
-
     // check for a session first!
     if (req.session.loggedIn) {
         connection.connect();
-
         connection.query(
-            "SELECT * FROM BBY_15_User WHERE email = ?",
-            [email],
+            "SELECT * FROM BBY_15_User WHERE user_id = ?",
+            [req.session.user_id],
             function (error, results, fields) {
                 let profile = fs.readFileSync("./app/html/profile.html", "utf8");
                 let profileDOM = new JSDOM(profile);
                 if (results.length > 0) {
                     for (var i = 0; i < results.length; i++) {
-
-                        console.log(results[i]);
                         let firstname = results[i].first_name;
                         let lastname = results[i].last_name;
                         let useremail = results[i].email;
                         let password = results[i].user_password;
                         let userprofile = results[i].profile;
                         var template = `   
-
                         </br>  
-
-
                         <div class="account-body"> 
-
                         <div class='profile-pic-div'>
                         <img class='profile-pic' src='${userprofile}'</div>
-
                             <div id="user_title">
                             <h2>${firstname} ${lastname} </h2>
                             </div>
-
                             <div id="user_content">
-
                                 <div class="form-group">
                                     <label for="firstName">First Name</label>
                                     <input type="text" class="um-input" id="firstName" placeholder=${firstname}>
                                 </div>
-
                                 <div class="form-group">
                                     <label for="lastName">Last Name</label>
                                     <input type="text" class="um-input" id="lastName" placeholder=${lastname}>
                                 </div>
-
                                 <div class="form-group">
                                     <label for="email">Email</label>
                                     <input type="email" class="um-input" id="userEmail" placeholder=${useremail}>
                                 </div>
-
                                 <div class="form-group">
                                     <label for="password">Password</label>
                                     <input type="password" class="um-input" id="userPassword" placeholder=${password}>
                                 </div>
-
-                                <div class="form-group">
-                                    <label for="picture">Upload profile picture</label>
-                                    <input id="image-upload" type="file" value="Upload Image" accept="image/png, image/gif, image/jpeg"multiple="multiple" />
-                                    <input id="submit" type="submit" value="Submit" />
-                                </div>
                             </div>  
-
                         </div>
                     `;
                         let area = profileDOM.window.document.querySelector('#user_content');
-                        console.log(template);
                         area.innerHTML += template;
                     }
                     res.send(profileDOM.serialize());
                 }
-
             }
         )
-        console.log(req.session.useremail);
         res.set("Server", "Wazubi Engine");
         res.set("X-Powered-By", "Wazubi");
     } else {
@@ -321,9 +296,8 @@ app.get("/profile", function (req, res) {
 });
 
 
-
 //Request to change the update
-app.put("/profile", function (req, res) {
+app.post("/profile", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     //Authenticating user.
@@ -336,22 +310,20 @@ app.put("/profile", function (req, res) {
 
     //connecting to the database, then creating and adding the user info into the database.
     connection.connect();
-
-    connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE id_user=?',
-        [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.body.user_id],
+    connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE user_id=?',
+        [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.session.user_id],
         function (error, results, fields) {
             res.send({
                 status: "success",
                 msg: "Record added."
             });
             req.session.loggedIn = true;
+            req.session.firstName = req.body.firstName;
+            req.session.email = req.body.email;
             req.session.save(function (err) {});
         });
     connection.end();
-
 });
-
-
 
 
 const storage = multer.diskStorage({
@@ -369,16 +341,11 @@ const upload = multer({
 
 app.post('/upload-images', upload.array("files"), function (req, res) {
 
-    //console.log(req.body);
-    console.log(req.files);
-
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
     }
 
 });
-
-
 
 
 /**
