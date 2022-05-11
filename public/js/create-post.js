@@ -19,9 +19,9 @@ select.addEventListener('click', () => {
         // Make space for dropdown menu in 2 different viewport according to media queries.
         var x = window.matchMedia("(max-width: 800px)");
         if (x.matches) {
-            document.querySelector('.form-box.title').style.marginTop = '75%';
+            document.querySelector('.form-box.title').style.marginTop = '220px';
         } else {
-            document.querySelector('.form-box.title').style.marginTop = '35%';
+            document.querySelector('.form-box.title').style.marginTop = '200px';
         }
 
         select.classList.toggle('select-clicked');
@@ -99,22 +99,19 @@ async function sendData(data) {
             });
             let parsedJSON2 = responseObject2.json();
             if (parsedJSON2.status == "fail") {
-                console.log("can not store image info");
+                document.getElementById("emptyError").innerHTML = "<small>*Please upload images again*</small>";
             } else {
-                console.log("image info has been saved to db"); //delete later
+                // Redirect to timeline page if data of the post has been stored into database
+                window.location.replace("/timeline");
             }
-            // Redirect to timeline page if data of the post has been stored into database
-            // window.location.replace("/timeline");
-
         }
-    } catch (error) {}
+    } catch (error) { }
 }
 
 /**
  * Send user's text input to server to store these data into database.
  * Display an error message if user did not fill in required fields.
  */
-
 document.getElementById("create").addEventListener("click", function (e) {
     let postType = document.getElementById("postType").innerText;
     let weatherType;
@@ -144,7 +141,6 @@ document.getElementById("create").addEventListener("click", function (e) {
 });
 
 
-
 /**
  * Removes the error message when user enters input.
  */
@@ -158,15 +154,46 @@ document.getElementById("cancel").addEventListener("click", function (e) {
 })
 
 
-// Store images into database
+/**
+ * Store the information of the images uploaded by user to database.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
+ */
 const upload_images = document.getElementById("upload-images");
-upload_images.addEventListener("submit", function(e){
+const imagesUpload = document.querySelector("#selectFile");
+upload_images.addEventListener("submit", function (e) {
     e.preventDefault();
-
-    const imagesUpload = document.querySelector("#selectFile");
 
     for (let i = 0; i < imagesUpload.files.length; i++) {
         formData.append("files", imagesUpload.files[i]);
     }
 });
 const formData = new FormData();
+
+
+/**
+ * Preview uploaded images before uploading to the server.
+ * The following codes follow an example on Youtube (https://www.youtube.com/watch?v=qpxi-fKffB4&ab_channel=CodingArtist),
+ * with changes and adjustments made by Linh.
+ */
+let imageContainer = document.getElementById("images");
+let fileNum = document.getElementById("fileNum");
+
+imagesUpload.addEventListener("change", function () {
+    imageContainer.innerHTML = "";
+    fileNum.textContent = `${imagesUpload.files.length} Files Selected`;
+
+    for (let i = 0; i < imagesUpload.files.length; i++) {
+        let reader = new FileReader();
+        let figure = document.createElement("figure");
+        let figCaption = document.createElement("figcaption");
+        figCaption.innerText = imagesUpload.files[i].name;
+        figure.appendChild(figCaption);
+        reader.addEventListener("load", function () {
+            let img = document.createElement("img");
+            img.setAttribute("src", reader.result);
+            figure.insertBefore(img, figCaption);
+        })
+        imageContainer.appendChild(figure);
+        reader.readAsDataURL(imagesUpload.files[i]);
+    }
+})

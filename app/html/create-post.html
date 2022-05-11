@@ -80,15 +80,16 @@
         <div class="form-box">
             <form id="upload-images">
                 <label>Upload pictures</label>
-
                 <input type="file" class="btn" id="selectFile" value="Select file"
                     accept="image/png, image/gif, image/jpeg" multiple="multiple" />
-
+                <label for="selectFile">Choose a Photo</label>
+                <p id="fileNum"><small>No Files Chosen</small></p>
+                <div id="images"></div>
                 <p class="errorMsg"></p>
-
-                <input class="form-input" type="submit" value="Create post" id="create">
-                <input class="form-input" type="button" value="Cancel" id="cancel">
-
+                <div id="btn">
+                    <input class="form-input" type="submit" value="Create post" id="create">
+                    <input class="form-input" type="button" value="Cancel" id="cancel">
+                </div>
             </form>
         </div>
 

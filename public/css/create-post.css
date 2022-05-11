@@ -99,9 +99,9 @@ body{
 
 /* create-a-post form css starts */
 #createPostForm {
-    margin: 0% 15% 3% 15%;
+    margin: 0% 15% 4% 15%;
     font-size: 16px;
-    padding: 10px 20px;
+    padding: 0px 20px;
 }
 
 .form-box {
@@ -222,11 +222,53 @@ body{
     height: max-content;
 }
 
-#selectFile:hover, #create:hover, #cancel:hover, .select:hover {
+label[for="selectFile"]:hover, #create:hover, #cancel:hover, .select:hover {
     cursor: pointer;
     box-shadow: 0 0 5px #3477F9;
 }
 
+input[type='file'] {
+    display: none;
+}
+
+label[for="selectFile"] {
+    cursor: pointer;
+    border-radius: 10px;
+    display: block;
+    position: relative;
+    text-align: center;
+    border: solid 0.2px #484848;
+    width: 200px;
+    margin: 0 auto 0 auto;
+}
+
+#fileNum {
+    margin: 0;
+    text-align: center;
+}
+
+#images {
+    display: flex;
+    width: 100%;
+    position: relative;
+    justify-content: space-evenly;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+figure{
+    width: 40%;
+    margin: 0;
+}
+
+img{
+    width: 100%;
+}
+
+figcaption{
+    text-align: center;
+    font-size: 14px;
+}
 .errorMsg{
     color: red;
     margin-left: inherit;
@@ -235,13 +277,14 @@ body{
 #btn {
     display: inline-flex;
     width: 100%;
+    justify-content: space-evenly;
 }
 
 #create, #cancel {
-    width: 30%;
-    height: 35px;
-    margin: 0% 10%;
+    width: 35%;
+    height: 40px;
 }
+
 #create {
     background-color: #3477F9;
     color: #ffffff;
@@ -352,14 +395,23 @@ footer {
         height: 150px;
     }
 
+    figure{
+        width: 45%  ;
+    }
+    figcaption{
+        margin:0;
+        font-size: 8px;
+        line-height: 10px;
+    }
     #btn {
         display: block;
         width: 100%;
+        align-items: center;
     }
 
     #create, #cancel {
         width: 70%;
-        margin-top: 20px; 
+        margin: 20px auto 0 auto; 
         font-size: 18px;       
     }
 }
