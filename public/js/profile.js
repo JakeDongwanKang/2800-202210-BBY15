@@ -1,5 +1,13 @@
-"use strict";
+/**
+ * Send data from client side to server for authentication.
+ * If user has an account and is an admin, redirect to Admin Dashboard.
+ * If user has an account and is not an admin, redirect to the Main page.
+ * Otherwise, send an error message to user. 
+ * @author Arron_Ferguson (1537 instructor)
+ * @param {*} data user input
+ */
 
+"use strict";
 //Hambuger menu
 const toggleButton = document.getElementsByClassName('toggle-button')[0]
 const navbarLinks = document.getElementsByClassName('navbar-links')[0]
@@ -7,41 +15,6 @@ const navbarLinks = document.getElementsByClassName('navbar-links')[0]
 toggleButton.addEventListener('click', () => {
     navbarLinks.classList.toggle('active')
 })
-
-// //Upload user profile
-// const upLoadForm = document.getElementById("upload-images-form");
-// upLoadForm.addEventListener("submit", uploadImages);
-
-// function uploadImages(e) {
-//     e.preventDefault();
-
-//     const imageUpload = document.querySelector('#image-upload');
-//     const formData = new FormData();
-
-//     for (let i = 0; i < imageUpload.files.length; i++) {
-//         // put the images from the input into the form data
-//         formData.append("files", imageUpload.files[i]);
-//     }
-
-//     const options = {
-//         method: 'POST',
-//         body: formData,
-//     };
-//     //delete options.headers['Content-Type'];
-
-//     // now use fetch
-//     fetch("/upload-images", options).then(function (res) {
-//         console.log(res);
-//     }).catch(function (err) {
-//         ("Error:", err)
-//     });
-// }
-
-
-
-
-
-
 
 //Send data to server, then either create or execute an error message.
 async function sendData(data) {
@@ -63,8 +36,7 @@ async function sendData(data) {
     } catch (error) {}
 }
 
-
-//Send the update information to server for authentication
+//Send the update information of users to server for authentication
 document.getElementById("updateAccount").addEventListener("click", function (e) {
     let firstName = document.getElementById("firstName").value;
     let lastName = document.getElementById("lastName").value;
@@ -80,7 +52,6 @@ document.getElementById("updateAccount").addEventListener("click", function (e) 
             email: document.getElementById("userEmail").value,
             password: document.getElementById("userPassword").value
         });
-        console.log("First Name: " + firstName);
     }
 });
 
@@ -89,10 +60,11 @@ document.getElementById("cancel").addEventListener("click", function (e) {
     window.location.replace("/main");
 })
 
-// function storeImageToDB() {
+// function to store imagines to the database
 const upload_avatar = document.getElementById("upload-images");
 upload_avatar.addEventListener("submit", uploadImages);
 
+//Upload images to the system.
 function uploadImages(e) {
     e.preventDefault();
     const imagesUpload = document.querySelector("#selectFile");
@@ -105,12 +77,7 @@ function uploadImages(e) {
         body: formData,
     };
     fetch("/upload-avatar", options)
-        .then(function (res) {
-            console.log(res);
-        }).catch(function (err) {
+        .then(function (res) {}).catch(function (err) {
             ("Error:", err)
         });
 };
-// }
-
-// storeTextDataToDB().then(storeImageToDB);

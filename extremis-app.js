@@ -13,6 +13,7 @@ const multer = require("multer");
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
 app.use("/js", express.static("./public/js"));
+app.use("/images", express.static("./app/images"));
 
 app.use(session({
     secret: "what is the point of this secret",
@@ -251,12 +252,12 @@ app.get("/profile", function (req, res) {
                         let lastname = results[i].last_name;
                         let useremail = results[i].email;
                         let password = results[i].user_password;
-                        let userprofile = results[i].profile;
+                        let userprofile = results[i].profile_picture;
                         var template = `   
                         </br>  
                         <div class="account-body"> 
                         <div class='profile-pic-div'>
-                        <img class='profile-pic' src='${userprofile}'</div>
+                            <img class='profile-pic' src='${userprofile}'</div>                              
                             <div id="user_title">
                             <h2>${firstname} ${lastname} </h2>
                             </div>
@@ -278,6 +279,8 @@ app.get("/profile", function (req, res) {
                                     <input type="password" class="um-input" id="userPassword" placeholder=${password}>
                                 </div>
                                 
+                            </div>
+                                
                             </div>  
                         </div>
                     `;
@@ -294,38 +297,6 @@ app.get("/profile", function (req, res) {
         res.redirect("/");
     }
 });
-
-
-// //Request to change the update
-// app.post("/profile", function (req, res) {
-//     res.setHeader('Content-Type', 'application/json');
-
-//     //Authenticating user.
-//     let connection = mysql.createConnection({
-//         host: 'localhost',
-//         user: 'root',
-//         password: '',
-//         database: 'COMP2800'
-//     });
-
-//     //connecting to the database, then creating and adding the user info into the database.
-//     connection.connect();
-//     connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE user_id=?',
-//         [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.session.user_id],
-//         function (error, results, fields) {
-//             res.send({
-//                 status: "success",
-//                 msg: "Record added."
-//             });
-//             req.session.loggedIn = true;
-//             req.session.firstName = req.body.firstName;
-//             req.session.email = req.body.email;
-//             req.session.save(function (err) {});
-//         });
-//     connection.end();
-// });
-
-
 
 const storage_avatar = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -351,6 +322,7 @@ app.post("/profile", function (req, res) {
         database: 'COMP2800'
     });
 
+
     //connecting to the database, then creating and adding the user info into the database.
     connection.connect();
     connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE user_id=?',
@@ -368,7 +340,7 @@ app.post("/profile", function (req, res) {
     connection.end();
 });
 
-
+//Upload the user profle into the database
 app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
     let connection = mysql.createConnection({
         host: 'localhost',
@@ -380,9 +352,9 @@ app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
 
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
-        console.log(req.files[i].path);
-        connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-            [req.session.postID, req.files[i].path],
+        let newpath = ".." + req.files[i].path.substring(3);
+        connection.query('UPDATE BBY_15_User SET profile_picture=? WHERE user_id=?',
+            [newpath, req.session.user_id],
             function (error, results, fields) {
                 res.send({
                     status: "success",
@@ -393,79 +365,12 @@ app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
     }
 
 
-    // connection.end();
+    connection.end();
 
 });
 
 
-
-// const storage = multer.diskStorage({
-//     destination: function (req, file, callback) {
-//         callback(null, "./app/images/avatar/")
-//     },
-//     filename: function (req, file, callback) {
-//         // callback(null, file.originalname.split('/').pop().trim());
-//         callback(null, req.session.user_id + 'AT' + Date.now() + "AND" + file.originalname.split('/').pop().trim());
-
-//     }
-// });
-
-// //Set storage engine
-
-// const upload = multer({
-//     storage: storage
-// });
-// const upload = multer({
-//     storage: storage,
-//     fileFilter: (req, file, cb) => {
-//         console.log(file.mimetype)
-//         if (file.mimetype === 'assets/jpeg' ||
-//             file.mimetype === 'assets/jpg' ||
-//             file.mimetype === 'assets/png' ||
-//             file.mimetype === 'assets/gif') {
-//             cb(null, true);
-//         } else {
-//             cb(null, false);
-//             req.fileError = 'File format is not valid';
-//         }
-//     }
-// })
-
-
-
-// app.post('/upload-images', upload.array("files"), function (req, res) {
-
-//     // const connection = mysql.createConnection({
-//     //     host: 'localhost',
-//     //     user: 'root',
-//     //     password: '',
-//     //     database: 'COMP2800'
-//     // });
-
-//     for (let i = 0; i < req.files.length; i++) {
-//         req.files[i].filename = req.files[i].originalname;
-//     }
-
-// });
-
-// app.post('/upload-images', (req, res) => {
-//     let sampleFile;
-//     let uploadPath;
-//     if (!req.file || Object.keys(req.files).length === 0) {
-//         return res.status(400).send('No files were uploaded.');
-//     }
-//     sampleFile = req.files.sampleFile;
-//     console.log(sampleFile);
-
-// });
-
-
-
-/**
- * Anh added the logout function
- * I learned how to write do it from Arron course (Comp1537).
- * These codes provided by Arron on his examples.
- */
+/** Logout from the website */
 app.get("/logout", function (req, res) {
     if (req.session) {
         req.session.destroy(function (error) {

@@ -4,8 +4,6 @@ body {
     font-family: 'Montserrat', sans-serif;
     align-items: center;
     justify-content: center;
-    margin-left: 20%;
-    margin-right: 20%;
     padding: 0;
     margin: 0;
     background: white;
@@ -15,15 +13,15 @@ body {
 .wrapper {
     margin-left: 20%;
     margin-right: 20%;
+    place-items: center;
 }
-
 
 h2 {
     text-align: center;
     text-transform: uppercase;
 }
 
-input {
+.form-group>input {
     display: block;
     align-items: center;
     width: 100%;
@@ -41,9 +39,12 @@ input {
     padding-bottom: 20px;
 }
 
+.buttonProfile {
+    margin-left: 38%;
+    display: block;
+}
 
 #updateAccount {
-    display: inline-block;
     padding: 10px 15px;
     font-size: 12px;
     cursor: pointer;
@@ -54,18 +55,16 @@ input {
     background-color: rgba(52, 119, 249, 0.9);
     border: none;
     border-radius: 8px;
-    margin-right: 15px;
     font-family: 'Montserrat';
+    display: inline-block;
+    margin: 0 auto;
 }
-
-
 
 .updateAccount:hover {
     background-color: rgba(52, 119, 249, 0.7);
 }
 
-.canncelUpdate {
-    display: inline-block;
+#cancel {
     padding: 10px 15px;
     font-size: 12px;
     cursor: pointer;
@@ -75,70 +74,36 @@ input {
     color: black;
     background-color: lightgrey;
     border: none;
-    border-radius: 8px;
-    margin-right: 15px;
     font-family: 'Montserrat';
+    object-fit: cover;
+    overflow: hidden;
+    display: inline-block;
+    margin-left: 20px;
+    border-radius: 8px;
 }
 
-.canncelUpdate:hover {
+#cancel:hover {
     background-color: red;
 }
 
 .profile-pic {
+    display: block;
+    margin: 0 auto;
     width: 150px;
+    height: 150px;
     border-radius: 50%;
     border-color: rebeccapurple;
-    margin-left: 25%;
-
+    object-fit: cover;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0), 0 6px 36px, rgba(0, 0, 0, 0.13);
+    border: 1px solid black;
 }
 
-
-/* #image-upload {
-    display: inline-block;
-    padding: 8px 12px;
-    font-size: 12px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    outline: none;
-    color: black;
-    background-color: lightgrey;
-    border: none;
+#selectFile {
     margin-left: 30px;
-    margin-right: 15px;
-    font-family: 'Montserrat';
-
 }
 
-#submit {
-    display: inline-block;
-    padding: 8px 12px;
-    font-size: 10px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    outline: none;
-    color: black;
-    background-color: lightblue;
-    border: none;
-    margin-right: 15px;
-    font-family: 'Montserrat';
-
-} */
-
-/* #upload-images-form {
-    display: block;
-    display: block;
-    align-items: center;
-    width: 30%;
-    border-radius: 20px;
-    border: none;
-    font-size: 16px;
-    height: 40px;
-    font-family: 'Montserrat';
-} */
-
-/* Navbar */
+/* CSS for the Navbar */
 .navbar {
     display: flex;
     position: relative;
@@ -222,8 +187,6 @@ button:hover {
     background-color: rgba(52, 119, 249, 0.3);
 }
 
-
-
 /*For the view under 800px*/
 @media (max-width: 800px) {
     #signUpForm>input[type="button"] {
@@ -297,6 +260,11 @@ button:hover {
         color: white;
         transition: all 0.3s ease 0s;
         margin-bottom: 30px;
+    }
+
+    .buttonProfile {
+        margin-left: 30%;
+        display: block;
     }
 
 }
