@@ -39,17 +39,27 @@
         <div class="account-body">
             <div id="user_title" class="user_title"></div>
             <div id="user_content" class="user_content"></div>
-            <button href="/update-profile" type="button" id="updateAccount">Save</button>
-            <a href="/main" type="button" class="canncelUpdate">Cancel</a>
-
         </div>
-        <footer>&copy 2022 Burnaby-15</footer>
 
-        <!-- Javascript goes here-->
-        <script src="/js/profile.js"></script>
+        <div class="form-box-image">
+            <form id="upload-images">
+                <label>Upload pictures</label>
+
+                <input type="file" class="btn" id="selectFile" value="Select file"
+                    accept="image/png, image/gif, image/jpeg" multiple="multiple" />
+                <p class="errorMsg"></p>
+
+                <input href="/profile" type="submit" id="updateAccount" value="Save" />
+                <input class="form-input" type="button" value="Cancel" id="cancel">
+
+            </form>
+        </div>
+
     </div>
+    <footer>&copy 2022 Burnaby-15</footer>
 
-
+    <!-- Javascript goes here-->
+    <script src="/js/profile.js"></script>
 </body>
 
 </html>

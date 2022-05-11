@@ -10,13 +10,9 @@ const {
 } = require('jsdom');
 const multer = require("multer");
 
-
-
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
 app.use("/js", express.static("./public/js"));
-
-
 
 app.use(session({
     secret: "what is the point of this secret",
@@ -29,6 +25,9 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
+
+// //default
+// app.use(fileUpload());
 
 
 /**
@@ -278,6 +277,7 @@ app.get("/profile", function (req, res) {
                                     <label for="password">Password</label>
                                     <input type="password" class="um-input" id="userPassword" placeholder=${password}>
                                 </div>
+                                
                             </div>  
                         </div>
                     `;
@@ -296,7 +296,50 @@ app.get("/profile", function (req, res) {
 });
 
 
-//Request to change the update
+// //Request to change the update
+// app.post("/profile", function (req, res) {
+//     res.setHeader('Content-Type', 'application/json');
+
+//     //Authenticating user.
+//     let connection = mysql.createConnection({
+//         host: 'localhost',
+//         user: 'root',
+//         password: '',
+//         database: 'COMP2800'
+//     });
+
+//     //connecting to the database, then creating and adding the user info into the database.
+//     connection.connect();
+//     connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE user_id=?',
+//         [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.session.user_id],
+//         function (error, results, fields) {
+//             res.send({
+//                 status: "success",
+//                 msg: "Record added."
+//             });
+//             req.session.loggedIn = true;
+//             req.session.firstName = req.body.firstName;
+//             req.session.email = req.body.email;
+//             req.session.save(function (err) {});
+//         });
+//     connection.end();
+// });
+
+
+
+const storage_avatar = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, "./app/images/avatar/")
+    },
+    filename: function (req, file, callback) {
+        callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname.split('/').pop().trim());
+    }
+});
+const uploadAvatar = multer({
+    storage: storage_avatar
+});
+
+//Store user update information and avatar
 app.post("/profile", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
@@ -326,26 +369,96 @@ app.post("/profile", function (req, res) {
 });
 
 
-const storage = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, "/assets")
-    },
-    filename: function (req, file, callback) {
-        callback(null, "my-app-" + file.originalname.split('/').pop().trim());
-    }
-});
-const upload = multer({
-    storage: storage
-});
-
-
-app.post('/upload-images', upload.array("files"), function (req, res) {
+app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.connect();
 
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
+        console.log(req.files[i].path);
+        connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
+            [req.session.postID, req.files[i].path],
+            function (error, results, fields) {
+                res.send({
+                    status: "success",
+                    msg: "Image information added to database."
+                });
+                req.session.save(function (err) {});
+            });
     }
 
+
+    // connection.end();
+
 });
+
+
+
+// const storage = multer.diskStorage({
+//     destination: function (req, file, callback) {
+//         callback(null, "./app/images/avatar/")
+//     },
+//     filename: function (req, file, callback) {
+//         // callback(null, file.originalname.split('/').pop().trim());
+//         callback(null, req.session.user_id + 'AT' + Date.now() + "AND" + file.originalname.split('/').pop().trim());
+
+//     }
+// });
+
+// //Set storage engine
+
+// const upload = multer({
+//     storage: storage
+// });
+// const upload = multer({
+//     storage: storage,
+//     fileFilter: (req, file, cb) => {
+//         console.log(file.mimetype)
+//         if (file.mimetype === 'assets/jpeg' ||
+//             file.mimetype === 'assets/jpg' ||
+//             file.mimetype === 'assets/png' ||
+//             file.mimetype === 'assets/gif') {
+//             cb(null, true);
+//         } else {
+//             cb(null, false);
+//             req.fileError = 'File format is not valid';
+//         }
+//     }
+// })
+
+
+
+// app.post('/upload-images', upload.array("files"), function (req, res) {
+
+//     // const connection = mysql.createConnection({
+//     //     host: 'localhost',
+//     //     user: 'root',
+//     //     password: '',
+//     //     database: 'COMP2800'
+//     // });
+
+//     for (let i = 0; i < req.files.length; i++) {
+//         req.files[i].filename = req.files[i].originalname;
+//     }
+
+// });
+
+// app.post('/upload-images', (req, res) => {
+//     let sampleFile;
+//     let uploadPath;
+//     if (!req.file || Object.keys(req.files).length === 0) {
+//         return res.status(400).send('No files were uploaded.');
+//     }
+//     sampleFile = req.files.sampleFile;
+//     console.log(sampleFile);
+
+// });
+
 
 
 /**

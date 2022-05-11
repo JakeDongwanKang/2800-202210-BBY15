@@ -55,9 +55,10 @@ input {
     border: none;
     border-radius: 8px;
     margin-right: 15px;
-    margin-left: 40%;
     font-family: 'Montserrat';
 }
+
+
 
 .updateAccount:hover {
     background-color: rgba(52, 119, 249, 0.7);
@@ -90,6 +91,7 @@ input {
     margin-left: 25%;
 
 }
+
 
 /* #image-upload {
     display: inline-block;

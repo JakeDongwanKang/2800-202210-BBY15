@@ -8,6 +8,7 @@ toggleButton.addEventListener('click', () => {
     navbarLinks.classList.toggle('active')
 })
 
+// //Upload user profile
 // const upLoadForm = document.getElementById("upload-images-form");
 // upLoadForm.addEventListener("submit", uploadImages);
 
@@ -39,18 +40,7 @@ toggleButton.addEventListener('click', () => {
 
 
 
-// document.querySelector('#updateAccount').addEventListener("click", function (e) {
-//     e.preventDefault();
-//     var updates = "questionID=" + document.querySelector('#q-id1').innerHTML + "&opt1=" + document.querySelector('#c1').value + "&opt2=" + document.querySelector('#c2').value + "&opt3=" + document.querySelector('#c3').value + "&opt4=" + document.querySelector('#c4').value + "&opt5=" + document.querySelector('#c5').value;
-//     ajaxPOST("/choices", function (data, status) {
-//         var response = JSON.parse(data);
-//         if (status != 200) {
-//             console.log(response);
-//         } else {
-//             document.querySelector('#info2').innerHTML = "Updated!";
-//         }
-//     }, updates);
-// });
+
 
 
 //Send data to server, then either create or execute an error message.
@@ -93,3 +83,34 @@ document.getElementById("updateAccount").addEventListener("click", function (e) 
         console.log("First Name: " + firstName);
     }
 });
+
+// Go to main page when user clicks on "Cancel"
+document.getElementById("cancel").addEventListener("click", function (e) {
+    window.location.replace("/main");
+})
+
+// function storeImageToDB() {
+const upload_avatar = document.getElementById("upload-images");
+upload_avatar.addEventListener("submit", uploadImages);
+
+function uploadImages(e) {
+    e.preventDefault();
+    const imagesUpload = document.querySelector("#selectFile");
+    const formData = new FormData();
+    for (let i = 0; i < imagesUpload.files.length; i++) {
+        formData.append("files", imagesUpload.files[i]);
+    }
+    const options = {
+        method: 'POST',
+        body: formData,
+    };
+    fetch("/upload-avatar", options)
+        .then(function (res) {
+            console.log(res);
+        }).catch(function (err) {
+            ("Error:", err)
+        });
+};
+// }
+
+// storeTextDataToDB().then(storeImageToDB);
