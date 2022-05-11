@@ -38,7 +38,7 @@
         <h2><span></span></h2>
     </header>
 
-    <form id="createPostForm">
+    <div id="createPostForm">
 
         <div class="form-box">
             <label>Type*</label>
@@ -61,32 +61,38 @@
 
         <div class="form-box title">
             <label>Title*</label>
-            <input class="form-input" id="postTitle" onfocus="removeErrorMsg()" required="required" placeholder="Enter the title">
+            <input class="form-input" id="postTitle" onfocus="removeErrorMsg()" required="required"
+                placeholder="Enter the title">
         </div>
 
         <div class="form-box">
             <label>Location*</label>
-            <input class="form-input" id="postLocation" onfocus="removeErrorMsg()" required="required" placeholder="Enter the location">
+            <input class="form-input" id="postLocation" onfocus="removeErrorMsg()" required="required"
+                placeholder="Enter the location">
         </div>
 
         <div class="form-box">
             <label>Description*</label>
-            <textarea class="form-input" id="postContent" rows="7" onfocus="removeErrorMsg()" required="required" placeholder="Write a description"></textarea>
+            <textarea class="form-input" id="postContent" rows="7" onfocus="removeErrorMsg()" required="required"
+                placeholder="Write a description"></textarea>
         </div>
 
         <div class="form-box">
-            <label>Upload pictures</label>
-            <button class="btn" id="selectFile">Select file</button>
+            <form id="upload-images">
+                <label>Upload pictures</label>
+
+                <input type="file" class="btn" id="selectFile" value="Select file"
+                    accept="image/png, image/gif, image/jpeg" multiple="multiple" />
+
+                <p class="errorMsg"></p>
+
+                <input class="form-input" type="submit" value="Create post" id="create">
+                <input class="form-input" type="button" value="Cancel" id="cancel">
+
+            </form>
         </div>
 
-        <p class = "errorMsg"></p>
-
-        <div class="form-box" id="btn">
-            <input class="form-input" type="button" value="Create post" id="create">
-            <input class="form-input" type="button" value="Cancel" id="cancel">
-        </div>
-
-    </form>
+    </div>
 
     <!-- Footer area -->
     <footer>&copy 2022 Burnaby-15</footer>

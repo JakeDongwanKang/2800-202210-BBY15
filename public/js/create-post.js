@@ -12,7 +12,7 @@ let dropdownButtonClicks = 0;
 /**
  * Open the dropdown menu if the number of clicks on dropdown menu is odd.
  * Close the dropdown menu if that number is even (for example, when user wants to select type later).
-*/
+ */
 select.addEventListener('click', () => {
     dropdownButtonClicks += 1;
     if (dropdownButtonClicks % 2 != 0) {
@@ -37,7 +37,7 @@ select.addEventListener('click', () => {
 /**
  * Close the dropdown menu and display the result after user selects a type of post.
  * Then, sets the number of clicks on "Select type" dropdown button to 0. 
-*/
+ */
 options.forEach(option => {
     option.addEventListener('click', () => {
         closeDropdown();
@@ -51,8 +51,8 @@ options.forEach(option => {
 
         // Add question asking for what kind of severe weather if user selects to create a post about weather condition.
         if (selected.innerText == "Weather conditions") {
-            question.innerHTML = "<label>What kind of severe weather is it?</label>"
-                + "<input class='form-input' id='weatherType' placeholder='flood/ drought/ blizzard/...'>";
+            question.innerHTML = "<label>What kind of severe weather is it?</label>" +
+                "<input class='form-input' id='weatherType' placeholder='flood/ drought/ blizzard/...'>";
         }
 
         // Set the number of clicks on dropdown button to 0
@@ -93,23 +93,34 @@ async function sendData(data) {
             // Display error message if data of the post has not been stored into database
             document.getElementById("emptyError").innerHTML = "<small>*All required fields have to be filled*</small>";
         } else {
+            let responseObject2 = await fetch("/upload-post-images", {
+                method: 'POST',
+                body: formData
+            });
+            let parsedJSON2 = responseObject2.json();
+            if (parsedJSON2.status == "fail") {
+                console.log("can not store image info");
+            } else {
+                console.log("image info has been saved to db"); //delete later
+            }
             // Redirect to timeline page if data of the post has been stored into database
-            window.location.replace("/timeline");
+            // window.location.replace("/timeline");
+
         }
-    } catch (error) { }
+    } catch (error) {}
 }
 
 /**
  * Send user's text input to server to store these data into database.
  * Display an error message if user did not fill in required fields.
-*/
+ */
+
 document.getElementById("create").addEventListener("click", function (e) {
     let postType = document.getElementById("postType").innerText;
     let weatherType;
     let postTitle = document.getElementById("postTitle").value;
     let postLocation = document.getElementById("postLocation").value;
     let postContent = document.getElementById("postContent").value;
-    let postTime = new Date();
 
     if (!document.getElementById("weatherType")) {
         // Set weatherType as "none" if user does not create a post about weather condition
@@ -127,11 +138,12 @@ document.getElementById("create").addEventListener("click", function (e) {
             postTitle: postTitle,
             postLocation: postLocation,
             postContent: postContent,
-            weatherType: weatherType,
-            postTime: postTime
+            weatherType: weatherType
         });
     }
 });
+
+
 
 /**
  * Removes the error message when user enters input.
@@ -144,3 +156,17 @@ function removeErrorMsg() {
 document.getElementById("cancel").addEventListener("click", function (e) {
     window.location.replace("/timeline");
 })
+
+
+// Store images into database
+const upload_images = document.getElementById("upload-images");
+upload_images.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const imagesUpload = document.querySelector("#selectFile");
+
+    for (let i = 0; i < imagesUpload.files.length; i++) {
+        formData.append("files", imagesUpload.files[i]);
+    }
+});
+const formData = new FormData();
