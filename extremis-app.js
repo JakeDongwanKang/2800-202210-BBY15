@@ -21,7 +21,6 @@ const uploadPostImages = multer({ storage: storage_post_images });
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
 app.use("/js", express.static("./public/js"));
-app.use("/images", express.static("./app/images"));
 
 app.use(session({
     secret: "what is the point of this secret",
