@@ -75,6 +75,18 @@ app.get("/dashboard", function (req, res) {
     } else {
         res.redirect("/");
     }
+});
+
+app.get("/add-user", function (req, res) {
+    if (req.session.loggedIn && req.session.isAdmin) {
+        let doc = fs.readFileSync("./app/html/add-user.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        let dashboard_jsdom = new JSDOM(doc);
+        res.write(dashboard_jsdom.serialize());
+        res.end();
+    } else {
+        res.redirect("/");
+    }
 
 });
 
@@ -110,13 +122,13 @@ app.get("/user-list", function (req, res) {
                     } else {
                         var role = 'User';
                     }
-                    user_list += ("<tr><td class='id'><span>" + results[i]['user_id']
-                    + "</span></td><td class='first_name'><span>" + results[i]['first_name']
+                    user_list += ("<tr><td class='id'>" + results[i]['user_id']
+                    + "</td><td class='first_name'><span>" + results[i]['first_name']
                     + "</span></td><td class='last_name'><span>" + results[i]['last_name']
                     + "</span></td><td class='email'><span>" + results[i]['email']
                     + "</span></td><td class='password'><span>" + results[i]['user_password']
-                    + "</span></td><td class='delete'><span>" + "<button type='submit' class='delete_user'>Delete"
-                    + "</span></button></td></tr>"
+                    + "</span></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete"
+                    + "</button></td></tr>"
                     );
                 }
                 user_list_jsdom.window.document.getElementById("user-container").innerHTML = user_list;
@@ -175,8 +187,8 @@ app.get("/admin-list", function (req, res) {
                     + "</span></td><td class='last_name'><span>" + results[i]['last_name']
                     + "</span></td><td class='email'><span>" + results[i]['email']
                     + "</span></td><td class='password'><span>" + results[i]['user_password']
-                    + "</span></td><td class='delete'><span>" + "<button type='submit' class='delete_user'>Delete"
-                    + "</span></button></td></tr>"
+                    + "</span></td><td class='delete'>" + "<button type='button' id='deleteUser'>Delete"
+                    + "</button></td></tr>"
                     );
                 }
                 admin_list_jsdom.window.document.getElementById("user-container").innerHTML = admin_list;
@@ -347,6 +359,31 @@ app.post('/update-user', function (req, res) {
       }
       //console.log('Rows returned are: ', results);
       res.send({ status: "success", msg: "Recorded updated." });
+    });
+    connection.end();
+});
+
+// POST: we are changing stuff on the server!!!
+app.post('/delete-user', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'COMP2800'
+    });
+    connection.connect();
+    // NOT WISE TO DO, BUT JUST SHOWING YOU CAN
+    connection.query('DELETE FROM BBY_15_User WHERE user_id = ?',
+        [parseInt(req.body.id)],
+        function (error, results, fields) {
+      if (error) {
+          console.log(error);
+      }
+      //console.log('Rows returned are: ', results);
+      res.send({ status: "success", msg: "Recorded deleted." });
+
     });
     connection.end();
 });
