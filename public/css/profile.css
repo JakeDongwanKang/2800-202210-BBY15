@@ -42,6 +42,8 @@ h2 {
 .buttonProfile {
     margin-left: 38%;
     display: block;
+    margin-bottom: 30px;
+    margin-top: 10px;
 }
 
 #updateAccount {
@@ -185,6 +187,10 @@ h2 {
 
 button:hover {
     background-color: rgba(52, 119, 249, 0.3);
+}
+
+p {
+    text-align: center;
 }
 
 /*For the view under 800px*/
