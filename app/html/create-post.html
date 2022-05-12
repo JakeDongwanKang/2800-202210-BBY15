@@ -11,7 +11,7 @@
 <body>
     <!-- Navbar area -->
     <nav class="navbar">
-        <logo class="brand-title">Extremis</logo>
+        <div class="brand-title">Extremis</div>
 
         <!-- Create a hamburger menu  -->
         <a href="#" class="toggle-button">
@@ -35,14 +35,14 @@
 
     <!-- The create-a-post form goes here -->
     <header>
-        <h2><span></span></h2>
+        <!-- <h2><span></span></h2> -->
     </header>
 
     <div id="createPostForm">
 
         <div class="form-box">
             <label>Type*</label>
-            <div class="dropdown" required="required">
+            <form class="dropdown">
                 <div class="select" onfocus="removeErrorMsg()">
                     <span class="selected" id="postType">Select type</span>
                     <div class="caret"></div>
@@ -54,7 +54,7 @@
                     <li>Weather conditions</li>
                     <li>Other</li>
                 </ul>
-            </div>
+            </form>
         </div>
 
         <div class="form-box" id="weather-type" onfocus="removeErrorMsg()"></div>
@@ -80,7 +80,7 @@
         <div class="form-box">
             <form id="upload-images">
                 <label>Upload pictures</label>
-                <input type="file" class="btn" id="selectFile" value="Select file"
+                <input type="file" class="btn" id="selectFile"
                     accept="image/png, image/gif, image/jpeg" multiple="multiple" />
                 <label for="selectFile">Choose a Photo</label>
                 <p id="fileNum"><small>No Files Chosen</small></p>
@@ -96,7 +96,7 @@
     </div>
 
     <!-- Footer area -->
-    <footer>&copy 2022 Burnaby-15</footer>
+    <footer>&copy; 2022 Burnaby-15</footer>
 
     <!-- Javascript goes here -->
     <script src="/js/create-post.js"></script>

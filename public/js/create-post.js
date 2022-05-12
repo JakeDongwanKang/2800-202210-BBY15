@@ -126,7 +126,7 @@ document.getElementById("create").addEventListener("click", function (e) {
         weatherType = document.getElementById("weatherType").value;
     }
 
-    if (!postType || !postTitle || !postLocation || !postContent) {
+    if (postType == "Select type" || !postTitle || !postLocation || !postContent) {
         // Display error message if user does not fill in required fields.
         document.querySelector(".errorMsg").innerHTML = "<small>*All required fields have to be filled*</small>";
     } else {
@@ -196,4 +196,4 @@ imagesUpload.addEventListener("change", function () {
         imageContainer.appendChild(figure);
         reader.readAsDataURL(imagesUpload.files[i]);
     }
-})
+});

@@ -21,7 +21,6 @@ body{
     position: relative;
     justify-content: space-between;
     align-items: center;
-    background-color: none;
     color: black;
     text-decoration: solid;
 }
@@ -170,7 +169,6 @@ body{
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     border-top: 6px solid black;
-    transition: 0.3;
     margin-right: 10px;
 }
 
@@ -377,7 +375,7 @@ footer {
 
     /* create-a-post form css starts */
     #createPostForm {
-        margin: 5% 5% 8% 5%;
+        margin: 5% 5% 12% 5%;
         font-size: 16px;
     }
 
