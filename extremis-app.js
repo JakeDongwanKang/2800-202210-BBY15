@@ -191,7 +191,7 @@ app.post("/add-user", function (req, res) {
         //connecting to the database, then creating and adding the user info into the database.
         connection.connect();
         connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
-            [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
+            [req.body.firstName, req.body.lastName, req.body.email, req.body.password, ],
             function (error, results, fields) {
                 res.send({
                     status: "success",
@@ -226,7 +226,7 @@ async function getdata(callback) {
 };
 
 
-//Get the user 's information from the database
+//Get the user 's information from the database and display information on the profile page
 app.get("/profile", function (req, res) {
     // check to see if the user email and password match with data in database
     const mysql = require("mysql2");
@@ -252,7 +252,10 @@ app.get("/profile", function (req, res) {
                         let lastname = results[i].last_name;
                         let useremail = results[i].email;
                         let password = results[i].user_password;
-                        let userprofile = results[i].profile_picture;
+                        let userprofile = '/assets/default-profile.jpg';
+                        if (results[i].profile_picture != null) {
+                            userprofile = results[i].profile_picture;
+                        };
                         var template = `   
                         </br>  
                         <div class="account-body"> 
