@@ -5,10 +5,18 @@ const session = require("express-session");
 const mysql = require("mysql2");
 const app = express();
 const fs = require("fs");
-const {
-    JSDOM
-} = require('jsdom');
+const { JSDOM } = require('jsdom');
 const multer = require("multer");
+const storage_post_images = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, "./app/images/post-images/")
+    },
+    filename: function(req, file, callback) {
+        callback(null, req.session.userID + "AT" + Date.now() + "AND" + file.originalname);
+    }
+});
+const uploadPostImages = multer({ storage: storage_post_images });
+
 
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
@@ -128,6 +136,7 @@ app.post("/login", function (req, res) {
 
             if (results.length > 0) {
                 // user authenticated, create a session
+                req.session.userID = results[0].user_id;
                 req.session.loggedIn = true;
                 req.session.firstName = results[0].first_name;
                 req.session.email = email;
@@ -198,9 +207,7 @@ app.post("/add-user", function (req, res) {
                     msg: "Record added."
                 });
                 req.session.loggedIn = true;
-                req.session.firstName = req.body.firstName;
-                req.session.email = req.body.email;
-                req.session.save(function (err) {});
+                req.session.save(function (err) { });
             });
         connection.end();
     }
@@ -386,8 +393,94 @@ app.get("/logout", function (req, res) {
     }
 });
 
+
+/**
+ * Redirect to the create-a-post page if user is a regular user and has logged in.
+ * Otherwise, not allow accessing this site.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
+ */
+app.get("/create-post", function (req, res) {
+    if (req.session.loggedIn && !req.session.isAdmin) {
+        let doc = fs.readFileSync("./app/html/create-post.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        res.send(doc);
+    } else {
+        res.redirect("/");
+    }
+
+});
+
+
+/**
+ * Store text data of user's post into the database.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
+ */
+app.post("/add-post", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+
+    let post_type = req.body.postType;
+    let post_title = req.body.postTitle;
+    let post_location = req.body.postLocation;
+    let post_content = req.body.postContent;
+    let weather_type = req.body.weatherType;
+    let userID = req.session.userID;
+    let post_time = new Date(Date.now());
+    let post_status = "pending";
+    
+    connection.connect();
+    connection.query('INSERT INTO BBY_15_post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [userID, post_time, post_content, post_title, post_type, post_location, post_status, weather_type],
+        function (error, results, fields) {
+            req.session.postID = results.insertId;
+            res.send({
+                status: "success",
+                msg: "Post added to database."
+            });
+            req.session.save(function (err) { });
+        });
+        
+    connection.end();
+});
+
+
+
+/**
+ * Store images information into the database. These images are uploaded by users when they create a post.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
+ */
+app.post('/upload-post-images', uploadPostImages.array("files"), function (req, res) {
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.connect();
+
+    for(let i = 0; i < req.files.length; i++) {
+        req.files[i].filename = req.files[i].originalname;
+        connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
+            [req.session.postID, req.files[i].path],
+            function (error, results, fields) {
+                res.send({
+                    status: "success",
+                    msg: "Image information added to database."
+                });
+                req.session.save(function (err) { });
+            });
+    }
+
+    connection.end();
+});
+
 // RUN SERVER
 let port = 8000;
 app.listen(port, function () {
-    console.log('Listening on port ' + port + '!');
 });
