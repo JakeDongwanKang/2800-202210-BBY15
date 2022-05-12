@@ -62,7 +62,6 @@ app.get("/main", function (req, res) {
 
 });
 
-
 //Redirect admin users to the admin dashboard page if they have logged in. Otherwise, redirect to login page.
 app.get("/dashboard", function (req, res) {
     if (req.session.loggedIn && req.session.isAdmin) {
@@ -114,20 +113,26 @@ app.get("/user-list", function (req, res) {
                 <th class="last_name_header">Last Name</th>
                 <th class="email_header">Email</th>
                 <th class="password_header">Password</th>
+                <th class="admin_header">Role</th>
                 <th class="delete_header">Delete</th>
                 </tr>`;
                 for (let i = 0; i < results.length; i++) {
                     if (results[i]['admin_role']) {
                         var role = 'Admin';
+                        var buttonText = 'Make User';
+                        var classText = '_make_user';
                     } else {
                         var role = 'User';
+                        var buttonText = 'Make Admin';
+                        var classText = '_make_admin';
                     }
                     user_list += ("<tr><td class='id'>" + results[i]['user_id']
                     + "</td><td class='first_name'><span>" + results[i]['first_name']
                     + "</span></td><td class='last_name'><span>" + results[i]['last_name']
                     + "</span></td><td class='email'><span>" + results[i]['email']
                     + "</span></td><td class='password'><span>" + results[i]['user_password']
-                    + "</span></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete"
+                    + "</span></td><td class='role'>" + "<button type='button' class='role_switch" + classText + "'>" + buttonText
+                    + "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete"
                     + "</button></td></tr>"
                     );
                 }
@@ -376,6 +381,54 @@ app.post('/delete-user', function (req, res) {
     connection.connect();
     // NOT WISE TO DO, BUT JUST SHOWING YOU CAN
     connection.query('DELETE FROM BBY_15_User WHERE user_id = ?',
+        [parseInt(req.body.id)],
+        function (error, results, fields) {
+      if (error) {
+          console.log(error);
+      }
+      //console.log('Rows returned are: ', results);
+      res.send({ status: "success", msg: "Recorded deleted." });
+
+    });
+    connection.end();
+});
+
+app.post('/make-user', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'COMP2800'
+    });
+    connection.connect();
+    // NOT WISE TO DO, BUT JUST SHOWING YOU CAN
+    connection.query('UPDATE BBY_15_User SET admin_role = false WHERE user_id = ?',
+        [parseInt(req.body.id)],
+        function (error, results, fields) {
+      if (error) {
+          console.log(error);
+      }
+      //console.log('Rows returned are: ', results);
+      res.send({ status: "success", msg: "Recorded deleted." });
+
+    });
+    connection.end();
+});
+
+app.post('/make-admin', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'COMP2800'
+    });
+    connection.connect();
+    // NOT WISE TO DO, BUT JUST SHOWING YOU CAN
+    connection.query('UPDATE BBY_15_User SET admin_role = true WHERE user_id = ?',
         [parseInt(req.body.id)],
         function (error, results, fields) {
       if (error) {

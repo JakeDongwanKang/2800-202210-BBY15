@@ -50,8 +50,3 @@ document.getElementById("signUpButton").addEventListener("click", function(e) {
 function removeErrorMsg() {
     document.getElementById("emptyError").innerHTML = "";
 }
-
-// Go to sign-up when user clicks on "Login Now!"
-document.getElementById("log-in-link").addEventListener("click", function(e) {
-    window.location.replace("/");
-})

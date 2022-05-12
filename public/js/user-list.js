@@ -75,6 +75,64 @@ function editCell(e) {
         deleteRecords[i].addEventListener("click", sendDataToDelete);
     }
 
+    let makeUserRecords = document.getElementsByClassName("role_switch_make_user");
+    for(let i = 0; i < deleteRecords.length; i++) {
+        deleteRecords[i].addEventListener("click", sendDataToMakeUser);
+    }
+
+    let makeAdminRecords = document.getElementsByClassName("role_switch_make_admin");
+    for(let i = 0; i < deleteRecords.length; i++) {
+        deleteRecords[i].addEventListener("click", sendDataToMakeAdmin);
+    }
+
+    async function sendDataToMakeUser(e) {
+        e.preventDefault();
+        let parent = e.target.parentNode;
+        let dataToSend = {
+            id: parent.parentNode.querySelector(".id").innerHTML
+        };
+        try {
+            let responseObject = await fetch("/make-user", {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json',
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            });
+            let parsedJSON = await responseObject.json();
+            if (parsedJSON.status == "success") {
+                console.log("thank goodness");
+                e.target.getElementsByClassName("role_switch_make_user").innerHTML = "Make Admin";
+                e.target.getElementsByClassName("role_switch_make_user").className = "role_switch_make_admin";
+            } 
+        } catch (error) {}
+    }
+
+    async function sendDataToMakeAdmin(e) {
+        e.preventDefault();
+        let parent = e.target.parentNode;
+        let dataToSend = {
+            id: parent.parentNode.querySelector(".id").innerHTML
+        };
+        try {
+            let responseObject = await fetch("/make-admin", {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json',
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            });
+            let parsedJSON = await responseObject.json();
+            if (parsedJSON.status == "success") {
+                console.log("thank goodness");
+                e.target.getElementsByClassName("role_switch_make_admin").innerHTML = "Make User";
+                e.target.getElementsByClassName("role_switch_make_admin").className = "role_switch_make_user";
+            } 
+        } catch (error) {}
+    }
+
     // function deleteCell(e) {
     //     e.preventDefault();
     //     let parent = e.target.parentNode;
