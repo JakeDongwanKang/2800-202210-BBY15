@@ -113,7 +113,7 @@ body{
     outline: solid 0.1px #484848;
     font-size: 16px;
     padding-left: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     height: 30px;
     font-family: 'Montserrat', sans-serif;
     border: none;
@@ -215,9 +215,13 @@ body{
     opacity: 1;
 }
 
+.__toolbar > select{
+    outline: solid 0.1px #484848;
+}
 #postContent {
     width: 100%;
     height: max-content;
+    height: 150px;
 }
 
 label[for="selectFile"]:hover, #create:hover, #cancel:hover, .select:hover {
@@ -387,6 +391,10 @@ footer {
         width: 90%;
         height: 40px;
         line-height: 35px;
+    }
+
+    .__toolbar-item{
+        margin-bottom: 8px;
     }
 
     #postContent {

@@ -117,7 +117,7 @@ document.getElementById("create").addEventListener("click", function (e) {
     let weatherType;
     let postTitle = document.getElementById("postTitle").value;
     let postLocation = document.getElementById("postLocation").value;
-    let postContent = document.getElementById("postContent").value;
+    let postContent = document.getElementById("postContent").innerHTML;
 
     if (!document.getElementById("weatherType")) {
         // Set weatherType as "none" if user does not create a post about weather condition

@@ -6,6 +6,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/create-post.css" />
+
+    <!-- Load the Font Awesome icon set -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
 
 <body>
@@ -35,7 +39,6 @@
 
     <!-- The create-a-post form goes here -->
     <header>
-        <!-- <h2><span></span></h2> -->
     </header>
 
     <div id="createPostForm">
@@ -73,15 +76,16 @@
 
         <div class="form-box">
             <label>Description*</label>
-            <textarea class="form-input" id="postContent" rows="7" onfocus="removeErrorMsg()" required="required"
-                placeholder="Write a description"></textarea>
+            <div data-tiny-editor data-remove-format="no" onfocus="removeErrorMsg()" required="required" id="postContent" style="height:150px">
+            </div>
+
         </div>
 
         <div class="form-box">
             <form id="upload-images">
                 <label>Upload pictures</label>
-                <input type="file" class="btn" id="selectFile"
-                    accept="image/png, image/gif, image/jpeg" multiple="multiple" />
+                <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
+                    multiple="multiple" />
                 <label for="selectFile">Choose a Photo</label>
                 <p id="fileNum"><small>No Files Chosen</small></p>
                 <div id="images"></div>
@@ -100,6 +104,8 @@
 
     <!-- Javascript goes here -->
     <script src="/js/create-post.js"></script>
+    <!-- Reference the editor library -->
+    <script src="https://unpkg.com/tiny-editor/dist/bundle.js"></script>
 </body>
 
 
