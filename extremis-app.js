@@ -97,12 +97,12 @@ app.get("/user-list", function (req, res) {
             function(error, results, fields) {
                 
                 let user_list = `<tr>
-                <th class="id_header"><span>ID</span></th>
-                <th class="first_name_header"><span>First Name</span></th>
-                <th class="last_name_header"><span>Last Name</span></th>
-                <th class="email_header"><span>Email</span></th>
-                <th class="password_header"><span>Password</span></th>
-                <th class="delete_header"><span>Delete</span></th>
+                <th class="id_header">ID</th>
+                <th class="first_name_header">First Name</th>
+                <th class="last_name_header">Last Name</th>
+                <th class="email_header">Email</th>
+                <th class="password_header">Password</th>
+                <th class="delete_header">Delete</th>
                 </tr>`;
                 for (let i = 0; i < results.length; i++) {
                     if (results[i]['admin_role']) {
@@ -170,8 +170,8 @@ app.get("/admin-list", function (req, res) {
                 <th class="delete_header"><span>Delete</span></th>
                 </tr>`;
                 for (let i = 0; i < results.length; i++) {
-                    admin_list += ("<tr><td class='id'><span>" + results[i]['user_id']
-                    + "</span></td><td class='first_name'><span>" + results[i]['first_name']
+                    admin_list += ("<tr><td class='id'>" + results[i]['user_id']
+                    + "</td><td class='first_name'><span>" + results[i]['first_name']
                     + "</span></td><td class='last_name'><span>" + results[i]['last_name']
                     + "</span></td><td class='email'><span>" + results[i]['email']
                     + "</span></td><td class='password'><span>" + results[i]['user_password']
@@ -329,6 +329,7 @@ app.get("/logout", function (req, res) {
 
 // ANOTHER POST: we are changing stuff on the server!!!
 app.post('/update-user', function (req, res) {
+    console.log("we made it");
     res.setHeader('Content-Type', 'application/json');
 
     let connection = mysql.createConnection({
@@ -338,8 +339,8 @@ app.post('/update-user', function (req, res) {
       database: 'COMP2800'
     });
     connection.connect();
-    connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ?, admin_role = ? WHERE user_id = ?',
-          [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.body.id],
+    connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ? WHERE user_id = ?',
+          [req.body.firstName, req.body.lastName, req.body.email, req.body.password, parseInt(req.body.id)],
           function (error, results, fields) {
       if (error) {
           console.log(error);
