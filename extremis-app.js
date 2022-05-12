@@ -209,6 +209,29 @@ app.post("/add-user", function (req, res) {
                 req.session.loggedIn = true;
                 req.session.save(function (err) { });
             });
+
+        connection.query(
+            "SELECT * FROM BBY_15_User WHERE email = ? AND user_password = ? AND first_name = ? AND last_name = ?",
+            [req.body.email, req.body.password, req.body.firstName, req.body.lastName],
+            function (error, results, fields) {
+
+                if (results.length > 0) {
+                    // user authenticated, create a session
+                    req.session.user_id = results[0].user_id;
+                    req.session.save(function (err) {
+                        //session saved
+                    });
+                } else {
+                    res.send({
+                        status: "fail",
+                        msg: "User account not found."
+                    });
+                }
+            }
+        );
+
+
+
         connection.end();
     }
 });
