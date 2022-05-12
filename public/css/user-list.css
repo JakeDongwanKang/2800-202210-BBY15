@@ -200,12 +200,15 @@ h3 {
 
 footer {
     overflow-x: hidden;
-    position: absolute;
-    top: 98%;
+    position: fixed;
     width: 99%;
     text-align: center;
     color: #ffffff;
     background-color: #484848;
+}
+
+td {
+    text-align : center;
 }
 
 @media only screen and (max-width: 960px) {

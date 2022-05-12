@@ -49,7 +49,7 @@ app.get('/', function (req, res) {
 
 //Redirect users to the main page if they have logged in. Otherwise, redirect to login page.
 app.get("/main", function (req, res) {
-    if (req.session.loggedIn) {
+    if (req.session.loggedIn && !req.session.isAdmin) {
         let doc = fs.readFileSync("./app/html/main.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         let main_jsdom = new JSDOM(doc);
@@ -65,7 +65,7 @@ app.get("/main", function (req, res) {
 
 //Redirect admin users to the admin dashboard page if they have logged in. Otherwise, redirect to login page.
 app.get("/dashboard", function (req, res) {
-    if (req.session.loggedIn) {
+    if (req.session.loggedIn && req.session.isAdmin) {
         let doc = fs.readFileSync("./app/html/dashboard.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         let dashboard_jsdom = new JSDOM(doc);
@@ -96,20 +96,28 @@ app.get("/user-list", function (req, res) {
             "SELECT * FROM BBY_15_User",
             function(error, results, fields) {
                 
-                let user_list = "";
+                let user_list = `<tr>
+                <th class="id_header"><span>ID</span></th>
+                <th class="first_name_header"><span>First Name</span></th>
+                <th class="last_name_header"><span>Last Name</span></th>
+                <th class="email_header"><span>Email</span></th>
+                <th class="password_header"><span>Password</span></th>
+                <th class="delete_header"><span>Delete</span></th>
+                </tr>`;
                 for (let i = 0; i < results.length; i++) {
                     if (results[i]['admin_role']) {
                         var role = 'Admin';
                     } else {
                         var role = 'User';
                     }
-
-                    user_list += "<div class='user-card'><div class='profile-pic-div'><img class='profile-pic' src='" + results[i]['profile_picture'] + "'></div>"
-                    + "<div class='user-content'><h3>" + results[i]['first_name'] + " " + results[i]['last_name'] + "</h3>"
-                    + "<p>" + role + "<br>" + results[i]['email'] + "<br>" + results[i]['num_posts'] + " posts <br> Joined " + results[i]['join_date'] + "</p>"
-                    + "<div class='user-list-button' id='toggle-admin'>Make Admin&ensp;</div>"
-                    + "<div class='user-list-button' id='edit'> Edit User&ensp;</div>"
-                    + "<div class='user-list-button' id='delete'> Delete User</div></div></div>";
+                    user_list += ("<tr><td class='id'><span>" + results[i]['user_id']
+                    + "</span></td><td class='first_name'><span>" + results[i]['first_name']
+                    + "</span></td><td class='last_name'><span>" + results[i]['last_name']
+                    + "</span></td><td class='email'><span>" + results[i]['email']
+                    + "</span></td><td class='password'><span>" + results[i]['user_password']
+                    + "</span></td><td class='delete'><span>" + "<button type='submit' class='delete_user'>Delete"
+                    + "</span></button></td></tr>"
+                    );
                 }
                 user_list_jsdom.window.document.getElementById("user-container").innerHTML = user_list;
                 res.write(user_list_jsdom.serialize());
@@ -121,6 +129,19 @@ app.get("/user-list", function (req, res) {
         res.redirect("/");
     }
 });
+
+app.get("/edit", function(req, res) {
+    if(req.session.loggedIn && req.session.isAdmin) {
+        let doc = fs.readFileSync("./app/html/edit.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        let dashboard_jsdom = new JSDOM(doc);
+        // dashboard_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Welcome " + req.session.firstName + "</h5>";
+        res.write(dashboard_jsdom.serialize());
+        res.end();
+    } else {
+        res.redirect("/");
+    }
+})
 
 // function for getting all admins for admin-list
 app.get("/admin-list", function (req, res) {
@@ -140,14 +161,23 @@ app.get("/admin-list", function (req, res) {
             "SELECT * FROM BBY_15_User WHERE admin_role = 1",
             function(error, results, fields) {
                 
-                let admin_list = "";
+                let admin_list = `<tr>
+                <th class="id_header"><span>ID</span></th>
+                <th class="first_name_header"><span>First Name</span></th>
+                <th class="last_name_header"><span>Last Name</span></th>
+                <th class="email_header"><span>Email</span></th>
+                <th class="password_header"><span>Password</span></th>
+                <th class="delete_header"><span>Delete</span></th>
+                </tr>`;
                 for (let i = 0; i < results.length; i++) {
-                    admin_list += "<div class='user-card'><div class='profile-pic-div'><img class='profile-pic' src='" + results[i]['profile_picture'] + "'></div>"
-                    + "<div class='user-content'><h3>" + results[i]['first_name'] + " " + results[i]['last_name'] + "</h3>"
-                    + "<p>" + results[i]['email'] + "<br>" + results[i]['num_posts'] + " posts <br> Joined " + results[i]['join_date'] + "</p>"
-                    + "<div class='user-list-button' id='toggle-admin'>Remove Admin&ensp;</div>"
-                    + "<div class='user-list-button' id='edit'> Edit User&ensp;</div>"
-                    + "<div class='user-list-button' id='delete'> Delete User</div></div></div>";
+                    admin_list += ("<tr><td class='id'><span>" + results[i]['user_id']
+                    + "</span></td><td class='first_name'><span>" + results[i]['first_name']
+                    + "</span></td><td class='last_name'><span>" + results[i]['last_name']
+                    + "</span></td><td class='email'><span>" + results[i]['email']
+                    + "</span></td><td class='password'><span>" + results[i]['user_password']
+                    + "</span></td><td class='delete'><span>" + "<button type='submit' class='delete_user'>Delete"
+                    + "</span></button></td></tr>"
+                    );
                 }
                 admin_list_jsdom.window.document.getElementById("user-container").innerHTML = admin_list;
                 res.write(admin_list_jsdom.serialize());
@@ -269,6 +299,10 @@ app.post("/add-user", function (req, res) {
                     status: "success",
                     msg: "Record added."
                 });
+                req.session.firstName = req.body.firstName;
+                req.session.lastName = req.body.lastName;
+                req.session.email = req.body.email;
+                req.session.password = req.body.password;
                 req.session.loggedIn = true;
                 req.session.save(function (err) {});
             });
@@ -293,9 +327,9 @@ app.get("/logout", function (req, res) {
     }
 });
 
-
-//Function needed to get admin users from the database
-app.get('/get-admin-list', function (req, res) {
+// ANOTHER POST: we are changing stuff on the server!!!
+app.post('/update-user', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
 
     let connection = mysql.createConnection({
       host: 'localhost',
@@ -304,13 +338,14 @@ app.get('/get-admin-list', function (req, res) {
       database: 'COMP2800'
     });
     connection.connect();
-    connection.query('SELECT * FROM BBY_15_User WHERE admin_role = TRUE', function (error, results, fields) {
-        if (error) {
-            console.log(error);
-        }
-        console.log('Rows returned are: ', results);
-        res.send({ status: "success", rows: results });
-
+    connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ?, admin_role = ? WHERE user_id = ?',
+          [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.body.id],
+          function (error, results, fields) {
+      if (error) {
+          console.log(error);
+      }
+      //console.log('Rows returned are: ', results);
+      res.send({ status: "success", msg: "Recorded updated." });
     });
     connection.end();
 });
