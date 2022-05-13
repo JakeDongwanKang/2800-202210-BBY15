@@ -130,7 +130,7 @@ app.get("/user-list", function (req, res) {
             "SELECT * FROM BBY_15_User WHERE admin_role = 0",
             function (error, results, fields) {
 
-                let user_list = `<tr>
+                let user_list = `<thead><tr>
                 <th class="id_header">ID</th>
                 <th class="first_name_header">First Name</th>
                 <th class="last_name_header">Last Name</th>
@@ -138,26 +138,17 @@ app.get("/user-list", function (req, res) {
                 <th class="password_header">Password</th>
                 <th class="admin_header">Role</th>
                 <th class="delete_header">Delete</th>
-                </tr>`;
+                </tr></head>`;
                 for (let i = 0; i < results.length; i++) {
-                    // if (results[i]['admin_role']) {
-                    //     var role = 'Admin';
-                    //     var buttonText = 'Make User';
-                    //     var classText = '_make_user';
-                    // } else {
-                    //     var role = 'User';
-                    //     var buttonText = 'Make Admin';
-                    //     var classText = '_make_admin';
-                    // }
 
-                    user_list += ("<tr><td class='id'>" + results[i]['user_id'] +
+                    user_list += ("<tbody><tr><td class='id'>" + results[i]['user_id'] +
                         "</td><td class='first_name'><span>" + results[i]['first_name'] +
                         "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
                         "</span></td><td class='email'><span>" + results[i]['email'] +
                         "</span></td><td class='password'><span>" + results[i]['user_password'] +
                         "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
                         "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
-                        "</button></td></tr>"
+                        "</button></td></tr></tbody>"
                     );
                 }
                 user_list_jsdom.window.document.getElementById("user-container").innerHTML = user_list;
@@ -527,6 +518,7 @@ app.get("/profile", function (req, res) {
     } else {
         res.redirect("/");
     }
+    connection.end();
 });
 
 const storage_avatar = multer.diskStorage({
@@ -885,6 +877,7 @@ app.get("/timeline", function (req, res) {
     } else {
         res.redirect("/");
     }
+    connection.end();
 });
 
 

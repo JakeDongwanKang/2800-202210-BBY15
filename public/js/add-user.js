@@ -1,6 +1,18 @@
 "use strict";
 
 /**
+ * I found how to do the toggleButton on 1537 course and 1800 course. 
+ * I found some syntax and codes on this website that I can use to create a hambuger menu.
+ * https://www.educba.com/hamburger-menu-javascript/
+ */
+ const toggleButton = document.getElementsByClassName('toggle-button')[0]
+ const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+ 
+ toggleButton.addEventListener('click', () => {
+     navbarLinks.classList.toggle('active')
+ })
+
+/**
  * Sends the user data from the client side to the server side for authentication.
  * If admin puts in a valid information in the add user page columns, adding user is complete, then gets redirected to the log-in page.
  * If not, admin receives an error message.

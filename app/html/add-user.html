@@ -7,6 +7,30 @@
     <link href="/css/sign-up.css" rel="stylesheet" />
   </head>
   <body>
+<!-- Navbar area -->
+<nav class="navbar">
+  <div class="brand-title">Extremis</div>
+
+  <!-- Create a hamburger menu  -->
+  <a href="#" class="toggle-button">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+  </a>
+  <div class="navbar-links">
+      <ul>
+          <li><a href="/dashboard">Home</a></li>
+          <li><a href="/profile">Profile</a></li>
+          <li><a href="#">About Us</a></li>
+          <li>
+              <form action="/logout" method="get">
+                  <input type="submit" class="singin" value="Sign out" />
+              </form>
+          </li>
+      </ul>
+  </div>
+</nav>
+
     <div id="signUpPanel">
       <header>
         <h2 id="signUpTitle">Add new User from the Dashboard</h2>
