@@ -104,7 +104,7 @@ app.get("/user-list", function (req, res) {
         res.setHeader("Content-Type", "text/html");
 
         connection.query(
-            "SELECT * FROM BBY_15_User",
+            "SELECT * FROM BBY_15_User WHERE admin_role = 0",
             function(error, results, fields) {
                 
                 let user_list = `<tr>
@@ -126,6 +126,7 @@ app.get("/user-list", function (req, res) {
                         var buttonText = 'Make Admin';
                         var classText = '_make_admin';
                     }
+
                     user_list += ("<tr><td class='id'>" + results[i]['user_id']
                     + "</td><td class='first_name'><span>" + results[i]['first_name']
                     + "</span></td><td class='last_name'><span>" + results[i]['last_name']
@@ -187,6 +188,7 @@ app.get("/admin-list", function (req, res) {
                 <th class="delete_header"><span>Delete</span></th>
                 </tr>`;
                 for (let i = 0; i < results.length; i++) {
+                    if(req.session.userID != results[i]['user_id']) {
                     admin_list += ("<tr><td class='id'>" + results[i]['user_id']
                     + "</td><td class='first_name'><span>" + results[i]['first_name']
                     + "</span></td><td class='last_name'><span>" + results[i]['last_name']
@@ -195,7 +197,7 @@ app.get("/admin-list", function (req, res) {
                     + "</span></td><td class='delete'>" + "<button type='button' id='deleteUser'>Delete"
                     + "</button></td></tr>"
                     );
-                }
+                }}
                 admin_list_jsdom.window.document.getElementById("user-container").innerHTML = admin_list;
                 res.write(admin_list_jsdom.serialize());
                 res.end;
@@ -253,6 +255,7 @@ app.post("/login", function (req, res) {
                 req.session.firstName = results[0].first_name;
                 req.session.email = email;
                 req.session.isAdmin = results[0].admin_role;
+                req.session.userID = results[0].user_id;
                 if (results[0].admin_role) {
                     res.send({
                         status: "success",
@@ -310,19 +313,95 @@ app.post("/add-user", function (req, res) {
         //connecting to the database, then creating and adding the user info into the database.
         connection.connect();
         connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
-            [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
+            [req.body.firstName, req.body.lastName, req.body.email, req.body.password, ],
             function (error, results, fields) {
                 res.send({
                     status: "success",
                     msg: "Record added."
                 });
-                req.session.firstName = req.body.firstName;
-                req.session.lastName = req.body.lastName;
-                req.session.email = req.body.email;
-                req.session.password = req.body.password;
                 req.session.loggedIn = true;
-                req.session.save(function (err) {});
+                req.session.save(function (err) { });
             });
+
+        connection.query(
+            "SELECT * FROM BBY_15_User WHERE email = ? AND user_password = ? AND first_name = ? AND last_name = ?",
+            [req.body.email, req.body.password, req.body.firstName, req.body.lastName],
+            function (error, results, fields) {
+
+                if (results.length > 0) {
+                    // user authenticated, create a session
+                    req.session.user_id = results[0].user_id;
+                    req.session.save(function (err) {
+                        //session saved
+                    });
+                } else {
+                    res.send({
+                        status: "fail",
+                        msg: "User account not found."
+                    });
+                }
+            }
+        );
+        connection.end();
+    }
+});
+
+//Authenticating user, checks if they can be added to the database, then creates and add the user info into the database.
+app.post("/add-user-as-admin", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    //Authenticating user.
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+
+    let firstName = req.body.firstName;
+    let lastName = req.body.lastName;
+    let signupemail = req.body.email;
+    let signuppassword = req.body.password;
+
+    //Checking to see if any columns in the sign-up page is NULL : if they are, the account cannot be made.
+    if (!firstName || !lastName || !signupemail || !signuppassword) {
+        res.send({
+            status: "fail",
+            msg: "Every column has to be filled."
+        });
+    } else {
+        //connecting to the database, then creating and adding the user info into the database.
+        connection.connect();
+        connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
+            [req.body.firstName, req.body.lastName, req.body.email, req.body.password, ],
+            function (error, results, fields) {
+                res.send({
+                    status: "success",
+                    msg: "Record added."
+                });
+                // req.session.loggedIn = true;
+                // req.session.save(function (err) { });
+            });
+
+        connection.query(
+            "SELECT * FROM BBY_15_User WHERE email = ? AND user_password = ? AND first_name = ? AND last_name = ?",
+            [req.body.email, req.body.password, req.body.firstName, req.body.lastName],
+            function (error, results, fields) {
+
+                if (results.length > 0) {
+                    // user authenticated, create a session
+                    // req.session.user_id = results[0].user_id;
+                    // req.session.save(function (err) {
+                    //     //session saved
+                    // });
+                } else {
+                    res.send({
+                        status: "fail",
+                        msg: "User account not found."
+                    });
+                }
+            }
+        );
         connection.end();
     }
 });
@@ -344,7 +423,9 @@ app.get("/logout", function (req, res) {
     }
 });
 
-// ANOTHER POST: we are changing stuff on the server!!!
+/** ANOTHER POST: we are changing stuff on the server!!!
+ *  This function updates the user on the user-list and the admin-list
+*/
 app.post('/update-user', function (req, res) {
     console.log("we made it");
     res.setHeader('Content-Type', 'application/json');
@@ -362,13 +443,14 @@ app.post('/update-user', function (req, res) {
       if (error) {
           console.log(error);
       }
-      //console.log('Rows returned are: ', results);
       res.send({ status: "success", msg: "Recorded updated." });
     });
     connection.end();
 });
 
-// POST: we are changing stuff on the server!!!
+/** POST: we are changing stuff on the server!!!
+ *  This user allows admins to click on delete user button to delete the user in the following row.
+ */
 app.post('/delete-user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
@@ -379,20 +461,21 @@ app.post('/delete-user', function (req, res) {
       database: 'COMP2800'
     });
     connection.connect();
-    // NOT WISE TO DO, BUT JUST SHOWING YOU CAN
     connection.query('DELETE FROM BBY_15_User WHERE user_id = ?',
         [parseInt(req.body.id)],
         function (error, results, fields) {
       if (error) {
           console.log(error);
       }
-      //console.log('Rows returned are: ', results);
       res.send({ status: "success", msg: "Recorded deleted." });
 
     });
     connection.end();
 });
 
+/**
+ * This functions allows admins to change other admin into regular users.
+ */
 app.post('/make-user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
@@ -403,20 +486,21 @@ app.post('/make-user', function (req, res) {
       database: 'COMP2800'
     });
     connection.connect();
-    // NOT WISE TO DO, BUT JUST SHOWING YOU CAN
     connection.query('UPDATE BBY_15_User SET admin_role = false WHERE user_id = ?',
         [parseInt(req.body.id)],
         function (error, results, fields) {
       if (error) {
           console.log(error);
       }
-      //console.log('Rows returned are: ', results);
       res.send({ status: "success", msg: "Recorded deleted." });
 
     });
     connection.end();
 });
 
+/**
+ * This function allows admins to change other regular users into admin users.
+ */
 app.post('/make-admin', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
@@ -427,14 +511,12 @@ app.post('/make-admin', function (req, res) {
       database: 'COMP2800'
     });
     connection.connect();
-    // NOT WISE TO DO, BUT JUST SHOWING YOU CAN
     connection.query('UPDATE BBY_15_User SET admin_role = true WHERE user_id = ?',
         [parseInt(req.body.id)],
         function (error, results, fields) {
       if (error) {
           console.log(error);
       }
-      //console.log('Rows returned are: ', results);
       res.send({ status: "success", msg: "Recorded deleted." });
 
     });
