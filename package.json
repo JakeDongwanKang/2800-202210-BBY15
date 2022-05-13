@@ -15,5 +15,13 @@
     "url": "https://github.com/JakeDongwanKang/2800_BBY-15/issues"
   },
   "homepage": "https://github.com/JakeDongwanKang/2800_BBY-15#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "fs": "^0.0.1-security",
+    "jsdom": "^19.0.0",
+    "jsdon": "^0.1.15",
+    "mysql2": "^2.3.3"
+  }
 }
