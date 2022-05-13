@@ -193,7 +193,7 @@ app.get("/admin-list", function (req, res) {
             "SELECT * FROM BBY_15_User WHERE admin_role = 1",
             function (error, results, fields) {
 
-                let admin_list = `<tr>
+                let admin_list = `<thead><tr>
                 <th class="id_header">ID</th>
                 <th class="first_name_header">First Name</th>
                 <th class="last_name_header">Last Name</th>
@@ -201,7 +201,7 @@ app.get("/admin-list", function (req, res) {
                 <th class="password_header">Password</th>
                 <th class="admin_header">Role</th>
                 <th class="delete_header">Delete</th>
-                </tr>`;
+                </tr></thead>`;
                 for (let i = 0; i < results.length; i++) {
                     if (req.session.userID != results[i]['user_id']) {
                         admin_list += ("<tr><td class='id'>" + results[i]['user_id'] +
