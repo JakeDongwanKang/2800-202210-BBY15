@@ -21,7 +21,6 @@
     "express-session": "^1.17.3",
     "fs": "^0.0.1-security",
     "jsdom": "^19.0.0",
-    "jsdon": "^0.1.15",
     "mysql2": "^2.3.3"
   }
 }
