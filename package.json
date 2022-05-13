@@ -1,0 +1,19 @@
+{
+  "name": "2800_bby-15",
+  "version": "1.0.0",
+  "description": "",
+  "main": "extremis-app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JakeDongwanKang/2800_BBY-15.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JakeDongwanKang/2800_BBY-15/issues"
+  },
+  "homepage": "https://github.com/JakeDongwanKang/2800_BBY-15#readme"
+}
