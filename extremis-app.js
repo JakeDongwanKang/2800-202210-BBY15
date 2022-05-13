@@ -611,7 +611,6 @@ app.get("/logout", function (req, res) {
  *  This function updates the user on the user-list and the admin-list
 */
 app.post('/update-user', function (req, res) {
-    console.log("we made it");
     res.setHeader('Content-Type', 'application/json');
 
     let connection = mysql.createConnection({
@@ -644,7 +643,6 @@ app.post('/delete-user', function (req, res) {
       password: '',
       database: 'COMP2800'
     });
-    console.log(parseInt(req.body.id) + "line 645");
     connection.connect();
     connection.query('DELETE FROM BBY_15_User WHERE user_id = ?',
         [parseInt(req.body.id)],
@@ -695,7 +693,6 @@ app.post('/make-admin', function (req, res) {
       password: '',
       database: 'COMP2800'
     });
-    console.log(parseInt(req.body.id));
     connection.connect();
     connection.query('UPDATE BBY_15_User SET admin_role = 1 WHERE user_id = ?',
         [parseInt(req.body.id)],

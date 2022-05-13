@@ -1,3 +1,10 @@
+"use strict";
+/**
+ * Sends the user data from the client side to the server side for authentication.
+ * User clicks on the data that needs to be changed through the text box, and it changes on to the server side in real time
+ * @author Arron_Ferguson (1537 instructor), Dongwan_Kang (BBY15)
+ * @param {*} data user input
+ */
 async function sendData(data) {
     try {
         let responseObject = await fetch("/update-user", {
@@ -10,17 +17,17 @@ async function sendData(data) {
         });
         let parsedJSON = await responseObject.json();
         if (parsedJSON.status == "success") {
-            console.log("thank goodness");
         } 
     } catch (error) {}
 }
 
-
+//This for loop adds the event listener to every editing columns in the user list.
 let records = document.getElementsByTagName("span");
                         for(let i = 0; i < records.length; i++) {
                             records[i].addEventListener("click", editCell);
                         }
 
+//This function helps the admin edit the Cell and get the values readied to send to the serer side.
 function editCell(e) {
     let span_text = e.target.innerHTML;
     let parent = e.target.parentNode; //gets parent, so we know which user we're editing
@@ -47,13 +54,13 @@ function editCell(e) {
         parent.appendChild(text_box);
     }
 
+    //This function sends the data of the users from the client side to the server side so that i can be deleted from the database.
     async function sendDataToDelete(e) {
         e.preventDefault();
         let parent = e.target.parentNode;
         let dataToSend = {
             id: parent.parentNode.querySelector(".id").innerHTML
         };
-        console.log(dataToSend);
         try {
             let responseObject = await fetch("/delete-user", {
                 method: 'POST',
@@ -65,27 +72,30 @@ function editCell(e) {
             });
             let parsedJSON = await responseObject.json();
             if (parsedJSON.status == "success") {
-                console.log("thank goodness");
                 parent.parentNode.remove();
             } 
         } catch (error) {}
     }
 
+    //This for loop adds the event listeners to the delete user button
     let deleteRecords = document.getElementsByClassName("deleteUser");
     for(let i = 0; i < deleteRecords.length; i++) {
         deleteRecords[i].addEventListener("click", sendDataToDelete);
     }
 
+    //This for loop adds the event listener to the Make user button
     let makeUserRecords = document.getElementsByClassName("role_switch_to_user");
     for(let i = 0; i < makeUserRecords.length; i++) {
         makeUserRecords[i].addEventListener("click", sendDataToMakeUser);
     }
 
+    //This for loop adds the event listener to the Make Admin button
     let makeAdminRecords = document.getElementsByClassName("role_switch_to_admin");
     for(let i = 0; i < makeAdminRecords.length; i++) {
         makeAdminRecords[i].addEventListener("click", sendDataToMakeAdmin);
     }
 
+    //This data sends the user data from the client side to the server side so that the specified admin user can become regular user.
     async function sendDataToMakeUser(e) {
         e.preventDefault();
         let parent = e.target.parentNode;
@@ -103,19 +113,18 @@ function editCell(e) {
             });
             let parsedJSON = await responseObject.json();
             if (parsedJSON.status == "success") {
-                console.log("thank goodness");
                 parent.parentNode.remove();
             } 
         } catch (error) {}
     }
 
+    //This data sends the user data from the client side to the server side so that the specified regular user can become admin user.
     async function sendDataToMakeAdmin(e) {
         e.preventDefault();
         let parent = e.target.parentNode;
         let dataToSend = {
             id: parent.parentNode.querySelector(".id").innerHTML
         };
-        console.log(dataToSend);
         try {
             let responseObject = await fetch("/make-admin", {
                 method: 'POST',
@@ -127,18 +136,7 @@ function editCell(e) {
             });
             let parsedJSON = await responseObject.json();
             if (parsedJSON.status == "success") {
-                console.log("thank goodness");
                 parent.parentNode.remove();
             } 
         } catch (error) {}
     }
-
-    // function deleteCell(e) {
-    //     e.preventDefault();
-    //     let parent = e.target.parentNode;
-    //     let dataToSend = {
-    //         id: parent.parentNode.querySelector(".id").innerHTML
-    //     };
-    //     sendDataToDelete(dataToSend);
-    //     parent.parentNode.remove();
-    // }
