@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <title>Admin List</title>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <link rel="stylesheet" href="/css/user-list.css">
+</head>
+
+<body>
+    <!-- Navbar area -->
+    <nav class="navbar">
+      <div class="brand-title">Extremis</div>
+
+      <!-- Create a hamburger menu  -->
+      <a href="#" class="toggle-button">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+      </a>
+      <div class="navbar-links">
+          <ul>
+              <li><a href="/dashboard/">Home</a></li>
+              <li><a href="/profile/">Profile</a></li>
+              <li><a href="#">About Us</a></li>
+              <li>
+                  <form action="/logout" method="get">
+                      <input type="submit" class="singin" value="Sign out" />
+                  </form>
+              </li>
+          </ul>
+      </div>
+  </nav>
+
+  <header>
+    <h1>Manage Admins</h1>
+  </header>
+
+  <table id="user-container"></table>
+
+  <footer>&copy; 2022 Burnaby-15</footer>
+  <script src="/js/user-list.js"></script>
+</body>
+
+</html>

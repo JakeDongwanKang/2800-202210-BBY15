@@ -3,17 +3,158 @@
 body {
     font-family: 'Montserrat';
     font-size: 18px;
-    display: grid;
-    grid-template-columns: 20% 60% 20%;
 }
 
-header {
-    grid-column: 2;
+.navbar {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+    text-decoration: solid;
+}
+
+.brand-title {
+    font-size: 1.5rem;
+    margin: .5rem;
+    color: #3477F9;
+    cursor: pointer;
+}
+
+.navbar-links {
+    height: 100%;
+    margin-right: 15px;
+}
+
+.navbar-links ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-links li {
+    list-style: none;
+    padding-top: 10px;
+}
+
+.navbar-links li a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    padding: 1rem;
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease 0s;
+}
+
+.navbar-links li a:hover {
+    color: rgba(52, 119, 249, 1.5);
+}
+
+
+.toggle-button {
+    position: absolute;
+    top: .75rem;
+    right: 1rem;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+}
+
+.toggle-button .bar {
+    height: 3px;
+    width: 100%;
+    background-color: black;
+    border-radius: 10px;
+}
+
+.singin {
+    margin-top: 8px;
+    padding: 9px 25px;
+    background-color: rgba(52, 119, 249, 0.7);
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease 0s;
+    letter-spacing: 1.5px;
+}
+
+button:hover {
+    background-color: rgba(52, 119, 249, 0.3);
+}
+
+.main-button {
+    margin-top: 2rem;
+}
+
+.um-subtitle {
+    font-weight: 500;
+    letter-spacing: 0.5rem;
+    font-size: 15px;
+}
+
+.branch {
+    font-size: 5rem;
+    font-weight: 700;
+}
+
+.container {
+    padding: 0;
+    text-align: center;
+}
+
+.createPost {
+    display: inline-block;
+    padding: 15px 15px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: rgba(52, 119, 249, 0.9);
+    border: none;
+    border-radius: 15px;
+
+}
+
+.createPost:hover {
+    background-color: rgba(52, 119, 249, 0.7);
+}
+
+.forecastButton {
+    display: inline-block;
+    padding: 15px 15px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: black;
+    background-color: bisque;
+    border: none;
+    border-radius: 15px;
+    margin-left: 20px;
+    border: 2px solid #3477F9;
+}
+
+.forecastButton:hover {
+    background-color: rgba(52, 119, 249, 0.7);
+}
+
+.howitwork {
+    font-size: 20px;
+    word-spacing: 2px;
 }
 
 h1 {
     color: #3477f9;
-    float: left;
+    text-align: center;
+    width: 100%;
 }
 
 h3 {
@@ -21,17 +162,19 @@ h3 {
 }
 
 #user-container {
-    grid-column: 2;
+    width: 100%;
 }
 
 .user-card {
-    float:left;
     border: solid 1px #484848;
     border-radius: 15px;
     display: grid;
     grid-template-columns: 25% 75%;
-    width: 500px;
-    margin: 0.1%;
+    width: 80%;
+    margin-top: 0.1%;
+    margin-bottom: 0.1%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .profile-pic-div {
@@ -46,14 +189,26 @@ h3 {
     max-width:90%;
 }
 
+.user-list-button {
+    float: left;
+}
+
+.user-list-button:hover {
+    color: #3477f9;
+    cursor: pointer;
+}
+
 footer {
     overflow-x: hidden;
-    position: absolute;
-    top: 98%;
+    position: fixed;
     width: 99%;
     text-align: center;
     color: #ffffff;
     background-color: #484848;
+}
+
+td {
+    text-align : center;
 }
 
 @media only screen and (max-width: 960px) {

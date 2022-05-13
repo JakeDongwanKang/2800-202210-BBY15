@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Create a post</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/timeline.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <!-- Navbar area -->
+    <nav class="navbar">
+        <div class="brand-title">Extremis</div>
+
+        <!-- Create a hamburger menu  -->
+        <a href="#" class="toggle-button">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="navbar-links">
+            <ul>
+                <li><a href="/main">Home</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li>
+                    <form action="/logout" method="get">
+                        <input type="submit" class="singin" value="Sign out" />
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- The create-a-post form goes here -->
+    <header>
+        <!-- <h2><span></span></h2> -->
+    </header>
+
+    <div class="body-allevents">
+        <!-- search bar -->
+        <div class="allevents-titlesearch">
+            <span>&#128269;</span>
+            <input type="text" id="allevents-search-keyword" onkeyup="eventSearch()">
+        </div>
+        <div class="create-post">
+            <a class="createPost" href="/create-post/" role="button">Create a Post</a>
+        </div>
+    </div>
+
+    <!-- event cards -->
+    <div class="all-events">
+        <div class="post_content"></div>
+    </div>
+
+    <!-- Footer area -->
+    <footer>&copy; 2022 Burnaby-15</footer>
+
+    <!-- Javascript goes here -->
+    <script src="/js/timeline.js"></script>
+</body>
+
+
+</html>

@@ -15,3 +15,7 @@ toggleButton.addEventListener('click', () => {
 document.getElementById("manage-users").addEventListener("click", function(e) {
     window.location.replace("/user-list");
 })
+
+document.getElementById("manage-admins").addEventListener("click", function(e) {
+    window.location.replace("/admin-list");
+})

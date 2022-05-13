@@ -10,32 +10,39 @@
 </head>
 
 <body>
+  <!-- Navbar area -->
+  <nav class="navbar">
+    <div class="brand-title">Extremis</div>
+
+    <!-- Create a hamburger menu  -->
+    <a href="#" class="toggle-button">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </a>
+    <div class="navbar-links">
+        <ul>
+            <li><a href="/dashboard/">Home</a></li>
+            <li><a href="/profile/">Profile</a></li>
+            <li><a href="#">About Us</a></li>
+            <li>
+                <form action="/logout" method="get">
+                    <input type="submit" class="singin" value="Sign out" />
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
   <header>
     <h1>Manage Users</h1>
   </header>
 
-  <div id="user-container">
-    <div class="user-card">
-      <div class="profile-pic-div">
-      </div>
-      <div class="user-content">
-        <h3>Admin Admin</h3>
-        <p>Admin <br> admin@email.ca <br> 0 posts <br> Joined 5 May 2022</p>
-      </div>
-    </div>
-
-    <div class="user-card">
-      <div class="profile-pic-div">
-      </div>
-      <div class="user-content">
-        <h3>Joe Smith</h3>
-        <p>User <br> joesmith@email.ca <br> 0 posts <br> Joined 6 May 2022</p>
-      </div>
-    </div>
-  </div>
+  <table id="user-container"></table>
 
   <footer>&copy; 2022 Burnaby-15</footer>
 
+  <script src="/js/user-list.js"></script>
 </body>
 
 </html>

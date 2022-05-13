@@ -5,17 +5,24 @@ const session = require("express-session");
 const mysql = require("mysql2");
 const app = express();
 const fs = require("fs");
-const { JSDOM } = require('jsdom');
+const {
+    JSDOM
+} = require('jsdom');
 const multer = require("multer");
+const {
+    Console
+} = require('console');
 const storage_post_images = multer.diskStorage({
-    destination: function(req, file, callback) {
+    destination: function (req, file, callback) {
         callback(null, "./app/images/post-images/")
     },
-    filename: function(req, file, callback) {
+    filename: function (req, file, callback) {
         callback(null, req.session.userID + "AT" + Date.now() + "AND" + file.originalname);
     }
 });
-const uploadPostImages = multer({ storage: storage_post_images });
+const uploadPostImages = multer({
+    storage: storage_post_images
+});
 
 
 app.use("/assets", express.static("./public/assets"));
@@ -64,12 +71,12 @@ app.get('/', function (req, res) {
 
 //Redirect users to the main page if they have logged in. Otherwise, redirect to login page.
 app.get("/main", function (req, res) {
-    if (req.session.loggedIn) {
+    if (req.session.loggedIn && !req.session.isAdmin) {
         let doc = fs.readFileSync("./app/html/main.html", "utf8");
         res.setHeader("Content-Type", "text/html");
-        let profile_jsdom = new JSDOM(doc);
-        profile_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Hello " + req.session.firstName + ". Welcome to</h5>";
-        res.write(profile_jsdom.serialize());
+        let main_jsdom = new JSDOM(doc);
+        main_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Hello " + req.session.firstName + ". Welcome to</h5>";
+        res.write(main_jsdom.serialize());
         res.end();
 
     } else {
@@ -77,16 +84,27 @@ app.get("/main", function (req, res) {
     }
 
 });
-
 
 //Redirect admin users to the admin dashboard page if they have logged in. Otherwise, redirect to login page.
 app.get("/dashboard", function (req, res) {
-    if (req.session.loggedIn) {
+    if (req.session.loggedIn && req.session.isAdmin) {
         let doc = fs.readFileSync("./app/html/dashboard.html", "utf8");
         res.setHeader("Content-Type", "text/html");
-        let profile_jsdom = new JSDOM(doc);
-        profile_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Welcome " + req.session.firstName + "</h5>";
-        res.write(profile_jsdom.serialize());
+        let dashboard_jsdom = new JSDOM(doc);
+        dashboard_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Welcome " + req.session.firstName + "</h5>";
+        res.write(dashboard_jsdom.serialize());
+        res.end();
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.get("/add-user", function (req, res) {
+    if (req.session.loggedIn && req.session.isAdmin) {
+        let doc = fs.readFileSync("./app/html/add-user.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        let dashboard_jsdom = new JSDOM(doc);
+        res.write(dashboard_jsdom.serialize());
         res.end();
     } else {
         res.redirect("/");
@@ -94,10 +112,132 @@ app.get("/dashboard", function (req, res) {
 
 });
 
-//function needed for redirecting to manage users lists in dahboard
+//function needed for getting list of all users in user-list
 app.get("/user-list", function (req, res) {
     if (req.session.loggedIn) {
+        const connection = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "",
+            database: "COMP2800"
+        });
+
         let doc = fs.readFileSync("./app/html/user-list.html", "utf8");
+        let user_list_jsdom = new JSDOM(doc);
+        res.setHeader("Content-Type", "text/html");
+
+        connection.query(
+            "SELECT * FROM BBY_15_User WHERE admin_role = 0",
+            function(error, results, fields) {
+                
+                let user_list = `<tr>
+                <th class="id_header">ID</th>
+                <th class="first_name_header">First Name</th>
+                <th class="last_name_header">Last Name</th>
+                <th class="email_header">Email</th>
+                <th class="password_header">Password</th>
+                <th class="admin_header">Role</th>
+                <th class="delete_header">Delete</th>
+                </tr>`;
+                for (let i = 0; i < results.length; i++) {
+                    // if (results[i]['admin_role']) {
+                    //     var role = 'Admin';
+                    //     var buttonText = 'Make User';
+                    //     var classText = '_make_user';
+                    // } else {
+                    //     var role = 'User';
+                    //     var buttonText = 'Make Admin';
+                    //     var classText = '_make_admin';
+                    // }
+
+                    user_list += ("<tr><td class='id'>" + results[i]['user_id']
+                    + "</td><td class='first_name'><span>" + results[i]['first_name']
+                    + "</span></td><td class='last_name'><span>" + results[i]['last_name']
+                    + "</span></td><td class='email'><span>" + results[i]['email']
+                    + "</span></td><td class='password'><span>" + results[i]['user_password']
+                    + "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin"
+                    + "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete"
+                    + "</button></td></tr>"
+                    );
+                }
+                user_list_jsdom.window.document.getElementById("user-container").innerHTML = user_list;
+                res.write(user_list_jsdom.serialize());
+                res.end;
+            }
+        )
+    } else {
+        // if user has not logged in, redirect to login page
+        res.redirect("/");
+    }
+});
+
+app.get("/edit", function(req, res) {
+    if(req.session.loggedIn && req.session.isAdmin) {
+        let doc = fs.readFileSync("./app/html/edit.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        let dashboard_jsdom = new JSDOM(doc);
+        // dashboard_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Welcome " + req.session.firstName + "</h5>";
+        res.write(dashboard_jsdom.serialize());
+        res.end();
+    } else {
+        res.redirect("/");
+    }
+})
+
+// function for getting all admins for admin-list
+app.get("/admin-list", function (req, res) {
+    if (req.session.loggedIn) {
+        const connection = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "",
+            database: "COMP2800"
+        });
+
+        let doc = fs.readFileSync("./app/html/admin-list.html", "utf8");
+        let admin_list_jsdom = new JSDOM(doc);
+        res.setHeader("Content-Type", "text/html");
+
+        connection.query(
+            "SELECT * FROM BBY_15_User WHERE admin_role = 1",
+            function(error, results, fields) {
+                
+                let admin_list = `<tr>
+                <th class="id_header">ID</th>
+                <th class="first_name_header">First Name</th>
+                <th class="last_name_header">Last Name</th>
+                <th class="email_header">Email</th>
+                <th class="password_header">Password</th>
+                <th class="admin_header">Role</th>
+                <th class="delete_header">Delete</th>
+                </tr>`;
+                for (let i = 0; i < results.length; i++) {
+                    if(req.session.userID != results[i]['user_id']) {
+                    admin_list += ("<tr><td class='id'>" + results[i]['user_id']
+                    + "</td><td class='first_name'><span>" + results[i]['first_name']
+                    + "</span></td><td class='last_name'><span>" + results[i]['last_name']
+                    + "</span></td><td class='email'><span>" + results[i]['email']
+                    + "</span></td><td class='password'><span>" + results[i]['user_password']
+                    + "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_user'>Make User"
+                    + "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete"
+                    + "</button></td></tr>"
+                    );
+                }}
+                admin_list_jsdom.window.document.getElementById("user-container").innerHTML = admin_list;
+                res.write(admin_list_jsdom.serialize());
+                res.end;
+            }
+        )
+    } else {
+        // if user has not logged in, redirect to login page
+        res.redirect("/");
+    }
+});
+
+//function needed for redirecting to manage admins list in dashboard
+app.get("/admin-list", function (req, res) {
+    if (req.session.loggedIn) {
+        let doc = fs.readFileSync("./app/html/admin-list.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
     } else {
@@ -207,7 +347,7 @@ app.post("/add-user", function (req, res) {
                     msg: "Record added."
                 });
                 req.session.loggedIn = true;
-                req.session.save(function (err) { });
+                req.session.save(function (err) {});
             });
 
         connection.query(
@@ -229,9 +369,66 @@ app.post("/add-user", function (req, res) {
                 }
             }
         );
+        connection.end();
+    }
+});
 
+//Authenticating user, checks if they can be added to the database, then creates and add the user info into the database.
+app.post("/add-user-as-admin", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
 
+    //Authenticating user.
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
 
+    let firstName = req.body.firstName;
+    let lastName = req.body.lastName;
+    let signupemail = req.body.email;
+    let signuppassword = req.body.password;
+
+    //Checking to see if any columns in the sign-up page is NULL : if they are, the account cannot be made.
+    if (!firstName || !lastName || !signupemail || !signuppassword) {
+        res.send({
+            status: "fail",
+            msg: "Every column has to be filled."
+        });
+    } else {
+        //connecting to the database, then creating and adding the user info into the database.
+        connection.connect();
+        connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
+            [req.body.firstName, req.body.lastName, req.body.email, req.body.password, ],
+            function (error, results, fields) {
+                res.send({
+                    status: "success",
+                    msg: "Record added."
+                });
+                // req.session.loggedIn = true;
+                // req.session.save(function (err) { });
+            });
+
+        connection.query(
+            "SELECT * FROM BBY_15_User WHERE email = ? AND user_password = ? AND first_name = ? AND last_name = ?",
+            [req.body.email, req.body.password, req.body.firstName, req.body.lastName],
+            function (error, results, fields) {
+
+                if (results.length > 0) {
+                    // user authenticated, create a session
+                    // req.session.user_id = results[0].user_id;
+                    // req.session.save(function (err) {
+                    //     //session saved
+                    // });
+                } else {
+                    res.send({
+                        status: "fail",
+                        msg: "User account not found."
+                    });
+                }
+            }
+        );
         connection.end();
     }
 });
@@ -416,6 +613,104 @@ app.get("/logout", function (req, res) {
     }
 });
 
+/** ANOTHER POST: we are changing stuff on the server!!!
+ *  This function updates the user on the user-list and the admin-list
+*/
+app.post('/update-user', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'COMP2800'
+    });
+    connection.connect();
+    connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ? WHERE user_id = ?',
+          [req.body.firstName, req.body.lastName, req.body.email, req.body.password, parseInt(req.body.id)],
+          function (error, results, fields) {
+      if (error) {
+          console.log(error);
+      }
+      res.send({ status: "success", msg: "Recorded updated." });
+    });
+    connection.end();
+});
+
+/** POST: we are changing stuff on the server!!!
+ *  This user allows admins to click on delete user button to delete the user in the following row.
+ */
+app.post('/delete-user', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'COMP2800'
+    });
+    connection.connect();
+    connection.query('DELETE FROM BBY_15_User WHERE user_id = ?',
+        [parseInt(req.body.id)],
+        function (error, results, fields) {
+      if (error) {
+          console.log(error);
+      }
+      res.send({ status: "success", msg: "Recorded deleted." });
+
+    });
+    connection.end();
+});
+
+/**
+ * This functions allows admins to change other admin into regular users.
+ */
+app.post('/make-user', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'COMP2800'
+    });
+    connection.connect();
+    connection.query('UPDATE BBY_15_User SET admin_role = 0 WHERE user_id = ?',
+        [parseInt(req.body.id)],
+        function (error, results, fields) {
+      if (error) {
+          console.log(error);
+      }
+      res.send({ status: "success", msg: "Recorded deleted." });
+
+    });
+    connection.end();
+});
+
+/**
+ * This function allows admins to change other regular users into admin users.
+ */
+app.post('/make-admin', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'COMP2800'
+    });
+    connection.connect();
+    connection.query('UPDATE BBY_15_User SET admin_role = 1 WHERE user_id = ?',
+        [parseInt(req.body.id)],
+        function (error, results, fields) {
+      if (error) {
+          console.log(error);
+      }
+      res.send({ status: "success", msg: "Recorded deleted." });
+
+    });
+    connection.end();
+});
 
 /**
  * Redirect to the create-a-post page if user is a regular user and has logged in.
@@ -456,7 +751,7 @@ app.post("/add-post", function (req, res) {
     let userID = req.session.userID;
     let post_time = new Date(Date.now());
     let post_status = "pending";
-    
+
     connection.connect();
     connection.query('INSERT INTO BBY_15_post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [userID, post_time, post_content, post_title, post_type, post_location, post_status, weather_type],
@@ -466,9 +761,9 @@ app.post("/add-post", function (req, res) {
                 status: "success",
                 msg: "Post added to database."
             });
-            req.session.save(function (err) { });
+            req.session.save(function (err) {});
         });
-        
+
     connection.end();
 });
 
@@ -487,23 +782,100 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
     });
     connection.connect();
 
-    for(let i = 0; i < req.files.length; i++) {
+    for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
+        let newpathImages = ".." + req.files[i].path.substring(3);
+
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-            [req.session.postID, req.files[i].path],
+            [req.session.postID, newpathImages],
             function (error, results, fields) {
                 res.send({
                     status: "success",
                     msg: "Image information added to database."
                 });
-                req.session.save(function (err) { });
+                req.session.save(function (err) {});
             });
     }
 
     connection.end();
 });
 
+
+
+//Get the post and event information from the database and display information on the profile page
+app.get("/timeline", function (req, res) {
+    // check to see if the user email and password match with data in database
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    let email = req.session.email;
+    // check for a session first!
+    if (req.session.loggedIn) {
+        connection.connect();
+        connection.query(
+            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id",
+            [],
+            function (error, results, fields) {
+                let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
+                let timelineDOM = new JSDOM(timeline);
+                if (results.length > 0) {
+                    for (var i = 0; i < results.length; i++) {
+                        let postTime = results[i].posted_time;
+                        let contentPost = results[i].post_content;
+                        let postTitle = results[i].post_title;
+                        let postlocation = results[i].location;
+                        let typeWeather = results[i].weather_type;
+                        let postImages = results[i].image_location;
+                        var template = `   
+                        </br>  
+                        <div class="post_content">
+                            <div class="card">
+                                <div class="post-image">
+                                    <img src="${postImages}">
+                                </div>
+                                <div class="desc">
+                                    <h3><b>${typeWeather}</b></h3> 
+                                    <h4>Title: ${postTitle} </h4> 
+                                    <p class="time">Posted time: ${postTime}</p> 
+                                    <p>Location: ${postlocation}</p> 
+                                    <p>Description: ${contentPost}</p>
+                                </div>
+                                <div class="share-social">
+                                    <ul>
+                                        <li><a href="#" class="social-link"><i class="fa fa-facebook-f"></i></a></li>
+                                        <li"><a href="#" class="social-link"><i class="fa fa-twitter"></i></a></li>
+                                        <li"><a href="#" class="social-link"><i class="fa fa-instagram"></i></a></li>
+                                        <li"><a href="#" class="social-link"><i class="fa fa-linkedin"></i></a></li>
+                                        <li"><a href="#" class="social-link"><i class="fa fa-reddit-alien"></i></a></li>
+                                        <li"><a href="#" class="social-link"><i class="fa fa-whatsapp"></i></a></li>
+                                    </ul> 
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    `;
+                        let area = timelineDOM.window.document.querySelector('.post_content');
+                        area.innerHTML += template;
+                    }
+                    res.send(timelineDOM.serialize());
+                }
+            }
+        )
+        res.set("Server", "Wazubi Engine");
+        res.set("X-Powered-By", "Wazubi");
+    } else {
+        res.redirect("/");
+    }
+});
+
+
+
 // RUN SERVER
 let port = 8000;
-app.listen(port, function () {
-});
+app.listen(port, function () {});
