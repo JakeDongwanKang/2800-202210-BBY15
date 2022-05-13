@@ -1,17 +1,29 @@
 "use strict";
 
 /**
+ * I found how to do the toggleButton on 1537 course and 1800 course. 
+ * I found some syntax and codes on this website that I can use to create a hambuger menu.
+ * https://www.educba.com/hamburger-menu-javascript/
+ */
+ const toggleButton = document.getElementsByClassName('toggle-button')[0]
+ const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+ 
+ toggleButton.addEventListener('click', () => {
+     navbarLinks.classList.toggle('active')
+ })
+
+/**
  * Sends the user data from the client side to the server side for authentication.
- * If user puts in a valid information in the signup page columns, sign-up is complete, then gets redirected to the log-in page.
- * If not, user receives an error message.
+ * If admin puts in a valid information in the add user page columns, adding user is complete, then gets redirected to the log-in page.
+ * If not, admin receives an error message.
  * @author Arron_Ferguson (1537 instructor), Dongwan_Kang (BBY15)
- * @param {*} data user input
+ * @param {*} data admin input
  */
 
 //Send data to server, then either create or execute an error message.
 async function sendData(data) {
     try {
-        let responseObject = await fetch("/add-user", {
+        let responseObject = await fetch("/add-user-as-admin", {
             method: 'POST',
             headers: { "Accept": 'application/json',
                        "Content-Type": 'application/json'
@@ -22,7 +34,7 @@ async function sendData(data) {
         if(parsedJSON.status == "fail") {
             document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
         } else {
-            window.location.replace("/main");
+            window.location.replace("/dashboard");
         }
     } catch(error) {}
 }
@@ -50,8 +62,3 @@ document.getElementById("signUpButton").addEventListener("click", function(e) {
 function removeErrorMsg() {
     document.getElementById("emptyError").innerHTML = "";
 }
-
-// Go to sign-up when user clicks on "Login Now!"
-document.getElementById("log-in-link").addEventListener("click", function(e) {
-    window.location.replace("/");
-})

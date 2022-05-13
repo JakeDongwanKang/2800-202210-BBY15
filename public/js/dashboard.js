@@ -1,3 +1,5 @@
+"use strict";
+ 
 /**
  * I found how to do the toggleButton on 1537 course and 1800 course. 
  * I found some syntax and codes on this website that I can use to create a hambuger menu.
@@ -12,4 +14,8 @@ toggleButton.addEventListener('click', () => {
 
 document.getElementById("manage-users").addEventListener("click", function(e) {
     window.location.replace("/user-list");
+})
+
+document.getElementById("manage-admins").addEventListener("click", function(e) {
+    window.location.replace("/admin-list");
 })

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Create a post</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/create-post.css" />
+</head>
+
+<body>
+    <!-- Navbar area -->
+    <nav class="navbar">
+        <div class="brand-title">Extremis</div>
+
+        <!-- Create a hamburger menu  -->
+        <a href="#" class="toggle-button">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="navbar-links">
+            <ul>
+                <li><a href="/main">Home</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li>
+                    <form action="/logout" method="get">
+                        <input type="submit" class="singin" value="Sign out" />
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- The create-a-post form goes here -->
+    <header>
+        <!-- <h2><span></span></h2> -->
+    </header>
+
+    <div id="createPostForm">
+
+        <div class="form-box">
+            <label>Type*</label>
+            <form class="dropdown">
+                <div class="select" onfocus="removeErrorMsg()">
+                    <span class="selected" id="postType">Select type</span>
+                    <div class="caret"></div>
+                </div>
+                <ul class="menu">
+                    <li class="active" id="choiceDisabled">Select type</li>
+                    <li>Safe places</li>
+                    <li>Supplies</li>
+                    <li>Weather conditions</li>
+                    <li>Other</li>
+                </ul>
+            </form>
+        </div>
+
+        <div class="form-box" id="weather-type" onfocus="removeErrorMsg()"></div>
+
+        <div class="form-box title">
+            <label>Title*</label>
+            <input class="form-input" id="postTitle" onfocus="removeErrorMsg()" required="required"
+                placeholder="Enter the title">
+        </div>
+
+        <div class="form-box">
+            <label>Location*</label>
+            <input class="form-input" id="postLocation" onfocus="removeErrorMsg()" required="required"
+                placeholder="Enter the location">
+        </div>
+
+        <div class="form-box">
+            <label>Description*</label>
+            <textarea class="form-input" id="postContent" rows="7" onfocus="removeErrorMsg()" required="required"
+                placeholder="Write a description"></textarea>
+        </div>
+
+        <div class="form-box">
+            <form id="upload-images">
+                <label>Upload pictures</label>
+                <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
+                    multiple="multiple" />
+                <label for="selectFile">Choose a Photo</label>
+                <p id="fileNum"><small>No Files Chosen</small></p>
+                <div id="images"></div>
+                <p class="errorMsg"></p>
+                <div id="btn">
+                    <input class="form-input" type="submit" value="Create post" id="create">
+                    <input class="form-input" type="button" value="Cancel" id="cancel">
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Footer area -->
+    <footer>&copy; 2022 Burnaby-15</footer>
+
+    <!-- Javascript goes here -->
+    <script src="/js/create-post.js"></script>
+</body>
+
+
+</html>

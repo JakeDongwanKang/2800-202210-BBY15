@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * Send data from client side to server for authentication.
  * If user has an account and is an admin, redirect to Admin Dashboard.
@@ -16,9 +18,7 @@ async function sendData(data) {
             },
             body: JSON.stringify(data)
         });
-        console.log("Response object", responseObject);
         let parsedJSON = await responseObject.json();
-        console.log("From the server", parsedJSON);
         if (parsedJSON.status == "fail") {
             document.getElementById("emailError").innerHTML = "<small>*Please check your email</small>";
             document.getElementById("passwordError").innerHTML = "<small>*Please check your password</small>";
@@ -27,13 +27,11 @@ async function sendData(data) {
                 //if user is an admin, redirect to the admin dashboard page
                 window.location.replace("/dashboard");
             } else {
-                //if user is an admin, redirect to the main page
+                //if user is not an admin, redirect to the main page
                 window.location.replace("/main");
             }
         }
-    } catch (error) {
-        console.log(error);
-    }
+    } catch (error) {}
 }
 
 //Send user's email and password to server for authentication
@@ -44,15 +42,14 @@ document.getElementById("submit").addEventListener("click", function (e) {
     });
 });
 
-/**
- * Removes the error message when user enters input.
- */
+
+//Removes the error message when user enters input.
 function removeErrorMsg() {
     document.getElementById("emailError").innerHTML = "";
     document.getElementById("passwordError").innerHTML = "";
 }
 
 // Go to sign-up when user clicks on "Join Extremis now!"
-document.getElementById("sign-up-link").addEventListener("click", function(e) {
+document.getElementById("sign-up-link").addEventListener("click", function (e) {
     window.location.replace("/sign-up");
 });

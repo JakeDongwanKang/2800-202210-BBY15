@@ -21,8 +21,8 @@
         </a>
         <div class="navbar-links">
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Profile</a></li>
+                <li><a href="/dashboard/">Home</a></li>
+                <li><a href="/profile/">Profile</a></li>
                 <li><a href="#">About Us</a></li>
                 <li>
                     <form action="/logout" method="get">
@@ -33,14 +33,18 @@
         </div>
     </nav>
 
-    <h1>Admin Dashboard</h1>
+    <header>    
+        <h1 class="branch">Admin Dashboard</h1>
+        <div id="header-name"></div>
+    </header>
+
     <div class="dashboard">
         <div id="content">
             <div class="button" id="manage-users">
-                <p> <a href="/user-list/" role="button">Total Users</a></p>
+                <p> <a href="/user-list/" role="button">Users</a></p>
             </div>
             <div class="button" id="manage-admins">
-                <p>Admins</p>
+                <p> <a href="/admin-list/" role="button">Admins</a></p>
             </div>
             <div class="button" id="manage-posts">
                 <p>Posts</p>
@@ -48,8 +52,14 @@
             <div class="button" id="manage-events">
                 <p>Events</p>
             </div>
+            <div class="button" id="add-users">
+                <p> <a href="/add-user/" role="button">Add users</a></p>
+            </div>
         </div>
     </div>
+
+    <footer>&copy; 2022 Burnaby-15</footer>
+
     <!-- Javascript goes here-->
     <script src="/js/dashboard.js"></script>
 </body>

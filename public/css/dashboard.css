@@ -21,16 +21,28 @@ body {
     align-items: center;
 }
 
-h1 {
+header {
     grid-column: 2;
     grid-row: 2;
-    color: #3477f9;
     border: 1px solid #484848;
     border-radius: 15px 15px 0 0;
     border-bottom: hidden;
+}
+
+.branch {
+    color: #3477f9;
     margin: 0;
     padding: 4%;
     text-align: center;
+    font-size: 5rem;
+    font-weight: 700;
+}
+
+.um-subtitle {
+    text-align: center;
+    font-weight: 500;
+    letter-spacing: 0.5rem;
+    font-size: 15px;
 }
 
 a {
@@ -45,7 +57,6 @@ a {
     border-radius: 0 0 15px 15px;
     border-top: hidden;
     padding: 3%;
-    padding: auto;
     display: flex;
     justify-content: center;
 
@@ -87,7 +98,6 @@ body {
     position: relative;
     justify-content: space-between;
     align-items: center;
-    background-color: none;
     color: black;
     text-decoration: solid;
 }
@@ -227,6 +237,16 @@ button:hover {
 .howitwork {
     font-size: 20px;
     word-spacing: 2px;
+}
+
+footer {
+    overflow-x: hidden;
+    position: absolute;
+    top: 98%;
+    width: 99%;
+    text-align: center;
+    color: #ffffff;
+    background-color: #484848;
 }
 
 /*For the view under 800px*/

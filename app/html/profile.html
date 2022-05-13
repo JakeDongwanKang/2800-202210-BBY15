@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Login</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/profile.css" />
+
+</head>
+
+<body>
+    <!-- Navbar area -->
+    <nav class="navbar">
+        <a class="brand-title">Extremis</a>
+        <!-- Create a hamburger menu  -->
+        <a href="#" class="toggle-button">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="navbar-links">
+            <ul>
+                <li><a href="/main">Home</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li>
+                    <form action="/logout" method="get">
+                        <input type="submit" class="singin" value="Sign out" />
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="wrapper">
+        <div class="profile-pic-div">
+        </div>
+        <div class="account-body">
+            <div id="user_title" class="user_title"></div>
+            <div id="user_content" class="user_content"></div>
+        </div>
+        <div class="form-box-image">
+            <form id="upload-images">
+                <label>Upload profile picture</label>
+                <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
+                    multiple="multiple" />
+                <p class="errorMsg"></p>
+
+                <div class="buttonProfile">
+                    <input class="form-input" type="submit" id="updateAccount" value="Save" />
+                    <input class="form-input" type="button" value="Cancel" id="cancel">
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <footer>
+        <p>&copy; Copyright 2022 Burnaby-15</p>
+    </footer>
+
+    <!-- Javascript goes here-->
+    <script src="/js/profile.js"></script>
+</body>
+
+</html>
