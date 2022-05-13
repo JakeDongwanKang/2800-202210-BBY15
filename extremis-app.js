@@ -128,8 +128,8 @@ app.get("/user-list", function (req, res) {
 
         connection.query(
             "SELECT * FROM BBY_15_User WHERE admin_role = 0",
-            function(error, results, fields) {
-                
+            function (error, results, fields) {
+
                 let user_list = `<tr>
                 <th class="id_header">ID</th>
                 <th class="first_name_header">First Name</th>
@@ -150,14 +150,14 @@ app.get("/user-list", function (req, res) {
                     //     var classText = '_make_admin';
                     // }
 
-                    user_list += ("<tr><td class='id'>" + results[i]['user_id']
-                    + "</td><td class='first_name'><span>" + results[i]['first_name']
-                    + "</span></td><td class='last_name'><span>" + results[i]['last_name']
-                    + "</span></td><td class='email'><span>" + results[i]['email']
-                    + "</span></td><td class='password'><span>" + results[i]['user_password']
-                    + "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin"
-                    + "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete"
-                    + "</button></td></tr>"
+                    user_list += ("<tr><td class='id'>" + results[i]['user_id'] +
+                        "</td><td class='first_name'><span>" + results[i]['first_name'] +
+                        "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
+                        "</span></td><td class='email'><span>" + results[i]['email'] +
+                        "</span></td><td class='password'><span>" + results[i]['user_password'] +
+                        "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
+                        "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
+                        "</button></td></tr>"
                     );
                 }
                 user_list_jsdom.window.document.getElementById("user-container").innerHTML = user_list;
@@ -171,8 +171,8 @@ app.get("/user-list", function (req, res) {
     }
 });
 
-app.get("/edit", function(req, res) {
-    if(req.session.loggedIn && req.session.isAdmin) {
+app.get("/edit", function (req, res) {
+    if (req.session.loggedIn && req.session.isAdmin) {
         let doc = fs.readFileSync("./app/html/edit.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         let dashboard_jsdom = new JSDOM(doc);
@@ -200,8 +200,8 @@ app.get("/admin-list", function (req, res) {
 
         connection.query(
             "SELECT * FROM BBY_15_User WHERE admin_role = 1",
-            function(error, results, fields) {
-                
+            function (error, results, fields) {
+
                 let admin_list = `<tr>
                 <th class="id_header">ID</th>
                 <th class="first_name_header">First Name</th>
@@ -212,17 +212,18 @@ app.get("/admin-list", function (req, res) {
                 <th class="delete_header">Delete</th>
                 </tr>`;
                 for (let i = 0; i < results.length; i++) {
-                    if(req.session.userID != results[i]['user_id']) {
-                    admin_list += ("<tr><td class='id'>" + results[i]['user_id']
-                    + "</td><td class='first_name'><span>" + results[i]['first_name']
-                    + "</span></td><td class='last_name'><span>" + results[i]['last_name']
-                    + "</span></td><td class='email'><span>" + results[i]['email']
-                    + "</span></td><td class='password'><span>" + results[i]['user_password']
-                    + "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_user'>Make User"
-                    + "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete"
-                    + "</button></td></tr>"
-                    );
-                }}
+                    if (req.session.userID != results[i]['user_id']) {
+                        admin_list += ("<tr><td class='id'>" + results[i]['user_id'] +
+                            "</td><td class='first_name'><span>" + results[i]['first_name'] +
+                            "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
+                            "</span></td><td class='email'><span>" + results[i]['email'] +
+                            "</span></td><td class='password'><span>" + results[i]['user_password'] +
+                            "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_user'>Make User" +
+                            "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
+                            "</button></td></tr>"
+                        );
+                    }
+                }
                 admin_list_jsdom.window.document.getElementById("user-container").innerHTML = admin_list;
                 res.write(admin_list_jsdom.serialize());
                 res.end;
@@ -615,25 +616,28 @@ app.get("/logout", function (req, res) {
 
 /** ANOTHER POST: we are changing stuff on the server!!!
  *  This function updates the user on the user-list and the admin-list
-*/
+ */
 app.post('/update-user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     let connection = mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'COMP2800'
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
     });
     connection.connect();
     connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ? WHERE user_id = ?',
-          [req.body.firstName, req.body.lastName, req.body.email, req.body.password, parseInt(req.body.id)],
-          function (error, results, fields) {
-      if (error) {
-          console.log(error);
-      }
-      res.send({ status: "success", msg: "Recorded updated." });
-    });
+        [req.body.firstName, req.body.lastName, req.body.email, req.body.password, parseInt(req.body.id)],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded updated."
+            });
+        });
     connection.end();
 });
 
@@ -644,21 +648,24 @@ app.post('/delete-user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     let connection = mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'COMP2800'
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
     });
     connection.connect();
     connection.query('DELETE FROM BBY_15_User WHERE user_id = ?',
         [parseInt(req.body.id)],
         function (error, results, fields) {
-      if (error) {
-          console.log(error);
-      }
-      res.send({ status: "success", msg: "Recorded deleted." });
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded deleted."
+            });
 
-    });
+        });
     connection.end();
 });
 
@@ -669,21 +676,24 @@ app.post('/make-user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     let connection = mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'COMP2800'
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
     });
     connection.connect();
     connection.query('UPDATE BBY_15_User SET admin_role = 0 WHERE user_id = ?',
         [parseInt(req.body.id)],
         function (error, results, fields) {
-      if (error) {
-          console.log(error);
-      }
-      res.send({ status: "success", msg: "Recorded deleted." });
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded deleted."
+            });
 
-    });
+        });
     connection.end();
 });
 
@@ -694,21 +704,24 @@ app.post('/make-admin', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     let connection = mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'COMP2800'
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
     });
     connection.connect();
     connection.query('UPDATE BBY_15_User SET admin_role = 1 WHERE user_id = ?',
         [parseInt(req.body.id)],
         function (error, results, fields) {
-      if (error) {
-          console.log(error);
-      }
-      res.send({ status: "success", msg: "Recorded deleted." });
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded deleted."
+            });
 
-    });
+        });
     connection.end();
 });
 
@@ -822,7 +835,7 @@ app.get("/timeline", function (req, res) {
             function (error, results, fields) {
                 let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
                 let timelineDOM = new JSDOM(timeline);
-                if (results.length > 0) {
+                if (results.length >= 0) {
                     for (var i = 0; i < results.length; i++) {
                         let postTime = results[i].posted_time;
                         let contentPost = results[i].post_content;
