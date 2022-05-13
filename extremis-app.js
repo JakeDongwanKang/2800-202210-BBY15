@@ -5,18 +5,24 @@ const session = require("express-session");
 const mysql = require("mysql2");
 const app = express();
 const fs = require("fs");
-const { JSDOM } = require('jsdom');
-const e = require('express');
+const {
+    JSDOM
+} = require('jsdom');
 const multer = require("multer");
+const {
+    Console
+} = require('console');
 const storage_post_images = multer.diskStorage({
-    destination: function(req, file, callback) {
+    destination: function (req, file, callback) {
         callback(null, "./app/images/post-images/")
     },
-    filename: function(req, file, callback) {
+    filename: function (req, file, callback) {
         callback(null, req.session.userID + "AT" + Date.now() + "AND" + file.originalname);
     }
 });
-const uploadPostImages = multer({ storage: storage_post_images });
+const uploadPostImages = multer({
+    storage: storage_post_images
+});
 
 
 app.use("/assets", express.static("./public/assets"));
@@ -341,7 +347,7 @@ app.post("/add-user", function (req, res) {
                     msg: "Record added."
                 });
                 req.session.loggedIn = true;
-                req.session.save(function (err) { });
+                req.session.save(function (err) {});
             });
 
         connection.query(
@@ -745,7 +751,7 @@ app.post("/add-post", function (req, res) {
     let userID = req.session.userID;
     let post_time = new Date(Date.now());
     let post_status = "pending";
-    
+
     connection.connect();
     connection.query('INSERT INTO BBY_15_post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [userID, post_time, post_content, post_title, post_type, post_location, post_status, weather_type],
@@ -755,9 +761,9 @@ app.post("/add-post", function (req, res) {
                 status: "success",
                 msg: "Post added to database."
             });
-            req.session.save(function (err) { });
+            req.session.save(function (err) {});
         });
-        
+
     connection.end();
 });
 
@@ -776,23 +782,100 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
     });
     connection.connect();
 
-    for(let i = 0; i < req.files.length; i++) {
+    for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
+        let newpathImages = ".." + req.files[i].path.substring(3);
+
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-            [req.session.postID, req.files[i].path],
+            [req.session.postID, newpathImages],
             function (error, results, fields) {
                 res.send({
                     status: "success",
                     msg: "Image information added to database."
                 });
-                req.session.save(function (err) { });
+                req.session.save(function (err) {});
             });
     }
 
     connection.end();
 });
 
+
+
+//Get the post and event information from the database and display information on the profile page
+app.get("/timeline", function (req, res) {
+    // check to see if the user email and password match with data in database
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    let email = req.session.email;
+    // check for a session first!
+    if (req.session.loggedIn) {
+        connection.connect();
+        connection.query(
+            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id",
+            [],
+            function (error, results, fields) {
+                let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
+                let timelineDOM = new JSDOM(timeline);
+                if (results.length > 0) {
+                    for (var i = 0; i < results.length; i++) {
+                        let postTime = results[i].posted_time;
+                        let contentPost = results[i].post_content;
+                        let postTitle = results[i].post_title;
+                        let postlocation = results[i].location;
+                        let typeWeather = results[i].weather_type;
+                        let postImages = results[i].image_location;
+                        var template = `   
+                        </br>  
+                        <div class="post_content">
+                            <div class="card">
+                                <div class="post-image">
+                                    <img src="${postImages}">
+                                </div>
+                                <div class="desc">
+                                    <h3><b>${typeWeather}</b></h3> 
+                                    <h4>Title: ${postTitle} </h4> 
+                                    <p class="time">Posted time: ${postTime}</p> 
+                                    <p>Location: ${postlocation}</p> 
+                                    <p>Description: ${contentPost}</p>
+                                </div>
+                                <div class="share-social">
+                                    <ul>
+                                        <li><a href="#" class="social-link"><i class="fa fa-facebook-f"></i></a></li>
+                                        <li"><a href="#" class="social-link"><i class="fa fa-twitter"></i></a></li>
+                                        <li"><a href="#" class="social-link"><i class="fa fa-instagram"></i></a></li>
+                                        <li"><a href="#" class="social-link"><i class="fa fa-linkedin"></i></a></li>
+                                        <li"><a href="#" class="social-link"><i class="fa fa-reddit-alien"></i></a></li>
+                                        <li"><a href="#" class="social-link"><i class="fa fa-whatsapp"></i></a></li>
+                                    </ul> 
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    `;
+                        let area = timelineDOM.window.document.querySelector('.post_content');
+                        area.innerHTML += template;
+                    }
+                    res.send(timelineDOM.serialize());
+                }
+            }
+        )
+        res.set("Server", "Wazubi Engine");
+        res.set("X-Powered-By", "Wazubi");
+    } else {
+        res.redirect("/");
+    }
+});
+
+
+
 // RUN SERVER
 let port = 8000;
-app.listen(port, function () {
-});
+app.listen(port, function () {});
