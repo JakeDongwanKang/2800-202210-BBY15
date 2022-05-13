@@ -527,6 +527,7 @@ app.get("/profile", function (req, res) {
     } else {
         res.redirect("/");
     }
+    connection.end();
 });
 
 const storage_avatar = multer.diskStorage({
@@ -885,6 +886,7 @@ app.get("/timeline", function (req, res) {
     } else {
         res.redirect("/");
     }
+    connection.end();
 });
 
 
