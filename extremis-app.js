@@ -5,18 +5,10 @@ const session = require("express-session");
 const mysql = require("mysql2");
 const app = express();
 const fs = require("fs");
-const { JSDOM } = require('jsdom');
+const {
+    JSDOM
+} = require('jsdom');
 const multer = require("multer");
-const storage_post_images = multer.diskStorage({
-    destination: function(req, file, callback) {
-        callback(null, "./app/images/post-images/")
-    },
-    filename: function(req, file, callback) {
-        callback(null, req.session.userID + "AT" + Date.now() + "AND" + file.originalname);
-    }
-});
-const uploadPostImages = multer({ storage: storage_post_images });
-
 
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
@@ -206,7 +198,7 @@ app.post("/add-user", function (req, res) {
                     msg: "Record added."
                 });
                 req.session.loggedIn = true;
-                req.session.save(function (err) { });
+                req.session.save(function (err) {});
             });
 
         connection.query(
@@ -437,6 +429,7 @@ app.get("/create-post", function (req, res) {
  * Store text data of user's post into the database.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
  */
+const sanitizeHtml = require('sanitize-html');
 app.post("/add-post", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
@@ -447,15 +440,48 @@ app.post("/add-post", function (req, res) {
         database: 'COMP2800'
     });
 
+    const DOMParser = require('dom-parser');
+    var parser = new DOMParser();
+    console.log("before sanitizing: " + req.body.postContent);
+    var stringToHTML = toHTML(req.body.postContent);
+    function toHTML(str){
+        
+        var doc = parser.parseFromString(str, 'text/html');
+        return doc.body;
+    };
+    console.log(stringToHTML);
+    const clean = sanitizeHtml(stringToHTML, {
+        allowedTags: [
+            "address", "article", "aside", "footer", "header", "h1", "h2", "h3", "h4",
+            "h5", "h6", "hgroup", "main", "nav", "section", "blockquote", "dd", "div",
+            "dl", "dt", "figcaption", "figure", "hr", "li", "main", "ol", "p", "pre",
+            "ul", "a", "abbr", "b", "bdi", "bdo", "br", "cite", "code", "data", "dfn",
+            "em", "i", "kbd", "mark", "q", "rb", "rp", "rt", "rtc", "ruby", "s", "samp",
+            "small", "span", "strong", "sub", "sup", "time", "u", "var", "wbr", "caption",
+            "col", "colgroup", "table", "tbody", "td", "tfoot", "th", "thead", "tr"
+        ],
+        disallowedTagsMode: ['discard', 'onerror'],
+        allowedAttributes: {
+            a: ['href', 'name', 'target'],
+            // We don't currently allow img itself by default, but
+            // these attributes would make sense if we did.
+            // img: ['src', 'srcset', 'alt', 'title', 'width', 'height', 'loading']
+        },
+        // Lots of these won't come up by default because we don't allow them
+        selfClosing: [ 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
+        
+        allowedIframeHostnames: ['www.youtube.com']
+    });
+
     let post_type = req.body.postType;
     let post_title = req.body.postTitle;
     let post_location = req.body.postLocation;
-    let post_content = req.body.postContent;
+    let post_content = clean;
     let weather_type = req.body.weatherType;
     let userID = req.session.userID;
     let post_time = new Date(Date.now());
     let post_status = "pending";
-    
+
     connection.connect();
     connection.query('INSERT INTO BBY_15_post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [userID, post_time, post_content, post_title, post_type, post_location, post_status, weather_type],
@@ -465,9 +491,9 @@ app.post("/add-post", function (req, res) {
                 status: "success",
                 msg: "Post added to database."
             });
-            req.session.save(function (err) { });
+            req.session.save(function (err) {});
         });
-        
+
     connection.end();
 });
 
@@ -477,6 +503,18 @@ app.post("/add-post", function (req, res) {
  * Store images information into the database. These images are uploaded by users when they create a post.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
  */
+const storage_post_images = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, "./app/images/post-images/")
+    },
+    filename: function (req, file, callback) {
+        callback(null, req.session.userID + "AT" + Date.now() + "AND" + file.originalname);
+    }
+});
+const uploadPostImages = multer({
+    storage: storage_post_images
+});
+
 app.post('/upload-post-images', uploadPostImages.array("files"), function (req, res) {
     let connection = mysql.createConnection({
         host: 'localhost',
@@ -486,7 +524,7 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
     });
     connection.connect();
 
-    for(let i = 0; i < req.files.length; i++) {
+    for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
             [req.session.postID, req.files[i].path],
@@ -495,7 +533,7 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
                     status: "success",
                     msg: "Image information added to database."
                 });
-                req.session.save(function (err) { });
+                req.session.save(function (err) {});
             });
     }
 
@@ -504,5 +542,4 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
 
 // RUN SERVER
 let port = 8000;
-app.listen(port, function () {
-});
+app.listen(port, function () {});
