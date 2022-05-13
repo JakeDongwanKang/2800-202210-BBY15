@@ -134,22 +134,22 @@ app.get("/user-list", function (req, res) {
                 <th class="delete_header">Delete</th>
                 </tr>`;
                 for (let i = 0; i < results.length; i++) {
-                    if (results[i]['admin_role']) {
-                        var role = 'Admin';
-                        var buttonText = 'Make User';
-                        var classText = '_make_user';
-                    } else {
-                        var role = 'User';
-                        var buttonText = 'Make Admin';
-                        var classText = '_make_admin';
-                    }
+                    // if (results[i]['admin_role']) {
+                    //     var role = 'Admin';
+                    //     var buttonText = 'Make User';
+                    //     var classText = '_make_user';
+                    // } else {
+                    //     var role = 'User';
+                    //     var buttonText = 'Make Admin';
+                    //     var classText = '_make_admin';
+                    // }
 
                     user_list += ("<tr><td class='id'>" + results[i]['user_id']
                     + "</td><td class='first_name'><span>" + results[i]['first_name']
                     + "</span></td><td class='last_name'><span>" + results[i]['last_name']
                     + "</span></td><td class='email'><span>" + results[i]['email']
                     + "</span></td><td class='password'><span>" + results[i]['user_password']
-                    + "</span></td><td class='role'>" + "<button type='button' class='role_switch" + classText + "'>" + buttonText
+                    + "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin"
                     + "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete"
                     + "</button></td></tr>"
                     );
@@ -197,12 +197,13 @@ app.get("/admin-list", function (req, res) {
             function(error, results, fields) {
                 
                 let admin_list = `<tr>
-                <th class="id_header"><span>ID</span></th>
-                <th class="first_name_header"><span>First Name</span></th>
-                <th class="last_name_header"><span>Last Name</span></th>
-                <th class="email_header"><span>Email</span></th>
-                <th class="password_header"><span>Password</span></th>
-                <th class="delete_header"><span>Delete</span></th>
+                <th class="id_header">ID</th>
+                <th class="first_name_header">First Name</th>
+                <th class="last_name_header">Last Name</th>
+                <th class="email_header">Email</th>
+                <th class="password_header">Password</th>
+                <th class="admin_header">Role</th>
+                <th class="delete_header">Delete</th>
                 </tr>`;
                 for (let i = 0; i < results.length; i++) {
                     if(req.session.userID != results[i]['user_id']) {
@@ -211,7 +212,8 @@ app.get("/admin-list", function (req, res) {
                     + "</span></td><td class='last_name'><span>" + results[i]['last_name']
                     + "</span></td><td class='email'><span>" + results[i]['email']
                     + "</span></td><td class='password'><span>" + results[i]['user_password']
-                    + "</span></td><td class='delete'>" + "<button type='button' id='deleteUser'>Delete"
+                    + "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_user'>Make User"
+                    + "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete"
                     + "</button></td></tr>"
                     );
                 }}
@@ -642,6 +644,7 @@ app.post('/delete-user', function (req, res) {
       password: '',
       database: 'COMP2800'
     });
+    console.log(parseInt(req.body.id) + "line 645");
     connection.connect();
     connection.query('DELETE FROM BBY_15_User WHERE user_id = ?',
         [parseInt(req.body.id)],
@@ -668,7 +671,7 @@ app.post('/make-user', function (req, res) {
       database: 'COMP2800'
     });
     connection.connect();
-    connection.query('UPDATE BBY_15_User SET admin_role = false WHERE user_id = ?',
+    connection.query('UPDATE BBY_15_User SET admin_role = 0 WHERE user_id = ?',
         [parseInt(req.body.id)],
         function (error, results, fields) {
       if (error) {
@@ -692,8 +695,9 @@ app.post('/make-admin', function (req, res) {
       password: '',
       database: 'COMP2800'
     });
+    console.log(parseInt(req.body.id));
     connection.connect();
-    connection.query('UPDATE BBY_15_User SET admin_role = true WHERE user_id = ?',
+    connection.query('UPDATE BBY_15_User SET admin_role = 1 WHERE user_id = ?',
         [parseInt(req.body.id)],
         function (error, results, fields) {
       if (error) {
@@ -702,6 +706,7 @@ app.post('/make-admin', function (req, res) {
       res.send({ status: "success", msg: "Recorded deleted." });
 
     });
+    connection.end();
 });
 
 /**

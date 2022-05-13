@@ -53,6 +53,7 @@ function editCell(e) {
         let dataToSend = {
             id: parent.parentNode.querySelector(".id").innerHTML
         };
+        console.log(dataToSend);
         try {
             let responseObject = await fetch("/delete-user", {
                 method: 'POST',
@@ -75,14 +76,14 @@ function editCell(e) {
         deleteRecords[i].addEventListener("click", sendDataToDelete);
     }
 
-    let makeUserRecords = document.getElementsByClassName("role_switch_make_user");
-    for(let i = 0; i < deleteRecords.length; i++) {
-        deleteRecords[i].addEventListener("click", sendDataToMakeUser);
+    let makeUserRecords = document.getElementsByClassName("role_switch_to_user");
+    for(let i = 0; i < makeUserRecords.length; i++) {
+        makeUserRecords[i].addEventListener("click", sendDataToMakeUser);
     }
 
-    let makeAdminRecords = document.getElementsByClassName("role_switch_make_admin");
-    for(let i = 0; i < deleteRecords.length; i++) {
-        deleteRecords[i].addEventListener("click", sendDataToMakeAdmin);
+    let makeAdminRecords = document.getElementsByClassName("role_switch_to_admin");
+    for(let i = 0; i < makeAdminRecords.length; i++) {
+        makeAdminRecords[i].addEventListener("click", sendDataToMakeAdmin);
     }
 
     async function sendDataToMakeUser(e) {
@@ -103,8 +104,7 @@ function editCell(e) {
             let parsedJSON = await responseObject.json();
             if (parsedJSON.status == "success") {
                 console.log("thank goodness");
-                e.target.getElementsByClassName("role_switch_make_user").innerHTML = "Make Admin";
-                e.target.getElementsByClassName("role_switch_make_user").className = "role_switch_make_admin";
+                parent.parentNode.remove();
             } 
         } catch (error) {}
     }
@@ -115,6 +115,7 @@ function editCell(e) {
         let dataToSend = {
             id: parent.parentNode.querySelector(".id").innerHTML
         };
+        console.log(dataToSend);
         try {
             let responseObject = await fetch("/make-admin", {
                 method: 'POST',
@@ -127,8 +128,7 @@ function editCell(e) {
             let parsedJSON = await responseObject.json();
             if (parsedJSON.status == "success") {
                 console.log("thank goodness");
-                e.target.getElementsByClassName("role_switch_make_admin").innerHTML = "Make User";
-                e.target.getElementsByClassName("role_switch_make_admin").className = "role_switch_make_user";
+                parent.parentNode.remove();
             } 
         } catch (error) {}
     }
