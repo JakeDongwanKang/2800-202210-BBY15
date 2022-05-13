@@ -1,0 +1,415 @@
+/**
+* I found this font on this website https://fonts.google.com/specimen/Montserrat
+* The CSS decor that I learned from 1537 course and also I found more information on this website
+* https://www.w3schools.com/css/css_navbar.asp
+* https://www.w3schools.com/howto/howto_css_switch.asp
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body{
+    font-family: 'Montserrat', sans-serif;
+    line-height: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* navbar css starts */
+.navbar {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+    text-decoration: solid;
+}
+
+.brand-title {
+    font-size: 1.5rem;
+    margin: .5rem;
+    color: #3477F9;
+    cursor: pointer;
+}
+
+.navbar-links {
+    height: 100%;
+    margin-right: 15px;
+}
+
+.navbar-links ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-links li {
+    list-style: none;
+    padding-top: 10px;
+}
+
+.navbar-links li a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    padding: 1rem;
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease 0s;
+}
+
+.navbar-links li a:hover {
+    color: rgba(52, 119, 249, 1.5);
+}
+
+
+.toggle-button {
+    position: absolute;
+    top: .75rem;
+    right: 1rem;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+}
+
+.toggle-button .bar {
+    height: 3px;
+    width: 100%;
+    background-color: black;
+    border-radius: 10px;
+}
+
+.singin {
+    margin-top: 8px;
+    padding: 9px 25px;
+    background-color: rgba(52, 119, 249, 0.7);
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease 0s;
+    letter-spacing: 1.5px;
+}
+/* navbar css ends */
+
+
+/* create-a-post form css starts */
+#createPostForm {
+    margin: 0% 15% 4% 15%;
+    font-size: 16px;
+    padding: 0px 20px;
+}
+
+.form-box {
+    margin: 13px;
+}
+
+.form-input{
+    display: block;
+    border-radius: 10px;
+    outline: solid 0.1px #484848;
+    font-size: 16px;
+    padding-left: 10px;
+    margin-bottom: 10px;
+    height: 30px;
+    font-family: 'Montserrat', sans-serif;
+    border: none;
+    width: 50%;
+}
+
+.form-input:hover, .btn:hover, .select:hover{
+    outline: solid 1px #3477f9;
+    text-transform: none;
+}
+
+.btn {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    background-color: white;
+    outline: solid 0.1px #484848;
+    border: none;
+    border-radius: 10px;
+    height: 30px;
+    padding: 0px 15px 0px 15px;
+    margin-left: 10px;
+}
+
+.dropdown {
+    position: relative;
+    width: 35%;
+    text-align: center;
+}
+
+.dropdown * {
+    box-sizing: border-box;
+}
+
+.select {
+    border-radius: 10px;
+    align-items: center;
+    outline: 1px solid #484848;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.select-clicked {
+    outline: solid 1px #3477f9;
+    box-shadow: 0 0 5px #3477F9;
+}
+
+.caret {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid black;
+    margin-right: 10px;
+}
+
+.caret-rotate {
+    transform: rotate(180deg);
+}
+
+.menu {
+    list-style: none;
+    padding: 10px 10px;
+    outline: solid 1px #3477f9;
+    border-radius: 10px;
+    position: absolute;
+    width: 100%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: 0.2s;
+    z-index: 1;
+    left: 50%;
+    display: none;
+}
+
+.menu li {
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.menu li:hover {
+    background: #3477F9;
+    color:#ffffff;
+}
+
+.active {
+    background-color: #3477F9;
+}
+
+#choiceDisabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.menu-open {
+    display: block;
+    opacity: 1;
+}
+
+#postContent {
+    width: 100%;
+    height: max-content;
+}
+
+label[for="selectFile"]:hover, #create:hover, #cancel:hover, .select:hover {
+    cursor: pointer;
+    box-shadow: 0 0 5px #3477F9;
+}
+
+input[type='file'] {
+    display: none;
+}
+
+label[for="selectFile"] {
+    cursor: pointer;
+    border-radius: 10px;
+    display: block;
+    position: relative;
+    text-align: center;
+    border: solid 0.2px #484848;
+    width: 200px;
+    margin: 0 auto 0 auto;
+}
+
+#fileNum {
+    margin: 0;
+    text-align: center;
+}
+
+#images {
+    display: flex;
+    width: 100%;
+    position: relative;
+    justify-content: space-evenly;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+figure{
+    width: 40%;
+    margin: 0;
+}
+
+img{
+    width: 100%;
+}
+
+figcaption{
+    text-align: center;
+    font-size: 14px;
+}
+.errorMsg{
+    color: red;
+    margin-left: inherit;
+}
+
+#btn {
+    display: inline-flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+#create, #cancel {
+    width: 35%;
+    height: 40px;
+}
+
+#create {
+    background-color: #3477F9;
+    color: #ffffff;
+    outline: none;
+}
+
+#cancel {
+    background-color:#ffffff;
+}
+/* create-a-post form css ends */
+
+
+/* footer css starts */
+footer {
+    overflow-x: hidden;
+    position: absolute;
+    bottom: 0%;
+    width: 100%;
+    margin-left: 0;
+    text-align: center;
+    color: #ffffff;
+    background-color: #484848;
+    position: fixed;
+}
+/* footer css ends */
+
+
+@media (max-width: 800px) {
+
+    body{
+        font-family: 'Montserrat', sans-serif;
+        line-height: 35px;
+    }
+
+    .brand-title {
+        color: rgba(52, 119, 249, 1.5);
+        text-decoration: solid;
+        font-size: 28px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        color: #000;
+        background-color: lightblue;
+    }
+
+    .toggle-button {
+        display: flex;
+    }
+
+    .navbar-links {
+        display: none;
+        width: 100%;
+    }
+
+    .navbar-links ul {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .navbar-links ul li {
+        text-align: center;
+        font-size: 18px;
+
+    }
+
+    .navbar-links ul li a {
+        padding: 1rem 1rem;
+        color: #000;
+        font-size: 18px;
+
+    }
+
+    .navbar-links.active {
+        display: flex;
+    }
+
+    .singin {
+        padding: 9px 30px;
+        background-color: rgba(52, 119, 249, 0.7);
+        border: none;
+        border-radius: 50px;
+        font-size: 18px;
+        cursor: pointer;
+        color: white;
+        transition: all 0.3s ease 0s;
+        margin-bottom: 30px;
+    }
+
+    /* create-a-post form css starts */
+    #createPostForm {
+        margin: 5% 5% 12% 5%;
+        font-size: 16px;
+    }
+
+    .dropdown {
+        width: 70%;
+    }
+
+    .form-input {
+        width: 90%;
+        height: 40px;
+        line-height: 35px;
+    }
+
+    #postContent {
+        height: 150px;
+    }
+
+    figure{
+        width: 45%  ;
+    }
+    figcaption{
+        margin:0;
+        font-size: 8px;
+        line-height: 10px;
+    }
+    #btn {
+        display: block;
+        width: 100%;
+        align-items: center;
+    }
+
+    #create, #cancel {
+        width: 70%;
+        margin: 20px auto 0 auto; 
+        font-size: 18px;       
+    }
+}
