@@ -1,4 +1,17 @@
 "use strict";
+
+/**
+ * I found how to do the toggleButton on 1537 course and 1800 course. 
+ * I found some syntax and codes on this website that I can use to create a hambuger menu.
+ * https://www.educba.com/hamburger-menu-javascript/
+ */
+const toggleButton = document.getElementsByClassName('toggle-button')[0]
+const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+
+toggleButton.addEventListener('click', () => {
+    navbarLinks.classList.toggle('active')
+})
+
 /**
  * Sends the user data from the client side to the server side for authentication.
  * User clicks on the data that needs to be changed through the text box, and it changes on to the server side in real time
