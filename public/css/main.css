@@ -13,7 +13,6 @@ body {
     padding: 0;
     background: white;
     color: #000;
-    background-image: url('/assets/picture2.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -186,7 +185,6 @@ footer {
         padding: 0;
         background: white;
         color: #000;
-        background-image: url('/assets/picture2.jpg');
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: cover;

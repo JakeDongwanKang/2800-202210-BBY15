@@ -8,7 +8,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 body {
-    background-image: url('/assets/picture2.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -259,7 +258,6 @@ footer {
         padding: 0;
         background: white;
         color: #000;
-        background-image: url('/assets/picture2.jpg');
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: cover;
