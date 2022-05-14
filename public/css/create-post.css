@@ -359,6 +359,7 @@ footer {
 
     .navbar-links.active {
         display: flex;
+        background-color: #ffffff;
     }
 
     .singin {
