@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="/css/create-post.css" />
 
     <!-- Load the Font Awesome icon set -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://cdn.tiny.cloud/1/173v1w4jt7c34wqvz1y6n77p431z5ziqka4n057tpifnntto/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
 </head>
 
 <body>
@@ -25,8 +25,8 @@
         </a>
         <div class="navbar-links">
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Profile</a></li>
+                <li><a href="/main">Home</a></li>
+                <li><a href="/profile">Profile</a></li>
                 <li><a href="#">About Us</a></li>
                 <li>
                     <form action="/logout" method="get">
@@ -76,10 +76,8 @@
 
         <div class="form-box">
             <label>Description*</label>
-            <!-- Add tiny editor to allow text editting as required in COMP2537 course. I learned this from https://www.npmjs.com/package/tiny-editor -->
-            <div data-tiny-editor data-remove-format="no" onfocus="removeErrorMsg()" required="required" id="postContent" style="height:150px">
-            </div>
-
+            <textarea id="postContent" rows="10" onfocus="removeErrorMsg()" required="required"
+                style="height:150px"></textarea>
         </div>
 
         <div class="form-box">
@@ -105,8 +103,6 @@
 
     <!-- Javascript goes here -->
     <script src="/js/create-post.js"></script>
-    <!-- Reference the editor library -->
-    <script src="https://unpkg.com/tiny-editor/dist/bundle.js"></script>
 </body>
 
 

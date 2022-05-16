@@ -123,8 +123,10 @@ document.getElementById("create").addEventListener("click", function (e) {
     let weatherType;
     let postTitle = document.getElementById("postTitle").value;
     let postLocation = document.getElementById("postLocation").value;
-    let postContent = document.getElementById("postContent").innerHTML;
-
+    var myContent = tinymce.get("postContent").getContent();
+    let postContent = myContent;
+    // let postContent = document.getElementById("postContent").value;
+    console.log(postContent);
     if (!document.getElementById("weatherType")) {
         // Set weatherType as "none" if user does not create a post about weather condition
         weatherType = "none";
@@ -204,3 +206,12 @@ imagesUpload.addEventListener("change", function () {
     }
     uploadImg = true;
 });
+
+
+tinymce.init({
+    selector: '#postContent',
+    plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinycomments tinymcespellchecker',
+    toolbar: 'a11ycheck alignleft aligncenter alignright alignfullbold italic underline fontname fontsize casechange checklist formatpainter pageembed table tableofcontents',
+    toolbar_mode: 'floating',
+    tinycomments_mode: 'embedded'
+  });
