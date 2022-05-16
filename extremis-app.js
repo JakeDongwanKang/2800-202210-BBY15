@@ -9,26 +9,10 @@ const {
     JSDOM
 } = require('jsdom');
 const multer = require("multer");
-const {
-    Console
-} = require('console');
-const storage_post_images = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, "./app/images/post-images/")
-    },
-    filename: function (req, file, callback) {
-        callback(null, req.session.userID + "AT" + Date.now() + "AND" + file.originalname);
-    }
-});
-const uploadPostImages = multer({
-    storage: storage_post_images
-});
-
 
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
 app.use("/js", express.static("./public/js"));
-app.use("/images", express.static("./app/images"));
 
 app.use(session({
     secret: "what is the point of this secret",
@@ -748,6 +732,7 @@ app.post("/add-post", function (req, res) {
         database: 'COMP2800'
     });
 
+
     let post_type = req.body.postType;
     let post_title = req.body.postTitle;
     let post_location = req.body.postLocation;
@@ -778,6 +763,18 @@ app.post("/add-post", function (req, res) {
  * Store images information into the database. These images are uploaded by users when they create a post.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
  */
+const storage_post_images = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, "./app/images/post-images/")
+    },
+    filename: function (req, file, callback) {
+        callback(null, req.session.userID + "AT" + Date.now() + "AND" + file.originalname);
+    }
+});
+const uploadPostImages = multer({
+    storage: storage_post_images
+});
+
 app.post('/upload-post-images', uploadPostImages.array("files"), function (req, res) {
     let connection = mysql.createConnection({
         host: 'localhost',

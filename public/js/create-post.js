@@ -106,17 +106,23 @@ async function sendData(data) {
             // Display error message if data of the post has not been stored into database
             document.getElementById("emptyError").innerHTML = "<small>*All required fields have to be filled*</small>";
         } else {
-            let responseObject2 = await fetch("/upload-post-images", {
-                method: 'POST',
-                body: formData
-            });
-            let parsedJSON2 = responseObject2.json();
-            if (parsedJSON2.status == "fail") {
-                document.getElementById("emptyError").innerHTML = "<small>*Please upload images again*</small>";
+            if (uploadImg) {
+                let responseObject2 = await fetch("/upload-post-images", {
+                    method: 'POST',
+                    body: formData
+                });
+                let parsedJSON2 = responseObject2.json();
+                if (parsedJSON2.status == "fail") {
+                    document.getElementById("emptyError").innerHTML = "<small>*Please upload images again*</small>";
+                } else {
+                    // Redirect to timeline page if data of the post has been stored into database
+                    window.location.replace("/timeline");
+                }
             } else {
                 // Redirect to timeline page if data of the post has been stored into database
                 window.location.replace("/timeline");
             }
+            
         }
     } catch (error) { }
 }
@@ -130,8 +136,10 @@ document.getElementById("create").addEventListener("click", function (e) {
     let weatherType;
     let postTitle = document.getElementById("postTitle").value;
     let postLocation = document.getElementById("postLocation").value;
-    let postContent = document.getElementById("postContent").value;
-
+    var myContent = tinymce.get("postContent").getContent();
+    let postContent = myContent;
+    // let postContent = document.getElementById("postContent").value;
+    console.log(postContent);
     if (!document.getElementById("weatherType")) {
         // Set weatherType as "none" if user does not create a post about weather condition
         weatherType = "none";
@@ -190,7 +198,7 @@ const formData = new FormData();
  */
 let imageContainer = document.getElementById("images");
 let fileNum = document.getElementById("fileNum");
-
+const uploadImg = false;
 imagesUpload.addEventListener("change", function () {
     imageContainer.innerHTML = "";
     fileNum.textContent = `${imagesUpload.files.length} Files Selected`;
@@ -209,4 +217,14 @@ imagesUpload.addEventListener("change", function () {
         imageContainer.appendChild(figure);
         reader.readAsDataURL(imagesUpload.files[i]);
     }
+    uploadImg = true;
 });
+
+
+tinymce.init({
+    selector: '#postContent',
+    plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinycomments tinymcespellchecker',
+    toolbar: 'a11ycheck alignleft aligncenter alignright alignfullbold italic underline fontname fontsize casechange checklist formatpainter pageembed table tableofcontents',
+    toolbar_mode: 'floating',
+    tinycomments_mode: 'embedded'
+  });
