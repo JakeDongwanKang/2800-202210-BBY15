@@ -1,5 +1,5 @@
 "use strict";
- 
+
 /**
  * I found how to do the toggleButton on 1537 course and 1800 course. 
  * I found some syntax and codes on this website that I can use to create a hambuger menu.
@@ -19,7 +19,6 @@ const caret = document.querySelector(".caret");
 const menu = document.querySelector(".menu");
 const options = document.querySelectorAll(".menu li");
 const selected = document.querySelector(".selected");
-// const question = document.getElementById("weather-type");
 let dropdownButtonClicks = 0;
 
 /**
@@ -27,20 +26,21 @@ let dropdownButtonClicks = 0;
  * Close the dropdown menu if that number is even (for example, when user wants to select type later).
  */
 select.addEventListener('click', () => {
+    document.querySelector(".post-container").style.opacity = "1";
     dropdownButtonClicks += 1;
     if (dropdownButtonClicks % 2 != 0) {
         // Make space for dropdown menu in 2 different viewport according to media queries.
-        var x = window.matchMedia("(max-width: 800px)");
-        if (x.matches) {
-            document.querySelector('.post-container').style.marginTop = '180px';
-        } else {
-            document.querySelector('.post-container').style.marginTop = '170px';
-        }
+        // var x = window.matchMedia("(max-width: 800px)");
+        // if (x.matches) {
+        //     document.querySelector('.post-container').style.marginTop = '180px';
+        // } else {
+        //     document.querySelector('.post-container').style.marginTop = '170px';
+        // }
 
+        document.querySelector(".post-container").style.opacity = "0.3";
         select.classList.toggle('select-clicked');
         caret.classList.toggle('caret-rotate');
         menu.classList.toggle('menu-open');
-        // question.innerHTML = "";
     } else {
         closeDropdown();
     }
@@ -61,12 +61,8 @@ options.forEach(option => {
             option.classList.remove('active');
         });
         option.classList.add('active');
-
-        // Add question asking for what kind of severe weather if user selects to create a post about weather condition.
-        if (selected.innerText == "Weather conditions") {
-            question.innerHTML = "<label>What kind of severe weather is it?</label>" +
-                "<input class='form-input' id='weatherType' placeholder='flood/ drought/ blizzard/...'>";
-        }
+        let selectedStatus = selected.innerText;
+        displayPost(selectedStatus);
 
         // Set the number of clicks on dropdown button to 0
         dropdownButtonClicks = 0;
@@ -77,8 +73,44 @@ options.forEach(option => {
  * Close the dropdown menu for types of post.
  */
 function closeDropdown() {
-    document.querySelector('.post-container').style.marginTop = '0%';
     select.classList.remove('select-clicked');
     caret.classList.remove('caret-rotate');
     menu.classList.remove('menu-open');
+}
+
+
+/**
+ * Display the posts based on the status that the user selects in Filter.
+ */
+const postStatus = document.querySelectorAll(".post-status");
+
+function displayPost(selectedStatus) {
+    if (selectedStatus == "Approved") {
+        for (let i = 0; i < postStatus.length; i++) {
+            if (postStatus[i].innerText != "Status: approved") {
+                postStatus[i].parentElement.parentElement.style.display = "none";
+            }
+        }
+    }
+    if (selectedStatus == "Pending") {
+        for (let i = 0; i < postStatus.length; i++) {
+            if (postStatus[i].innerText != "Status: pending") {
+                postStatus[i].parentElement.parentElement.style.display = "none";
+            }
+        }
+    }
+    if (selectedStatus == "Rejected") {
+        for (let i = 0; i < postStatus.length; i++) {
+            if (postStatus[i].innerText != "Status: rejected") {
+                postStatus[i].parentElement.parentElement.style.display = "none";
+            }
+        }
+    }
+
+    if (selectedStatus == "All") {
+        for (let i = 0; i < postStatus.length; i++) {
+            postStatus[i].parentElement.parentElement.style.display = "grid";
+        }
+    }
+    document.querySelector(".post-container").style.opacity = "1";
 }
