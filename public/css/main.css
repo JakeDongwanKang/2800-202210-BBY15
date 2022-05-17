@@ -148,12 +148,10 @@ button:hover {
     text-align: center;
     text-decoration: none;
     outline: none;
-    color: black;
-    background-color: bisque;
+    color: #fff;
+    background-color: rgba(52, 119, 249, 0.9);
     border: none;
     border-radius: 15px;
-    margin-left: 20px;
-    border: 2px solid #3477F9;
 }
 
 .forecastButton:hover {

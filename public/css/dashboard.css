@@ -46,7 +46,7 @@ header {
 
 a {
     text-decoration: none;
-    color: black;
+    color: white;
 }
 
 #content {
@@ -69,8 +69,8 @@ a {
     padding: 8px 16px;
     font-size: 16px;
     border-radius: 15px;
-    background-color: bisque;
-    border: 0.5px solid #484848;
+    color: #fff;
+    background-color: rgba(52, 119, 249, 0.9);
     text-align: center;
     text-decoration: none;
 }
@@ -221,8 +221,8 @@ button:hover {
     text-align: center;
     text-decoration: none;
     outline: none;
-    color: black;
-    background-color: bisque;
+    color: #fff;
+    background-color: rgba(52, 119, 249, 0.9);
     border: none;
     border-radius: 15px;
     margin-left: 20px;
