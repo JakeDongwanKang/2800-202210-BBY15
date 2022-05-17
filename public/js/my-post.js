@@ -1,20 +1,17 @@
-/**
- * we found how to do the toggleButton on 1537 course and 1800 course. 
- * we found some syntax and codes on this website that I can use to create a hambuger menu.
- * https://www.educba.com/hamburger-menu-javascript/
- */
 "use strict";
 
-
+//Humbeger menu
 const toggleButton = document.getElementsByClassName('toggle-button')[0]
 const navbarLinks = document.getElementsByClassName('navbar-links')[0]
 
 toggleButton.addEventListener('click', () => {
     navbarLinks.classList.toggle('active')
 })
+
+//Send the update of each post
 async function sendData(data) {
     try {
-        let responseObject = await fetch("/my-post", {
+        let responseObject = await fetch("/update-post", {
             method: 'POST',
             headers: {
                 "Accept": 'application/json',
@@ -48,11 +45,11 @@ function editCell(e) {
             parent.innerHTML = ""; //clears parent node pointer
             parent.appendChild(filled_box);
             let dataToSend = {
-                id: parent.parentNode.querySelector(".id").innerHTML,
-                firstName: parent.parentNode.querySelector(".first_name :nth-child(1)").innerHTML,
-                lastName: parent.parentNode.querySelector(".last_name :nth-child(1)").innerHTML,
-                email: parent.parentNode.querySelector(".email :nth-child(1)").innerHTML,
-                password: parent.parentNode.querySelector(".password :nth-child(1)").innerHTML
+                timePost: parent.parentNode.querySelector(".time_post").innerHTML,
+                typeWeather: parent.parentNode.querySelector(".type_weather").innerHTML,
+                titlePost: parent.parentNode.querySelector(".title_post").innerHTML,
+                postLocation: parent.parentNode.querySelector(".post_location").innerHTML,
+                descrip: parent.parentNode.querySelector(".description").innerHTML
             };
             sendData(dataToSend);
         }
@@ -66,7 +63,7 @@ async function sendDataToDelete(e) {
     e.preventDefault();
     let parent = e.target.parentNode;
     let dataToSend = {
-        id: parent.parentNode.querySelector(".id").innerHTML
+        timePost: parent.parentNode.querySelector(".time_post").innerHTML
     };
     try {
         let responseObject = await fetch("/delete-post", {
@@ -89,61 +86,3 @@ let deleteRecords = document.getElementsByClassName("deletePost");
 for (let i = 0; i < deleteRecords.length; i++) {
     deleteRecords[i].addEventListener("click", sendDataToDelete);
 }
-
-// //This for loop adds the event listener to the Make user button
-// let makeUserRecords = document.getElementsByClassName("role_switch_to_user");
-// for (let i = 0; i < makeUserRecords.length; i++) {
-//     makeUserRecords[i].addEventListener("click", sendDataToMakeUser);
-// }
-
-// //This for loop adds the event listener to the Make Admin button
-// let makeAdminRecords = document.getElementsByClassName("role_switch_to_admin");
-// for (let i = 0; i < makeAdminRecords.length; i++) {
-//     makeAdminRecords[i].addEventListener("click", sendDataToMakeAdmin);
-// }
-
-//This data sends the user data from the client side to the server side so that the specified admin user can become regular user.
-// async function sendDataToMakeUser(e) {
-//     e.preventDefault();
-//     let parent = e.target.parentNode;
-//     let dataToSend = {
-//         id: parent.parentNode.querySelector(".id").innerHTML
-//     };
-//     try {
-//         let responseObject = await fetch("/make-user", {
-//             method: 'POST',
-//             headers: {
-//                 "Accept": 'application/json',
-//                 "Content-Type": 'application/json'
-//             },
-//             body: JSON.stringify(dataToSend)
-//         });
-//         let parsedJSON = await responseObject.json();
-//         if (parsedJSON.status == "success") {
-//             parent.parentNode.remove();
-//         }
-//     } catch (error) {}
-// }
-
-//This data sends the user data from the client side to the server side so that the specified regular user can become admin user.
-// async function sendDataToMakeAdmin(e) {
-//     e.preventDefault();
-//     let parent = e.target.parentNode;
-//     let dataToSend = {
-//         id: parent.parentNode.querySelector(".id").innerHTML
-//     };
-//     try {
-//         let responseObject = await fetch("/make-admin", {
-//             method: 'POST',
-//             headers: {
-//                 "Accept": 'application/json',
-//                 "Content-Type": 'application/json'
-//             },
-//             body: JSON.stringify(dataToSend)
-//         });
-//         let parsedJSON = await responseObject.json();
-//         if (parsedJSON.status == "success") {
-//             parent.parentNode.remove();
-//         }
-//     } catch (error) {}
-// }

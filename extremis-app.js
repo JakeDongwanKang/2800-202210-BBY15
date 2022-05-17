@@ -319,6 +319,7 @@ app.post("/add-user", function (req, res) {
 
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
+    ``
     let signupemail = req.body.email;
     let signuppassword = req.body.password;
 
@@ -881,6 +882,177 @@ app.get("/timeline", function (req, res) {
 });
 
 
+//Get the all posts from users and display on the my post page
+// app.get("/my-post", function (req, res) {
+//     // check to see if the user email and password match with data in database
+//     const mysql = require("mysql2");
+//     const connection = mysql.createConnection({
+//         host: "localhost",
+//         user: "root",
+//         password: "",
+//         database: "COMP2800"
+//     });
+//     // let email = req.session.email;
+//     // check for a session first!
+//     if (req.session.loggedIn) {
+//         connection.connect();
+//         connection.query(
+//             "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id where user_id=?",
+//             [req.session.user_id],
+//             function (error, results, fields) {
+//                 let profile = fs.readFileSync("./app/html/my-post.html", "utf8");
+//                 let profileDOM = new JSDOM(profile);
+//                 if (results != null) {
+//                     for (var i = 0; i < results.length; i++) {
+//                         let postTime = results[i].posted_time;
+//                         let contentPost = results[i].post_content;
+//                         let postTitle = results[i].post_title;
+//                         let postlocation = results[i].location;
+//                         let typeWeather = results[i].weather_type;
+//                         let postImages = results[i].image_location;
+//                         var template = `   
+//                         </br>  
+//                         <div class="my-post-content">
+//                             <div class="card">
+//                                 <div class="post-image">
+//                                     <img src="${postImages}">
+//                                 </div>
+//                                 <div class="desc">
+//                                     <h3><b>${typeWeather}</b></h3> 
+//                                     <h4>Title: ${postTitle} </h4> 
+//                                     <p class="time">Posted time: ${postTime}</p> 
+//                                     <p>Location: ${postlocation}</p> 
+//                                     <p>Description: ${contentPost}</p>
+
+//                                 </div>
+//                             </div> 
+//                         </div>
+//                     `;
+//                         let area = profileDOM.window.document.querySelector('#my-post-content');
+//                         area.innerHTML += template;
+//                     }
+//                     res.send(profileDOM.serialize());
+//                 }
+//             }
+//         )
+//         res.set("Server", "Wazubi Engine");
+//         res.set("X-Powered-By", "Wazubi");
+//     } else {
+//         res.redirect("/");
+//     }
+//     connection.end();
+// });
+
+//function needed for getting list of all users in user-list
+app.get("/my-post", function (req, res) {
+    if (req.session.loggedIn) {
+        const connection = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "",
+            database: "COMP2800"
+        });
+        let doc = fs.readFileSync("./app/html/my-post.html", "utf8");
+        let my_post_jsdom = new JSDOM(doc);
+        res.setHeader("Content-Type", "text/html");
+        connection.query(
+            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id where user_id = ?",
+            [req.session.user_id],
+            function (error, results, fields) {
+                if (results != null) {
+                    for (let i = 0; i < results.length; i++) {
+                        let postTime = results[i].posted_time;
+                        let contentPost = results[i].post_content;
+                        let postTitle = results[i].post_title;
+                        let postlocation = results[i].location;
+                        let typeWeather = results[i].weather_type;
+                        let postImages = results[i].image_location;
+                        var my_post = `   
+                                </br>  
+                                <div class="my-post-content">
+                                    <div class="card">
+                                        <div class="post-image">
+                                            <img class="image"src="${postImages}">
+                                        </div>
+                                        <div class="desc">
+                                            <p>Posted time:</p>
+                                            <p class="time_post"><span> ${postTime}</span></p> 
+                                            <h3 class="type_weather"><span>${typeWeather}</span></h3> 
+                                            <h4 class="title_post"><span>${postTitle}</span> </h4> 
+                                            <p class="post_location"><span> ${postlocation} </span></p>
+                                            <p class="description"><span>${contentPost}</span></p>
+                                        </div>
+                                        <div class="groupButton">
+                                            <button class='deletePost'>Delete post</button>
+                                            <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
+                                                multiple="multiple" />
+                                        </div>
+                                    </div> 
+                                </div>
+                            `;
+                        my_post_jsdom.window.document.getElementById("my-post-content").innerHTML += my_post;
+                    }
+                }
+                res.write(my_post_jsdom.serialize());
+                res.end;
+            }
+
+
+        )
+    } else {
+        // if user has not logged in, redirect to login page
+        res.redirect("/");
+    }
+});
+
+app.post('/delete-post', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.connect();
+    connection.query('DELETE FROM BBY_15_post WHERE user_id = ?',
+        [parseInt(req.body.id)],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded deleted."
+            });
+
+        });
+    connection.end();
+});
+
+app.post('/update-post', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.connect();
+    console.log(req.body.posted_time);
+    connection.query('UPDATE BBY_15_post SET posted_time = ?, post_content = ?, post_title = ?, location = ?, weather_type = ? WHERE post_id = ? AND user_id = ?',
+        [req.body.posted_time, req.body.post_content, req.body.post_title, req.body.location, req.body.post_type, req.session.post_id, req.session.user_id],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded updated."
+            });
+        });
+    connection.end();
+});
 
 //RUN SERVER
 let port = 8000;
