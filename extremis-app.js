@@ -948,34 +948,53 @@ app.get("/post-list", function (req, res) {
                 if (results.length >= 0) {
 
                     for (var i = 0; i < results.length; i++) {
-                        let postID = results[i].post_id;
-                        let userID = results[i].user_id;
-                        let postTime = results[i].posted_time;
-                        let postContent = results[i].post_content;
-                        let postTitle = results[i].post_title;
-                        let postType = results[i].post_type;
-                        let postLocation = results[i].location;
-                        let postStatus = results[i].post_status;
-                        let weatherType = results[i].weather_type;
-                        let postImage = results[i].image_location;
-                        let display = "";
+                        // let postID = results[i].post_id;
+                        // let userID = results[i].user_id;
+                        // let postTime = results[i].posted_time;
+                        // let postContent = results[i].post_content;
+                        // let postTitle = results[i].post_title;
+                        // let postType = results[i].post_type;
+                        // let postLocation = results[i].location;
+                        // let postStatus = results[i].post_status;
+                        // let weatherType = results[i].weather_type;
+                        // let postImage = results[i].image_location;
+                        // let display = "";
                         // If the image path that has been stored into database is null, the src of img tag will be automatically default and will not be displayed.
-                        if (postImage == null) {
-                            display = "none";
-                            postImage = "/images/post-images/test.jpg"
-                        }
+                        
 
                         let newcard = cardTemplate.content.cloneNode(true);
-                        newcard.querySelector('.postID').innerHTML = postID;
-                        newcard.querySelector('.post-status').innerHTML = postStatus;
-                        newcard.querySelector('.userID').innerHTML = userID;
-                        newcard.querySelector('.post-type').innerHTML = postType;
-                        newcard.querySelector('.post-title').innerHTML = postTitle;
-                        newcard.querySelector('.weather-type').innerHTML = weatherType;
-                        newcard.querySelector('.post-location').innerHTML = postLocation;
-                        newcard.querySelector('.post-time').innerHTML = postTime;
-                        newcard.querySelector('.post-content').innerHTML = postContent;
-                        newcard.querySelector('.card-image').src = postImage;
+                        newcard.querySelector('.postID').innerHTML = results[i].post_id;
+                        newcard.querySelector('.post-status').innerHTML = "Status: " + results[i].post_status;
+                        newcard.querySelector('.userID').innerHTML = "User ID: " + results[i].user_id;
+                        newcard.querySelector('.post-type').innerHTML = "Type: " + results[i].post_type;
+                        newcard.querySelector('.post-title').innerHTML = "Title: " + results[i].post_title;
+                        newcard.querySelector('.weather-type').innerHTML = "Weather Type: " + results[i].weather_type;
+                        newcard.querySelector('.post-location').innerHTML = "Location: " + results[i].location;
+                        newcard.querySelector('.post-time').innerHTML = "Time: " + results[i].posted_time;
+                        
+                        // Display the first 50 words of the post content.
+                        const contentArray = results[i].post_content.split(" ");
+                        let str1 = "";
+                        for (let j = 0; j < 50; j++) {
+                            if (contentArray[j]) {
+                                str1 += contentArray[j] + " ";
+                            }
+                        }
+                        newcard.querySelector('.post-content').innerHTML = "Content: " + str1;
+                        if (contentArray.length > 50) {
+                            let str2 = "";
+                            for (let j = 50; j < contentArray.length; j++) {
+                                str2 += contentArray[j] + " ";
+                            }
+                            newcard.querySelector('#more').innerHTML = str2;
+                        }
+                        
+                        if (results[i].image_location == null) {
+                            newcard.querySelector('.card-image').src = "/images/post-images/test.jpg";
+                            newcard.querySelector('.card-image').style.display = 'none';
+                        } else {
+                            newcard.querySelector('.card-image').src = results[i].image_location;
+                        }
 
                         postListDOM.window.document.getElementById("post-goes-here").appendChild(newcard);
 

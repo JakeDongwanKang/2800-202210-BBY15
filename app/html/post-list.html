@@ -6,7 +6,7 @@
   <title>Post List</title>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <!-- <link rel="stylesheet" href="/css/user-list.css"> -->
+  <link rel="stylesheet" href="/css/post-list.css">
 </head>
 
 <body>
@@ -48,22 +48,26 @@
   <!-- Templates for populating posts as cards, not displayed -->
   <template id="postCardTemplate">
     <div class="post">
-      <p class="postID"></p>
-      <p class="post-status"></p>
-      <p class="userID"></p>
       <div class="post-body">
-        <h4 class="post-type"></h4>
-        <h4 class="post-title">Card title</h4>
-        <h4 class="weather-type"></h4>
-        <p class="post-location"></p>
-        <p class="post-time"></p>
-        <p class="post-content">Some quick example text to build on the card title and make up the bulk of the
+        <div class="postID"></div>
+        <div class="post-status"></div>
+        <div class="userID"></div>
+        <div class="post-type"></div>
+        <div class="post-title">Card title</div>
+        <div class="weather-type"></div>
+        <div class="post-location"></div>
+        <div class="post-time"></div>
+        <div class="post-content">Some quick example text to build on the card title and make up the bulk of the
           card's content.
-        <span id="dots">...</span>
-        <div id="more"><p>...</p></div>
-      </p>
+          <span id="dots">...</span>
+          <div id="more">
+            <p>...</p>
+          </div>
+        </div>
         <button class="btn">More</button>
+
       </div>
+
       <div class="card-images">
         <img class="card-image" src=" ..." alt="...">
       </div>

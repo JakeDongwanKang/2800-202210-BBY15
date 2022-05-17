@@ -1,0 +1,262 @@
+/**
+* I found this font on this website https://fonts.google.com/specimen/Montserrat
+* The CSS decor that I learned from 1537 course and also I found more information on this website
+* https://www.w3schools.com/css/css_navbar.asp
+* https://www.w3schools.com/howto/howto_css_switch.asp
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body{
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 30px;
+}
+
+
+/* navbar css starts */
+.navbar {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+    text-decoration: solid;
+}
+
+.brand-title {
+    font-size: 1.5rem;
+    margin: .5rem;
+    color: #3477F9;
+    cursor: pointer;
+}
+
+.navbar-links {
+    height: 100%;
+    margin-right: 15px;
+}
+
+.navbar-links ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-links li {
+    list-style: none;
+    padding-top: 10px;
+}
+
+.navbar-links li a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    padding: 1rem;
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease 0s;
+}
+
+.navbar-links li a:hover {
+    color: rgba(52, 119, 249, 1.5);
+}
+
+
+.toggle-button {
+    position: absolute;
+    top: .75rem;
+    right: 1rem;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+}
+
+.toggle-button .bar {
+    height: 3px;
+    width: 100%;
+    background-color: black;
+    border-radius: 10px;
+}
+
+.singin {
+    margin-top: 8px;
+    padding: 9px 25px;
+    background-color: rgba(52, 119, 249, 0.7);
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease 0s;
+    letter-spacing: 1.5px;
+}
+/* navbar css ends */
+
+/* post css starts */
+h1 {
+    color: #3477F9;
+    text-align: center;
+    font-size: 40px;
+}
+
+.post-container{
+    margin: 0 auto 0 auto;
+    font-size: 18px;
+}
+
+.post{
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 48% 50%;
+    column-gap: 2%;
+    margin: 5vh 5% 5vh 5%;
+    box-shadow: 0 0 5px #484848;
+    border-radius: 10px;
+}
+
+.post:hover {
+    background-color: bisque;
+}
+.post-body {
+    grid-row: 1;
+    grid-column: 1;
+    padding-left: 5%;
+    margin: auto 0 auto 0;
+}
+.postID{
+    display: none;
+}
+
+.card-images {
+    grid-row: 1;
+    grid-column: 2;
+    display: flex;
+    justify-content: center;
+}
+.card-image {
+    width: 100%;
+    border-radius: 0 10px 10px 0;
+}
+/* post css ends */
+
+/* footer css starts */
+footer {
+    overflow-x: hidden;
+    bottom: 0%;
+    width: 100%;
+    margin-left: 0;
+    text-align: center;
+    color: #ffffff;
+    background-color: #484848;
+}
+/* footer css ends */
+
+
+@media (max-width: 800px) {
+
+    body{
+        font-family: 'Montserrat', sans-serif;
+        line-height: 25px;
+    }
+
+    /* navbar css starts */
+    .brand-title {
+        color: rgba(52, 119, 249, 1.5);
+        text-decoration: solid;
+        font-size: 28px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        color: #000;
+        background-color: lightblue;
+    }
+
+    .toggle-button {
+        display: flex;
+    }
+
+    .navbar-links {
+        display: none;
+        width: 100%;
+    }
+
+    .navbar-links ul {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .navbar-links ul li {
+        text-align: center;
+        font-size: 18px;
+
+    }
+
+    .navbar-links ul li a {
+        padding: 1rem 1rem;
+        color: #000;
+        font-size: 18px;
+
+    }
+
+    .navbar-links.active {
+        display: flex;
+        background-color: #ffffff;
+    }
+
+    .singin {
+        padding: 9px 30px;
+        background-color: rgba(52, 119, 249, 0.7);
+        border: none;
+        border-radius: 50px;
+        font-size: 18px;
+        cursor: pointer;
+        color: white;
+        transition: all 0.3s ease 0s;
+        margin-bottom: 30px;
+    }
+    /* navbar css ends  */
+
+    /* post css starts */
+    h1{
+        font-size: 30px;
+        line-height: 50px;
+    }
+
+    .post{
+        font-size: 15px;
+        display: grid;
+        grid-template-rows: 60% auto;
+        grid-template-columns: 100%;
+        row-gap: 3vh;
+    }
+
+    .post:nth-child(2n+1) {
+        background-color: bisque;
+        border-radius: 10px;
+    }
+
+    .post-body {
+        grid-row: 1;
+        grid-column: 1;
+        padding: 0 30px 0 30px;
+        margin: auto 0 auto 0;
+    }
+
+    .card-images {
+        grid-column: 1;
+        grid-row: 2;
+        display: unset;
+        text-align: center;
+    }
+
+    .card-image {
+        width: 90%;
+        border-radius: 0;
+    }
+}
+
