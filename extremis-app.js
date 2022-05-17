@@ -926,6 +926,72 @@ app.get("/timeline", function (req, res) {
 });
 
 
+//Get the post and event information from the database and display information on the profile page
+app.get("/post-list", function (req, res) {
+    // check to see if the user email and password match with data in database
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    // check for a session first!
+    if (req.session.loggedIn) {
+        connection.connect();
+        connection.query(
+            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id",
+            [],
+            function (error, results, fields) {
+                let postList = fs.readFileSync("./app/html/post-list.html", "utf8");
+                let postListDOM = new JSDOM(postList);
+                let cardTemplate = postListDOM.window.document.getElementById("postCardTemplate");
+                if (results.length >= 0) {
+
+                    for (var i = 0; i < results.length; i++) {
+                        let postID = results[i].post_id;
+                        let userID = results[i].user_id;
+                        let postTime = results[i].posted_time;
+                        let postContent = results[i].post_content;
+                        let postTitle = results[i].post_title;
+                        let postType = results[i].post_type;
+                        let postLocation = results[i].location;
+                        let postStatus = results[i].post_status;
+                        let weatherType = results[i].weather_type;
+                        let postImage = results[i].image_location;
+                        let display = "";
+                        // If the image path that has been stored into database is null, the src of img tag will be automatically default and will not be displayed.
+                        if (postImage == null) {
+                            display = "none";
+                            postImage = "/images/post-images/test.jpg"
+                        }
+
+                        let newcard = cardTemplate.content.cloneNode(true);
+                        newcard.querySelector('.postID').innerHTML = postID;
+                        newcard.querySelector('.post-status').innerHTML = postStatus;
+                        newcard.querySelector('.userID').innerHTML = userID;
+                        newcard.querySelector('.post-type').innerHTML = postType;
+                        newcard.querySelector('.post-title').innerHTML = postTitle;
+                        newcard.querySelector('.weather-type').innerHTML = weatherType;
+                        newcard.querySelector('.post-location').innerHTML = postLocation;
+                        newcard.querySelector('.post-time').innerHTML = postTime;
+                        newcard.querySelector('.post-content').innerHTML = postContent;
+                        newcard.querySelector('.card-image').src = postImage;
+
+                        postListDOM.window.document.getElementById("post-goes-here").appendChild(newcard);
+
+                    }
+                    res.send(postListDOM.serialize());
+                }
+            }
+        )
+
+        res.set("Server", "Wazubi Engine");
+        res.set("X-Powered-By", "Wazubi");
+    } else {
+        res.redirect("/");
+    }
+    connection.end();
+});
 
 // RUN SERVER
 let port = 8000;
