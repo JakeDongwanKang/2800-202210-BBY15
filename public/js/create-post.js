@@ -5,14 +5,14 @@
  * I found some syntax and codes on this website that I can use to create a hambuger menu.
  * https://www.educba.com/hamburger-menu-javascript/
  */
- const toggleButton = document.getElementsByClassName('toggle-button')[0]
- const navbarLinks = document.getElementsByClassName('navbar-links')[0]
- 
- toggleButton.addEventListener('click', () => {
-     navbarLinks.classList.toggle('active')
- })
+const toggleButton = document.getElementsByClassName('toggle-button')[0]
+const navbarLinks = document.getElementsByClassName('navbar-links')[0]
 
- 
+toggleButton.addEventListener('click', () => {
+    navbarLinks.classList.toggle('active')
+})
+
+
 const dropdown = document.querySelector(".dropdown");
 const select = document.querySelector(".select");
 const caret = document.querySelector(".caret");
@@ -122,9 +122,9 @@ async function sendData(data) {
                 // Redirect to timeline page if data of the post has been stored into database
                 window.location.replace("/timeline");
             }
-            
+
         }
-    } catch (error) { }
+    } catch (error) {}
 }
 
 /**
@@ -198,7 +198,7 @@ const formData = new FormData();
  */
 let imageContainer = document.getElementById("images");
 let fileNum = document.getElementById("fileNum");
-const uploadImg = false;
+let uploadImg = false;
 imagesUpload.addEventListener("change", function () {
     imageContainer.innerHTML = "";
     fileNum.textContent = `${imagesUpload.files.length} Files Selected`;
@@ -220,11 +220,14 @@ imagesUpload.addEventListener("change", function () {
     uploadImg = true;
 });
 
-
+/**
+ * Add text-editor feature so users can edit the content of the post they are creating.
+ * The following code comes from https://www.tiny.cloud/ with changes and adjustment made by Linh.
+ */
 tinymce.init({
     selector: '#postContent',
     plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinycomments tinymcespellchecker',
-    toolbar: 'a11ycheck alignleft aligncenter alignright alignfullbold italic underline fontname fontsize casechange checklist formatpainter pageembed table tableofcontents',
+    toolbar: 'a11ycheck alignleft aligncenter alignright alignfull bold italic underline forecolor fontname fontsize casechange checklist formatpainter pageembed table',
     toolbar_mode: 'floating',
     tinycomments_mode: 'embedded'
-  });
+});

@@ -718,6 +718,8 @@ app.get("/create-post", function (req, res) {
 });
 
 
+const sanitizeHtml = require("sanitize-html");
+
 /**
  * Store text data of user's post into the database.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
@@ -732,11 +734,33 @@ app.post("/add-post", function (req, res) {
         database: 'COMP2800'
     });
 
+    // Sanitize html code on the server (https://www.npmjs.com/package//sanitize-html)
+    const stringToSanitize = req.body.postContent;
+    const clean = sanitizeHtml(stringToSanitize, {
+        allowedTags: [
+            "address", "article", "aside", "footer", "header", "h1", "h2", "h3", "h4",
+            "h5", "h6", "hgroup", "main", "nav", "section", "blockquote", "dd", "div",
+            "dl", "dt", "figcaption", "figure", "hr", "li", "main", "ol", "p", "pre",
+            "ul", "a", "abbr", "b", "bdi", "bdo", "br", "cite", "code", "data", "dfn",
+            "em", "i", "kbd", "mark", "q", "rb", "rp", "rt", "rtc", "ruby", "s", "samp",
+            "small", "span", "strong", "sub", "sup", "time", "u", "var", "wbr", "caption",
+            "col", "colgroup", "table", "tbody", "td", "tfoot", "th", "thead", "tr", "span"
+        ],
+        disallowedTagsMode: ['discard'],
+        allowedAttributes: {
+            a: ['href', 'name', 'target'],
+            img: ['srcset', 'alt', 'title', 'width', 'height', 'loading'],
+            span: ['style']
+        },
+        selfClosing: ['br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
+
+        allowedIframeHostnames: ['www.youtube.com']
+    });
 
     let post_type = req.body.postType;
     let post_title = req.body.postTitle;
     let post_location = req.body.postLocation;
-    let post_content = req.body.postContent;
+    let post_content = clean;
     let weather_type = req.body.weatherType;
     let userID = req.session.userID;
     let post_time = new Date(Date.now());
