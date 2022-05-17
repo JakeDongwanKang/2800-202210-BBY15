@@ -138,8 +138,7 @@ document.getElementById("create").addEventListener("click", function (e) {
     let postLocation = document.getElementById("postLocation").value;
     var myContent = tinymce.get("postContent").getContent();
     let postContent = myContent;
-    // let postContent = document.getElementById("postContent").value;
-    console.log(postContent);
+
     if (!document.getElementById("weatherType")) {
         // Set weatherType as "none" if user does not create a post about weather condition
         weatherType = "none";
