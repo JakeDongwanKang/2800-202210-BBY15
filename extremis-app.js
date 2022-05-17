@@ -382,8 +382,6 @@ app.post("/add-user-as-admin", function (req, res) {
                     status: "success",
                     msg: "Record added."
                 });
-                // req.session.loggedIn = true;
-                // req.session.save(function (err) { });
             });
 
         connection.query(
@@ -392,11 +390,6 @@ app.post("/add-user-as-admin", function (req, res) {
             function (error, results, fields) {
 
                 if (results.length > 0) {
-                    // user authenticated, create a session
-                    // req.session.user_id = results[0].user_id;
-                    // req.session.save(function (err) {
-                    //     //session saved
-                    // });
                 } else {
                     res.send({
                         status: "fail",
@@ -767,15 +760,13 @@ app.post("/add-post", function (req, res) {
     let post_status = "pending";
 
     connection.connect();
-    connection.query('INSERT INTO BBY_15_post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    connection.query('INSERT INTO BBY_15_Post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [userID, post_time, post_content, post_title, post_type, post_location, post_status, weather_type],
         function (error, results, fields) {
-            req.session.postID = results.insertId;
             res.send({
                 status: "success",
                 msg: "Post added to database."
             });
-            req.session.save(function (err) {});
         });
 
     connection.end();

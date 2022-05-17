@@ -32,7 +32,33 @@ body {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
-img {
+.post-user {
+    display: flex;
+    align-items: center;
+}
+
+.profile-pic {
+    width: 48px;
+    height: 48px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+h3 {
+    margin-bottom: 5px;
+}
+
+h4 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+h5 {
+    margin-top: 5px;
+    text-align: left;
+}
+
+.post-pic {
     border-radius: 5px 5px 0 0;
     width: 100%;
     height: 250px;
