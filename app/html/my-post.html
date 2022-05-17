@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Login</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/my-post.css" />
+
+</head>
+
+<body>
+    <!-- Navbar area -->
+    <nav class="navbar">
+        <a class="brand-title">Extremis</a>
+        <!-- Create a hamburger menu  -->s
+        <a href="#" class="toggle-button">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+        <div class="navbar-links">
+            <ul>
+                <li><a href="/main">Home</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/my-post">My post</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li>
+                    <form action="/logout" method="get">
+                        <input type="submit" class="singout" value="Sign out" />
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="wrapper">
+        <!-- <div class>
+            <div id="my-post-image" class="my-post-image"></div>
+        </div>
+        <div>
+            <div id="my-post-contain" class="my-post-contain"></div>
+        </div> -->
+        <div id="my-post-content" class="my-post-content"></div>
+    </div>
+
+
+    <footer>
+        <p>&copy; Copyright 2022 Burnaby-15</p>
+    </footer>
+
+    <!-- Javascript goes here-->
+    <script src="/js/profile.js"></script>
+</body>
+
+</html>
