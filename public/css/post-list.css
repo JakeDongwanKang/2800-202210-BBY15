@@ -95,6 +95,95 @@ body{
 }
 /* navbar css ends */
 
+
+/* Dropdown menu for Filter button css starts here  */
+.dropdown {
+    position: relative;
+    width: 150px;
+    margin: 0 auto 0 auto;
+    text-align: center;
+}
+
+.dropdown * {
+    box-sizing: border-box;
+}
+
+.select {
+    border-radius: 10px;
+    align-items: center;
+    outline: 1px solid #484848;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.select:hover{
+    outline: solid 1px #3477f9;
+    text-transform: none;
+}
+
+.select-clicked {
+    outline: solid 1px #3477f9;
+    box-shadow: 0 0 5px #3477F9;
+}
+
+.caret {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid black;
+    margin-right: 10px;
+}
+
+.caret-rotate {
+    transform: rotate(180deg);
+}
+
+.menu {
+    list-style: none;
+    padding: 10px 10px;
+    outline: solid 1px #3477f9;
+    border-radius: 10px;
+    position: absolute;
+    width: 100%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: 0.2s;
+    z-index: 1;
+    left: 50%;
+    display: none;
+}
+
+.menu li {
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.menu li:hover {
+    background: #3477F9;
+    color:#ffffff;
+}
+
+.active {
+    background-color: #3477F9;
+}
+
+#choiceDisabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.menu-open {
+    display: block;
+    opacity: 1;
+}
+
+/* Dropdown menu for Filter button css ends here  */
+
+
 /* post css starts */
 h1 {
     color: #3477F9;
@@ -118,12 +207,14 @@ h1 {
 }
 
 .post:hover {
-    background-color: bisque;
+    outline: solid 1px #3477f9;
+    box-shadow: 0 0 10px #3477F9;
 }
 .post-body {
     grid-row: 1;
     grid-column: 1;
     padding-left: 5%;
+    padding-top: 2%;
     margin: auto 0 auto 0;
 }
 .postID{

@@ -38,6 +38,20 @@
     <h1>Manage Posts</h1>
   </header>
 
+  <!-- Dropdown menu for the Filter button -->
+  <form class="dropdown">
+    <div class="select">
+        <span class="selected" id="postType">Filter</span>
+        <div class="caret"></div>
+    </div>
+    <ul class="menu">
+        <li class="active" id="choiceDisabled">Filter</li>
+        <li>Pending</li>
+        <li>Approved</li>
+        <li>Rejected</li>
+    </ul>
+</form>
+
   <!-- All posts will be displayed here -->
   <div class="post-container">
     <div id="post-goes-here">
