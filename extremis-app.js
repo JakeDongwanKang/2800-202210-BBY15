@@ -85,6 +85,21 @@ app.get("/main", function (req, res) {
 
 });
 
+//Redirect users to the main page if they have logged in. Otherwise, redirect to login page.
+app.get("/about-us", function (req, res) {
+    if (req.session.loggedIn && !req.session.isAdmin) {
+        let doc = fs.readFileSync("./app/html/about-us.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        let main_jsdom = new JSDOM(doc);
+        res.write(main_jsdom.serialize());
+        res.end();
+
+    } else {
+        res.redirect("/");
+    }
+
+});
+
 //Redirect admin users to the admin dashboard page if they have logged in. Otherwise, redirect to login page.
 app.get("/dashboard", function (req, res) {
     if (req.session.loggedIn && req.session.isAdmin) {
