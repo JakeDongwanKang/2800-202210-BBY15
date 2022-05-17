@@ -169,12 +169,11 @@ input{
 
 footer {
   position:fixed;
-    left:0;
+  left:0;
     bottom:0;
     width:100%;
     text-align: center;
-    color: #ffffff;
-    background-color: #484848;
+    color: #000;
 }
 
 /*For the view under 800px*/

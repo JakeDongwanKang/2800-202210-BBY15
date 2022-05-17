@@ -162,13 +162,12 @@ h2 {
 }
 
 footer {
-    position:fixed;
     left:0;
     bottom:0;
     width:100%;
     text-align: center;
-    color: #ffffff;
-    background-color: #484848;
+    color: #000;
+    overflow:hidden;
 }
 
 #myImg {
