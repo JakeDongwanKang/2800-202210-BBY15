@@ -13,6 +13,8 @@ const multer = require("multer");
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
 app.use("/js", express.static("./public/js"));
+app.use("/images", express.static("./app/images"));
+
 
 app.use(session({
     secret: "what is the point of this secret",
@@ -808,20 +810,36 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
     });
     connection.connect();
 
-    for (let i = 0; i < req.files.length; i++) {
-        req.files[i].filename = req.files[i].originalname;
-        let newpathImages = ".." + req.files[i].path.substring(3);
+    if (req.files.length > 0) {
+        // If there is at leats one image uploaded by users, the image path will be stored into database.
+        for (let i = 0; i < req.files.length; i++) {
+            req.files[i].filename = req.files[i].originalname;
+            // New image path is created before being saved into dababase to make it easier to display on Timeline later.
+            let newpathImages = req.files[i].path.substring(3);
 
+            connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
+                [req.session.postID, newpathImages],
+                function (error, results, fields) {
+                    res.send({
+                        status: "success",
+                        msg: "Image information added to database."
+                    });
+                    req.session.save(function (err) {});
+                });
+        }
+    } else {
+        // If there is no image in user's post, the image path will be stored into database as null.
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-            [req.session.postID, newpathImages],
+            [req.session.postID, null],
             function (error, results, fields) {
                 res.send({
                     status: "success",
-                    msg: "Image information added to database."
+                    msg: "No image has been uploaded"
                 });
                 req.session.save(function (err) {});
             });
     }
+
 
     connection.end();
 });
@@ -856,12 +874,19 @@ app.get("/timeline", function (req, res) {
                         let postlocation = results[i].location;
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
+                        let display = "";
+                        // If the image path that has been stored into database is null, the src of img tag will be automatically default and will not be displayed.
+                        if (postImages == null) {
+                            display = "none";
+                            postImages = "/images/post-images/test.jpg"
+                        }
+
                         var template = `   
                         </br>  
                         <div class="post_content">
                             <div class="card">
-                                <div class="post-image">
-                                    <img src="${postImages}">
+                                <div class="post-image" >
+                                    <img src="${postImages}" style='display: ${display}'/>
                                 </div>
                                 <div class="desc">
                                     <h3><b>${typeWeather}</b></h3> 
@@ -883,8 +908,6 @@ app.get("/timeline", function (req, res) {
 
                             </div>
                         </div>
-
-
                     `;
                         let area = timelineDOM.window.document.querySelector('.post_content');
                         area.innerHTML += template;
@@ -893,6 +916,7 @@ app.get("/timeline", function (req, res) {
                 }
             }
         )
+
         res.set("Server", "Wazubi Engine");
         res.set("X-Powered-By", "Wazubi");
     } else {
