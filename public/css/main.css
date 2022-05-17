@@ -166,10 +166,10 @@ button:hover {
 }
 
 footer {
-    overflow-x: hidden;
-    position: absolute;
-    top: 98%;
-    width: 99%;
+    position:fixed;
+    left:0;
+    bottom:0;
+    width:100%;
     text-align: center;
     color: #ffffff;
     background-color: #484848;

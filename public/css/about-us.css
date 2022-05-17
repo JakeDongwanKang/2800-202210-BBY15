@@ -103,37 +103,54 @@ button:hover {
     color: #3477F9;
 }
 
+.html-container {
+    display:grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+}
+
 .who-we-are {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 5px; /* 5px rounded corners */
   margin : auto;
-  width:35%;
+  width:50%;
   padding:10px;
+  grid-column: 1 / span 1;
+  grid-row: 1 / span 1;
 }
 
 .how-it-works {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 5px; /* 5px rounded corners */
   margin : auto;
-  
+  width:50%;
   padding:10px;
+  grid-column: 2 / span 1;
+  grid-row: 1 / span 1;
 }
 
 .commitment {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 5px; /* 5px rounded corners */
   margin : auto;
-  
+  width:50%;
   padding:10px;
+    grid-column: 1 / span 1;
+    grid-row: 2 / span 1;
 }
 
 .contact-us {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 5px; /* 5px rounded corners */
   margin : auto;
-  
+  width:50%;
   padding:10px;
+  grid-column: 2 / span 1;
+  grid-row: 2 / span 1;
 }
 
 .container {
@@ -145,10 +162,10 @@ h2 {
 }
 
 footer {
-    overflow-x: hidden;
-    position: absolute;
-    top: 98%;
-    width: 99%;
+    position:fixed;
+    left:0;
+    bottom:0;
+    width:100%;
     text-align: center;
     color: #ffffff;
     background-color: #484848;

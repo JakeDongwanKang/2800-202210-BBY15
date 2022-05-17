@@ -297,15 +297,13 @@ figcaption{
 
 /* footer css starts */
 footer {
-    overflow-x: hidden;
-    position: absolute;
-    bottom: 0%;
-    width: 100%;
-    margin-left: 0;
+    position:fixed;
+    left:0;
+    bottom:0;
+    width:100%;
     text-align: center;
     color: #ffffff;
     background-color: #484848;
-    position: fixed;
 }
 /* footer css ends */
 
