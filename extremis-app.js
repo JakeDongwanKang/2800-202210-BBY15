@@ -812,7 +812,7 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
 
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
-        let newpathImages = ".." + req.files[i].path.substring(3);
+        let newpathImages = req.files[i].path.substring(3);
 
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
             [req.session.postID, newpathImages],
