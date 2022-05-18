@@ -88,12 +88,12 @@ body {
 .singin {
     margin-top: 8px;
     padding: 9px 25px;
-    background-color: rgba(52, 119, 249, 0.7);
+    background-color: #fff;
     border: none;
     border-radius: 50px;
     font-size: 16px;
     cursor: pointer;
-    color: white;
+    color: rgba(52, 119, 249, 0.7);
     transition: all 0.3s ease 0s;
     letter-spacing: 1.5px;
 }
@@ -135,7 +135,7 @@ button:hover {
     background-color: #fff;
     border: none;
     border-radius: 15px;
-
+    width:17%;
 }
 
 .timeline:hover {
@@ -154,6 +154,7 @@ button:hover {
     background-color: #fff;
     border: none;
     border-radius: 15px;
+    width:17%;
 }
 
 .forecastButton:hover {
