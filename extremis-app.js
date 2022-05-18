@@ -546,8 +546,6 @@ app.post("/profile", function (req, res) {
         password: '',
         database: 'COMP2800'
     });
-
-
     //connecting to the database, then creating and adding the user info into the database.
     connection.connect();
     connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE user_id=?',
@@ -806,7 +804,11 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
     connection.end();
 });
 
-
+/**
+ * Redirect to the timeline page
+ * Otherwise, not allow accessing this site.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen
+ */
 
 //Get the post and event information from the database and display information on the profile page
 app.get("/timeline", function (req, res) {
@@ -881,8 +883,11 @@ app.get("/timeline", function (req, res) {
     connection.end();
 });
 
+/**
+ * Redirect to the my post and show all the post that created by a user.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen
+ */
 
-//function needed for getting list of all users in user-list
 app.get("/my-post", function (req, res) {
     const mysql = require("mysql2");
     const connection = mysql.createConnection({
@@ -914,31 +919,30 @@ app.get("/my-post", function (req, res) {
                                 <div class="my-post-content">
                                     <div class="card">
                                         <div class="post-image">
+                                            <img class="remove-icon"src="/assets/remove.png" width="15" height="15">
                                             <img class="image"src="${postImages}">
+                                            <button type='button' class='deleteImage'>&times;</button>
                                         </div>
                                         <div class="desc">
-                                            <p class="post_id"><span>` + postID + `</span></p> 
-                                            <p class="posted_time">Posted time: ` + postTime + `</p> 
+                                            <p class="post_id">` + postID + `</p> 
+                                            <p class="posted_time">` + postTime + `</p> 
                                             <h3 class="weather_type"><span>` + typeWeather + `</span></h3> 
                                             <h4 class="post_title"><span>` + postTitle + `</span> </h4> 
                                             <p class="location"><span>` + postlocation + `</span></p>
                                             <p class="post_content"><span>` + contentPost + `</span></p>
-                                        </div>
-                                        <div class="form-box-image">
                                             <form id="upload-images">
                                                 <label>Change images's posts</label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
                                                     multiple="multiple" />
                                                 <p class="errorMsg"></p>
-                                
                                                 <div class="button-update-images">
-                                                    <input class="form-input" type="submit" id="update" value="Save" />
-                                                    <input class="form-input" type="button" value="Cancel" id="cancel">
+                                                    <input class="form-input" type="submit" id="upload" value="Upload images" />
+                                                    <button type='button' class='deletePost'>Delete post</button>
                                                 </div>
                                             </form>
+                                        </div>
+                                        <div class="form-box-image">
                                     </div>
-
-                                    </div> 
                                 </div>
                             `;
                         my_post_jsdom.window.document.getElementById("my-post-content").innerHTML += my_post;
@@ -957,19 +961,24 @@ app.get("/my-post", function (req, res) {
     connection.end();
 });
 
+/**
+ * delete post from users.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen
+ */
+
+
 app.post('/delete-post', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
-
     let connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
         password: '',
         database: 'COMP2800'
     });
-
     connection.connect();
-    connection.query('DELETE FROM BBY_15_post WHERE user_id = ?',
-        [parseInt(req.body.id)],
+    console.log("Delete post: " + req.body.post_id);
+    connection.query('DELETE FROM BBY_15_post WHERE post_id = ?',
+        [req.body.post_id],
         function (error, results, fields) {
             if (error) {
                 console.log(error);
@@ -983,7 +992,14 @@ app.post('/delete-post', function (req, res) {
     connection.end();
 });
 
-app.post('/update-post', function (req, res) {
+
+
+/**
+ * Redirect to the my post and update the changed from user's input
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
+ */
+
+app.post("/update-post", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     let connection = mysql.createConnection({
         host: 'localhost',
@@ -991,15 +1007,6 @@ app.post('/update-post', function (req, res) {
         password: '',
         database: 'COMP2800'
     });
-
-    connection.connect();
-    console.log(req.body.post_id);
-    console.log(req.body.post_content);
-    console.log(req.body.post_title);
-    console.log(req.body.location);
-    console.log(req.body.weather_type);
-    console.log(req.session.user_id);
-
     connection.query('UPDATE BBY_15_post SET post_content = ?, post_title = ?, location = ?, weather_type = ? WHERE post_id = ? AND user_id = ?',
         [req.body.post_content, req.body.post_title, req.body.location, req.body.weather_type, req.body.post_id, req.session.user_id],
         function (error, results, fields) {
@@ -1015,7 +1022,12 @@ app.post('/update-post', function (req, res) {
 });
 
 
-app.post('/change-images-post', uploadPostImages.array("files"), function (req, res) {
+
+/**
+ * Redirect to the my post and update the new images if user changes post's images
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
+ */
+app.post("/change-images-post", uploadPostImages.array("files"), function (req, res) {
     let connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -1023,11 +1035,14 @@ app.post('/change-images-post', uploadPostImages.array("files"), function (req, 
         database: 'COMP2800'
     });
     connection.connect();
+    //let post_title = req.body.postTitle;
+    console.log(req.body.post_id);
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
         let newpath = ".." + req.files[i].path.substring(3);
-        connection.query('UPDATE BBY_15_post_images SET image_location=? WHERE post_id=?',
-            [newpath, req.session.post_id],
+        console.log(req.body.post_id);
+        connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
+            [newpath, req.body.post_id],
             function (error, results, fields) {
                 res.send({
                     status: "success",
@@ -1038,6 +1053,62 @@ app.post('/change-images-post', uploadPostImages.array("files"), function (req, 
     }
     connection.end();
 });
+
+
+//Delete a image after posted
+app.post('/delete-image', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.connect();
+    console.log("image location" + req.body.image);
+    connection.query('DELETE FROM BBY_15_post_images WHERE image_location=?',
+        [req.body.image],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded deleted."
+            });
+        });
+    connection.end();
+});
+
+
+
+// app.post('/upload-post-images', uploadPostImages.array("files"), function (req, res) {
+//     let connection = mysql.createConnection({
+//         host: 'localhost',
+//         user: 'root',
+//         password: '',
+//         database: 'COMP2800'
+//     });
+//     connection.connect();
+
+//     for (let i = 0; i < req.files.length; i++) {
+//         req.files[i].filename = req.files[i].originalname;
+//         let newpathImages = ".." + req.files[i].path.substring(3);
+
+//         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
+//             [req.session.postID, newpathImages],
+//             function (error, results, fields) {
+//                 res.send({
+//                     status: "success",
+//                     msg: "Image information added to database."
+//                 });
+//                 req.session.save(function (err) {});
+//             });
+//     }
+
+//     connection.end();
+// });
+
 
 
 //RUN SERVER

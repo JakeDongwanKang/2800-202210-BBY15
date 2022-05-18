@@ -39,11 +39,39 @@ body {
     margin-bottom: 0;
 }
 
-img {
+.image {
     width: fit-content;
     width: 100%;
-    height: 250px;
+    /* height: 250px; */
 }
+
+/* .icon {
+    margin-left: 95%;
+    size-adjust: 30px;
+    color: red;
+
+} */
+
+
+
+.remove-icon {
+    margin-left: 280px;
+    top: 20px;
+    cursor: pointer;
+    position: absolute;
+
+}
+
+.deleteImage {
+    margin-left: 280px;
+    /* top: 20px; */
+    cursor: pointer;
+    /* position: absolute; */
+    background-color: red;
+    top: 15px;
+}
+
+
 
 p {
     text-align: left;
@@ -132,7 +160,7 @@ h4 {
     border-radius: 10px;
 }
 
-.singin {
+.singout {
     margin-top: 8px;
     padding: 9px 25px;
     background-color: rgba(52, 119, 249, 0.7);
