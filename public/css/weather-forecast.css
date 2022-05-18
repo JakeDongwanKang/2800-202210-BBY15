@@ -1,0 +1,150 @@
+/**
+* I found this font on this website https://fonts.google.com/specimen/Montserrat
+* The CSS decor that I learned from 1537 course and also I found more information on this website
+* https://www.w3schools.com/css/css_navbar.asp
+* https://www.w3schools.com/howto/howto_css_switch.asp
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background: white;
+    color: #000;
+    background-image:url("/assets/background-web-rain.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.navbar {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+    text-decoration: solid;
+}
+
+.brand-title {
+    font-size: 1.5rem;
+    margin: .5rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+#content {
+    grid-column: 2;
+    grid-row: 3;
+    padding: 3%;
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+    display: inline-block;
+    width: 200px;
+    height: 50px;
+    margin: 16px;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 15px;
+    color: rgba(52, 119, 249, 0.9);
+    background-color: #fff;
+    text-align: center;
+    text-decoration: none;
+}
+
+.navbar-links {
+    height: 100%;
+    margin-right: 15px;
+}
+
+.navbar-links ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-links li {
+    list-style: none;
+    padding-top: 10px;
+}
+
+.navbar-links li a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    padding: 1rem;
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease 0s;
+}
+
+.navbar-links li a:hover {
+    color: white;
+}
+
+.toggle-button {
+    position: absolute;
+    top: .75rem;
+    right: 1rem;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+}
+
+.toggle-button .bar {
+    height: 3px;
+    width: 100%;
+    background-color: black;
+    border-radius: 10px;
+}
+
+.singin {
+    margin-top: 8px;
+    padding: 9px 25px;
+    background-color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    color: rgba(52, 119, 249, 0.7);
+    transition: all 0.3s ease 0s;
+    letter-spacing: 1.5px;
+}
+
+.card {
+    background:#fff;
+    border-radius:30px;
+    text-align: center;
+    color: rgba(52, 119, 249, 0.7);
+}
+
+.search {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+input.search-bar {
+    border:none;
+    outline:none;
+    padding:0.5em 1em;
+    border-radius: 24px;
+    font-size:120%;
+}
+
+footer {
+    position:fixed;
+    left:0;
+    bottom:0;
+    width:100%;
+    text-align: center;
+    color: #fff;
+}

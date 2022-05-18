@@ -113,6 +113,19 @@ app.get("/add-user", function (req, res) {
 
 });
 
+app.get("/weather-forecast", function (req, res) {
+    if (req.session.loggedIn && !req.session.isAdmin) {
+        let doc = fs.readFileSync("./app/html/weather-forecast.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        let dashboard_jsdom = new JSDOM(doc);
+        res.write(dashboard_jsdom.serialize());
+        res.end();
+    } else {
+        res.redirect("/");
+    }
+
+});
+
 //function needed for getting list of all users in user-list
 app.get("/user-list", function (req, res) {
     if (req.session.loggedIn && req.session.isAdmin) {
