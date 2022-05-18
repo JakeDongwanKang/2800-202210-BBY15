@@ -63,9 +63,14 @@
   <template id="postCardTemplate">
     <div class="post">
       <div class="post-body">
-        <div class="postID"></div>
-        <div class="post-status"></div>
         <div class="userID"></div>
+        <div class="postID"></div>
+        <div class="post-status">
+          Status: <button class='current-status'></button>
+          <button class="cancel-btn" onclick="cancel(this)">Cancel</button>
+          <button class="approve-btn" onclick="approve(this)">Approve</button>
+          <button class="reject-btn" onclick="reject(this)">Reject</button>
+        </div>
         <div class="post-type"></div>
         <div class="post-title">Card title</div>
         <div class="weather-type"></div>

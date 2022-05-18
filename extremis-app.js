@@ -948,23 +948,9 @@ app.get("/post-list", function (req, res) {
                 if (results.length >= 0) {
 
                     for (var i = 0; i < results.length; i++) {
-                        // let postID = results[i].post_id;
-                        // let userID = results[i].user_id;
-                        // let postTime = results[i].posted_time;
-                        // let postContent = results[i].post_content;
-                        // let postTitle = results[i].post_title;
-                        // let postType = results[i].post_type;
-                        // let postLocation = results[i].location;
-                        // let postStatus = results[i].post_status;
-                        // let weatherType = results[i].weather_type;
-                        // let postImage = results[i].image_location;
-                        // let display = "";
-                        // If the image path that has been stored into database is null, the src of img tag will be automatically default and will not be displayed.
-                        
-
                         let newcard = cardTemplate.content.cloneNode(true);
                         newcard.querySelector('.postID').innerHTML = results[i].post_id;
-                        newcard.querySelector('.post-status').innerHTML = "Status: " + results[i].post_status;
+                        newcard.querySelector('.current-status').innerHTML = results[i].post_status;
                         newcard.querySelector('.userID').innerHTML = "User ID: " + results[i].user_id;
                         newcard.querySelector('.post-type').innerHTML = "Type: " + results[i].post_type;
                         newcard.querySelector('.post-title').innerHTML = "Title: " + results[i].post_title;

@@ -82,35 +82,71 @@ function closeDropdown() {
 /**
  * Display the posts based on the status that the user selects in Filter.
  */
-const postStatus = document.querySelectorAll(".post-status");
+const postStatus = document.querySelectorAll(".current-status");
 
 function displayPost(selectedStatus) {
     if (selectedStatus == "Approved") {
         for (let i = 0; i < postStatus.length; i++) {
-            if (postStatus[i].innerText != "Status: approved") {
-                postStatus[i].parentElement.parentElement.style.display = "none";
+            if (postStatus[i].innerText != "approved") {
+                postStatus[i].parentElement.parentElement.parentElement.style.display = "none";
             }
         }
     }
     if (selectedStatus == "Pending") {
         for (let i = 0; i < postStatus.length; i++) {
-            if (postStatus[i].innerText != "Status: pending") {
-                postStatus[i].parentElement.parentElement.style.display = "none";
+            if (postStatus[i].innerText != "pending") {
+                postStatus[i].parentElement.parentElement.parentElement.style.display = "none";
             }
         }
     }
     if (selectedStatus == "Rejected") {
         for (let i = 0; i < postStatus.length; i++) {
-            if (postStatus[i].innerText != "Status: rejected") {
-                postStatus[i].parentElement.parentElement.style.display = "none";
+            if (postStatus[i].innerText != "rejected") {
+                postStatus[i].parentElement.parentElement.parentElement.style.display = "none";
             }
         }
     }
 
     if (selectedStatus == "All") {
         for (let i = 0; i < postStatus.length; i++) {
-            postStatus[i].parentElement.parentElement.style.display = "grid";
+            postStatus[i].parentElement.parentElement.parentElement.style.display = "grid";
         }
     }
     document.querySelector(".post-container").style.opacity = "1";
+}
+
+/**
+ * Display the status of posts as different colors: blue for pending posts, red for rejected posts, and green for approved posts.
+ */
+for (let i = 0; i < postStatus.length; i++) {
+    if (postStatus[i].innerText == "pending") {
+        postStatus[i].style.color = "#3477F9";
+    } else if (postStatus[i].innerText == "approved") {
+        postStatus[i].style.color = "green";
+    } else {
+        postStatus[i].style.color = "red";
+    }
+}
+
+
+/**
+ * 
+ */
+for (let i = 0; i < postStatus.length; i++) {
+    postStatus[i].addEventListener("click", function () {
+        let children = postStatus[i].parentElement.children;
+        children[0].style.display = "none";
+        children[1].style.display = "inline-block";
+        children[2].style.display = "inline-block";
+        children[3].style.display = "inline-block";
+    })
+}
+
+
+function cancel(e) {
+    let children = e.parentElement.children;
+    children[0].style.display = "";
+        children[1].style.display = "none";
+        children[2].style.display = "none";
+        children[3].style.display = "none";
 }

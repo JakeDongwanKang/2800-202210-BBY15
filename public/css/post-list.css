@@ -11,7 +11,7 @@ body{
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
-    line-height: 30px;
+    line-height: 35px;
 }
 
 
@@ -198,14 +198,14 @@ h1 {
     grid-template-rows: 100%;
     grid-template-columns: 48% 50%;
     column-gap: 2%;
-    margin: 5vh 5% 5vh 5%;
+    margin: 5vh 5% 8vh 5%;
     box-shadow: 0 0 5px #484848;
     border-radius: 10px;
 }
 
 .post:hover {
     outline: solid 1px #3477f9;
-    box-shadow: 0 0 10px #3477F9;
+    box-shadow: 0 0 5px #3477F9;
 }
 .post-body {
     grid-row: 1;
@@ -218,6 +218,39 @@ h1 {
     display: none;
 }
 
+button {
+    font-size: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 30px;
+    border: none;
+    margin-left: 10px;
+    font-family: 'Montserrat', sans-serif;
+    width: 100px;
+}
+
+button:hover{
+    box-shadow: 0 0 5px #3477F9;
+}
+
+.cancel-btn, .approve-btn, .reject-btn {
+    display:none;
+    outline: none;
+}
+
+.cancel-btn{
+    background-color: #c0c8c7;
+}
+
+.approve-btn {
+    background-color: #00ca4e;
+    color: white;
+}
+
+.reject-btn {
+    background-color: #ff605c;
+    color: white;
+}
 .card-images {
     grid-row: 1;
     grid-column: 2;
