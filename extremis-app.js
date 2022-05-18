@@ -13,6 +13,7 @@ const multer = require("multer");
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
 app.use("/js", express.static("./public/js"));
+app.use("/images", express.static("./app/images"));
 
 app.use(session({
     secret: "what is the point of this secret",
@@ -763,10 +764,12 @@ app.post("/add-post", function (req, res) {
     connection.query('INSERT INTO BBY_15_Post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [userID, post_time, post_content, post_title, post_type, post_location, post_status, weather_type],
         function (error, results, fields) {
+            req.session.postID = results.insertId;
             res.send({
                 status: "success",
                 msg: "Post added to database."
             });
+            req.session.save(function (err) {});
         });
 
     connection.end();
@@ -810,6 +813,8 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
                     status: "success",
                     msg: "Image information added to database."
                 });
+                console.log(req.session.postID);
+                console.log(newpathImages);
                 req.session.save(function (err) {});
             });
     }
@@ -833,9 +838,7 @@ app.get("/timeline", function (req, res) {
     // check for a session first!
     if (req.session.loggedIn) {
         connection.connect();
-        connection.query(
-            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id",
-            [],
+        connection.query("SELECT * FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id ORDER BY posted_time DESC",
             function (error, results, fields) {
                 let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
                 let timelineDOM = new JSDOM(timeline);
@@ -851,32 +854,33 @@ app.get("/timeline", function (req, res) {
                         </br>  
                         <div class="post_content">
                             <div class="card">
-                                <div class="post-image">
-                                    <img src="${postImages}">
+                                <div class="post-user">
+                                    <img class="profile-pic" src="Profile Pic">
+                                    <span><h4>FirstName LastName</h4></span>
                                 </div>
+                
+                                <div>
+                                    <h3><b>${postTitle}</b></h3> 
+                                    <h4>Type: ${typeWeather}</h4> 
+                                    <h5>Location: ${postlocation}</h5> 
+                                </div>
+                                <div class="post-image">
+                                <img class='post-pic' src="${postImages}">`;
+                
+                                while (results[i].post_id && (results[i].post_id == results[i + 1].post_id)) {
+                                    i++;
+                                    template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                                }
+
+                                template += `</div>
                                 <div class="desc">
-                                    <h3><b>${typeWeather}</b></h3> 
-                                    <h4>Title: ${postTitle} </h4> 
                                     <p class="time">Posted time: ${postTime}</p> 
-                                    <p>Location: ${postlocation}</p> 
                                     <p>Description: ${contentPost}</p>
                                 </div>
-                                <div class="share-social">
-                                    <ul>
-                                        <li><a href="#" class="social-link"><i class="fa fa-facebook-f"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-twitter"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-instagram"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-linkedin"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-reddit-alien"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-whatsapp"></i></a></li>
-                                    </ul> 
-                                </div>
 
+                                <p class="read-more"><a href="#" class="button">Read More</a></p>
                             </div>
-                        </div>
-
-
-                    `;
+                        </div>`;
                         let area = timelineDOM.window.document.querySelector('.post_content');
                         area.innerHTML += template;
                     }
@@ -884,8 +888,6 @@ app.get("/timeline", function (req, res) {
                 }
             }
         )
-        res.set("Server", "Wazubi Engine");
-        res.set("X-Powered-By", "Wazubi");
     } else {
         res.redirect("/");
     }
