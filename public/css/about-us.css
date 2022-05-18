@@ -171,8 +171,11 @@ footer {
 }
 
 #myImg {
-    max-width: 100%;
+    width: 50%;
     height: auto;
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
 }
 
 #small-totoro {
@@ -207,11 +210,18 @@ footer {
         flex-direction: column;
         align-items: flex-start;
         color: #000;
-        background-color: lightblue;
+        background-color: #5ca1dc;
     }
 
     .toggle-button {
         display: flex;
+    }
+
+    .brand-title {
+        font-size: 1.5rem;
+        margin: .5rem;
+        color: white;
+        cursor: pointer;
     }
 
     .navbar-links {
@@ -274,31 +284,38 @@ footer {
 
     .html-container {
         display:grid;
-    grid-template-columns: 100%;
     grid-template-rows: 25% 25% 25% 25%;
     }
 
     .who-we-are {
         grid-column: 1 / span 1;
         grid-row: 1 / span 1;
-        width : 100%;
+        width:175%;
     }
 
     .how-it-works {
         grid-column: 1 / span 1;
         grid-row: 2 / span 1;
-        width : 100%;
+        width : 175%;
     }
 
     .commitment {
         grid-column : 1 / span 1;
         grid-row:3 / span 1;
-        width:100%;
+        width:175%;
     }
 
     .contact-us {
         grid-column : 1 / span 1;
         grid-row : 4 / span 1;
-        width:100%;
+        width:175%;
+    }
+
+    #myImg {
+        width: 80%;
+        height: auto;
+        display:block;
+        margin-left:auto;
+        margin-right:auto;
     }
 }
