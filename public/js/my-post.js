@@ -20,9 +20,11 @@ async function sendData(data) {
             body: JSON.stringify(data)
         });
         let parsedJSON = await responseObject.json();
+        console.log(data);
         if (parsedJSON.status == "success") {}
     } catch (error) {}
 }
+
 
 //This for loop adds the event listener to every editing columns in the user list.
 let records = document.getElementsByTagName("span");
@@ -44,13 +46,16 @@ function editCell(e) {
             filled_box.innerHTML = val;
             parent.innerHTML = ""; //clears parent node pointer
             parent.appendChild(filled_box);
+            console.log(document.querySelector(".post_id").childNodes);
+            console.log(filled_box);
             let dataToSend = {
-                timePost: parent.parentNode.querySelector(".time_post").innerHTML,
-                typeWeather: parent.parentNode.querySelector(".type_weather").innerHTML,
-                titlePost: parent.parentNode.querySelector(".title_post").innerHTML,
-                postLocation: parent.parentNode.querySelector(".post_location").innerHTML,
-                descrip: parent.parentNode.querySelector(".description").innerHTML
+                post_id: parent.parentNode.querySelector(".post_id").innerText,
+                weather_type: parent.parentNode.querySelector(".weather_type").innerText,
+                post_title: parent.parentNode.querySelector(".post_title").innerText,
+                location: parent.parentNode.querySelector(".location").innerText,
+                post_content: parent.parentNode.querySelector(".post_content").innerText
             };
+
             sendData(dataToSend);
         }
     });
@@ -63,7 +68,7 @@ async function sendDataToDelete(e) {
     e.preventDefault();
     let parent = e.target.parentNode;
     let dataToSend = {
-        timePost: parent.parentNode.querySelector(".time_post").innerHTML
+        post_id: parent.parentNode.querySelector(".post_id").innerHTML
     };
     try {
         let responseObject = await fetch("/delete-post", {
@@ -86,3 +91,29 @@ let deleteRecords = document.getElementsByClassName("deletePost");
 for (let i = 0; i < deleteRecords.length; i++) {
     deleteRecords[i].addEventListener("click", sendDataToDelete);
 }
+
+/**
+ * Store the information of the images uploaded by user to database.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
+ */
+// function to store imagines to the database
+const upload_images = document.getElementById("upload-images");
+upload_images.addEventListener("submit", uploadImages);
+
+//Upload images to the system.
+function uploadImages(e) {
+    e.preventDefault();
+    const imagesUpload = document.querySelector("#selectFile");
+    const formData = new FormData();
+    for (let i = 0; i < imagesUpload.files.length; i++) {
+        formData.append("files", imagesUpload.files[i]);
+    }
+    const options = {
+        method: 'POST',
+        body: formData,
+    };
+    fetch("/change-images-post", options)
+        .then(function (res) {}).catch(function (err) {
+            ("Error:", err)
+        });
+};
