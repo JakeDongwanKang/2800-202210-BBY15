@@ -957,7 +957,7 @@ app.get("/post-list", function (req, res) {
                         newcard.querySelector('.weather-type').innerHTML = "Weather Type: " + results[i].weather_type;
                         newcard.querySelector('.post-location').innerHTML = "Location: " + results[i].location;
                         newcard.querySelector('.post-time').innerHTML = "Time: " + results[i].posted_time;
-                        
+
                         // Display the first 50 words of the post content.
                         const contentArray = results[i].post_content.split(" ");
                         let str1 = "";
@@ -966,19 +966,22 @@ app.get("/post-list", function (req, res) {
                                 str1 += contentArray[j] + " ";
                             }
                         }
-                        newcard.querySelector('.post-content').innerHTML = "Content: " + str1;
+                        newcard.querySelector('.post-content').innerHTML = "Content: " + str1 + '<span class="more"></span>';
+                        let str2 = "";
                         if (contentArray.length > 50) {
-                            let str2 = "";
-                            for (let j = 50; j < contentArray.length; j++) {
-                                str2 += contentArray[j] + " ";
+                            for (let k = 50; k < contentArray.length; k++) {
+                                str2 += contentArray[k] + " ";
                             }
-                            newcard.querySelector('#more').innerHTML = str2;
+                            str2 += '<button onclick="readmore(this)" class="more-btn">Read more</button></div>';
+                            newcard.querySelector('.more').innerHTML = str2;
                         }
-                        
+
+                        // Set src property of img tag as default and display property as none if the post has no images
                         if (results[i].image_location == null) {
                             newcard.querySelector('.card-image').src = "/images/post-images/test.jpg";
                             newcard.querySelector('.card-image').style.display = 'none';
                         } else {
+                            // Set src property of img tag as the image path
                             newcard.querySelector('.card-image').src = results[i].image_location;
                         }
 
@@ -989,14 +992,44 @@ app.get("/post-list", function (req, res) {
                 }
             }
         )
-
-        res.set("Server", "Wazubi Engine");
-        res.set("X-Powered-By", "Wazubi");
     } else {
         res.redirect("/");
     }
     connection.end();
 });
+
+
+app.post("/update-status", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    // check for a session first!
+    if (req.session.loggedIn) {
+        let postID = req.body.postID;
+        let status = req.body.postStatus;
+
+        connection.connect();
+        connection.query(
+            "UPDATE BBY_15_post SET post_status = ? WHERE post_id = ?",
+            [status, postID],
+            function (error, results, fields) {
+                res.send({
+                    status: "success",
+                    msg: "Post status has been updated in database."
+                });
+                req.session.save(function (err) {});
+            })
+    } else {
+        res.redirect("/");
+    }
+    connection.end();
+})
+
 
 // RUN SERVER
 let port = 8000;
