@@ -850,12 +850,18 @@ app.get("/timeline", function (req, res) {
     // check for a session first!
     if (req.session.loggedIn) {
         connection.connect();
-        connection.query("SELECT * FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id ORDER BY posted_time DESC",
+        connection.query(`SELECT * FROM BBY_15_User 
+            INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
+            LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id 
+            ORDER BY posted_time DESC`,
             function (error, results, fields) {
                 let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
                 let timelineDOM = new JSDOM(timeline);
                 if (results.length >= 0) {
                     for (var i = 0; i < results.length; i++) {
+                        let firstName = results[i].first_name;
+                        let lastName = results[i].last_name;
+                        let profilePic = results[i].profile_picture;
                         let postTime = results[i].posted_time;
                         let contentPost = results[i].post_content;
                         let postTitle = results[i].post_title;
@@ -867,8 +873,8 @@ app.get("/timeline", function (req, res) {
                         <div class="post_content">
                             <div class="card">
                                 <div class="post-user">
-                                    <img class="profile-pic" src="Profile Pic">
-                                    <span><h4>FirstName LastName</h4></span>
+                                    <img class="profile-pic" src="${profilePic}">
+                                    <span><h4>&ensp;${firstName} ${lastName}</h4></span>
                                 </div>
                 
                                 <div>
@@ -876,8 +882,11 @@ app.get("/timeline", function (req, res) {
                                     <h4>Type: ${typeWeather}</h4> 
                                     <h5>Location: ${postlocation}</h5> 
                                 </div>
-                                <div class="post-image">
-                                <img class='post-pic' src="${postImages}">`;
+                                <div class="post-image">`;
+
+                                if (postImages) {
+                                    template += `<img class='post-pic' src="${postImages}">`;
+                                }
                 
                                 while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                                     i++;
