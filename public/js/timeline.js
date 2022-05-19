@@ -9,7 +9,7 @@ toggleButton.addEventListener('click', () => {
 
 // Original jQuery code from https://css-tricks.com/text-fade-read-more/
 // Modified by Vincent Lam
-$(".card .button").click(function() {
+$(".card .read-more-button").click(function() {
     var totalHeight = 0
   
     var $el = $(this);
