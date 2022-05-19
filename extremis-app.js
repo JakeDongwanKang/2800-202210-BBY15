@@ -895,7 +895,7 @@ app.get("/timeline", function (req, res) {
                                 <div class="post-image">
                                 <img class='post-pic' src="${postImages}">`;
                 
-                                while (results[i].post_id && (results[i].post_id == results[i + 1].post_id)) {
+                                while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                                     i++;
                                     template += "<img class='post-pic' src=" + results[i].image_location + ">"
                                 }
