@@ -863,19 +863,6 @@ app.get("/timeline", function (req, res) {
                                     <h4>Type: ${typeWeather}</h4> 
                                     <h5>Location: ${postlocation}</h5> 
                                 </div>
-
-                                <div class="post-user">
-                                    <img class="profile-pic" src="Profile Pic">
-                                    <span><h4>FirstName LastName</h4></span>
-                                <div class="post-image" >
-                                    <img src="${postImages}">
-                                </div>
-                
-                                <div>
-                                    <h3><b>${postTitle}</b></h3> 
-                                    <h4>Type: ${typeWeather}</h4> 
-                                    <h5>Location: ${postlocation}</h5> 
-                                </div>
                                 <div class="post-image">
                                 <img class='post-pic' src="${postImages}">`;
                 
