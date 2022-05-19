@@ -1036,9 +1036,9 @@ app.post("/change-images-post", uploadPostImages.array("files"), function (req, 
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
         let newpath = ".." + req.files[i].path.substring(3);
-        console.log("post_id: " + req.body.post_id);
+        console.log("Post ID: " + req.body.post_id);
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-            [newpath, req.body.post_id],
+            [req.body.post_id, newpath],
             function (error, results, fields) {
                 res.send({
                     status: "success",

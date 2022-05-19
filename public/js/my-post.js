@@ -108,9 +108,6 @@ async function sendDataToDeleteImage(e) {
     let dataToSend = {
         image: parent.querySelector(".image").getAttribute("src")
     };
-
-    dataToSend
-    console.log("test on delete each image" + dataToSend);
     try {
         let responseObject = await fetch("/delete-image", {
             method: 'POST',
@@ -135,47 +132,82 @@ for (let i = 0; i < deleteImageRecords.length; i++) {
 }
 
 // function to store imagines to the database
-const upload_new_image = document.getElementById("upload-images");
-upload_new_image.addEventListener("submit", sendDataToaddImage);
+// const upload_new_image = document.getElementById("upload-images");
+// upload_new_image.addEventListener("submit", sendDataToaddImage);
 
-//This for loop adds the event listeners to the delete post button
-
-//Upload images to the system.
-// function uploadImages(e) {
+// async function sendDataToaddImage(e) {
 //     e.preventDefault();
-//     const imagesUpload = document.querySelector("#selectFile");
-//     const formData = new FormData();
-//     for (let i = 0; i < imagesUpload.files.length; i++) {
-//         formData.append("files", imagesUpload.files[i]);
-//     }
-//     const options = {
-//         method: 'POST',
-//         body: formData,
+//     let parent = e.target.parentNode;
+//     console.log(parent.children[0]);
+//     let dataToSend = {
+//         post_id: parent.children[0].innerText
 //     };
-//     fetch("/change-images-post", options)
-//         .then(function (res) {}).catch(function (err) {
-//             ("Error:", err)
+//     console.log("data to send" + dataToSend);
+//     try {
+//         let responseObject = await fetch("/change-images-post", {
+//             method: 'POST',
+//             headers: {
+//                 "Accept": 'application/json',
+//                 "Content-Type": 'application/json'
+//             },
+//             body: JSON.stringify(dataToSend)
 //         });
-// };
+//         let parsedJSON = await responseObject.json();
+//         console.log(data);
+//         if (parsedJSON.status == "success") {
+//             parent.parentNode.remove();
+//         }
+//     } catch (error) {}
+// }
+
+const upLoadForm = document.getElementById("upload-images");
+upLoadForm.addEventListener("submit", uploadImages);
+
+function uploadImages(e) {
+    e.preventDefault();
+    const imageUpload = document.querySelector('#selectFile');
+    const formData = new FormData();
+    for (let i = 0; i < imageUpload.files.length; i++) {
+        // put the images from the input into the form data
+        formData.append("files", imageUpload.files[i]);
+    }
+    const options = {
+        method: 'POST',
+        body: formData,
+    };
+    // now use fetch
+    fetch("/change-images-post", options).then(function (res) {
+        console.log(res);
+    }).catch(function (err) {
+        ("Error:", err)
+    });
+}
+
+
 
 async function sendDataToaddImage(e) {
     e.preventDefault();
-    let parent = e.target.parentNode;
-    let dataToSend = {
-        post_id: parent.parentNode.parentNode.querySelector(".post_id").innerText
-    };
-    console.log("data to send" + dataToSend);
+    // let parent = e.target.parentNode;
+    // console.log(parent.children[0]);
+    // let dataToSend = {
+    //     post_id: parent.children[0].innerText
+    // };
+
     try {
+        let dataToSend = {
+            post_id: 43
+        };
         let responseObject = await fetch("/change-images-post", {
             method: 'POST',
             headers: {
                 "Accept": 'application/json',
                 "Content-Type": 'application/json'
             },
-            body: JSON.stringify(dataToSend)
+            body: JSON.stringify({
+                post_id: 43
+            })
         });
         let parsedJSON = await responseObject.json();
-        console.log(data);
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
         }

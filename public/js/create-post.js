@@ -5,14 +5,14 @@
  * I found some syntax and codes on this website that I can use to create a hambuger menu.
  * https://www.educba.com/hamburger-menu-javascript/
  */
- const toggleButton = document.getElementsByClassName('toggle-button')[0]
- const navbarLinks = document.getElementsByClassName('navbar-links')[0]
- 
- toggleButton.addEventListener('click', () => {
-     navbarLinks.classList.toggle('active')
- })
+const toggleButton = document.getElementsByClassName('toggle-button')[0]
+const navbarLinks = document.getElementsByClassName('navbar-links')[0]
 
- 
+toggleButton.addEventListener('click', () => {
+    navbarLinks.classList.toggle('active')
+})
+
+
 const dropdown = document.querySelector(".dropdown");
 const select = document.querySelector(".select");
 const caret = document.querySelector(".caret");
@@ -118,7 +118,7 @@ async function sendData(data) {
                 window.location.replace("/timeline");
             }
         }
-    } catch (error) { }
+    } catch (error) {}
 }
 
 /**
