@@ -41,16 +41,16 @@
   <!-- Dropdown menu for the Filter button -->
   <form class="dropdown">
     <div class="select">
-        <span class="selected">All</span>
-        <div class="caret"></div>
+      <span class="selected">All</span>
+      <div class="caret"></div>
     </div>
     <ul class="menu">
-        <li class="active">All</li>
-        <li>Pending</li>
-        <li>Approved</li>
-        <li>Rejected</li>
+      <li class="active">All</li>
+      <li>Pending</li>
+      <li>Approved</li>
+      <li>Rejected</li>
     </ul>
-</form>
+  </form>
 
   <!-- All posts will be displayed here -->
   <div class="post-container">
@@ -61,12 +61,12 @@
 
   <!-- Templates for populating posts as cards, not displayed -->
   <template id="postCardTemplate">
-    <div class="post" >
+    <div class="post">
       <div class="post-body">
         <div class="userID"></div>
         <div class="postID"></div>
         <div class="post-status">
-          Status: <button class='current-status'></button>
+          <b>Status: </b><button class='current-status'></button>
           <button class="cancel-btn" onclick="cancel(this)">Cancel</button>
           <button class="approve-btn" onclick="approve(this)">Approve</button>
           <button class="reject-btn" onclick="reject(this)">Reject</button>
@@ -76,14 +76,15 @@
         <div class="weather-type"></div>
         <div class="post-location"></div>
         <div class="post-time"></div>
-        <div class="post-content">Some quick example text to build on the card title and make up the bulk of the
-          card's content
+        <div class="sidebar-box">
+          <p class="post-content">Some quick example text to build on the card title and make up the bulk of the
+            card's content</p>
         </div>
 
       </div>
 
       <div class="card-images">
-        <img class="card-image" src=" ..." alt="...">
+        <img class="card-image" src=" ..." alt="..." onclick="expandImage(this)">
       </div>
     </div>
   </template>

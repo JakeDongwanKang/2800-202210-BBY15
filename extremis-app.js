@@ -939,41 +939,32 @@ app.get("/post-list", function (req, res) {
     if (req.session.loggedIn) {
         connection.connect();
         connection.query(
-            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id",
+            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id ORDER BY posted_time DESC",
             [],
             function (error, results, fields) {
                 let postList = fs.readFileSync("./app/html/post-list.html", "utf8");
                 let postListDOM = new JSDOM(postList);
                 let cardTemplate = postListDOM.window.document.getElementById("postCardTemplate");
                 if (results.length >= 0) {
-
                     for (var i = 0; i < results.length; i++) {
                         let newcard = cardTemplate.content.cloneNode(true);
                         newcard.querySelector('.postID').innerHTML = results[i].post_id;
                         newcard.querySelector('.current-status').innerHTML = results[i].post_status;
-                        newcard.querySelector('.userID').innerHTML = "User ID: " + results[i].user_id;
-                        newcard.querySelector('.post-type').innerHTML = "Type: " + results[i].post_type;
-                        newcard.querySelector('.post-title').innerHTML = "Title: " + results[i].post_title;
-                        newcard.querySelector('.weather-type').innerHTML = "Weather Type: " + results[i].weather_type;
-                        newcard.querySelector('.post-location').innerHTML = "Location: " + results[i].location;
-                        newcard.querySelector('.post-time').innerHTML = "Time: " + results[i].posted_time;
+                        newcard.querySelector('.userID').innerHTML = "<b>User ID: </b>" + results[i].user_id;
+                        newcard.querySelector('.post-type').innerHTML = "<b>Type: </b>" + results[i].post_type;
+                        newcard.querySelector('.post-title').innerHTML = "<b>Title: </b>" + results[i].post_title;
+                        newcard.querySelector('.weather-type').innerHTML = "<b>Weather Type: </b>" + results[i].weather_type;
+                        newcard.querySelector('.post-location').innerHTML = "<b>Location: </b>" + results[i].location;
+                        newcard.querySelector('.post-time').innerHTML = "<b>Time: </b>" + results[i].posted_time;
+                        newcard.querySelector('.post-content').innerHTML = "<b>Content: </b>" + results[i].post_content;
 
-                        // Display the first 50 words of the post content.
-                        const contentArray = results[i].post_content.split(" ");
-                        let str1 = "";
-                        for (let j = 0; j < 50; j++) {
-                            if (contentArray[j]) {
-                                str1 += contentArray[j] + " ";
-                            }
-                        }
-                        newcard.querySelector('.post-content').innerHTML = "Content: " + str1 + '<span class="more"></span>';
-                        let str2 = "";
-                        if (contentArray.length > 50) {
-                            for (let k = 50; k < contentArray.length; k++) {
-                                str2 += contentArray[k] + " ";
-                            }
-                            str2 += '<button onclick="readmore(this)" class="more-btn">Read more</button></div>';
-                            newcard.querySelector('.more').innerHTML = str2;
+                        //Add Read more button if the total length of the post content is more than 500
+                        if (results[i].post_content.length >= 500) {
+                            let p = postListDOM.window.document.createElement("p");
+                            p.setAttribute("class", "read-more");
+                            newcard.querySelector('.sidebar-box').appendChild(p);
+                            newcard.querySelector('.read-more').innerHTML = '<button onclick="expandText(this)" class="more-button">Read More</button>';
+                            
                         }
 
                         // Set src property of img tag as default and display property as none if the post has no images
@@ -984,9 +975,7 @@ app.get("/post-list", function (req, res) {
                             // Set src property of img tag as the image path
                             newcard.querySelector('.card-image').src = results[i].image_location;
                         }
-
                         postListDOM.window.document.getElementById("post-goes-here").appendChild(newcard);
-
                     }
                     res.send(postListDOM.serialize());
                 }
@@ -995,7 +984,6 @@ app.get("/post-list", function (req, res) {
     } else {
         res.redirect("/");
     }
-    connection.end();
 });
 
 

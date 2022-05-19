@@ -134,10 +134,10 @@ for (let i = 0; i < postStatus.length; i++) {
 for (let i = 0; i < postStatus.length; i++) {
     postStatus[i].addEventListener("click", function () {
         let children = postStatus[i].parentElement.children;
-        children[0].style.display = "none";
-        children[1].style.display = "inline-block";
+        children[1].style.display = "none";
         children[2].style.display = "inline-block";
         children[3].style.display = "inline-block";
+        children[4].style.display = "inline-block";
     })
 }
 
@@ -176,10 +176,10 @@ async function sendData(data, e) {
  */
 function cancel(e) {
     let children = e.parentElement.children;
-    children[0].style.display = "";
-    children[1].style.display = "none";
+    children[1].style.display = "";
     children[2].style.display = "none";
     children[3].style.display = "none";
+    children[4].style.display = "none";
 }
 
 
@@ -209,26 +209,6 @@ function reject(e) {
     }, e);
 }
 
-/**
- * Display the full post content when users click on "Read more" button.
- * Only display the first 50 words when users click on "Read less" button. 
- * @param {*} e the current html element
- */
-var readMoreButtonClicks = 0; //Count the number of clicks on Read more/Read less button
-function readmore(e) {
-    readMoreButtonClicks += 1;
-    let elements = e.previousElementSibling.previousElementSibling.children;
-    if (readMoreButtonClicks % 2 != 0) {
-        // If the number of clicks is odd, display the full text.
-        elements[1].style.display = "inline";
-        e.innerHTML = "Read less";
-    } else {
-        // If the number of clicks is even, only display the first 50 words.
-        elements[1].style.display = "none";
-        e.innerHTML = "Read more";
-    }
-}
-
 
 /**
  * Hide the image div if the specific post has no images.
@@ -247,5 +227,48 @@ for (let i = 0; i < allPosts.length; i++) {
             postBodyElement.style.gridColumn = "1 / span 2";
         }
         
+    }
+}
+
+
+/**
+ * Display the full post content when users click on "Read more" button.
+ * Return to the original setting when users click on "Read less" button. 
+ * @param {*} e the current html element
+ */
+var expandContent = true; // Set a boolean variable to determine if users are expanding or 
+function expandText(e) {
+    if (expandContent) {
+        e.innerHTML = "Read less";
+        e.parentElement.style.position = "relative";
+        e.parentElement.style.padding = "10px 0";
+        e.parentElement.style.backgroundImage = "";
+        e.parentElement.parentElement.style.maxHeight = "fit-content";
+        expandContent = false;
+    } else {
+        e.innerHTML = "Read more";
+        e.parentElement.style.position = "absolute";
+        e.parentElement.style.padding = "30px 0";
+        e.parentElement.style.backgroundImage = "linear-gradient(to bottom, transparent, #ffffff)";
+        e.parentElement.parentElement.style.maxHeight = "150px";
+        expandContent = true;
+    }
+}
+
+
+/**
+ * Display the full image when users click on that image.
+ * Return to the original size when users click on that image again. 
+ * @param {*} e the current img element
+ */
+var expandImg = true;
+function expandImage(e) {
+    if (expandImg) {
+        e.style.transform = "scale(1.3)";
+        e.style.transition = 'transform 0.5s ease';
+        expandImg = false;
+    } else {
+        e.style.transform = "scale(1.0)";
+        expandImg = true;
     }
 }
