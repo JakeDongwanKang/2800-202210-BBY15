@@ -8,9 +8,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background: white;
+    color: #000;
+    background-image:url("/assets/background-web-rain.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .dashboard {
@@ -23,13 +30,10 @@ body {
 header {
     grid-column: 2;
     grid-row: 2;
-    border: 1px solid #484848;
-    border-radius: 15px 15px 0 0;
-    border-bottom: hidden;
 }
 
 .branch {
-    color: #3477f9;
+    color: #fff;
     margin: 0;
     padding: 4%;
     text-align: center;
@@ -46,19 +50,15 @@ header {
 
 a {
     text-decoration: none;
-    color: black;
+    color: rgba(52, 119, 249, 0.9);
 }
 
 #content {
     grid-column: 2;
     grid-row: 3;
-    border: 0.5px solid #484848;
-    border-radius: 0 0 15px 15px;
-    border-top: hidden;
     padding: 3%;
     display: flex;
     justify-content: center;
-
 }
 
 .button {
@@ -69,27 +69,14 @@ a {
     padding: 8px 16px;
     font-size: 16px;
     border-radius: 15px;
-    background-color: bisque;
-    border: 0.5px solid #484848;
+    color: rgba(52, 119, 249, 0.9);
+    background-color: #fff;
     text-align: center;
     text-decoration: none;
 }
 
 .button:hover {
-    background-color: #3477f9;
-}
-
-
-body {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    background: white;
-    color: #000;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
 .navbar {
@@ -104,7 +91,7 @@ body {
 .brand-title {
     font-size: 1.5rem;
     margin: .5rem;
-    color: #3477F9;
+    color: #fff;
     cursor: pointer;
 }
 
@@ -160,7 +147,7 @@ body {
 .singin {
     margin-top: 8px;
     padding: 9px 25px;
-    background-color: rgba(52, 119, 249, 0.7);
+    background-color:#3477f9 ;
     border: none;
     border-radius: 50px;
     font-size: 16px;
@@ -194,58 +181,13 @@ button:hover {
     text-align: center;
 }
 
-.createPost {
-    display: inline-block;
-    padding: 15px 15px;
-    font-size: 24px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    outline: none;
-    color: #fff;
-    background-color: rgba(52, 119, 249, 0.9);
-    border: none;
-    border-radius: 15px;
-
-}
-
-.createPost:hover {
-    background-color: rgba(52, 119, 249, 0.7);
-}
-
-.forecastButton {
-    display: inline-block;
-    padding: 15px 15px;
-    font-size: 24px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    outline: none;
-    color: black;
-    background-color: bisque;
-    border: none;
-    border-radius: 15px;
-    margin-left: 20px;
-    border: 2px solid #3477F9;
-}
-
-.forecastButton:hover {
-    background-color: rgba(52, 119, 249, 0.7);
-}
-
-.howitwork {
-    font-size: 20px;
-    word-spacing: 2px;
-}
-
 footer {
-    overflow-x: hidden;
-    position: absolute;
-    top: 98%;
-    width: 99%;
+    position:fixed;
+    left:0;
+    bottom:0;
+    width:100%;
     text-align: center;
-    color: #ffffff;
-    background-color: #484848;
+    color: #fff;
 }
 
 /*For the view under 800px*/
@@ -256,7 +198,6 @@ footer {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-        background: white;
         color: #000;
         background-repeat: no-repeat;
         background-attachment: fixed;
@@ -266,7 +207,7 @@ footer {
     }
 
     .brand-title {
-        color: rgba(52, 119, 249, 1.5);
+        color: #fff;
         text-decoration: solid;
         font-size: 28px;
     }
@@ -274,8 +215,7 @@ footer {
     .navbar {
         flex-direction: column;
         align-items: flex-start;
-        color: #000;
-        background-color: lightblue;
+        color: #fff;
     }
 
     .toggle-button {
@@ -307,6 +247,7 @@ footer {
 
     .navbar-links.active {
         display: flex;
+        background:white;
     }
 
     .singin {
@@ -344,58 +285,6 @@ footer {
         padding: 0;
         text-align: center;
         align-items: center;
-
-
-    }
-
-    .createPost {
-        display: inline-block;
-        padding: 15px 15px;
-        font-size: 18px;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        outline: none;
-        color: #fff;
-        background-color: rgba(52, 119, 249, 0.9);
-        border: none;
-        border-radius: 12px;
-        margin-bottom: 10px;
-        text-align: center;
-        margin-right: 20px;
-
-    }
-
-    .createPost:hover {
-        background-color: rgba(52, 119, 249, 0.7);
-    }
-
-    .forecastButton {
-        display: inline-block;
-        padding: 15px 15px;
-        font-size: 18px;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        outline: none;
-        color: black;
-        background-color: lightyellow;
-        border: none;
-        border-radius: 12px;
-        margin-bottom: 10px;
-        border: 2px solid #3477F9;
-        text-align: center;
-        margin-left: 20px;
-    }
-
-    .forecastButton:hover {
-        background-color: rgba(52, 119, 249, 0.7);
-    }
-
-    .howitwork {
-        font-size: 20px;
-        word-spacing: 2px;
-        color: black;
     }
 
     #content {
