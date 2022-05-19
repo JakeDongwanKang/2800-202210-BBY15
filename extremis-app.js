@@ -15,6 +15,8 @@ app.use("/css", express.static("./public/css"));
 app.use("/js", express.static("./public/js"));
 app.use("/images", express.static("./app/images"));
 
+
+
 app.use(session({
     secret: "what is the point of this secret",
     name: "extremisSessionID",
@@ -70,6 +72,21 @@ app.get("/main", function (req, res) {
 
 });
 
+//Redirect users to the main page if they have logged in. Otherwise, redirect to login page.
+app.get("/about-us", function (req, res) {
+    if (req.session.loggedIn && !req.session.isAdmin) {
+        let doc = fs.readFileSync("./app/html/about-us.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        let main_jsdom = new JSDOM(doc);
+        res.write(main_jsdom.serialize());
+        res.end();
+
+    } else {
+        res.redirect("/");
+    }
+
+});
+
 //Redirect admin users to the admin dashboard page if they have logged in. Otherwise, redirect to login page.
 app.get("/dashboard", function (req, res) {
     if (req.session.loggedIn && req.session.isAdmin) {
@@ -99,7 +116,7 @@ app.get("/add-user", function (req, res) {
 
 //function needed for getting list of all users in user-list
 app.get("/user-list", function (req, res) {
-    if (req.session.loggedIn) {
+    if (req.session.loggedIn && req.session.isAdmin) {
         const connection = mysql.createConnection({
             host: "localhost",
             user: "root",
@@ -162,7 +179,7 @@ app.get("/edit", function (req, res) {
 
 // function for getting all admins for admin-list
 app.get("/admin-list", function (req, res) {
-    if (req.session.loggedIn) {
+    if (req.session.loggedIn && req.session.isAdmin) {
         const connection = mysql.createConnection({
             host: "localhost",
             user: "root",
@@ -213,7 +230,7 @@ app.get("/admin-list", function (req, res) {
 
 //function needed for redirecting to manage admins list in dashboard
 app.get("/admin-list", function (req, res) {
-    if (req.session.loggedIn) {
+    if (req.session.loggedIn && req.session.isAdmin) {
         let doc = fs.readFileSync("./app/html/admin-list.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
@@ -802,22 +819,38 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
     });
     connection.connect();
 
-    for (let i = 0; i < req.files.length; i++) {
-        req.files[i].filename = req.files[i].originalname;
-        let newpathImages = ".." + req.files[i].path.substring(3);
+    if (req.files.length > 0) {
+        // If there is at leats one image uploaded by users, the image path will be stored into database.
+        for (let i = 0; i < req.files.length; i++) {
+            req.files[i].filename = req.files[i].originalname;
+            // New image path is created before being saved into dababase to make it easier to display on Timeline later.
+            let newpathImages = req.files[i].path.substring(3);
 
+            connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
+                [req.session.postID, newpathImages],
+                function (error, results, fields) {
+                    res.send({
+                        status: "success",
+                        msg: "Image information added to database."
+                    });
+                    req.session.save(function (err) {});
+                });
+        }
+    } else {
+        // If there is no image in user's post, the image path will be stored into database as null.
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-            [req.session.postID, newpathImages],
+            [req.session.postID, null],
             function (error, results, fields) {
                 res.send({
                     status: "success",
-                    msg: "Image information added to database."
+                    msg: "No image has been uploaded"
                 });
                 console.log(req.session.postID);
                 console.log(newpathImages);
                 req.session.save(function (err) {});
             });
     }
+
 
     connection.end();
 });
@@ -850,13 +883,23 @@ app.get("/timeline", function (req, res) {
                         let postlocation = results[i].location;
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
+                        let display = "";
+                        // If the image path that has been stored into database is null, the src of img tag will be automatically default and will not be displayed.
+                        if (postImages == null) {
+                            display = "none";
+                            postImages = "/images/post-images/test.jpg"
+                        }
+
                         var template = `   
                         </br>  
                         <div class="post_content">
                             <div class="card">
+
                                 <div class="post-user">
                                     <img class="profile-pic" src="Profile Pic">
                                     <span><h4>FirstName LastName</h4></span>
+                                <div class="post-image" >
+                                    <img src="${postImages}" style='display: ${display}'/>
                                 </div>
                 
                                 <div>
@@ -881,6 +924,7 @@ app.get("/timeline", function (req, res) {
                                 <p class="read-more"><a href="#" class="button">Read More</a></p>
                             </div>
                         </div>`;
+
                         let area = timelineDOM.window.document.querySelector('.post_content');
                         area.innerHTML += template;
                     }
@@ -896,6 +940,6 @@ app.get("/timeline", function (req, res) {
 
 
 
-// RUN SERVER
+//RUN SERVER
 let port = 8000;
 app.listen(port, function () {});

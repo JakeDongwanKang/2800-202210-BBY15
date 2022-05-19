@@ -268,11 +268,11 @@ button:hover {
 }
 
 footer {
-    color: black;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    font-size: 14px;
+    left:0;
+    bottom:0;
+    width:100%;
     text-align: center;
+    color: #000;
 }
 
 /*For the view under 800px*/

@@ -193,6 +193,14 @@ p {
     text-align: center;
 }
 
+.footer {
+    left:0;
+    bottom:0;
+    width:100%;
+    text-align: center;
+    color: #000;
+}
+
 /*For the view under 800px*/
 @media (max-width: 800px) {
     #signUpForm>input[type="button"] {
