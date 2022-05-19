@@ -16,7 +16,6 @@ app.use("/js", express.static("./public/js"));
 app.use("/images", express.static("./app/images"));
 
 
-
 app.use(session({
     secret: "what is the point of this secret",
     name: "extremisSessionID",
@@ -169,7 +168,6 @@ app.get("/edit", function (req, res) {
         let doc = fs.readFileSync("./app/html/edit.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         let dashboard_jsdom = new JSDOM(doc);
-        // dashboard_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Welcome " + req.session.firstName + "</h5>";
         res.write(dashboard_jsdom.serialize());
         res.end();
     } else {
@@ -819,38 +817,22 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
     });
     connection.connect();
 
-    if (req.files.length > 0) {
-        // If there is at leats one image uploaded by users, the image path will be stored into database.
-        for (let i = 0; i < req.files.length; i++) {
-            req.files[i].filename = req.files[i].originalname;
-            // New image path is created before being saved into dababase to make it easier to display on Timeline later.
-            let newpathImages = req.files[i].path.substring(3);
+    for (let i = 0; i < req.files.length; i++) {
+        req.files[i].filename = req.files[i].originalname;
+        let newpathImages = ".." + req.files[i].path.substring(3);
 
-            connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-                [req.session.postID, newpathImages],
-                function (error, results, fields) {
-                    res.send({
-                        status: "success",
-                        msg: "Image information added to database."
-                    });
-                    req.session.save(function (err) {});
-                });
-        }
-    } else {
-        // If there is no image in user's post, the image path will be stored into database as null.
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-            [req.session.postID, null],
+            [req.session.postID, newpathImages],
             function (error, results, fields) {
                 res.send({
                     status: "success",
-                    msg: "No image has been uploaded"
+                    msg: "Image information added to database."
                 });
                 console.log(req.session.postID);
                 console.log(newpathImages);
                 req.session.save(function (err) {});
             });
     }
-
 
     connection.end();
 });
@@ -883,17 +865,20 @@ app.get("/timeline", function (req, res) {
                         let postlocation = results[i].location;
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
-                        let display = "";
-                        // If the image path that has been stored into database is null, the src of img tag will be automatically default and will not be displayed.
-                        if (postImages == null) {
-                            display = "none";
-                            postImages = "/images/post-images/test.jpg"
-                        }
-
                         var template = `   
                         </br>  
                         <div class="post_content">
                             <div class="card">
+                                <div class="post-user">
+                                    <img class="profile-pic" src="Profile Pic">
+                                    <span><h4>FirstName LastName</h4></span>
+                                </div>
+                
+                                <div>
+                                    <h3><b>${postTitle}</b></h3> 
+                                    <h4>Type: ${typeWeather}</h4> 
+                                    <h5>Location: ${postlocation}</h5> 
+                                </div>
 
                                 <div class="post-user">
                                     <img class="profile-pic" src="Profile Pic">
@@ -920,7 +905,6 @@ app.get("/timeline", function (req, res) {
                                     <p class="time">Posted time: ${postTime}</p> 
                                     <p>Description: ${contentPost}</p>
                                 </div>
-
                                 <p class="read-more"><a href="#" class="button">Read More</a></p>
                             </div>
                         </div>`;
@@ -938,7 +922,86 @@ app.get("/timeline", function (req, res) {
     connection.end();
 });
 
+app.post('/search-timeline', function(req, res) {
+    //res.setHeader('Content-Type', 'application/json');
+    let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
+    let timelineDOM = new JSDOM(timeline);
 
+    let term = req.body.searchTerm;
+
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+
+    if(req.session.loggedIn) {
+        connection.connect();
+        connection.query(`SELECT * FROM BBY_15_post 
+        LEFT JOIN BBY_15_post_images 
+        ON BBY_15_post.post_id = BBY_15_post_images.post_id 
+        WHERE LOWER(post_content) LIKE '%${term}%'
+        OR LOWER(post_title) LIKE '%${term}%'
+        OR LOWER(post_type) LIKE '%${term}%'
+        OR LOWER(location) LIKE '%${term}%'
+        OR LOWER(weather_type) LIKE '%${term}%'
+        ORDER BY posted_time DESC`,
+        function (error, results, fields) {
+            var timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
+            var timelineDOM = new JSDOM(timeline);
+            if (results.length >= 0) {
+                for (var i = 0; i < results.length; i++) {
+                    let postTime = results[i].posted_time;
+                    let contentPost = results[i].post_content;
+                    let postTitle = results[i].post_title;
+                    let postlocation = results[i].location;
+                    let typeWeather = results[i].weather_type;
+                    let postImages = results[i].image_location;
+                    var template = `   
+                    </br>  
+                    <div class="post_content">
+                        <div class="card">
+                            <div class="post-user">
+                                <img class="profile-pic" src="Profile Pic">
+                                <span><h4>FirstName LastName</h4></span>
+                            </div>
+            
+                            <div>
+                                <h3><b>${postTitle}</b></h3> 
+                                <h4>Type: ${typeWeather}</h4> 
+                                <h5>Location: ${postlocation}</h5> 
+                            </div>
+                            <div class="post-image">
+                            <img class='post-pic' src="${postImages}">`;
+            
+                            while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                                i++;
+                                template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                            }
+
+                            template += `</div>
+                            <div class="desc">
+                                <p class="time">Posted time: ${postTime}</p> 
+                                <p>Description: ${contentPost}</p>
+                            </div>
+                            <p class="read-more"><a href="#" class="button">Read More</a></p>
+                        </div>
+                    </div>`;
+                    let area = timelineDOM.window.document.querySelector('.post_content');
+                    area.innerHTML = template;
+                }
+                //res.send(timelineDOM.serialize());
+                res.send({status: "success", message: template});
+            }
+        }
+    )
+    } else {
+        res.redirect("/");
+    }
+    connection.end();
+});
 
 //RUN SERVER
 let port = 8000;
