@@ -941,6 +941,98 @@ app.get("/timeline", function (req, res) {
 });
 
 
+//Get the post and event information from the database and display information on the profile page
+app.get("/post-list", function (req, res) {
+    // check to see if the user email and password match with data in database
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    // check for a session first!
+    if (req.session.loggedIn) {
+        connection.connect();
+        connection.query(
+            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id ORDER BY posted_time DESC",
+            [],
+            function (error, results, fields) {
+                let postList = fs.readFileSync("./app/html/post-list.html", "utf8");
+                let postListDOM = new JSDOM(postList);
+                let cardTemplate = postListDOM.window.document.getElementById("postCardTemplate");
+                if (results.length >= 0) {
+                    for (var i = 0; i < results.length; i++) {
+                        let newcard = cardTemplate.content.cloneNode(true);
+                        newcard.querySelector('.postID').innerHTML = results[i].post_id;
+                        newcard.querySelector('.current-status').innerHTML = results[i].post_status;
+                        newcard.querySelector('.userID').innerHTML = "<b>User ID: </b>" + results[i].user_id;
+                        newcard.querySelector('.post-type').innerHTML = "<b>Type: </b>" + results[i].post_type;
+                        newcard.querySelector('.post-title').innerHTML = "<b>Title: </b>" + results[i].post_title;
+                        newcard.querySelector('.weather-type').innerHTML = "<b>Weather Type: </b>" + results[i].weather_type;
+                        newcard.querySelector('.post-location').innerHTML = "<b>Location: </b>" + results[i].location;
+                        newcard.querySelector('.post-time').innerHTML = "<b>Time: </b>" + results[i].posted_time;
+                        newcard.querySelector('.post-content').innerHTML = "<b>Content: </b>" + results[i].post_content;
+
+                        //Add Read more button if the total length of the post content is more than 500
+                        if (results[i].post_content.length >= 500) {
+                            let p = postListDOM.window.document.createElement("p");
+                            p.setAttribute("class", "read-more");
+                            newcard.querySelector('.sidebar-box').appendChild(p);
+                            newcard.querySelector('.read-more').innerHTML = '<button onclick="expandText(this)" class="more-button">Read More</button>';
+                            
+                        }
+
+                        // Set src property of img tag as default and display property as none if the post has no images
+                        if (results[i].image_location == null) {
+                            newcard.querySelector('.card-image').src = "/images/post-images/test.jpg";
+                            newcard.querySelector('.card-image').style.display = 'none';
+                        } else {
+                            // Set src property of img tag as the image path
+                            newcard.querySelector('.card-image').src = results[i].image_location;
+                        }
+                        postListDOM.window.document.getElementById("post-goes-here").appendChild(newcard);
+                    }
+                    res.send(postListDOM.serialize());
+                }
+            }
+        )
+    } else {
+        res.redirect("/");
+    }
+});
+
+
+app.post("/update-status", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    // check for a session first!
+    if (req.session.loggedIn) {
+        let postID = req.body.postID;
+        let status = req.body.postStatus;
+
+        connection.connect();
+        connection.query(
+            "UPDATE BBY_15_post SET post_status = ? WHERE post_id = ?",
+            [status, postID],
+            function (error, results, fields) {
+                res.send({
+                    status: "success",
+                    msg: "Post status has been updated in database."
+                });
+                req.session.save(function (err) {});
+            })
+    } else {
+        res.redirect("/");
+    }
+    connection.end();
+})
+
 
 //RUN SERVER
 let port = 8000;
