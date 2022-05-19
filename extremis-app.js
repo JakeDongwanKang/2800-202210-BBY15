@@ -884,7 +884,7 @@ app.get("/timeline", function (req, res) {
                                     <img class="profile-pic" src="Profile Pic">
                                     <span><h4>FirstName LastName</h4></span>
                                 <div class="post-image" >
-                                    <img src="${postImages}" style='display: ${display}'/>
+                                    <img src="${postImages}">
                                 </div>
                 
                                 <div>
