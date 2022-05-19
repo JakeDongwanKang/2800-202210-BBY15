@@ -9,9 +9,9 @@
 
 body{
     font-family: 'Montserrat', sans-serif;
-    line-height: 30px;
     margin: 0;
     padding: 0;
+    line-height: 30px;
 }
 
 
@@ -96,50 +96,11 @@ body{
 /* navbar css ends */
 
 
-/* create-a-post form css starts */
-#createPostForm {
-    margin: 0% 15% 4% 15%;
-    font-size: 16px;
-    padding: 0px 20px;
-}
-
-.form-box {
-    margin: 13px;
-}
-
-.form-input{
-    display: block;
-    border-radius: 10px;
-    outline: solid 0.1px #484848;
-    font-size: 16px;
-    padding-left: 10px;
-    margin-bottom: 20px;
-    height: 30px;
-    font-family: 'Montserrat', sans-serif;
-    border: none;
-    width: 50%;
-}
-
-.form-input:hover, .btn:hover, .select:hover{
-    outline: solid 1px #3477f9;
-    text-transform: none;
-}
-
-.btn {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
-    background-color: white;
-    outline: solid 0.1px #484848;
-    border: none;
-    border-radius: 10px;
-    height: 30px;
-    padding: 0px 15px 0px 15px;
-    margin-left: 10px;
-}
-
+/* Dropdown menu for Filter button css starts here  */
 .dropdown {
     position: relative;
-    width: 35%;
+    width: 150px;
+    margin: 0 auto 0 auto;
     text-align: center;
 }
 
@@ -158,8 +119,14 @@ body{
     transition: background 0.3s;
 }
 
+.select:hover{
+    outline: solid 2px #3477f9;
+    box-shadow: 0 0 5px #3477F9;
+    text-transform: none;
+}
+
 .select-clicked {
-    outline: solid 1px #3477f9;
+    outline: solid 2px #3477f9;
     box-shadow: 0 0 5px #3477F9;
 }
 
@@ -179,7 +146,7 @@ body{
 .menu {
     list-style: none;
     padding: 10px 10px;
-    outline: solid 1px #3477f9;
+    outline: solid 2px #3477f9;
     border-radius: 10px;
     position: absolute;
     width: 100%;
@@ -189,6 +156,7 @@ body{
     z-index: 1;
     left: 50%;
     display: none;
+    background-color: #ffffff;
 }
 
 .menu li {
@@ -205,107 +173,140 @@ body{
     background-color: #3477F9;
 }
 
-#choiceDisabled {
-    pointer-events: none;
-    opacity: 0.5;
-}
-
 .menu-open {
     display: block;
     opacity: 1;
 }
 
-.__toolbar > select{
-    outline: solid 0.1px #484848;
-}
-#postContent {
-    width: 100%;
-    height: max-content;
-    height: 150px;
+/* Dropdown menu for Filter button css ends here  */
+
+
+/* post css starts */
+h1 {
+    color: #3477F9;
+    text-align: center;
+    font-size: 35px;
 }
 
-label[for="selectFile"]:hover, #create:hover, #cancel:hover, .select:hover {
-    cursor: pointer;
+.post-container{
+    margin: 0 auto 0 auto;
+    font-size: 16px;
+}
+
+.post{
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 50% 50%;
+    margin: 5vh 5% 8vh 5%;
+    box-shadow: 0 0 5px #484848;
+    border-radius: 10px;
+}
+
+.post:hover {
+    outline: solid 1px #3477f9;
     box-shadow: 0 0 5px #3477F9;
 }
 
-input[type='file'] {
+.post:last-child {
+    margin-bottom: 5%;
+}
+.post-body {
+    grid-row: 1;
+    grid-column: 1;
+    padding: 2% 3% 1% 5%;
+    margin: auto 0 auto 0;
+}
+.postID{
     display: none;
 }
 
-label[for="selectFile"] {
+button {
+    font-size: 16px;
+    border-radius: 4px;
     cursor: pointer;
-    border-radius: 10px;
-    display: block;
-    position: relative;
-    text-align: center;
-    border: solid 0.2px #484848;
-    width: 200px;
-    margin: 0 auto 0 auto;
+    height: 30px;
+    border: none;
+    margin-left: 10px;
+    font-family: 'Montserrat', sans-serif;
+    width: 100px;
 }
 
-#fileNum {
-    margin: 0;
-    text-align: center;
+button:hover{
+    box-shadow: 0 0 5px #3477F9;
 }
 
-#images {
-    display: flex;
-    width: 100%;
-    position: relative;
-    justify-content: space-evenly;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-figure{
-    width: 40%;
-    margin: 0;
-}
-
-img{
-    width: 100%;
-}
-
-figcaption{
-    text-align: center;
-    font-size: 14px;
-}
-.errorMsg{
-    color: red;
-    margin-left: inherit;
-}
-
-#btn {
-    display: inline-flex;
-    width: 100%;
-    justify-content: space-evenly;
-}
-
-#create, #cancel {
-    width: 35%;
-    height: 40px;
-}
-
-#create {
-    background-color: #3477F9;
-    color: #ffffff;
+.cancel-btn, .approve-btn, .reject-btn {
+    display:none;
     outline: none;
 }
 
-#cancel {
-    background-color:#ffffff;
+.cancel-btn{
+    background-color: #c0c8c7;
 }
-/* create-a-post form css ends */
 
+.approve-btn {
+    background-color: #00ca4e;
+    color: white;
+}
+
+.reject-btn {
+    background-color: #ff605c;
+    color: white;
+}
+
+.sidebar-box {
+    max-height: 150px;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-box .read-more { 
+    position: absolute; 
+    bottom: 0; 
+    left: 0;
+    width: 100%; 
+    text-align: center; 
+    margin: 0; padding: 30px 0; 
+      
+    /* "transparent" only works here because == rgba(0,0,0,0) */
+    background-image: linear-gradient(to bottom, transparent, #ffffff);
+}
+
+.read-more button{
+    background-color: #3477F9;
+    width: 120px;
+    margin-bottom: 0;
+    color: #ffffff;
+}
+
+p{
+    margin:0;
+}
+
+.card-images {
+    grid-row: 1;
+    grid-column: 2;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.card-image {
+    width: 75%;
+    cursor: pointer;
+}
+
+/* post css ends */
 
 /* footer css starts */
 footer {
-    left:0;
-    bottom:0;
-    width:100%;
+    overflow-x: hidden;
+    bottom: 0%;
+    width: 100%;
+    margin-left: 0;
     text-align: center;
-    color: #000;
+    color: #ffffff;
+    background-color: #484848;
 }
 /* footer css ends */
 
@@ -314,9 +315,10 @@ footer {
 
     body{
         font-family: 'Montserrat', sans-serif;
-        line-height: 35px;
+        line-height: 25px;
     }
 
+    /* navbar css starts */
     .brand-title {
         color: rgba(52, 119, 249, 1.5);
         text-decoration: solid;
@@ -373,48 +375,58 @@ footer {
         transition: all 0.3s ease 0s;
         margin-bottom: 30px;
     }
+    /* navbar css ends  */
 
-    /* create-a-post form css starts */
-    #createPostForm {
-        margin: 5% 5% 12% 5%;
-        font-size: 16px;
-    }
-
-    .dropdown {
-        width: 70%;
+    /* post css starts */
+    h1{
+        font-size: 30px;
+        line-height: 50px;
     }
 
-    .form-input {
-        width: 90%;
-        height: 40px;
-        line-height: 35px;
+    .post{
+        font-size: 15px;
+        display: grid;
+        grid-template-rows: 65% 35%;
+        grid-template-columns: 100%;
+        margin: 5% 5% auto 5%;
     }
 
-    .__toolbar-item{
-        margin-bottom: 8px;
+    .post:hover {
+        outline: solid 1px #3477f9;
+        box-shadow: 0 0 10px #3477F9;
     }
 
-    #postContent {
-        height: 150px;
+    .post-body {
+        grid-row: 1;
+        grid-column: 1;
+        padding: 0 30px 0 30px;
     }
 
-    figure{
-        width: 45%  ;
-    }
-    figcaption{
-        margin:0;
-        font-size: 8px;
-        line-height: 10px;
-    }
-    #btn {
-        display: block;
-        width: 100%;
-        align-items: center;
+    button {
+        font-size: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        height: 25px;
+        margin-left: 10px;
+        margin-bottom: 5px;
+        border: none;
+        font-family: 'Montserrat', sans-serif;
+        width: 90px;
     }
 
-    #create, #cancel {
-        width: 70%;
-        margin: 20px auto 0 auto; 
-        font-size: 18px;       
+    .card-images {
+        grid-column: 1;
+        grid-row: 2;
+        text-align: center;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        margin-bottom: 5px;
+    }
+
+    .card-image {
+        max-height: 95%;
+        border-radius: 0;
     }
 }
+

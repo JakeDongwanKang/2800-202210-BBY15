@@ -9,22 +9,6 @@ const {
     JSDOM
 } = require('jsdom');
 const multer = require("multer");
-const {
-    Console
-} = require('console');
-
-const storage_post_images = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, "./app/images/post-images/")
-    },
-    filename: function (req, file, callback) {
-        callback(null, req.session.userID + "AT" + Date.now() + "AND" + file.originalname);
-    }
-});
-const uploadPostImages = multer({
-    storage: storage_post_images
-});
-
 
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
@@ -168,7 +152,6 @@ app.get("/edit", function (req, res) {
         let doc = fs.readFileSync("./app/html/edit.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         let dashboard_jsdom = new JSDOM(doc);
-        // dashboard_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Welcome " + req.session.firstName + "</h5>";
         res.write(dashboard_jsdom.serialize());
         res.end();
     } else {
@@ -231,6 +214,19 @@ app.get("/admin-list", function (req, res) {
 app.get("/admin-list", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/admin-list.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        res.send(doc);
+    } else {
+        // if user has not logged in, redirect to login page
+        res.redirect("/");
+    }
+
+});
+
+//function needed for redirecting to manage admins list in dashboard
+app.get("/about-us", function (req, res) {
+    if (req.session.loggedIn) {
+        let doc = fs.readFileSync("./app/html/about-us.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
     } else {
@@ -320,7 +316,6 @@ app.post("/add-user", function (req, res) {
 
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
-    ``
     let signupemail = req.body.email;
     let signuppassword = req.body.password;
 
@@ -400,8 +395,6 @@ app.post("/add-user-as-admin", function (req, res) {
                     status: "success",
                     msg: "Record added."
                 });
-                // req.session.loggedIn = true;
-                // req.session.save(function (err) { });
             });
 
         connection.query(
@@ -410,11 +403,6 @@ app.post("/add-user-as-admin", function (req, res) {
             function (error, results, fields) {
 
                 if (results.length > 0) {
-                    // user authenticated, create a session
-                    // req.session.user_id = results[0].user_id;
-                    // req.session.save(function (err) {
-                    //     //session saved
-                    // });
                 } else {
                     res.send({
                         status: "fail",
@@ -546,6 +534,8 @@ app.post("/profile", function (req, res) {
         password: '',
         database: 'COMP2800'
     });
+
+
     //connecting to the database, then creating and adding the user info into the database.
     connection.connect();
     connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE user_id=?',
@@ -560,7 +550,6 @@ app.post("/profile", function (req, res) {
             req.session.email = req.body.email;
             req.session.save(function (err) {});
         });
-
     connection.end();
 });
 
@@ -587,7 +576,10 @@ app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
                 req.session.save(function (err) {});
             });
     }
+
+
     connection.end();
+
 });
 
 
@@ -732,6 +724,8 @@ app.get("/create-post", function (req, res) {
 });
 
 
+const sanitizeHtml = require("sanitize-html");
+
 /**
  * Store text data of user's post into the database.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
@@ -746,21 +740,43 @@ app.post("/add-post", function (req, res) {
         database: 'COMP2800'
     });
 
+    // Sanitize html code on the server (https://www.npmjs.com/package//sanitize-html)
+    const stringToSanitize = req.body.postContent;
+    const clean = sanitizeHtml(stringToSanitize, {
+        allowedTags: [
+            "address", "article", "aside", "footer", "header", "h1", "h2", "h3", "h4",
+            "h5", "h6", "hgroup", "main", "nav", "section", "blockquote", "dd", "div",
+            "dl", "dt", "figcaption", "figure", "hr", "li", "main", "ol", "p", "pre",
+            "ul", "a", "abbr", "b", "bdi", "bdo", "br", "cite", "code", "data", "dfn",
+            "em", "i", "kbd", "mark", "q", "rb", "rp", "rt", "rtc", "ruby", "s", "samp",
+            "small", "span", "strong", "sub", "sup", "time", "u", "var", "wbr", "caption",
+            "col", "colgroup", "table", "tbody", "td", "tfoot", "th", "thead", "tr", "span"
+        ],
+        disallowedTagsMode: ['discard'],
+        allowedAttributes: {
+            a: ['href', 'name', 'target'],
+            img: ['srcset', 'alt', 'title', 'width', 'height', 'loading'],
+            span: ['style']
+        },
+        selfClosing: ['br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
+
+        allowedIframeHostnames: ['www.youtube.com']
+    });
+
     let post_type = req.body.postType;
     let post_title = req.body.postTitle;
     let post_location = req.body.postLocation;
-    let post_content = req.body.postContent;
+    let post_content = clean;
     let weather_type = req.body.weatherType;
     let userID = req.session.userID;
     let post_time = new Date(Date.now());
     let post_status = "pending";
 
     connection.connect();
-    connection.query('INSERT INTO BBY_15_post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    connection.query('INSERT INTO BBY_15_Post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [userID, post_time, post_content, post_title, post_type, post_location, post_status, weather_type],
         function (error, results, fields) {
             req.session.postID = results.insertId;
-
             res.send({
                 status: "success",
                 msg: "Post added to database."
@@ -777,6 +793,18 @@ app.post("/add-post", function (req, res) {
  * Store images information into the database. These images are uploaded by users when they create a post.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
  */
+const storage_post_images = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, "./app/images/post-images/")
+    },
+    filename: function (req, file, callback) {
+        callback(null, req.session.userID + "AT" + Date.now() + "AND" + file.originalname);
+    }
+});
+const uploadPostImages = multer({
+    storage: storage_post_images
+});
+
 app.post('/upload-post-images', uploadPostImages.array("files"), function (req, res) {
     let connection = mysql.createConnection({
         host: 'localhost',
@@ -797,6 +825,8 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
                     status: "success",
                     msg: "Image information added to database."
                 });
+                console.log(req.session.postID);
+                console.log(newpathImages);
                 req.session.save(function (err) {});
             });
     }
@@ -804,11 +834,7 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
     connection.end();
 });
 
-/**
- * Redirect to the timeline page
- * Otherwise, not allow accessing this site.
- * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen
- */
+
 
 //Get the post and event information from the database and display information on the profile page
 app.get("/timeline", function (req, res) {
@@ -824,14 +850,18 @@ app.get("/timeline", function (req, res) {
     // check for a session first!
     if (req.session.loggedIn) {
         connection.connect();
-        connection.query(
-            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id",
-            [],
+        connection.query(`SELECT * FROM BBY_15_User 
+            INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
+            LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id 
+            ORDER BY posted_time DESC`,
             function (error, results, fields) {
                 let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
                 let timelineDOM = new JSDOM(timeline);
                 if (results.length >= 0) {
                     for (var i = 0; i < results.length; i++) {
+                        let firstName = results[i].first_name;
+                        let lastName = results[i].last_name;
+                        let profilePic = results[i].profile_picture;
                         let postTime = results[i].posted_time;
                         let contentPost = results[i].post_content;
                         let postTitle = results[i].post_title;
@@ -842,32 +872,35 @@ app.get("/timeline", function (req, res) {
                         </br>  
                         <div class="post_content">
                             <div class="card">
-                                <div class="post-image">
-                                    <img src="${postImages}">
+                                <div class="post-user">
+                                    <img class="profile-pic" src="${profilePic}">
+                                    <span><h4>&ensp;${firstName} ${lastName}</h4></span>
                                 </div>
+                
+                                <div>
+                                    <h3><b>${postTitle}</b></h3> 
+                                    <h4>Type: ${typeWeather}</h4> 
+                                    <h5>Location: ${postlocation}</h5> 
+                                </div>
+                                <div class="post-image">`;
+
+                                if (postImages) {
+                                    template += `<img class='post-pic' src="${postImages}">`;
+                                }
+                
+                                while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                                    i++;
+                                    template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                                }
+
+                                template += `</div>
                                 <div class="desc">
-                                    <h3><b>${typeWeather}</b></h3> 
-                                    <h4>Title: ${postTitle} </h4> 
                                     <p class="time">Posted time: ${postTime}</p> 
-                                    <p>Location: ${postlocation}</p> 
                                     <p>Description: ${contentPost}</p>
                                 </div>
-                                <div class="share-social">
-                                    <ul>
-                                        <li><a href="#" class="social-link"><i class="fa fa-facebook-f"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-twitter"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-instagram"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-linkedin"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-reddit-alien"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-whatsapp"></i></a></li>
-                                    </ul> 
-                                </div>
-
+                                <p class="read-more"><a href="#" class="button">Read More</a></p>
                             </div>
-                        </div>
-
-
-                    `;
+                        </div>`;
                         let area = timelineDOM.window.document.querySelector('.post_content');
                         area.innerHTML += template;
                     }
@@ -875,12 +908,177 @@ app.get("/timeline", function (req, res) {
                 }
             }
         )
-        res.set("Server", "Wazubi Engine");
-        res.set("X-Powered-By", "Wazubi");
     } else {
         res.redirect("/");
     }
     connection.end();
+});
+
+app.post('/search-timeline', function(req, res) {
+    //res.setHeader('Content-Type', 'application/json');
+    let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
+    let timelineDOM = new JSDOM(timeline);
+
+
+    let term = req.body.searchTerm;
+
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    
+    if(req.session.loggedIn) {
+        connection.connect();
+        connection.query(`SELECT * FROM BBY_15_post 
+        LEFT JOIN BBY_15_post_images 
+        ON BBY_15_post.post_id = BBY_15_post_images.post_id 
+        WHERE LOWER(post_content) LIKE '%${term}%'
+        OR LOWER(post_title) LIKE '%${term}%'
+        OR LOWER(post_type) LIKE '%${term}%'
+        OR LOWER(location) LIKE '%${term}%'
+        OR LOWER(weather_type) LIKE '%${term}%'
+        ORDER BY posted_time DESC`,
+        function (error, results, fields) {
+            var timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
+            var timelineDOM = new JSDOM(timeline);
+            if (results.length >= 0) {
+                for (var i = 0; i < results.length; i++) {
+                    let postTime = results[i].posted_time;
+                    let contentPost = results[i].post_content;
+                    let postTitle = results[i].post_title;
+                    let postlocation = results[i].location;
+                    let typeWeather = results[i].weather_type;
+                    let postImages = results[i].image_location;
+                    var template = `   
+                    </br>  
+                    <div class="post_content">
+                        <div class="card">
+                            <div class="post-user">
+                                <img class="profile-pic" src="Profile Pic">
+                                <span><h4>FirstName LastName</h4></span>
+                            </div>
+            
+                            <div>
+                                <h3><b>${postTitle}</b></h3> 
+                                <h4>Type: ${typeWeather}</h4> 
+                                <h5>Location: ${postlocation}</h5> 
+                            </div>
+                            <div class="post-image">
+                            <img class='post-pic' src="${postImages}">`;
+            
+                            while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                                i++;
+                                template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                            }
+
+                            template += `</div>
+                            <div class="desc">
+                                <p class="time">Posted time: ${postTime}</p> 
+                                <p>Description: ${contentPost}</p>
+                            </div>
+                            <p class="read-more"><a href="#" class="button">Read More</a></p>
+                        </div>
+                    </div>`;
+                    let area = timelineDOM.window.document.querySelector('.post_content');
+                    area.innerHTML = template;
+                }
+                //res.send(timelineDOM.serialize());
+                res.send({status: "success", message: template});
+            }
+        }
+    )
+    } else {
+        res.redirect("/");
+    }
+    connection.end();
+    
+});
+
+
+//Get the post and event information from the database and display information on the profile page
+app.get("/post-list", function (req, res) {
+    // check to see if the user email and password match with data in database
+    // check for a session first!
+    if (req.session.loggedIn) {
+        connection.connect();
+        connection.query(
+            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id ORDER BY posted_time DESC",
+            [],
+            function (error, results, fields) {
+                let postList = fs.readFileSync("./app/html/post-list.html", "utf8");
+                let postListDOM = new JSDOM(postList);
+                let cardTemplate = postListDOM.window.document.getElementById("postCardTemplate");
+                if (results.length >= 0) {
+                    for (var i = 0; i < results.length; i++) {
+                        let newcard = cardTemplate.content.cloneNode(true);
+                        newcard.querySelector('.postID').innerHTML = results[i].post_id;
+                        newcard.querySelector('.current-status').innerHTML = results[i].post_status;
+                        newcard.querySelector('.userID').innerHTML = "<b>User ID: </b>" + results[i].user_id;
+                        newcard.querySelector('.post-type').innerHTML = "<b>Type: </b>" + results[i].post_type;
+                        newcard.querySelector('.post-title').innerHTML = "<b>Title: </b>" + results[i].post_title;
+                        newcard.querySelector('.weather-type').innerHTML = "<b>Weather Type: </b>" + results[i].weather_type;
+                        newcard.querySelector('.post-location').innerHTML = "<b>Location: </b>" + results[i].location;
+                        newcard.querySelector('.post-time').innerHTML = "<b>Time: </b>" + results[i].posted_time;
+                        newcard.querySelector('.post-content').innerHTML = "<b>Content: </b>" + results[i].post_content;
+
+                        //Add Read more button if the total length of the post content is more than 500
+                        if (results[i].post_content.length >= 500) {
+                            let p = postListDOM.window.document.createElement("p");
+                            p.setAttribute("class", "read-more");
+                            newcard.querySelector('.sidebar-box').appendChild(p);
+                            newcard.querySelector('.read-more').innerHTML = '<button onclick="expandText(this)" class="more-button">Read More</button>';
+                            
+                        }
+
+                        // Set src property of img tag as default and display property as none if the post has no images
+                        if (results[i].image_location == null) {
+                            newcard.querySelector('.card-image').src = "/images/post-images/test.jpg";
+                            newcard.querySelector('.card-image').style.display = 'none';
+                        } else {
+                            // Set src property of img tag as the image path
+                            newcard.querySelector('.card-image').src = results[i].image_location;
+                        }
+                        postListDOM.window.document.getElementById("post-goes-here").appendChild(newcard);
+                    }
+                    res.send(postListDOM.serialize());
+                }
+            }
+        )
+    } else {
+        res.redirect("/");
+    }
+});
+
+
+app.post("/update-status", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    // check for a session first!
+    if (req.session.loggedIn) {
+        let postID = req.body.postID;
+        let status = req.body.postStatus;
+
+        connection.connect();
+        connection.query(
+            "UPDATE BBY_15_post SET post_status = ? WHERE post_id = ?",
+            [status, postID],
+            function (error, results, fields) {
+                res.send({
+                    status: "success",
+                    msg: "Post status has been updated in database."
+                });
+                req.session.save(function (err) {});
+            })
+        }
 });
 
 /**
@@ -1078,7 +1276,6 @@ app.post('/delete-image', function (req, res) {
 });
 
 
-
-//RUN SERVER
+// RUN SERVER
 let port = 8000;
 app.listen(port, function () {});

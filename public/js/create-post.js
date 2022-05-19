@@ -93,6 +93,7 @@ function closeDropdown() {
  */
 async function sendData(data) {
     try {
+        // Send data of user's post to the server first.
         let responseObject = await fetch("/add-post", {
             method: 'POST',
             headers: {
@@ -106,6 +107,7 @@ async function sendData(data) {
             // Display error message if data of the post has not been stored into database
             document.getElementById("emptyError").innerHTML = "<small>*All required fields have to be filled*</small>";
         } else {
+            // Send data of images uploaded by users to the server later.
             let responseObject2 = await fetch("/upload-post-images", {
                 method: 'POST',
                 body: formData
@@ -130,7 +132,8 @@ document.getElementById("create").addEventListener("click", function (e) {
     let weatherType;
     let postTitle = document.getElementById("postTitle").value;
     let postLocation = document.getElementById("postLocation").value;
-    let postContent = document.getElementById("postContent").value;
+    var myContent = tinymce.get("postContent").getContent();
+    let postContent = myContent;
 
     if (!document.getElementById("weatherType")) {
         // Set weatherType as "none" if user does not create a post about weather condition
@@ -190,7 +193,6 @@ const formData = new FormData();
  */
 let imageContainer = document.getElementById("images");
 let fileNum = document.getElementById("fileNum");
-
 imagesUpload.addEventListener("change", function () {
     imageContainer.innerHTML = "";
     fileNum.textContent = `${imagesUpload.files.length} Files Selected`;
@@ -209,4 +211,16 @@ imagesUpload.addEventListener("change", function () {
         imageContainer.appendChild(figure);
         reader.readAsDataURL(imagesUpload.files[i]);
     }
+});
+
+/**
+ * Add text-editor feature so users can edit the content of the post they are creating.
+ * The following code comes from https://www.tiny.cloud/ with changes and adjustment made by Linh.
+ */
+tinymce.init({
+    selector: '#postContent',
+    plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinycomments tinymcespellchecker',
+    toolbar: 'a11ycheck alignleft aligncenter alignright alignfull bold italic underline forecolor fontname fontsize casechange checklist formatpainter pageembed table',
+    toolbar_mode: 'floating',
+    tinycomments_mode: 'embedded'
 });

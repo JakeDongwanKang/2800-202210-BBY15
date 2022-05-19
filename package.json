@@ -17,6 +17,12 @@
   },
   "homepage": "https://github.com/JakeDongwanKang/2800-202210-BBY15#readme",
   "dependencies": {
-    "fs": "^0.0.1-security"
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "fs": "^0.0.1-security",
+    "jsdom": "^19.0.0",
+    "multer": "^1.4.4",
+    "mysql2": "^2.3.3",
+    "sanitize-html": "^2.7.0"
   }
 }
