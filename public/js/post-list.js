@@ -149,6 +149,7 @@ for (let i = 0; i < postStatus.length; i++) {
  */
 async function sendData(data, e) {
     try {
+        console.log(data);
         let responseObject = await fetch("/update-status", {
             method: 'POST',
             headers: {
@@ -188,6 +189,7 @@ function cancel(e) {
  * @param {*} e 
  */
 function approve(e) {
+    console.log("aloooo");
     let postID = e.parentElement.previousElementSibling.innerText;
     let postStatus = "approved";
     sendData({
@@ -264,11 +266,19 @@ function expandText(e) {
 var expandImg = true;
 function expandImage(e) {
     if (expandImg) {
-        e.style.transform = "scale(1.5)";
+        e.style.transform = "scale(3)";
         e.style.transition = 'transform 0.5s ease';
+        e.style.position = 'absolute';
+        e.style.top = "20%";
+        e.style.left = "-20%";
+        e.style.zIndex = "1";
         expandImg = false;
     } else {
         e.style.transform = "scale(1.0)";
+        e.style.position = '';
+        e.style.top = "";
+        e.style.right = "";
+        e.style.zIndex = "";
         expandImg = true;
     }
 }

@@ -402,8 +402,7 @@ app.post("/add-user-as-admin", function (req, res) {
             [req.body.email, req.body.password, req.body.firstName, req.body.lastName],
             function (error, results, fields) {
 
-                if (results.length > 0) {
-                } else {
+                if (results.length > 0) {} else {
                     res.send({
                         status: "fail",
                         msg: "User account not found."
@@ -814,21 +813,32 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
     });
     connection.connect();
 
-    for (let i = 0; i < req.files.length; i++) {
-        req.files[i].filename = req.files[i].originalname;
-        let newpathImages = ".." + req.files[i].path.substring(3);
+    if (req.files.length > 0) {
+        for (let i = 0; i < req.files.length; i++) {
+            req.files[i].filename = req.files[i].originalname;
+            let newpathImages = req.files[i].path.substring(3);
 
-        connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-            [req.session.postID, newpathImages],
-            function (error, results, fields) {
-                res.send({
-                    status: "success",
-                    msg: "Image information added to database."
+            connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
+                [req.session.postID, newpathImages],
+                function (error, results, fields) {
+
                 });
-                console.log(req.session.postID);
-                console.log(newpathImages);
-                req.session.save(function (err) {});
-            });
+        }
+        res.send({
+            status: "success",
+            msg: "Image information added to database."
+        });
+        req.session.save(function (err) {});
+    } else {
+        connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
+                [req.session.postID, null],
+                function (error, results, fields) {
+                });
+        res.send({
+            status: "success",
+            msg: "No image has been uploaded"
+        });
+        req.session.save(function (err) {});
     }
 
     connection.end();
@@ -878,13 +888,13 @@ app.get("/timeline", function (req, res) {
                                 </div>
                                 <div class="post-image">
                                 <img class='post-pic' src="${postImages}">`;
-                
-                                while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
-                                    i++;
-                                    template += "<img class='post-pic' src=" + results[i].image_location + ">"
-                                }
 
-                                template += `</div>
+                        while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                            i++;
+                            template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                        }
+
+                        template += `</div>
                                 <div class="desc">
                                     <p class="time">Posted time: ${postTime}</p> 
                                     <p>Description: ${contentPost}</p>
@@ -905,7 +915,7 @@ app.get("/timeline", function (req, res) {
     connection.end();
 });
 
-app.post('/search-timeline', function(req, res) {
+app.post('/search-timeline', function (req, res) {
     //res.setHeader('Content-Type', 'application/json');
     let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
     let timelineDOM = new JSDOM(timeline);
@@ -920,8 +930,8 @@ app.post('/search-timeline', function(req, res) {
         password: "",
         database: "COMP2800"
     });
-    
-    if(req.session.loggedIn) {
+
+    if (req.session.loggedIn) {
         connection.connect();
         connection.query(`SELECT * FROM BBY_15_post 
         LEFT JOIN BBY_15_post_images 
@@ -932,18 +942,18 @@ app.post('/search-timeline', function(req, res) {
         OR LOWER(location) LIKE '%${term}%'
         OR LOWER(weather_type) LIKE '%${term}%'
         ORDER BY posted_time DESC`,
-        function (error, results, fields) {
-            var timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
-            var timelineDOM = new JSDOM(timeline);
-            if (results.length >= 0) {
-                for (var i = 0; i < results.length; i++) {
-                    let postTime = results[i].posted_time;
-                    let contentPost = results[i].post_content;
-                    let postTitle = results[i].post_title;
-                    let postlocation = results[i].location;
-                    let typeWeather = results[i].weather_type;
-                    let postImages = results[i].image_location;
-                    var template = `   
+            function (error, results, fields) {
+                var timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
+                var timelineDOM = new JSDOM(timeline);
+                if (results.length >= 0) {
+                    for (var i = 0; i < results.length; i++) {
+                        let postTime = results[i].posted_time;
+                        let contentPost = results[i].post_content;
+                        let postTitle = results[i].post_title;
+                        let postlocation = results[i].location;
+                        let typeWeather = results[i].weather_type;
+                        let postImages = results[i].image_location;
+                        var template = `   
                     </br>  
                     <div class="post_content">
                         <div class="card">
@@ -959,13 +969,13 @@ app.post('/search-timeline', function(req, res) {
                             </div>
                             <div class="post-image">
                             <img class='post-pic' src="${postImages}">`;
-            
-                            while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
-                                i++;
-                                template += "<img class='post-pic' src=" + results[i].image_location + ">"
-                            }
 
-                            template += `</div>
+                        while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                            i++;
+                            template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                        }
+
+                        template += `</div>
                             <div class="desc">
                                 <p class="time">Posted time: ${postTime}</p> 
                                 <p>Description: ${contentPost}</p>
@@ -973,30 +983,42 @@ app.post('/search-timeline', function(req, res) {
                             <p class="read-more"><a href="#" class="button">Read More</a></p>
                         </div>
                     </div>`;
-                    let area = timelineDOM.window.document.querySelector('.post_content');
-                    area.innerHTML = template;
+                        let area = timelineDOM.window.document.querySelector('.post_content');
+                        area.innerHTML = template;
+                    }
+                    //res.send(timelineDOM.serialize());
+                    res.send({
+                        status: "success",
+                        message: template
+                    });
                 }
-                //res.send(timelineDOM.serialize());
-                res.send({status: "success", message: template});
             }
-        }
-    )
+        )
     } else {
         res.redirect("/");
     }
     connection.end();
-    
+
 });
 
 
-//Get the post and event information from the database and display information on the profile page
+/**
+ * Display all posts on the Manage-Post page using the card template in post-list.html.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
+ */
 app.get("/post-list", function (req, res) {
     // check to see if the user email and password match with data in database
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
     // check for a session first!
     if (req.session.loggedIn) {
         connection.connect();
         connection.query(
-            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id ORDER BY posted_time DESC",
+            "SELECT * FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id ORDER BY posted_time DESC",
             [],
             function (error, results, fields) {
                 let postList = fs.readFileSync("./app/html/post-list.html", "utf8");
@@ -1005,7 +1027,6 @@ app.get("/post-list", function (req, res) {
                 if (results.length >= 0) {
                     for (var i = 0; i < results.length; i++) {
                         let newcard = cardTemplate.content.cloneNode(true);
-                        newcard.querySelector('.postID').innerHTML = results[i].post_id;
                         newcard.querySelector('.current-status').innerHTML = results[i].post_status;
                         newcard.querySelector('.userID').innerHTML = "<b>User ID: </b>" + results[i].user_id;
                         newcard.querySelector('.post-type').innerHTML = "<b>Type: </b>" + results[i].post_type;
@@ -1014,31 +1035,36 @@ app.get("/post-list", function (req, res) {
                         newcard.querySelector('.post-location').innerHTML = "<b>Location: </b>" + results[i].location;
                         newcard.querySelector('.post-time').innerHTML = "<b>Time: </b>" + results[i].posted_time;
                         newcard.querySelector('.post-content').innerHTML = "<b>Content: </b>" + results[i].post_content;
+                        newcard.querySelector('.postID').innerHTML = results[i].post_id;
 
+                        if (!results[i].image_location) {
+                            // Set src property of img tag as default and display property as none if the post has no images
+                            newcard.querySelector('.card-images').innerHTML = '<img class="card-image" src="/images/post-images/test.jpg" alt="no image" style="display: none" />';
+                        } else {
+                            let str = '<img class="card-image" src="' + results[i].image_location + '" onclick = "expandImage(this)" alt="post image"/>';
+                            // Set src property of img tag as the image path
+                            while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                                i++;
+                                str += '<img class="card-image" src="' + results[i].image_location + '" onclick = "expandImage(this)" alt="post image"/>';
+                            }
+                            newcard.querySelector('.card-images').innerHTML = str;
+                        }
+                        
                         //Add Read more button if the total length of the post content is more than 500
                         if (results[i].post_content.length >= 500) {
                             let p = postListDOM.window.document.createElement("p");
                             p.setAttribute("class", "read-more");
                             newcard.querySelector('.sidebar-box').appendChild(p);
                             newcard.querySelector('.read-more').innerHTML = '<button onclick="expandText(this)" class="more-button">Read More</button>';
-                            
-                        }
 
-                        // Set src property of img tag as default and display property as none if the post has no images
-                        if (results[i].image_location == null) {
-                            newcard.querySelector('.card-image').src = "/images/post-images/test.jpg";
-                            newcard.querySelector('.card-image').style.display = 'none';
-                        } else {
-                            // Set src property of img tag as the image path
-                            newcard.querySelector('.card-image').src = results[i].image_location;
                         }
-                        postListDOM.window.document.getElementById("post-goes-here").appendChild(newcard);
+                    postListDOM.window.document.getElementById("post-goes-here").appendChild(newcard);
                     }
-                    res.send(postListDOM.serialize());
                 }
-            }
-        )
-    } else {
+                res.send(postListDOM.serialize());
+            })
+    }
+    else {
         res.redirect("/");
     }
 });
@@ -1069,7 +1095,7 @@ app.post("/update-status", function (req, res) {
                 });
                 req.session.save(function (err) {});
             })
-        }
+    }
 });
 
 
