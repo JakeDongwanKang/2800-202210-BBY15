@@ -984,8 +984,8 @@ app.post('/search-timeline', function (req, res) {
                     <div class="post_content">
                         <div class="card">
                             <div class="post-user">
-                                <img class="profile-pic" src="Profile Pic">
-                                <span><h4>FirstName LastName</h4></span>
+                                <img class="profile-pic" src="${profilePic}">
+                                <span><h4>&ensp;${firstName} ${lastName}</h4></span>
                             </div>
             
                             <div class="post-header">
