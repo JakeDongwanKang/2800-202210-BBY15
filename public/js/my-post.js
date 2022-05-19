@@ -1,10 +1,13 @@
+/**
+ * Send data from client side to server for authentication.
+ * Otherwise, send an error message to user. 
+ * @author Arron_Ferguson (1537 instructor), Anh Nguyen (BBY15)
+ * @param {*} data user input
+ */
+
 "use strict";
 
-/**
- * I found how to do the toggleButton on 1537 course and 1800 course. 
- * I found some syntax and codes on this website that I can use to create a hambuger menu.
- * https://www.educba.com/hamburger-menu-javascript/
- */
+//Humbeger menu
 const toggleButton = document.getElementsByClassName('toggle-button')[0]
 const navbarLinks = document.getElementsByClassName('navbar-links')[0]
 
@@ -12,15 +15,10 @@ toggleButton.addEventListener('click', () => {
     navbarLinks.classList.toggle('active')
 })
 
-/**
- * Sends the user data from the client side to the server side for authentication.
- * User clicks on the data that needs to be changed through the text box, and it changes on to the server side in real time
- * @author Arron_Ferguson (1537 instructor), Dongwan_Kang (BBY15)
- * @param {*} data user input
- */
+//Send the update of texts on each post
 async function sendData(data) {
     try {
-        let responseObject = await fetch("/update-user", {
+        let responseObject = await fetch("/update-post", {
             method: 'POST',
             headers: {
                 "Accept": 'application/json',
@@ -29,17 +27,18 @@ async function sendData(data) {
             body: JSON.stringify(data)
         });
         let parsedJSON = await responseObject.json();
+        console.log(data);
         if (parsedJSON.status == "success") {}
     } catch (error) {}
 }
 
-//This for loop adds the event listener to every editing columns in the user list.
+//This for loop adds the event listener to every editing columns in each post
 let records = document.getElementsByTagName("span");
 for (let i = 0; i < records.length; i++) {
     records[i].addEventListener("click", editCell);
 }
 
-//This function helps the admin edit the Cell and get the values readied to send to the serer side.
+//This function helps the user can edit the Cell and get the values readied to send to the serer side.
 function editCell(e) {
     let span_text = e.target.innerHTML;
     let parent = e.target.parentNode; //gets parent, so we know which user we're editing
@@ -54,11 +53,11 @@ function editCell(e) {
             parent.innerHTML = ""; //clears parent node pointer
             parent.appendChild(filled_box);
             let dataToSend = {
-                id: parent.parentNode.querySelector(".id").innerHTML,
-                firstName: parent.parentNode.querySelector(".first_name :nth-child(1)").innerHTML,
-                lastName: parent.parentNode.querySelector(".last_name :nth-child(1)").innerHTML,
-                email: parent.parentNode.querySelector(".email :nth-child(1)").innerHTML,
-                password: parent.parentNode.querySelector(".password :nth-child(1)").innerHTML
+                post_id: parent.parentNode.querySelector(".post_id").innerText,
+                weather_type: parent.parentNode.querySelector(".weather_type").innerText,
+                post_title: parent.parentNode.querySelector(".post_title").innerText,
+                location: parent.parentNode.querySelector(".location").innerText,
+                post_content: parent.parentNode.querySelector(".post_content").innerText
             };
             sendData(dataToSend);
         }
@@ -68,14 +67,15 @@ function editCell(e) {
 }
 
 //This function sends the data of the users from the client side to the server side so that i can be deleted from the database.
+//Delete whole post
 async function sendDataToDelete(e) {
     e.preventDefault();
     let parent = e.target.parentNode;
     let dataToSend = {
-        id: parent.parentNode.querySelector(".id").innerHTML
+        post_id: parent.parentNode.parentNode.querySelector(".post_id").innerText
     };
     try {
-        let responseObject = await fetch("/delete-user", {
+        let responseObject = await fetch("/delete-post", {
             method: 'POST',
             headers: {
                 "Accept": 'application/json',
@@ -84,39 +84,30 @@ async function sendDataToDelete(e) {
             body: JSON.stringify(dataToSend)
         });
         let parsedJSON = await responseObject.json();
+
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
         }
     } catch (error) {}
 }
 
-//This for loop adds the event listeners to the delete user button
-let deleteRecords = document.getElementsByClassName("deleteUser");
+//This for loop adds the event listeners to the delete post button
+let deleteRecords = document.getElementsByClassName("deletePost");
 for (let i = 0; i < deleteRecords.length; i++) {
     deleteRecords[i].addEventListener("click", sendDataToDelete);
 }
 
-//This for loop adds the event listener to the Make user button
-let makeUserRecords = document.getElementsByClassName("role_switch_to_user");
-for (let i = 0; i < makeUserRecords.length; i++) {
-    makeUserRecords[i].addEventListener("click", sendDataToMakeUser);
-}
 
-//This for loop adds the event listener to the Make Admin button
-let makeAdminRecords = document.getElementsByClassName("role_switch_to_admin");
-for (let i = 0; i < makeAdminRecords.length; i++) {
-    makeAdminRecords[i].addEventListener("click", sendDataToMakeAdmin);
-}
-
-//This data sends the user data from the client side to the server side so that the specified admin user can become regular user.
-async function sendDataToMakeUser(e) {
+//This function sends the data of the users from the client side to the server side so that i can be deleted from the database.
+//Delete an image among many images
+async function sendDataToDeleteImage(e) {
     e.preventDefault();
     let parent = e.target.parentNode;
     let dataToSend = {
-        id: parent.parentNode.querySelector(".id").innerHTML
+        image: parent.querySelector(".image").getAttribute("src")
     };
     try {
-        let responseObject = await fetch("/make-user", {
+        let responseObject = await fetch("/delete-image", {
             method: 'POST',
             headers: {
                 "Accept": 'application/json',
@@ -131,15 +122,48 @@ async function sendDataToMakeUser(e) {
     } catch (error) {}
 }
 
-//This data sends the user data from the client side to the server side so that the specified regular user can become admin user.
-async function sendDataToMakeAdmin(e) {
+//This for loop adds the event listeners to the delete image button
+let deleteImageRecords = document.getElementsByClassName("remove-icon");
+for (let i = 0; i < deleteImageRecords.length; i++) {
+    deleteImageRecords[i].addEventListener("click", sendDataToDeleteImage);
+}
+
+
+
+const upLoadForm = document.getElementById("upload-images");
+upLoadForm.addEventListener("submit", uploadImages);
+
+function uploadImages(e) {
+    e.preventDefault();
+    const imageUpload = document.querySelector('#selectFile');
+    const formData = new FormData();
+    for (let i = 0; i < imageUpload.files.length; i++) {
+        // put the images from the input into the form data
+        formData.append("files", imageUpload.files[i]);
+    }
+    const options = {
+        method: 'POST',
+        body: formData,
+    };
+    // now use fetch
+    fetch("/change-images-post", options).then(function (res) {
+        console.log(res);
+    }).catch(function (err) {
+        ("Error:", err)
+    });
+}
+// function to store imagines to the database
+// const upload_new_image = document.getElementById("upload-images");
+// upload_new_image.addEventListener("submit", sendDataToaddImage);
+
+async function sendDataToaddImage(e) {
     e.preventDefault();
     let parent = e.target.parentNode;
     let dataToSend = {
-        id: parent.parentNode.querySelector(".id").innerHTML
+        p: parent.children[0].innerText
     };
     try {
-        let responseObject = await fetch("/make-admin", {
+        let responseObject = await fetch("/change-images-post", {
             method: 'POST',
             headers: {
                 "Accept": 'application/json',
@@ -148,6 +172,7 @@ async function sendDataToMakeAdmin(e) {
             body: JSON.stringify(dataToSend)
         });
         let parsedJSON = await responseObject.json();
+        console.log(data);
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
         }

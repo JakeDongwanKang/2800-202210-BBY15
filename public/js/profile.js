@@ -1,9 +1,7 @@
 /**
  * Send data from client side to server for authentication.
- * If user has an account and is an admin, redirect to Admin Dashboard.
- * If user has an account and is not an admin, redirect to the Main page.
  * Otherwise, send an error message to user. 
- * @author Arron_Ferguson (1537 instructor)
+ * @author Arron_Ferguson (1537 instructor), Anh Nguyen (BBY15)
  * @param {*} data user input
  */
 
