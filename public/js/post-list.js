@@ -264,7 +264,7 @@ function expandText(e) {
 var expandImg = true;
 function expandImage(e) {
     if (expandImg) {
-        e.style.transform = "scale(1.3)";
+        e.style.transform = "scale(1.5)";
         e.style.transition = 'transform 0.5s ease';
         expandImg = false;
     } else {

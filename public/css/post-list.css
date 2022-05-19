@@ -288,7 +288,9 @@ p{
     grid-column: 2;
     align-items: center;
     display: flex;
+    justify-content: center;
 }
+
 .card-image {
     width: 75%;
     cursor: pointer;
@@ -415,8 +417,11 @@ footer {
     .card-images {
         grid-column: 1;
         grid-row: 2;
-        display: unset;
         text-align: center;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        margin-bottom: 5px;
     }
 
     .card-image {
