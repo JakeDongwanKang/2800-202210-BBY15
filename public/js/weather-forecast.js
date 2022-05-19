@@ -16,10 +16,11 @@
   * And the code's idea was brought from Jonah Lawrence from Youtube.
   */
  let weather = {
-     apiKey: "f639c77111fed2e66276e6da631415cc",
+     apiKey: "409920448d71baef986e2cb0a350df62",
      fetchWeather: function(city) {
          fetch("https://api.openweathermap.org/data/2.5/weather?q=" 
          + city 
+         + "&units=metric"
          + "&appid=" 
          + this.apiKey
          )
@@ -34,7 +35,7 @@
         console.log(name, icon, description, temp, humidity, speed);
         document.querySelector(".city").innerText = "Weather in " + name;
         document.querySelector(".description").innerText = description;
-        document.querySelector(".temperature").innerText = temp;
+        document.querySelector(".temperature").innerText = temp + "°c";
         document.querySelector(".humidity").innerText = "Humidity " + humidity + "%";
         document.querySelector(".wind").innerText = "Wind Speed " + speed + "km/h";
  },
