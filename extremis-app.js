@@ -15,6 +15,7 @@ app.use("/css", express.static("./public/css"));
 app.use("/js", express.static("./public/js"));
 app.use("/images", express.static("./app/images"));
 
+
 app.use(session({
     secret: "what is the point of this secret",
     name: "extremisSessionID",
@@ -70,6 +71,21 @@ app.get("/main", function (req, res) {
 
 });
 
+//Redirect users to the main page if they have logged in. Otherwise, redirect to login page.
+app.get("/about-us", function (req, res) {
+    if (req.session.loggedIn && !req.session.isAdmin) {
+        let doc = fs.readFileSync("./app/html/about-us.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        let main_jsdom = new JSDOM(doc);
+        res.write(main_jsdom.serialize());
+        res.end();
+
+    } else {
+        res.redirect("/");
+    }
+
+});
+
 //Redirect admin users to the admin dashboard page if they have logged in. Otherwise, redirect to login page.
 app.get("/dashboard", function (req, res) {
     if (req.session.loggedIn && req.session.isAdmin) {
@@ -99,7 +115,7 @@ app.get("/add-user", function (req, res) {
 
 //function needed for getting list of all users in user-list
 app.get("/user-list", function (req, res) {
-    if (req.session.loggedIn) {
+    if (req.session.loggedIn && req.session.isAdmin) {
         const connection = mysql.createConnection({
             host: "localhost",
             user: "root",
@@ -161,7 +177,7 @@ app.get("/edit", function (req, res) {
 
 // function for getting all admins for admin-list
 app.get("/admin-list", function (req, res) {
-    if (req.session.loggedIn) {
+    if (req.session.loggedIn && req.session.isAdmin) {
         const connection = mysql.createConnection({
             host: "localhost",
             user: "root",
@@ -212,7 +228,7 @@ app.get("/admin-list", function (req, res) {
 
 //function needed for redirecting to manage admins list in dashboard
 app.get("/admin-list", function (req, res) {
-    if (req.session.loggedIn) {
+    if (req.session.loggedIn && req.session.isAdmin) {
         let doc = fs.readFileSync("./app/html/admin-list.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
@@ -863,6 +879,19 @@ app.get("/timeline", function (req, res) {
                                     <h4>Type: ${typeWeather}</h4> 
                                     <h5>Location: ${postlocation}</h5> 
                                 </div>
+
+                                <div class="post-user">
+                                    <img class="profile-pic" src="Profile Pic">
+                                    <span><h4>FirstName LastName</h4></span>
+                                <div class="post-image" >
+                                    <img src="${postImages}" style='display: ${display}'/>
+                                </div>
+                
+                                <div>
+                                    <h3><b>${postTitle}</b></h3> 
+                                    <h4>Type: ${typeWeather}</h4> 
+                                    <h5>Location: ${postlocation}</h5> 
+                                </div>
                                 <div class="post-image">
                                 <img class='post-pic' src="${postImages}">`;
                 
@@ -879,6 +908,7 @@ app.get("/timeline", function (req, res) {
                                 <p class="read-more"><a href="#" class="button">Read More</a></p>
                             </div>
                         </div>`;
+
                         let area = timelineDOM.window.document.querySelector('.post_content');
                         area.innerHTML += template;
                     }
@@ -973,6 +1003,6 @@ app.post('/search-timeline', function(req, res) {
     connection.end();
 });
 
-// RUN SERVER
+//RUN SERVER
 let port = 8000;
 app.listen(port, function () {});
