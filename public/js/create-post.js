@@ -120,7 +120,6 @@ async function sendData(data) {
                 window.location.replace("/timeline");
             }
         }
-
     } catch (error) {}
 }
 
