@@ -15,7 +15,6 @@ app.use("/css", express.static("./public/css"));
 app.use("/js", express.static("./public/js"));
 app.use("/images", express.static("./app/images"));
 
-
 app.use(session({
     secret: "what is the point of this secret",
     name: "extremisSessionID",
@@ -71,21 +70,6 @@ app.get("/main", function (req, res) {
 
 });
 
-//Redirect users to the main page if they have logged in. Otherwise, redirect to login page.
-app.get("/about-us", function (req, res) {
-    if (req.session.loggedIn && !req.session.isAdmin) {
-        let doc = fs.readFileSync("./app/html/about-us.html", "utf8");
-        res.setHeader("Content-Type", "text/html");
-        let main_jsdom = new JSDOM(doc);
-        res.write(main_jsdom.serialize());
-        res.end();
-
-    } else {
-        res.redirect("/");
-    }
-
-});
-
 //Redirect admin users to the admin dashboard page if they have logged in. Otherwise, redirect to login page.
 app.get("/dashboard", function (req, res) {
     if (req.session.loggedIn && req.session.isAdmin) {
@@ -128,7 +112,7 @@ app.get("/weather-forecast", function (req, res) {
 
 //function needed for getting list of all users in user-list
 app.get("/user-list", function (req, res) {
-    if (req.session.loggedIn && req.session.isAdmin) {
+    if (req.session.loggedIn) {
         const connection = mysql.createConnection({
             host: "localhost",
             user: "root",
@@ -181,7 +165,6 @@ app.get("/edit", function (req, res) {
         let doc = fs.readFileSync("./app/html/edit.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         let dashboard_jsdom = new JSDOM(doc);
-        // dashboard_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Welcome " + req.session.firstName + "</h5>";
         res.write(dashboard_jsdom.serialize());
         res.end();
     } else {
@@ -191,7 +174,7 @@ app.get("/edit", function (req, res) {
 
 // function for getting all admins for admin-list
 app.get("/admin-list", function (req, res) {
-    if (req.session.loggedIn && req.session.isAdmin) {
+    if (req.session.loggedIn) {
         const connection = mysql.createConnection({
             host: "localhost",
             user: "root",
@@ -242,8 +225,21 @@ app.get("/admin-list", function (req, res) {
 
 //function needed for redirecting to manage admins list in dashboard
 app.get("/admin-list", function (req, res) {
-    if (req.session.loggedIn && req.session.isAdmin) {
+    if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/admin-list.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        res.send(doc);
+    } else {
+        // if user has not logged in, redirect to login page
+        res.redirect("/");
+    }
+
+});
+
+//function needed for redirecting to manage admins list in dashboard
+app.get("/about-us", function (req, res) {
+    if (req.session.loggedIn) {
+        let doc = fs.readFileSync("./app/html/about-us.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
     } else {
@@ -412,8 +408,6 @@ app.post("/add-user-as-admin", function (req, res) {
                     status: "success",
                     msg: "Record added."
                 });
-                // req.session.loggedIn = true;
-                // req.session.save(function (err) { });
             });
 
         connection.query(
@@ -422,11 +416,6 @@ app.post("/add-user-as-admin", function (req, res) {
             function (error, results, fields) {
 
                 if (results.length > 0) {
-                    // user authenticated, create a session
-                    // req.session.user_id = results[0].user_id;
-                    // req.session.save(function (err) {
-                    //     //session saved
-                    // });
                 } else {
                     res.send({
                         status: "fail",
@@ -797,7 +786,7 @@ app.post("/add-post", function (req, res) {
     let post_status = "pending";
 
     connection.connect();
-    connection.query('INSERT INTO BBY_15_post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    connection.query('INSERT INTO BBY_15_Post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [userID, post_time, post_content, post_title, post_type, post_location, post_status, weather_type],
         function (error, results, fields) {
             req.session.postID = results.insertId;
@@ -838,36 +827,22 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
     });
     connection.connect();
 
-    if (req.files.length > 0) {
-        // If there is at leats one image uploaded by users, the image path will be stored into database.
-        for (let i = 0; i < req.files.length; i++) {
-            req.files[i].filename = req.files[i].originalname;
-            // New image path is created before being saved into dababase to make it easier to display on Timeline later.
-            let newpathImages = req.files[i].path.substring(3);
+    for (let i = 0; i < req.files.length; i++) {
+        req.files[i].filename = req.files[i].originalname;
+        let newpathImages = ".." + req.files[i].path.substring(3);
 
-            connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-                [req.session.postID, newpathImages],
-                function (error, results, fields) {
-                    res.send({
-                        status: "success",
-                        msg: "Image information added to database."
-                    });
-                    req.session.save(function (err) {});
-                });
-        }
-    } else {
-        // If there is no image in user's post, the image path will be stored into database as null.
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-            [req.session.postID, null],
+            [req.session.postID, newpathImages],
             function (error, results, fields) {
                 res.send({
                     status: "success",
-                    msg: "No image has been uploaded"
+                    msg: "Image information added to database."
                 });
+                console.log(req.session.postID);
+                console.log(newpathImages);
                 req.session.save(function (err) {});
             });
     }
-
 
     connection.end();
 });
@@ -888,55 +863,57 @@ app.get("/timeline", function (req, res) {
     // check for a session first!
     if (req.session.loggedIn) {
         connection.connect();
-        connection.query(
-            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id",
-            [],
+        connection.query(`SELECT * FROM BBY_15_User 
+            INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
+            LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id 
+            ORDER BY posted_time DESC`,
             function (error, results, fields) {
                 let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
                 let timelineDOM = new JSDOM(timeline);
                 if (results.length >= 0) {
                     for (var i = 0; i < results.length; i++) {
+                        let firstName = results[i].first_name;
+                        let lastName = results[i].last_name;
+                        let profilePic = results[i].profile_picture;
                         let postTime = results[i].posted_time;
                         let contentPost = results[i].post_content;
                         let postTitle = results[i].post_title;
                         let postlocation = results[i].location;
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
-                        let display = "";
-                        // If the image path that has been stored into database is null, the src of img tag will be automatically default and will not be displayed.
-                        if (postImages == null) {
-                            display = "none";
-                            postImages = "/images/post-images/test.jpg"
-                        }
-
                         var template = `   
                         </br>  
                         <div class="post_content">
                             <div class="card">
-                                <div class="post-image" >
-                                    <img src="${postImages}" style='display: ${display}'/>
+                                <div class="post-user">
+                                    <img class="profile-pic" src="${profilePic}">
+                                    <span><h4>&ensp;${firstName} ${lastName}</h4></span>
                                 </div>
+                
+                                <div>
+                                    <h3><b>${postTitle}</b></h3> 
+                                    <h4>Type: ${typeWeather}</h4> 
+                                    <h5>Location: ${postlocation}</h5> 
+                                </div>
+                                <div class="post-image">`;
+
+                                if (postImages) {
+                                    template += `<img class='post-pic' src="${postImages}">`;
+                                }
+                
+                                while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                                    i++;
+                                    template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                                }
+
+                                template += `</div>
                                 <div class="desc">
-                                    <h3><b>${typeWeather}</b></h3> 
-                                    <h4>Title: ${postTitle} </h4> 
                                     <p class="time">Posted time: ${postTime}</p> 
-                                    <p>Location: ${postlocation}</p> 
                                     <p>Description: ${contentPost}</p>
                                 </div>
-                                <div class="share-social">
-                                    <ul>
-                                        <li><a href="#" class="social-link"><i class="fa fa-facebook-f"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-twitter"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-instagram"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-linkedin"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-reddit-alien"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-whatsapp"></i></a></li>
-                                    </ul> 
-                                </div>
-
+                                <p class="read-more"><a href="#" class="button">Read More</a></p>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                         let area = timelineDOM.window.document.querySelector('.post_content');
                         area.innerHTML += template;
                     }
@@ -944,17 +921,180 @@ app.get("/timeline", function (req, res) {
                 }
             }
         )
-
-        res.set("Server", "Wazubi Engine");
-        res.set("X-Powered-By", "Wazubi");
     } else {
         res.redirect("/");
     }
     connection.end();
 });
 
+app.post('/search-timeline', function(req, res) {
+    //res.setHeader('Content-Type', 'application/json');
+    let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
+    let timelineDOM = new JSDOM(timeline);
 
 
-//RUN SERVER
+    let term = req.body.searchTerm;
+
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    
+    if(req.session.loggedIn) {
+        connection.connect();
+        connection.query(`SELECT * FROM BBY_15_post 
+        LEFT JOIN BBY_15_post_images 
+        ON BBY_15_post.post_id = BBY_15_post_images.post_id 
+        WHERE LOWER(post_content) LIKE '%${term}%'
+        OR LOWER(post_title) LIKE '%${term}%'
+        OR LOWER(post_type) LIKE '%${term}%'
+        OR LOWER(location) LIKE '%${term}%'
+        OR LOWER(weather_type) LIKE '%${term}%'
+        ORDER BY posted_time DESC`,
+        function (error, results, fields) {
+            var timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
+            var timelineDOM = new JSDOM(timeline);
+            if (results.length >= 0) {
+                for (var i = 0; i < results.length; i++) {
+                    let postTime = results[i].posted_time;
+                    let contentPost = results[i].post_content;
+                    let postTitle = results[i].post_title;
+                    let postlocation = results[i].location;
+                    let typeWeather = results[i].weather_type;
+                    let postImages = results[i].image_location;
+                    var template = `   
+                    </br>  
+                    <div class="post_content">
+                        <div class="card">
+                            <div class="post-user">
+                                <img class="profile-pic" src="Profile Pic">
+                                <span><h4>FirstName LastName</h4></span>
+                            </div>
+            
+                            <div>
+                                <h3><b>${postTitle}</b></h3> 
+                                <h4>Type: ${typeWeather}</h4> 
+                                <h5>Location: ${postlocation}</h5> 
+                            </div>
+                            <div class="post-image">
+                            <img class='post-pic' src="${postImages}">`;
+            
+                            while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                                i++;
+                                template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                            }
+
+                            template += `</div>
+                            <div class="desc">
+                                <p class="time">Posted time: ${postTime}</p> 
+                                <p>Description: ${contentPost}</p>
+                            </div>
+                            <p class="read-more"><a href="#" class="button">Read More</a></p>
+                        </div>
+                    </div>`;
+                    let area = timelineDOM.window.document.querySelector('.post_content');
+                    area.innerHTML = template;
+                }
+                //res.send(timelineDOM.serialize());
+                res.send({status: "success", message: template});
+            }
+        }
+    )
+    } else {
+        res.redirect("/");
+    }
+    connection.end();
+    
+});
+
+
+//Get the post and event information from the database and display information on the profile page
+app.get("/post-list", function (req, res) {
+    // check to see if the user email and password match with data in database
+    // check for a session first!
+    if (req.session.loggedIn) {
+        connection.connect();
+        connection.query(
+            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id ORDER BY posted_time DESC",
+            [],
+            function (error, results, fields) {
+                let postList = fs.readFileSync("./app/html/post-list.html", "utf8");
+                let postListDOM = new JSDOM(postList);
+                let cardTemplate = postListDOM.window.document.getElementById("postCardTemplate");
+                if (results.length >= 0) {
+                    for (var i = 0; i < results.length; i++) {
+                        let newcard = cardTemplate.content.cloneNode(true);
+                        newcard.querySelector('.postID').innerHTML = results[i].post_id;
+                        newcard.querySelector('.current-status').innerHTML = results[i].post_status;
+                        newcard.querySelector('.userID').innerHTML = "<b>User ID: </b>" + results[i].user_id;
+                        newcard.querySelector('.post-type').innerHTML = "<b>Type: </b>" + results[i].post_type;
+                        newcard.querySelector('.post-title').innerHTML = "<b>Title: </b>" + results[i].post_title;
+                        newcard.querySelector('.weather-type').innerHTML = "<b>Weather Type: </b>" + results[i].weather_type;
+                        newcard.querySelector('.post-location').innerHTML = "<b>Location: </b>" + results[i].location;
+                        newcard.querySelector('.post-time').innerHTML = "<b>Time: </b>" + results[i].posted_time;
+                        newcard.querySelector('.post-content').innerHTML = "<b>Content: </b>" + results[i].post_content;
+
+                        //Add Read more button if the total length of the post content is more than 500
+                        if (results[i].post_content.length >= 500) {
+                            let p = postListDOM.window.document.createElement("p");
+                            p.setAttribute("class", "read-more");
+                            newcard.querySelector('.sidebar-box').appendChild(p);
+                            newcard.querySelector('.read-more').innerHTML = '<button onclick="expandText(this)" class="more-button">Read More</button>';
+                            
+                        }
+
+                        // Set src property of img tag as default and display property as none if the post has no images
+                        if (results[i].image_location == null) {
+                            newcard.querySelector('.card-image').src = "/images/post-images/test.jpg";
+                            newcard.querySelector('.card-image').style.display = 'none';
+                        } else {
+                            // Set src property of img tag as the image path
+                            newcard.querySelector('.card-image').src = results[i].image_location;
+                        }
+                        postListDOM.window.document.getElementById("post-goes-here").appendChild(newcard);
+                    }
+                    res.send(postListDOM.serialize());
+                }
+            }
+        )
+    } else {
+        res.redirect("/");
+    }
+});
+
+
+app.post("/update-status", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    // check for a session first!
+    if (req.session.loggedIn) {
+        let postID = req.body.postID;
+        let status = req.body.postStatus;
+
+        connection.connect();
+        connection.query(
+            "UPDATE BBY_15_post SET post_status = ? WHERE post_id = ?",
+            [status, postID],
+            function (error, results, fields) {
+                res.send({
+                    status: "success",
+                    msg: "Post status has been updated in database."
+                });
+                req.session.save(function (err) {});
+            })
+        }
+});
+
+
+// RUN SERVER
 let port = 8000;
 app.listen(port, function () {});

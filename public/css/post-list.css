@@ -1,0 +1,432 @@
+/**
+* I found this font on this website https://fonts.google.com/specimen/Montserrat
+* The CSS decor that I learned from 1537 course and also I found more information on this website
+* https://www.w3schools.com/css/css_navbar.asp
+* https://www.w3schools.com/howto/howto_css_switch.asp
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body{
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 30px;
+}
+
+
+/* navbar css starts */
+.navbar {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+    text-decoration: solid;
+}
+
+.brand-title {
+    font-size: 1.5rem;
+    margin: .5rem;
+    color: #3477F9;
+    cursor: pointer;
+}
+
+.navbar-links {
+    height: 100%;
+    margin-right: 15px;
+}
+
+.navbar-links ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-links li {
+    list-style: none;
+    padding-top: 10px;
+}
+
+.navbar-links li a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    padding: 1rem;
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease 0s;
+}
+
+.navbar-links li a:hover {
+    color: rgba(52, 119, 249, 1.5);
+}
+
+
+.toggle-button {
+    position: absolute;
+    top: .75rem;
+    right: 1rem;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+}
+
+.toggle-button .bar {
+    height: 3px;
+    width: 100%;
+    background-color: black;
+    border-radius: 10px;
+}
+
+.singin {
+    margin-top: 8px;
+    padding: 9px 25px;
+    background-color: rgba(52, 119, 249, 0.7);
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease 0s;
+    letter-spacing: 1.5px;
+}
+/* navbar css ends */
+
+
+/* Dropdown menu for Filter button css starts here  */
+.dropdown {
+    position: relative;
+    width: 150px;
+    margin: 0 auto 0 auto;
+    text-align: center;
+}
+
+.dropdown * {
+    box-sizing: border-box;
+}
+
+.select {
+    border-radius: 10px;
+    align-items: center;
+    outline: 1px solid #484848;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.select:hover{
+    outline: solid 2px #3477f9;
+    box-shadow: 0 0 5px #3477F9;
+    text-transform: none;
+}
+
+.select-clicked {
+    outline: solid 2px #3477f9;
+    box-shadow: 0 0 5px #3477F9;
+}
+
+.caret {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid black;
+    margin-right: 10px;
+}
+
+.caret-rotate {
+    transform: rotate(180deg);
+}
+
+.menu {
+    list-style: none;
+    padding: 10px 10px;
+    outline: solid 2px #3477f9;
+    border-radius: 10px;
+    position: absolute;
+    width: 100%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: 0.2s;
+    z-index: 1;
+    left: 50%;
+    display: none;
+    background-color: #ffffff;
+}
+
+.menu li {
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.menu li:hover {
+    background: #3477F9;
+    color:#ffffff;
+}
+
+.active {
+    background-color: #3477F9;
+}
+
+.menu-open {
+    display: block;
+    opacity: 1;
+}
+
+/* Dropdown menu for Filter button css ends here  */
+
+
+/* post css starts */
+h1 {
+    color: #3477F9;
+    text-align: center;
+    font-size: 35px;
+}
+
+.post-container{
+    margin: 0 auto 0 auto;
+    font-size: 16px;
+}
+
+.post{
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 50% 50%;
+    margin: 5vh 5% 8vh 5%;
+    box-shadow: 0 0 5px #484848;
+    border-radius: 10px;
+}
+
+.post:hover {
+    outline: solid 1px #3477f9;
+    box-shadow: 0 0 5px #3477F9;
+}
+
+.post:last-child {
+    margin-bottom: 5%;
+}
+.post-body {
+    grid-row: 1;
+    grid-column: 1;
+    padding: 2% 3% 1% 5%;
+    margin: auto 0 auto 0;
+}
+.postID{
+    display: none;
+}
+
+button {
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 30px;
+    border: none;
+    margin-left: 10px;
+    font-family: 'Montserrat', sans-serif;
+    width: 100px;
+}
+
+button:hover{
+    box-shadow: 0 0 5px #3477F9;
+}
+
+.cancel-btn, .approve-btn, .reject-btn {
+    display:none;
+    outline: none;
+}
+
+.cancel-btn{
+    background-color: #c0c8c7;
+}
+
+.approve-btn {
+    background-color: #00ca4e;
+    color: white;
+}
+
+.reject-btn {
+    background-color: #ff605c;
+    color: white;
+}
+
+.sidebar-box {
+    max-height: 150px;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-box .read-more { 
+    position: absolute; 
+    bottom: 0; 
+    left: 0;
+    width: 100%; 
+    text-align: center; 
+    margin: 0; padding: 30px 0; 
+      
+    /* "transparent" only works here because == rgba(0,0,0,0) */
+    background-image: linear-gradient(to bottom, transparent, #ffffff);
+}
+
+.read-more button{
+    background-color: #3477F9;
+    width: 120px;
+    margin-bottom: 0;
+    color: #ffffff;
+}
+
+p{
+    margin:0;
+}
+
+.card-images {
+    grid-row: 1;
+    grid-column: 2;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.card-image {
+    width: 75%;
+    cursor: pointer;
+}
+
+/* post css ends */
+
+/* footer css starts */
+footer {
+    overflow-x: hidden;
+    bottom: 0%;
+    width: 100%;
+    margin-left: 0;
+    text-align: center;
+    color: #ffffff;
+    background-color: #484848;
+}
+/* footer css ends */
+
+
+@media (max-width: 800px) {
+
+    body{
+        font-family: 'Montserrat', sans-serif;
+        line-height: 25px;
+    }
+
+    /* navbar css starts */
+    .brand-title {
+        color: rgba(52, 119, 249, 1.5);
+        text-decoration: solid;
+        font-size: 28px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        color: #000;
+        background-color: lightblue;
+    }
+
+    .toggle-button {
+        display: flex;
+    }
+
+    .navbar-links {
+        display: none;
+        width: 100%;
+    }
+
+    .navbar-links ul {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .navbar-links ul li {
+        text-align: center;
+        font-size: 18px;
+
+    }
+
+    .navbar-links ul li a {
+        padding: 1rem 1rem;
+        color: #000;
+        font-size: 18px;
+
+    }
+
+    .navbar-links.active {
+        display: flex;
+        background-color: #ffffff;
+    }
+
+    .singin {
+        padding: 9px 30px;
+        background-color: rgba(52, 119, 249, 0.7);
+        border: none;
+        border-radius: 50px;
+        font-size: 18px;
+        cursor: pointer;
+        color: white;
+        transition: all 0.3s ease 0s;
+        margin-bottom: 30px;
+    }
+    /* navbar css ends  */
+
+    /* post css starts */
+    h1{
+        font-size: 30px;
+        line-height: 50px;
+    }
+
+    .post{
+        font-size: 15px;
+        display: grid;
+        grid-template-rows: 65% 35%;
+        grid-template-columns: 100%;
+        margin: 5% 5% auto 5%;
+    }
+
+    .post:hover {
+        outline: solid 1px #3477f9;
+        box-shadow: 0 0 10px #3477F9;
+    }
+
+    .post-body {
+        grid-row: 1;
+        grid-column: 1;
+        padding: 0 30px 0 30px;
+    }
+
+    button {
+        font-size: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        height: 25px;
+        margin-left: 10px;
+        margin-bottom: 5px;
+        border: none;
+        font-family: 'Montserrat', sans-serif;
+        width: 90px;
+    }
+
+    .card-images {
+        grid-column: 1;
+        grid-row: 2;
+        text-align: center;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        margin-bottom: 5px;
+    }
+
+    .card-image {
+        max-height: 95%;
+        border-radius: 0;
+    }
+}
+
