@@ -267,10 +267,11 @@ var expandImg = true;
 function expandImage(e) {
     if (expandImg) {
         e.style.transform = "scale(3)";
-        e.style.transition = 'transform 0.5s ease';
         e.style.position = 'absolute';
-        e.style.top = "20%";
-        e.style.left = "-20%";
+        if (!x.matches) {
+            e.style.top = "20%";
+            e.style.left = "-20%";
+        }
         e.style.zIndex = "1";
         expandImg = false;
     } else {

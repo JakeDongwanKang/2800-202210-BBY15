@@ -13,12 +13,13 @@ body {
 .all-events {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .post_content {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    
     width: 65%;
 }
 
@@ -118,7 +119,7 @@ h4 {
     border-radius: 12px;
     margin-bottom: 10px;
     text-align: center;
-    margin-left: 100px;
+    margin-left: 10px;
 }
 
 .createPost:hover {
@@ -356,7 +357,7 @@ footer {
         border-radius: 12px;
         margin-bottom: 10px;
         text-align: center;
-        margin-left: 100px;
+        margin-left: 10px;
     }
 
     .createPost:hover {
@@ -365,6 +366,11 @@ footer {
 
     .post_content{
         width: 100%;
+        justify-content: center;
+    }
+
+    #allevents-search-keyword {
+        width: 150px;
     }
 
     h3 {
@@ -394,7 +400,7 @@ footer {
     /* "Read More" Styling */
     .card {
         width: 300px;
-        max-height: 300px;
+        max-height: 350px;
         position: relative;
         overflow: hidden;
       }

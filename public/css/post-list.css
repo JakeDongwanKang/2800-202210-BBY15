@@ -297,6 +297,9 @@ p{
 .card-image {
     width: 45%;
     cursor: pointer;
+    transition: transform 0.5s ease;
+    /* The next code is from https://tutorialsclass.com/code/css-code-to-fix-blurry-image-when-scaling-down/ */
+    image-rendering: pixelated;
 }
 
 /* post css ends */
@@ -437,7 +440,7 @@ footer {
     }
 
     .card-image {
-        width: 25%;
+        width: 35%;
         border-radius: 0;
     }
 }
