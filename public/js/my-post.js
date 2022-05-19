@@ -74,7 +74,6 @@ async function sendDataToDelete(e) {
     let dataToSend = {
         post_id: parent.parentNode.parentNode.querySelector(".post_id").innerText
     };
-    console.log("data to send" + dataToSend);
     try {
         let responseObject = await fetch("/delete-post", {
             method: 'POST',
@@ -85,7 +84,7 @@ async function sendDataToDelete(e) {
             body: JSON.stringify(dataToSend)
         });
         let parsedJSON = await responseObject.json();
-        console.log(data);
+
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
         }
@@ -104,7 +103,6 @@ for (let i = 0; i < deleteRecords.length; i++) {
 async function sendDataToDeleteImage(e) {
     e.preventDefault();
     let parent = e.target.parentNode;
-    console.log(parent);
     let dataToSend = {
         image: parent.querySelector(".image").getAttribute("src")
     };
@@ -126,39 +124,11 @@ async function sendDataToDeleteImage(e) {
 
 //This for loop adds the event listeners to the delete image button
 let deleteImageRecords = document.getElementsByClassName("remove-icon");
-console.log(deleteImageRecords);
 for (let i = 0; i < deleteImageRecords.length; i++) {
     deleteImageRecords[i].addEventListener("click", sendDataToDeleteImage);
 }
 
-// function to store imagines to the database
-// const upload_new_image = document.getElementById("upload-images");
-// upload_new_image.addEventListener("submit", sendDataToaddImage);
 
-// async function sendDataToaddImage(e) {
-//     e.preventDefault();
-//     let parent = e.target.parentNode;
-//     console.log(parent.children[0]);
-//     let dataToSend = {
-//         post_id: parent.children[0].innerText
-//     };
-//     console.log("data to send" + dataToSend);
-//     try {
-//         let responseObject = await fetch("/change-images-post", {
-//             method: 'POST',
-//             headers: {
-//                 "Accept": 'application/json',
-//                 "Content-Type": 'application/json'
-//             },
-//             body: JSON.stringify(dataToSend)
-//         });
-//         let parsedJSON = await responseObject.json();
-//         console.log(data);
-//         if (parsedJSON.status == "success") {
-//             parent.parentNode.remove();
-//         }
-//     } catch (error) {}
-// }
 
 const upLoadForm = document.getElementById("upload-images");
 upLoadForm.addEventListener("submit", uploadImages);
@@ -182,32 +152,27 @@ function uploadImages(e) {
         ("Error:", err)
     });
 }
-
-
+// function to store imagines to the database
+// const upload_new_image = document.getElementById("upload-images");
+// upload_new_image.addEventListener("submit", sendDataToaddImage);
 
 async function sendDataToaddImage(e) {
     e.preventDefault();
-    // let parent = e.target.parentNode;
-    // console.log(parent.children[0]);
-    // let dataToSend = {
-    //     post_id: parent.children[0].innerText
-    // };
-
+    let parent = e.target.parentNode;
+    let dataToSend = {
+        p: parent.children[0].innerText
+    };
     try {
-        let dataToSend = {
-            post_id: 43
-        };
         let responseObject = await fetch("/change-images-post", {
             method: 'POST',
             headers: {
                 "Accept": 'application/json',
                 "Content-Type": 'application/json'
             },
-            body: JSON.stringify({
-                post_id: 43
-            })
+            body: JSON.stringify(dataToSend)
         });
         let parsedJSON = await responseObject.json();
+        console.log(data);
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
         }
