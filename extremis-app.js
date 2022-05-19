@@ -884,7 +884,7 @@ app.get("/timeline", function (req, res) {
 });
 
 /**
- * Redirect to the my post and show all the post that created by a user.
+ * Redirect to the my post and show all the posts that created by a user.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen
  */
 
@@ -921,7 +921,6 @@ app.get("/my-post", function (req, res) {
                                         <div class="post-image">
                                             <img class="remove-icon"src="/assets/remove.png" width="15" height="15">
                                             <img class="image"src="${postImages}">
-                                            <button type='button' class='deleteImage'>&times;</button>
                                         </div>
                                         <div class="desc">
                                             <p class="post_id">` + postID + `</p> 
@@ -962,7 +961,7 @@ app.get("/my-post", function (req, res) {
 });
 
 /**
- * delete post from users.
+ * Delete post from users.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen
  */
 
@@ -976,7 +975,6 @@ app.post('/delete-post', function (req, res) {
         database: 'COMP2800'
     });
     connection.connect();
-    console.log("Delete post: " + req.body.post_id);
     connection.query('DELETE FROM BBY_15_post WHERE post_id = ?',
         [req.body.post_id],
         function (error, results, fields) {
@@ -995,7 +993,7 @@ app.post('/delete-post', function (req, res) {
 
 
 /**
- * Redirect to the my post and update the changed from user's input
+ * Redirect to the my post and update new posts that changed based on the user's input
  * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
  */
 
@@ -1022,7 +1020,6 @@ app.post("/update-post", function (req, res) {
 });
 
 
-
 /**
  * Redirect to the my post and update the new images if user changes post's images
  * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
@@ -1036,11 +1033,10 @@ app.post("/change-images-post", uploadPostImages.array("files"), function (req, 
     });
     connection.connect();
     //let post_title = req.body.postTitle;
-    console.log(req.body.post_id);
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
         let newpath = ".." + req.files[i].path.substring(3);
-        console.log(req.body.post_id);
+        console.log("post_id: " + req.body.post_id);
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
             [newpath, req.body.post_id],
             function (error, results, fields) {
@@ -1055,7 +1051,10 @@ app.post("/change-images-post", uploadPostImages.array("files"), function (req, 
 });
 
 
-//Delete a image after posted
+/**
+ * Delete an image on the post
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
+ */
 app.post('/delete-image', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     let connection = mysql.createConnection({
@@ -1065,7 +1064,6 @@ app.post('/delete-image', function (req, res) {
         database: 'COMP2800'
     });
     connection.connect();
-    console.log("image location" + req.body.image);
     connection.query('DELETE FROM BBY_15_post_images WHERE image_location=?',
         [req.body.image],
         function (error, results, fields) {
@@ -1079,35 +1077,6 @@ app.post('/delete-image', function (req, res) {
         });
     connection.end();
 });
-
-
-
-// app.post('/upload-post-images', uploadPostImages.array("files"), function (req, res) {
-//     let connection = mysql.createConnection({
-//         host: 'localhost',
-//         user: 'root',
-//         password: '',
-//         database: 'COMP2800'
-//     });
-//     connection.connect();
-
-//     for (let i = 0; i < req.files.length; i++) {
-//         req.files[i].filename = req.files[i].originalname;
-//         let newpathImages = ".." + req.files[i].path.substring(3);
-
-//         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-//             [req.session.postID, newpathImages],
-//             function (error, results, fields) {
-//                 res.send({
-//                     status: "success",
-//                     msg: "Image information added to database."
-//                 });
-//                 req.session.save(function (err) {});
-//             });
-//     }
-
-//     connection.end();
-// });
 
 
 

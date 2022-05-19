@@ -15,7 +15,7 @@ toggleButton.addEventListener('click', () => {
     navbarLinks.classList.toggle('active')
 })
 
-//Send the update of text on each post
+//Send the update of texts on each post
 async function sendData(data) {
     try {
         let responseObject = await fetch("/update-post", {
@@ -32,7 +32,7 @@ async function sendData(data) {
     } catch (error) {}
 }
 
-//This for loop adds the event listener to every editing columns in the user list.
+//This for loop adds the event listener to every editing columns in each post
 let records = document.getElementsByTagName("span");
 for (let i = 0; i < records.length; i++) {
     records[i].addEventListener("click", editCell);
@@ -67,6 +67,7 @@ function editCell(e) {
 }
 
 //This function sends the data of the users from the client side to the server side so that i can be deleted from the database.
+//Delete whole post
 async function sendDataToDelete(e) {
     e.preventDefault();
     let parent = e.target.parentNode;
@@ -98,60 +99,17 @@ for (let i = 0; i < deleteRecords.length; i++) {
 }
 
 
-// //Send the update of new images to the database
-async function sendData(data) {
-    try {
-        let responseObject = await fetch("/change-images-post", {
-            method: 'POST',
-            headers: {
-                "Accept": 'application/json',
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-        let parsedJSON = await responseObject.json();
-        console.log(data);
-        if (parsedJSON.status == "success") {}
-    } catch (error) {}
-}
-
-// function to store imagines to the database
-const upload_images = document.getElementById("upload-images");
-upload_images.addEventListener("#upload", uploadImages);
-
-//Upload images to the system.
-function uploadImages(e) {
-    e.preventDefault();
-    const imagesUpload = document.querySelector("#selectFile");
-    const formData = new FormData();
-    for (let i = 0; i < imagesUpload.files.length; i++) {
-        formData.append("files", imagesUpload.files[i]);
-    }
-    let parent = e.target.parentNode; //gets parent, so we know which user we're editing
-    let dataToSend = {
-        post_id: parent.parentNode.querySelector(".post_id").innerText
-    }
-    sendData(dataToSend);
-    console.log(dataToSend);
-
-    const options = {
-        method: 'POST',
-        body: formData,
-    };
-    fetch("/change-images-post", options)
-        .then(function (res) {}).catch(function (err) {
-            ("Error:", err)
-        });
-};
-
-
 //This function sends the data of the users from the client side to the server side so that i can be deleted from the database.
+//Delete an image among many images
 async function sendDataToDeleteImage(e) {
     e.preventDefault();
     let parent = e.target.parentNode;
+    console.log(parent);
     let dataToSend = {
-        image: parent.parentNode.querySelector(".image").innerText
+        image: parent.querySelector(".image").getAttribute("src")
     };
+
+    dataToSend
     console.log("test on delete each image" + dataToSend);
     try {
         let responseObject = await fetch("/delete-image", {
@@ -169,9 +127,57 @@ async function sendDataToDeleteImage(e) {
     } catch (error) {}
 }
 
-//This for loop adds the event listeners to the delete user button
-let deleteImageRecords = document.getElementsByClassName("deleteImage");
+//This for loop adds the event listeners to the delete image button
+let deleteImageRecords = document.getElementsByClassName("remove-icon");
 console.log(deleteImageRecords);
 for (let i = 0; i < deleteImageRecords.length; i++) {
     deleteImageRecords[i].addEventListener("click", sendDataToDeleteImage);
+}
+
+// function to store imagines to the database
+const upload_new_image = document.getElementById("upload-images");
+upload_new_image.addEventListener("submit", sendDataToaddImage);
+
+//This for loop adds the event listeners to the delete post button
+
+//Upload images to the system.
+// function uploadImages(e) {
+//     e.preventDefault();
+//     const imagesUpload = document.querySelector("#selectFile");
+//     const formData = new FormData();
+//     for (let i = 0; i < imagesUpload.files.length; i++) {
+//         formData.append("files", imagesUpload.files[i]);
+//     }
+//     const options = {
+//         method: 'POST',
+//         body: formData,
+//     };
+//     fetch("/change-images-post", options)
+//         .then(function (res) {}).catch(function (err) {
+//             ("Error:", err)
+//         });
+// };
+
+async function sendDataToaddImage(e) {
+    e.preventDefault();
+    let parent = e.target.parentNode;
+    let dataToSend = {
+        post_id: parent.parentNode.parentNode.querySelector(".post_id").innerText
+    };
+    console.log("data to send" + dataToSend);
+    try {
+        let responseObject = await fetch("/change-images-post", {
+            method: 'POST',
+            headers: {
+                "Accept": 'application/json',
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify(dataToSend)
+        });
+        let parsedJSON = await responseObject.json();
+        console.log(data);
+        if (parsedJSON.status == "success") {
+            parent.parentNode.remove();
+        }
+    } catch (error) {}
 }
