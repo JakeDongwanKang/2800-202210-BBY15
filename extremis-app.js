@@ -27,8 +27,6 @@ app.use(express.urlencoded({
     extended: true
 }));
 
-// //default
-// app.use(fileUpload());
 
 
 /**
@@ -859,7 +857,7 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
 
 
 
-//Get the post and event information from the database and display information on the profile page
+//Get the post and event information from the database and display information on the timeline page
 app.get("/timeline", function (req, res) {
     // check to see if the user email and password match with data in database
     const mysql = require("mysql2");
@@ -900,7 +898,7 @@ app.get("/timeline", function (req, res) {
                                     <span><h4>&ensp;${firstName} ${lastName}</h4></span>
                                 </div>
                 
-                                <div>
+                                <div class="post-header">
                                     <h3><b>${postTitle}</b></h3> 
                                     <h4>Type: ${typeWeather}</h4> 
                                     <h5>Location: ${postlocation}</h5> 
@@ -944,7 +942,6 @@ app.post('/search-timeline', function (req, res) {
     let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
     let timelineDOM = new JSDOM(timeline);
 
-
     let term = req.body.searchTerm;
 
     const mysql = require("mysql2");
@@ -957,7 +954,8 @@ app.post('/search-timeline', function (req, res) {
 
     if (req.session.loggedIn) {
         connection.connect();
-        connection.query(`SELECT * FROM BBY_15_post 
+        connection.query(`SELECT * FROM BBY_15_User
+        INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
         LEFT JOIN BBY_15_post_images 
         ON BBY_15_post.post_id = BBY_15_post_images.post_id 
         WHERE LOWER(post_content) LIKE '%${term}%'
@@ -970,14 +968,18 @@ app.post('/search-timeline', function (req, res) {
                 var timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
                 var timelineDOM = new JSDOM(timeline);
                 if (results.length >= 0) {
+                    var template = "";
                     for (var i = 0; i < results.length; i++) {
+                        let firstName = results[i].first_name;
+                        let lastName = results[i].last_name;
+                        let profilePic = results[i].profile_picture;
                         let postTime = results[i].posted_time;
                         let contentPost = results[i].post_content;
                         let postTitle = results[i].post_title;
                         let postlocation = results[i].location;
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
-                        var template = `   
+                        template += `   
                     </br>  
                     <div class="post_content">
                         <div class="card">
@@ -986,7 +988,7 @@ app.post('/search-timeline', function (req, res) {
                                 <span><h4>FirstName LastName</h4></span>
                             </div>
             
-                            <div>
+                            <div class="post-header">
                                 <h3><b>${postTitle}</b></h3> 
                                 <h4>Type: ${typeWeather}</h4> 
                                 <h5>Location: ${postlocation}</h5> 
@@ -1007,8 +1009,6 @@ app.post('/search-timeline', function (req, res) {
                             <p class="read-more"><a href="#" class="button">Read More</a></p>
                         </div>
                     </div>`;
-                        let area = timelineDOM.window.document.querySelector('.post_content');
-                        area.innerHTML = template;
                     }
                     //res.send(timelineDOM.serialize());
                     res.send({
