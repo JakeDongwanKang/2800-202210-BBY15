@@ -1109,6 +1109,200 @@ app.post("/update-status", function (req, res) {
     }
 });
 
+/**
+ * Redirect to the my post and show all the posts that created by a user.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen
+ */
+
+app.get("/my-post", function (req, res) {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+
+    if (req.session.loggedIn) {
+        connection.query(
+            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id where user_id = ?",
+            [req.session.user_id],
+            function (error, results, fields) {
+                let doc = fs.readFileSync("./app/html/my-post.html", "utf8");
+                let my_post_jsdom = new JSDOM(doc);
+                res.setHeader("Content-Type", "text/html");
+                if (results != null) {
+                    for (let i = 0; i < results.length; i++) {
+                        let postTime = results[i].posted_time;
+                        let contentPost = results[i].post_content;
+                        let postID = results[i].post_id;
+                        let postTitle = results[i].post_title;
+                        let postlocation = results[i].location;
+                        let typeWeather = results[i].weather_type;
+                        let postImages = results[i].image_location;
+                        var my_post = `   
+                                </br>  
+                                <div class="my-post-content">
+                                    <div class="card">
+                                        <div class="post-image">
+                                            <img class="remove-icon"src="/assets/remove.png" width="15" height="15">
+                                            <img class="image"src="${postImages}">
+                                        </div>
+                                        <div class="desc">
+                                            <p class="post_id">` + postID + `</p> 
+                                            <p class="posted_time">` + postTime + `</p> 
+                                            <h3 class="weather_type"><span>` + typeWeather + `</span></h3> 
+                                            <h4 class="post_title"><span>` + postTitle + `</span> </h4> 
+                                            <p class="location"><span>` + postlocation + `</span></p>
+                                            <p class="post_content"><span>` + contentPost + `</span></p>
+                                            <form id="upload-images">
+                                                <label>Change images's posts</label>
+                                                <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
+                                                    multiple="multiple" />
+                                                <p class="errorMsg"></p>
+                                                <div class="button-update-images">
+                                                    <input class="form-input" type="submit" id="upload" value="Upload images" />
+                                                    <button type='button' class='deletePost'>Delete post</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="form-box-image">
+                                    </div>
+                                </div>
+                            `;
+                        my_post_jsdom.window.document.getElementById("my-post-content").innerHTML += my_post;
+                    }
+                }
+                res.send(my_post_jsdom.serialize());
+            }
+        )
+        res.set("Server", "Wazubi Engine");
+        res.set("X-Powered-By", "Wazubi");
+
+    } else {
+        // if user has not logged in, redirect to login page
+        res.redirect("/");
+    }
+    connection.end();
+});
+
+/**
+ * Delete post from users.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen
+ */
+
+
+app.post('/delete-post', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.connect();
+    connection.query('DELETE FROM BBY_15_post WHERE post_id = ?',
+        [req.body.post_id],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded deleted."
+            });
+
+        });
+    connection.end();
+});
+
+
+
+/**
+ * Redirect to the my post and update new posts that changed based on the user's input
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
+ */
+
+app.post("/update-post", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.query('UPDATE BBY_15_post SET post_content = ?, post_title = ?, location = ?, weather_type = ? WHERE post_id = ? AND user_id = ?',
+        [req.body.post_content, req.body.post_title, req.body.location, req.body.weather_type, req.body.post_id, req.session.user_id],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded updated."
+            });
+        });
+    connection.end();
+});
+
+
+/**
+ * Redirect to the my post and update the new images if user changes post's images
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
+ */
+app.post("/change-images-post", uploadPostImages.array("files"), function (req, res) {
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.connect();
+    //let post_title = req.body.postTitle;
+    for (let i = 0; i < req.files.length; i++) {
+        req.files[i].filename = req.files[i].originalname;
+        let newpath = ".." + req.files[i].path.substring(3);
+        connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
+            [req.params.post_id, newpath],
+            function (error, results, fields) {
+                res.send({
+                    status: "success",
+                    msg: "Image information added to database."
+                });
+                req.session.save(function (err) {});
+            });
+    }
+    connection.end();
+});
+
+
+/**
+ * Delete an image on the post
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
+ */
+app.post('/delete-image', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.connect();
+    connection.query('DELETE FROM BBY_15_post_images WHERE image_location=?',
+        [req.body.image],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded deleted."
+            });
+        });
+    connection.end();
+});
+
 
 // RUN SERVER
 let port = 8000;
