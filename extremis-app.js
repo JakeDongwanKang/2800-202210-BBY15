@@ -908,8 +908,6 @@ app.get("/timeline", function (req, res) {
                                 if (postImages) {
                                     template += `<img class='post-pic' src="${postImages}">`;
                                 }
-                
-                                
 
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
@@ -938,10 +936,7 @@ app.get("/timeline", function (req, res) {
 });
 
 app.post('/search-timeline', function (req, res) {
-    //res.setHeader('Content-Type', 'application/json');
     let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
-    let timelineDOM = new JSDOM(timeline);
-
     let term = req.body.searchTerm;
 
     const mysql = require("mysql2");
@@ -965,8 +960,6 @@ app.post('/search-timeline', function (req, res) {
         OR LOWER(weather_type) LIKE '%${term}%'
         ORDER BY posted_time DESC`,
             function (error, results, fields) {
-                var timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
-                var timelineDOM = new JSDOM(timeline);
                 if (results.length >= 0) {
                     var template = "";
                     for (var i = 0; i < results.length; i++) {
@@ -994,14 +987,17 @@ app.post('/search-timeline', function (req, res) {
                                 <h5>Location: ${postlocation}</h5> 
                             </div>
                             <div class="post-image">
-                            <img class='post-pic' src="${postImages}">`;
+                            
+                            if (postImages) {
+                                template += `<img class='post-pic' src="${postImages}">`;
+                            }
 
-                        while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
-                            i++;
-                            template += "<img class='post-pic' src=" + results[i].image_location + ">"
-                        }
+                            while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                                i++;
+                                template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                            }
 
-                        template += `</div>
+                            template += `</div>
                             <div class="desc">
                                 <p class="time">Posted time: ${postTime}</p> 
                                 <p>Description: ${contentPost}</p>
