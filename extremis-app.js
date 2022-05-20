@@ -1138,7 +1138,7 @@ app.get("/my-post", function (req, res) {
 
     if (req.session.loggedIn) {
         connection.query(
-            `SELECT posted_time, post_content, BBY_15_post.post_id, posted_title, location, weather_type, image_location 
+            `SELECT posted_time, post_content, BBY_15_post.post_id, post_title, location, weather_type, image_location 
             FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id WHERE user_id = ?`,
             [req.session.user_id],
             function (error, results, fields) {
