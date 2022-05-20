@@ -871,6 +871,7 @@ app.get("/timeline", function (req, res) {
         connection.query(`SELECT * FROM BBY_15_User 
             INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
             LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id 
+            WHERE post_status = "approved"
             ORDER BY posted_time DESC`,
             function (error, results, fields) {
                 let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
@@ -901,12 +902,9 @@ app.get("/timeline", function (req, res) {
                                     <h5>Location: ${postlocation}</h5> 
                                 </div>
                                 <div class="post-image">`;
-
                         if (postImages) {
                             template += `<img class='post-pic' src="${postImages}">`;
                         }
-
-
 
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
@@ -918,7 +916,7 @@ app.get("/timeline", function (req, res) {
                                     <p class="time">Posted time: ${postTime}</p> 
                                     <p>Description: ${contentPost}</p>
                                 </div>
-                                <p class="read-more"><a href="#" class="button">Read More</a></p>
+                                <p class="read-more"><a href="#" class="read-more-button">Read More</a></p>
                             </div>
                         </div>`;
                         let area = timelineDOM.window.document.querySelector('.post_content');
@@ -935,10 +933,7 @@ app.get("/timeline", function (req, res) {
 });
 
 app.post('/search-timeline', function (req, res) {
-    //res.setHeader('Content-Type', 'application/json');
     let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
-    let timelineDOM = new JSDOM(timeline);
-
     let term = req.body.searchTerm;
 
     const mysql = require("mysql2");
@@ -955,15 +950,14 @@ app.post('/search-timeline', function (req, res) {
         INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
         LEFT JOIN BBY_15_post_images 
         ON BBY_15_post.post_id = BBY_15_post_images.post_id 
-        WHERE LOWER(post_content) LIKE '%${term}%'
+        WHERE (LOWER(post_content) LIKE '%${term}%'
         OR LOWER(post_title) LIKE '%${term}%'
         OR LOWER(post_type) LIKE '%${term}%'
         OR LOWER(location) LIKE '%${term}%'
-        OR LOWER(weather_type) LIKE '%${term}%'
+        OR LOWER(weather_type) LIKE '%${term}%')
+        AND post_status = "approved"
         ORDER BY posted_time DESC`,
             function (error, results, fields) {
-                var timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
-                var timelineDOM = new JSDOM(timeline);
                 if (results.length >= 0) {
                     var template = "";
                     for (var i = 0; i < results.length; i++) {
@@ -990,20 +984,23 @@ app.post('/search-timeline', function (req, res) {
                                 <h4>Type: ${typeWeather}</h4> 
                                 <h5>Location: ${postlocation}</h5> 
                             </div>
-                            <div class="post-image">
-                            <img class='post-pic' src="${postImages}">`;
+                            <div class="post-image">`;
+                            
+                            if (postImages) {
+                                template += `<img class='post-pic' src="${postImages}">`;
+                            }
 
-                        while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
-                            i++;
-                            template += "<img class='post-pic' src=" + results[i].image_location + ">"
-                        }
+                            while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                                i++;
+                                template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                            }
 
-                        template += `</div>
+                            template += `</div>
                             <div class="desc">
                                 <p class="time">Posted time: ${postTime}</p> 
                                 <p>Description: ${contentPost}</p>
                             </div>
-                            <p class="read-more"><a href="#" class="button">Read More</a></p>
+                            <p class="read-more"><a href="#" class="read-more-button">Read More</a></p>
                         </div>
                     </div>`;
                     }

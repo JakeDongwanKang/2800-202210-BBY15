@@ -51,6 +51,31 @@ async function sendData(data) {
         let parsedJSON = await responseObject.json();
         if(parsedJSON.status == "success") {
             document.querySelector('.post_content').innerHTML = parsedJSON.message;
+              $(".card .read-more-button").click(function() {
+              var totalHeight = 0
+          
+              var $el = $(this);
+              var $p  = $el.parent();
+              var $up = $p.parent();
+              var $ps = $up.find("div");
+              
+              $ps.each(function() {
+                totalHeight += $(this).outerHeight();
+                totalHeight += 12;
+              });
+                    
+              $up
+                .css({
+                  "height": $up.height(),
+                  "max-height": 9999
+                })
+                .animate({
+                  "height": totalHeight
+                });
+            
+              $p.fadeOut();
+              return false;
+            });
         }
     } catch(error) {}
 }
