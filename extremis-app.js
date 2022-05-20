@@ -921,7 +921,7 @@ app.get("/timeline", function (req, res) {
                                     <p class="time">Posted time: ${postTime}</p> 
                                     <p>Description: ${contentPost}</p>
                                 </div>
-                                <p class="read-more"><a href="#" class="button">Read More</a></p>
+                                <p class="read-more"><a href="#" class="read-more-button">Read More</a></p>
                             </div>
                         </div>`;
                         let area = timelineDOM.window.document.querySelector('.post_content');
@@ -1006,7 +1006,7 @@ app.post('/search-timeline', function (req, res) {
                                 <p class="time">Posted time: ${postTime}</p> 
                                 <p>Description: ${contentPost}</p>
                             </div>
-                            <p class="read-more"><a href="#" class="button">Read More</a></p>
+                            <p class="read-more"><a href="#" class="read-more-button">Read More</a></p>
                         </div>
                     </div>`;
                     }
