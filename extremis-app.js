@@ -586,8 +586,6 @@ app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
                 req.session.save(function (err) {});
             });
     }
-
-
     connection.end();
 
 });
@@ -904,7 +902,6 @@ app.get("/timeline", function (req, res) {
                                     <h5>Location: ${postlocation}</h5> 
                                 </div>
                                 <div class="post-image">`;
-
                         if (postImages) {
                             template += `<img class='post-pic' src="${postImages}">`;
                         }
@@ -988,17 +985,15 @@ app.post('/search-timeline', function (req, res) {
                                 <h5>Location: ${postlocation}</h5> 
                             </div>
                             <div class="post-image">`;
-
                         if (postImages) {
                             template += `<img class='post-pic' src="${postImages}">`;
                         }
+                            while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                                i++;
+                                template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                            }
 
-                        while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
-                            i++;
-                            template += "<img class='post-pic' src=" + results[i].image_location + ">"
-                        }
-
-                        template += `</div>
+                            template += `</div>
                             <div class="desc">
                                 <p class="time">Posted time: ${postTime}</p> 
                                 <p>Description: ${contentPost}</p>
@@ -1151,13 +1146,27 @@ app.get("/my-post", function (req, res) {
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
                         var my_post = `   
-                                </br>  
-                                <div class="my-post-content">
-                                    <div class="card">
-                                        <div class="post-image">
-                                            <img class="remove-icon"src="/assets/remove.png" width="15" height="15">
-                                            <img class="image"src="${postImages}">
-                                        </div>
+                        </br>  
+                        <div class="my-post-content">
+                            <div class="card">
+                                <div class="post-image">
+                                    
+                                    <div class="image">`;
+                        if (postImages) {
+                            my_post += `<div class="po-image">
+                            <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
+                            <img class='image' src="${postImages}">
+                            </div>`;
+                        }
+
+                        while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                            i++;
+                            my_post += `<div class="po-image">
+                            <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
+                            `
+                            my_post += "<img class='image' src=" + results[i].image_location + "></div>"
+                        }
+                        my_post += `</div>
                                         <div class="desc">
                                             <p class="post_id">` + postID + `</p> 
                                             <p class="posted_time">` + postTime + `</p> 
@@ -1300,7 +1309,6 @@ app.post("/change-images-post", uploadPostImages.array("files"), function (req, 
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
             [req.session.postID, newpath],
             function (error, results, fields) {
-                console.log(newpath);
                 res.send({
                     status: "success",
                     msg: "Image information added to database."
