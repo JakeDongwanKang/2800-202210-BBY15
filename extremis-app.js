@@ -874,6 +874,7 @@ app.get("/timeline", function (req, res) {
         connection.query(`SELECT * FROM BBY_15_User 
             INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
             LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id 
+            WHERE post_status = "approved"
             ORDER BY posted_time DESC`,
             function (error, results, fields) {
                 let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
@@ -953,11 +954,12 @@ app.post('/search-timeline', function (req, res) {
         INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
         LEFT JOIN BBY_15_post_images 
         ON BBY_15_post.post_id = BBY_15_post_images.post_id 
-        WHERE LOWER(post_content) LIKE '%${term}%'
+        WHERE (LOWER(post_content) LIKE '%${term}%'
         OR LOWER(post_title) LIKE '%${term}%'
         OR LOWER(post_type) LIKE '%${term}%'
         OR LOWER(location) LIKE '%${term}%'
-        OR LOWER(weather_type) LIKE '%${term}%'
+        OR LOWER(weather_type) LIKE '%${term}%')
+        AND post_status = "approved"
         ORDER BY posted_time DESC`,
             function (error, results, fields) {
                 if (results.length >= 0) {
@@ -986,7 +988,7 @@ app.post('/search-timeline', function (req, res) {
                                 <h4>Type: ${typeWeather}</h4> 
                                 <h5>Location: ${postlocation}</h5> 
                             </div>
-                            <div class="post-image">
+                            <div class="post-image">`;
                             
                             if (postImages) {
                                 template += `<img class='post-pic' src="${postImages}">`;
