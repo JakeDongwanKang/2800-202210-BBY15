@@ -904,7 +904,6 @@ app.get("/timeline", function (req, res) {
                                     <h5>Location: ${postlocation}</h5> 
                                 </div>
                                 <div class="post-image">`;
-
                         if (postImages) {
                             template += `<img class='post-pic' src="${postImages}">`;
                         }
