@@ -842,9 +842,8 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
         req.session.save(function (err) {});
     } else {
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-                [req.session.postID, null],
-                function (error, results, fields) {
-                });
+            [req.session.postID, null],
+            function (error, results, fields) {});
         res.send({
             status: "success",
             msg: "No image has been uploaded"
@@ -905,11 +904,11 @@ app.get("/timeline", function (req, res) {
                                 </div>
                                 <div class="post-image">`;
 
-                                if (postImages) {
-                                    template += `<img class='post-pic' src="${postImages}">`;
-                                }
-                
-                                
+                        if (postImages) {
+                            template += `<img class='post-pic' src="${postImages}">`;
+                        }
+
+
 
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
@@ -1073,7 +1072,7 @@ app.get("/post-list", function (req, res) {
                             }
                             newcard.querySelector('.card-images').innerHTML = str;
                         }
-                        
+
                         //Add Read more button if the total length of the post content is more than 500
                         if (results[i].post_content.length >= 500) {
                             let p = postListDOM.window.document.createElement("p");
@@ -1082,13 +1081,12 @@ app.get("/post-list", function (req, res) {
                             newcard.querySelector('.read-more').innerHTML = '<button onclick="expandText(this)" class="more-button">Read More</button>';
 
                         }
-                    postListDOM.window.document.getElementById("post-goes-here").appendChild(newcard);
+                        postListDOM.window.document.getElementById("post-goes-here").appendChild(newcard);
                     }
                 }
                 res.send(postListDOM.serialize());
             })
-    }
-    else {
+    } else {
         res.redirect("/");
     }
 });
@@ -1257,7 +1255,7 @@ app.post("/update-post", function (req, res) {
 });
 
 // When adding images, this function saves the ID of the post ahead of the image itself
-app.post("/change-images-post-data", function(req,res) {
+app.post("/change-images-post-data", function (req, res) {
     req.session.postID = req.body.p;
     res.send();
     req.session.save(function (err) {});
@@ -1319,7 +1317,6 @@ app.post('/delete-image', function (req, res) {
         });
     connection.end();
 });
-
 
 // RUN SERVER
 let port = 8000;

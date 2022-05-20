@@ -50,7 +50,7 @@ function editCell(e) {
             let filled_box = document.createElement("span"); //creates the HTML for after done editing
             filled_box.addEventListener("click", editCell); //makes thing clickable for next time want to edit
             filled_box.innerHTML = val;
-            parent.innerHTML = ""; //clears parent node pointer
+            parent.innerHTML = "";
             parent.appendChild(filled_box);
             let dataToSend = {
                 post_id: parent.parentNode.querySelector(".post_id").innerText,
@@ -96,6 +96,7 @@ let deleteRecords = document.getElementsByClassName("deletePost");
 for (let i = 0; i < deleteRecords.length; i++) {
     deleteRecords[i].addEventListener("click", sendDataToDelete);
 }
+
 
 
 //This function sends the data of the users from the client side to the server side so that i can be deleted from the database.
