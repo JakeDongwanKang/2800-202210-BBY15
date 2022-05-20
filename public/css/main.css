@@ -165,12 +165,7 @@ button:hover {
     text-decoration: none;
     outline: none;
     color: rgba(52, 119, 249, 0.9);
-}
-
-.howitwork {
-    font-size: 20px;
-    word-spacing: 2px;
-    color:#fff;
+    background-color: #fff;
 }
 
 footer {
@@ -280,10 +275,13 @@ footer {
     }
     
     .timeline {
-        font-size:14px;
+        font-size:13px;
     }
 
     .forecastButton {
-        font-size:14px;
+        font-size:12px;
+        text-align: center;
+        align-items: center;
+        padding:0;
     }
 }
