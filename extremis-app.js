@@ -586,8 +586,6 @@ app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
                 req.session.save(function (err) {});
             });
     }
-
-
     connection.end();
 
 });
@@ -842,9 +840,8 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
         req.session.save(function (err) {});
     } else {
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-                [req.session.postID, null],
-                function (error, results, fields) {
-                });
+            [req.session.postID, null],
+            function (error, results, fields) {});
         res.send({
             status: "success",
             msg: "No image has been uploaded"
@@ -905,11 +902,11 @@ app.get("/timeline", function (req, res) {
                                 </div>
                                 <div class="post-image">`;
 
-                                if (postImages) {
-                                    template += `<img class='post-pic' src="${postImages}">`;
-                                }
-                
-                                
+                        if (postImages) {
+                            template += `<img class='post-pic' src="${postImages}">`;
+                        }
+
+
 
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
@@ -1073,7 +1070,7 @@ app.get("/post-list", function (req, res) {
                             }
                             newcard.querySelector('.card-images').innerHTML = str;
                         }
-                        
+
                         //Add Read more button if the total length of the post content is more than 500
                         if (results[i].post_content.length >= 500) {
                             let p = postListDOM.window.document.createElement("p");
@@ -1082,13 +1079,12 @@ app.get("/post-list", function (req, res) {
                             newcard.querySelector('.read-more').innerHTML = '<button onclick="expandText(this)" class="more-button">Read More</button>';
 
                         }
-                    postListDOM.window.document.getElementById("post-goes-here").appendChild(newcard);
+                        postListDOM.window.document.getElementById("post-goes-here").appendChild(newcard);
                     }
                 }
                 res.send(postListDOM.serialize());
             })
-    }
-    else {
+    } else {
         res.redirect("/");
     }
 });
@@ -1155,21 +1151,36 @@ app.get("/my-post", function (req, res) {
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
                         var my_post = `   
-                                </br>  
-                                <div class="my-post-content">
-                                    <div class="card">
-                                        <div class="post-image">
-                                            <img class="remove-icon"src="/assets/remove.png" width="15" height="15">
-                                            <img class="image"src="${postImages}">
-                                        </div>
+                        </br>  
+                        <div class="my-post-content">
+                            <div class="card">
+                                <div class="post-image">
+                                    
+                                    <div class="image">`;
+                        if (postImages) {
+                            my_post += `<div class="po-image">
+                            <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
+                            <img class='image' src="${postImages}">
+                            </div>`;
+                        }
+
+                        while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                            i++;
+                            my_post += `<div class="po-image">
+                            <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
+                            `
+                            my_post += "<img class='image' src=" + results[i].image_location + "></div>"
+                        }
+                        my_post += `</div>
                                         <div class="desc">
                                             <p class="post_id">` + postID + `</p> 
                                             <p class="posted_time">` + postTime + `</p> 
                                             <h3 class="weather_type"><span>` + typeWeather + `</span></h3> 
                                             <h4 class="post_title"><span>` + postTitle + `</span> </h4> 
                                             <p class="location"><span>` + postlocation + `</span></p>
-                                            <p class="post_content"><span>` + contentPost + `</span></p>
-                                            <form id="upload-images">
+                                            <h5 class="post_content" spellcheck="true"><span>` + contentPost + `</span></h5>`
+
+                        my_post += `<form id="upload-images">
                                                 <label>Change images's posts</label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
                                                     multiple="multiple" />
@@ -1257,7 +1268,7 @@ app.post("/update-post", function (req, res) {
 });
 
 // When adding images, this function saves the ID of the post ahead of the image itself
-app.post("/change-images-post-data", function(req,res) {
+app.post("/change-images-post-data", function (req, res) {
     req.session.postID = req.body.p;
     res.send();
     req.session.save(function (err) {});
@@ -1282,7 +1293,6 @@ app.post("/change-images-post", uploadPostImages.array("files"), function (req, 
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
             [req.session.postID, newpath],
             function (error, results, fields) {
-                console.log(newpath);
                 res.send({
                     status: "success",
                     msg: "Image information added to database."

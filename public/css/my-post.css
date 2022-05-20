@@ -47,7 +47,7 @@ body {
 }
 
 .post_id {
-    /* display: none; */
+    display: none;
     font-size: 14px;
 }
 
@@ -70,8 +70,8 @@ body {
 }
 
 .remove-icon {
-    margin-left: 580px;
-    top: 20px;
+    margin-left: 575px;
+    padding-top: 8px;
     cursor: pointer;
     position: absolute;
 
@@ -347,7 +347,6 @@ p {
 
     .remove-icon {
         margin-left: 480px;
-        top: 20px;
         cursor: pointer;
         position: absolute;
 
@@ -541,8 +540,7 @@ p {
     }
 
     .remove-icon {
-        margin-left: 100px;
-        top: 20px;
+        margin-left: 230px;
         cursor: pointer;
         position: absolute;
     }
@@ -587,5 +585,9 @@ p {
         cursor: pointer;
         border: none;
         border-radius: 5px;
+    }
+
+    #selectFile {
+        padding-top: 10px;
     }
 }
