@@ -1138,7 +1138,8 @@ app.get("/my-post", function (req, res) {
 
     if (req.session.loggedIn) {
         connection.query(
-            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id where user_id = ?",
+            `SELECT posted_time, post_content, BBY_15_post.post_id, posted_title, location, weather_type, image_location 
+            FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id WHERE user_id = ?`,
             [req.session.user_id],
             function (error, results, fields) {
                 let doc = fs.readFileSync("./app/html/my-post.html", "utf8");
@@ -1189,9 +1190,6 @@ app.get("/my-post", function (req, res) {
                 res.send(my_post_jsdom.serialize());
             }
         )
-        res.set("Server", "Wazubi Engine");
-        res.set("X-Powered-By", "Wazubi");
-
     } else {
         // if user has not logged in, redirect to login page
         res.redirect("/");
@@ -1258,6 +1256,12 @@ app.post("/update-post", function (req, res) {
     connection.end();
 });
 
+// When adding images, this function saves the ID of the post ahead of the image itself
+app.post("/change-images-post-data", function(req,res) {
+    req.session.postID = req.body.p;
+    res.send();
+    req.session.save(function (err) {});
+})
 
 /**
  * Redirect to the my post and update the new images if user changes post's images
@@ -1271,18 +1275,18 @@ app.post("/change-images-post", uploadPostImages.array("files"), function (req, 
         database: 'COMP2800'
     });
     connection.connect();
-    //let post_title = req.body.postTitle;
+
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
         let newpath = ".." + req.files[i].path.substring(3);
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-            [req.params.post_id, newpath],
+            [req.session.postID, newpath],
             function (error, results, fields) {
+                console.log(newpath);
                 res.send({
                     status: "success",
                     msg: "Image information added to database."
                 });
-                req.session.save(function (err) {});
             });
     }
     connection.end();

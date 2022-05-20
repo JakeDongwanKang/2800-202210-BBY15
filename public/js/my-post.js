@@ -106,7 +106,6 @@ async function sendDataToDeleteImage(e) {
     let dataToSend = {
         image: parent.querySelector(".image").getAttribute("src")
     };
-    console.log("Delete an image: " + dataToSend);
     try {
         let responseObject = await fetch("/delete-image", {
             method: 'POST',
@@ -130,9 +129,10 @@ for (let i = 0; i < deleteImageRecords.length; i++) {
 }
 
 const upLoadForm = document.getElementById("upload-images");
+upLoadForm.addEventListener("submit", sendDataToaddImage);
 upLoadForm.addEventListener("submit", uploadImages);
 
-function uploadImages(e) {
+async function uploadImages(e) {
     e.preventDefault();
     const imageUpload = document.querySelector('#selectFile');
     const formData = new FormData();
@@ -140,13 +140,13 @@ function uploadImages(e) {
         // put the images from the input into the form data
         formData.append("files", imageUpload.files[i]);
     }
-    const options = {
+    let options = {
         method: 'POST',
         body: formData,
     };
     // now use fetch
-    fetch("/change-images-post", options).then(function (res) {
-        console.log(res);
+    await fetch("/change-images-post", options).then(function (res) {
+        window.location.replace("/my-post");
     }).catch(function (err) {
         ("Error:", err)
     });
@@ -158,11 +158,12 @@ function uploadImages(e) {
 async function sendDataToaddImage(e) {
     e.preventDefault();
     let parent = e.target.parentNode;
+    console.log(parent.children[0].innerText);
     let dataToSend = {
         p: parent.children[0].innerText
     };
     try {
-        let responseObject = await fetch("/change-images-post", {
+        let responseObject = await fetch("/change-images-post-data", {
             method: 'POST',
             headers: {
                 "Accept": 'application/json',
