@@ -149,7 +149,6 @@ for (let i = 0; i < postStatus.length; i++) {
  */
 async function sendData(data, e) {
     try {
-        console.log(data);
         let responseObject = await fetch("/update-status", {
             method: 'POST',
             headers: {
@@ -189,7 +188,6 @@ function cancel(e) {
  * @param {*} e 
  */
 function approve(e) {
-    console.log("aloooo");
     let postID = e.parentElement.previousElementSibling.innerText;
     let postStatus = "approved";
     sendData({

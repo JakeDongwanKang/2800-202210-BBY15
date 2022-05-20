@@ -45,7 +45,7 @@ header {
     text-align: center;
     font-weight: 500;
     letter-spacing: 0.5rem;
-    font-size: 15px;
+    font-size: 17px;
 }
 
 a {
@@ -122,7 +122,7 @@ a {
 }
 
 .navbar-links li a:hover {
-    color: rgba(52, 119, 249, 1.5);
+    color: white;
 }
 
 
@@ -168,7 +168,7 @@ button:hover {
 .um-subtitle {
     font-weight: 500;
     letter-spacing: 0.5rem;
-    font-size: 15px;
+    font-size: 17px;
 }
 
 .branch {
@@ -273,7 +273,7 @@ footer {
     .um-subtitle {
         font-weight: 500;
         letter-spacing: 0.5rem;
-        font-size: 12px;
+        font-size: 15px;
     }
 
     .branch {
@@ -289,7 +289,7 @@ footer {
 
     #content {
         display: grid;
-        grid-template-rows: 20% 20% 20% 20% 20%;
+        grid-template-rows: 25% 25% 25% 25%;
     }
 
     #manage-users {

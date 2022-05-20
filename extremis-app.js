@@ -28,6 +28,39 @@ app.use(express.urlencoded({
 }));
 
 
+/**
+ * Identify the connection. If users are accessing the website (Heroku), connect to Heroku host and database.
+ * If users are accessing through local host, connect to local host and database in the system.
+ * This code is from example of COMP2800 Instructor Patrick Guichon and changes made by our team.
+ */
+const isHeroku = process.env.IS_HEROKU || false;
+//Since we have another git repository set up by Heroku, the information of the connection will not be shown here
+const connectionHeroku = {
+    host: "",
+    user: "",
+    password: "",
+    database: ""
+};
+
+const connectionLocal = {
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "COMP2800"
+};
+
+if (isHeroku) {
+    var connection = mysql.createPool(connectionHeroku);
+    let port = process.env.PORT || 3000;
+    app.listen(port, function () {});
+
+} else {
+    var connection = mysql.createPool(connectionLocal);
+    let port = 8000;
+    app.listen(port, function () {});
+}
+
+
 
 /**
  * Redirect users to main page if they have logged in and are not admin.
@@ -111,13 +144,6 @@ app.get("/weather-forecast", function (req, res) {
 //function needed for getting list of all users in user-list
 app.get("/user-list", function (req, res) {
     if (req.session.loggedIn) {
-        const connection = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "",
-            database: "COMP2800"
-        });
-
         let doc = fs.readFileSync("./app/html/user-list.html", "utf8");
         let user_list_jsdom = new JSDOM(doc);
         res.setHeader("Content-Type", "text/html");
@@ -173,13 +199,6 @@ app.get("/edit", function (req, res) {
 // function for getting all admins for admin-list
 app.get("/admin-list", function (req, res) {
     if (req.session.loggedIn) {
-        const connection = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "",
-            database: "COMP2800"
-        });
-
         let doc = fs.readFileSync("./app/html/admin-list.html", "utf8");
         let admin_list_jsdom = new JSDOM(doc);
         res.setHeader("Content-Type", "text/html");
@@ -198,7 +217,7 @@ app.get("/admin-list", function (req, res) {
                 <th class="delete_header">Delete</th>
                 </tr></thead>`;
                 for (let i = 0; i < results.length; i++) {
-                    if (req.session.userID != results[i]['user_id']) {
+                    if (req.session.user_id != results[i]['user_id']) {
                         admin_list += ("<tr><td class='id'>" + results[i]['user_id'] +
                             "</td><td class='first_name'><span>" + results[i]['first_name'] +
                             "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
@@ -238,8 +257,16 @@ app.get("/admin-list", function (req, res) {
 app.get("/about-us", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/about-us.html", "utf8");
-        res.setHeader("Content-Type", "text/html");
-        res.send(doc);
+        res.setHeader("Content-Type", "text/html"); 
+        let aboutUsDOM = new JSDOM(doc);
+        // Display My Post on navbar if the user is not an admin
+        if (!req.session.isAdmin){
+            res.send(doc);
+        } else {
+            aboutUsDOM.window.document.getElementById("myPostLink").remove();
+            res.send(aboutUsDOM.serialize());
+        }
+        
     } else {
         // if user has not logged in, redirect to login page
         res.redirect("/");
@@ -258,14 +285,6 @@ app.get("/sign-up", function (req, res) {
 app.post("/login", function (req, res) {
     res.setHeader("Content-Type", "application/json");
 
-    // check to see if the user email and password match with data in database
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-
     let email = req.body.email;
     let pwd = req.body.password;
 
@@ -276,7 +295,6 @@ app.post("/login", function (req, res) {
 
             if (results.length > 0) {
                 // user authenticated, create a session
-                req.session.userID = results[0].user_id;
                 req.session.loggedIn = true;
                 req.session.firstName = results[0].first_name;
                 req.session.email = email;
@@ -288,7 +306,6 @@ app.post("/login", function (req, res) {
                         msg: "Logged in.",
                         isAdmin: true
                     });
-
                 } else {
                     res.send({
                         status: "success",
@@ -306,8 +323,6 @@ app.post("/login", function (req, res) {
                     msg: "User account not found."
                 });
             }
-            connection.end();
-
         }
     );
 });
@@ -317,14 +332,6 @@ app.post("/login", function (req, res) {
 app.post("/add-user", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    //Authenticating user.
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
     let signupemail = req.body.email;
@@ -337,39 +344,18 @@ app.post("/add-user", function (req, res) {
             msg: "Every column has to be filled."
         });
     } else {
-        //connecting to the database, then creating and adding the user info into the database.
-        connection.connect();
         connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
-            [req.body.firstName, req.body.lastName, req.body.email, req.body.password, ],
+            [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
             function (error, results, fields) {
                 res.send({
                     status: "success",
                     msg: "Record added."
                 });
                 req.session.loggedIn = true;
+                req.session.user_id = results.insertId;
+                req.session.firstName = req.body.firstName;
                 req.session.save(function (err) {});
             });
-
-        connection.query(
-            "SELECT * FROM BBY_15_User WHERE email = ? AND user_password = ? AND first_name = ? AND last_name = ?",
-            [req.body.email, req.body.password, req.body.firstName, req.body.lastName],
-            function (error, results, fields) {
-
-                if (results.length > 0) {
-                    // user authenticated, create a session
-                    req.session.user_id = results[0].user_id;
-                    req.session.save(function (err) {
-                        //session saved
-                    });
-                } else {
-                    res.send({
-                        status: "fail",
-                        msg: "User account not found."
-                    });
-                }
-            }
-        );
-        connection.end();
     }
 });
 
@@ -377,14 +363,6 @@ app.post("/add-user", function (req, res) {
 app.post("/add-user-as-admin", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    //Authenticating user.
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
     let signupemail = req.body.email;
@@ -398,7 +376,6 @@ app.post("/add-user-as-admin", function (req, res) {
         });
     } else {
         //connecting to the database, then creating and adding the user info into the database.
-        connection.connect();
         connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
             [req.body.firstName, req.body.lastName, req.body.email, req.body.password, ],
             function (error, results, fields) {
@@ -407,58 +384,14 @@ app.post("/add-user-as-admin", function (req, res) {
                     msg: "Record added."
                 });
             });
-
-        connection.query(
-            "SELECT * FROM BBY_15_User WHERE email = ? AND user_password = ? AND first_name = ? AND last_name = ?",
-            [req.body.email, req.body.password, req.body.firstName, req.body.lastName],
-            function (error, results, fields) {
-
-                if (results.length > 0) {} else {
-                    res.send({
-                        status: "fail",
-                        msg: "User account not found."
-                    });
-                }
-            }
-        );
-        connection.end();
     }
 });
-
-async function getdata(callback) {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-    connection.connect();
-    connection.query(
-        "SELECT * FROM BBY_15_User where",
-        function (error, results, fields) {
-            if (results.length > 0) {
-                return callback(results);
-            }
-        }
-    )
-};
 
 
 //Get the user 's information from the database and display information on the profile page
 app.get("/profile", function (req, res) {
-    // check to see if the user email and password match with data in database
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-    let email = req.session.email;
     // check for a session first!
     if (req.session.loggedIn) {
-        connection.connect();
         connection.query(
             "SELECT * FROM BBY_15_User WHERE user_id = ?",
             [req.session.user_id],
@@ -509,16 +442,20 @@ app.get("/profile", function (req, res) {
                         let area = profileDOM.window.document.querySelector('#user_content');
                         area.innerHTML += template;
                     }
-                    res.send(profileDOM.serialize());
+        // Display My Post on navbar if the user is not an admin
+        if (!req.session.isAdmin){
+            res.send(profileDOM.serialize());
+        } else {
+            profileDOM.window.document.getElementById("myPostLink").remove();
+            res.send(profileDOM.serialize());
+        }
+                    
                 }
             }
         )
-        res.set("Server", "Wazubi Engine");
-        res.set("X-Powered-By", "Wazubi");
     } else {
         res.redirect("/");
     }
-    connection.end();
 });
 
 const storage_avatar = multer.diskStorage({
@@ -537,17 +474,7 @@ const uploadAvatar = multer({
 app.post("/profile", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    //Authenticating user.
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-
-
     //connecting to the database, then creating and adding the user info into the database.
-    connection.connect();
     connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE user_id=?',
         [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.session.user_id],
         function (error, results, fields) {
@@ -560,19 +487,10 @@ app.post("/profile", function (req, res) {
             req.session.email = req.body.email;
             req.session.save(function (err) {});
         });
-    connection.end();
 });
 
 //Upload the user profle into the database
 app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-    connection.connect();
-
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
         let newpath = ".." + req.files[i].path.substring(3);
@@ -586,10 +504,6 @@ app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
                 req.session.save(function (err) {});
             });
     }
-
-
-    connection.end();
-
 });
 
 
@@ -612,13 +526,6 @@ app.get("/logout", function (req, res) {
 app.post('/update-user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-    connection.connect();
     connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ? WHERE user_id = ?',
         [req.body.firstName, req.body.lastName, req.body.email, req.body.password, parseInt(req.body.id)],
         function (error, results, fields) {
@@ -630,7 +537,6 @@ app.post('/update-user', function (req, res) {
                 msg: "Recorded updated."
             });
         });
-    connection.end();
 });
 
 /** POST: we are changing stuff on the server!!!
@@ -638,14 +544,6 @@ app.post('/update-user', function (req, res) {
  */
 app.post('/delete-user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
-
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-    connection.connect();
     connection.query('DELETE FROM BBY_15_User WHERE user_id = ?',
         [parseInt(req.body.id)],
         function (error, results, fields) {
@@ -656,9 +554,7 @@ app.post('/delete-user', function (req, res) {
                 status: "success",
                 msg: "Recorded deleted."
             });
-
         });
-    connection.end();
 });
 
 /**
@@ -666,14 +562,6 @@ app.post('/delete-user', function (req, res) {
  */
 app.post('/make-user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
-
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-    connection.connect();
     connection.query('UPDATE BBY_15_User SET admin_role = 0 WHERE user_id = ?',
         [parseInt(req.body.id)],
         function (error, results, fields) {
@@ -686,7 +574,6 @@ app.post('/make-user', function (req, res) {
             });
 
         });
-    connection.end();
 });
 
 /**
@@ -694,14 +581,6 @@ app.post('/make-user', function (req, res) {
  */
 app.post('/make-admin', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
-
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-    connection.connect();
     connection.query('UPDATE BBY_15_User SET admin_role = 1 WHERE user_id = ?',
         [parseInt(req.body.id)],
         function (error, results, fields) {
@@ -712,10 +591,9 @@ app.post('/make-admin', function (req, res) {
                 status: "success",
                 msg: "Recorded deleted."
             });
-
         });
-    connection.end();
 });
+
 
 /**
  * Redirect to the create-a-post page if user is a regular user and has logged in.
@@ -730,7 +608,6 @@ app.get("/create-post", function (req, res) {
     } else {
         res.redirect("/");
     }
-
 });
 
 
@@ -742,13 +619,6 @@ const sanitizeHtml = require("sanitize-html");
  */
 app.post("/add-post", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
-
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
 
     // Sanitize html code on the server (https://www.npmjs.com/package//sanitize-html)
     const stringToSanitize = req.body.postContent;
@@ -778,11 +648,10 @@ app.post("/add-post", function (req, res) {
     let post_location = req.body.postLocation;
     let post_content = clean;
     let weather_type = req.body.weatherType;
-    let userID = req.session.userID;
+    let userID = req.session.user_id;
     let post_time = new Date(Date.now());
     let post_status = "pending";
 
-    connection.connect();
     connection.query('INSERT INTO BBY_15_Post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [userID, post_time, post_content, post_title, post_type, post_location, post_status, weather_type],
         function (error, results, fields) {
@@ -793,8 +662,6 @@ app.post("/add-post", function (req, res) {
             });
             req.session.save(function (err) {});
         });
-
-    connection.end();
 });
 
 
@@ -808,7 +675,7 @@ const storage_post_images = multer.diskStorage({
         callback(null, "./app/images/post-images/")
     },
     filename: function (req, file, callback) {
-        callback(null, req.session.userID + "AT" + Date.now() + "AND" + file.originalname);
+        callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname);
     }
 });
 const uploadPostImages = multer({
@@ -816,14 +683,6 @@ const uploadPostImages = multer({
 });
 
 app.post('/upload-post-images', uploadPostImages.array("files"), function (req, res) {
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-    connection.connect();
-
     if (req.files.length > 0) {
         for (let i = 0; i < req.files.length; i++) {
             req.files[i].filename = req.files[i].originalname;
@@ -831,9 +690,7 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
 
             connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
                 [req.session.postID, newpathImages],
-                function (error, results, fields) {
-
-                });
+                function (error, results, fields) {});
         }
         res.send({
             status: "success",
@@ -850,29 +707,18 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
         });
         req.session.save(function (err) {});
     }
-
-    connection.end();
 });
 
 
 
 //Get the post and event information from the database and display information on the timeline page
 app.get("/timeline", function (req, res) {
-    // check to see if the user email and password match with data in database
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-    let email = req.session.email;
     // check for a session first!
     if (req.session.loggedIn) {
-        connection.connect();
         connection.query(`SELECT * FROM BBY_15_User 
             INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
             LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id 
+            WHERE post_status = "approved"
             ORDER BY posted_time DESC`,
             function (error, results, fields) {
                 let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
@@ -903,12 +749,9 @@ app.get("/timeline", function (req, res) {
                                     <h5>Location: ${postlocation}</h5> 
                                 </div>
                                 <div class="post-image">`;
-
                         if (postImages) {
                             template += `<img class='post-pic' src="${postImages}">`;
                         }
-
-
 
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
@@ -920,7 +763,7 @@ app.get("/timeline", function (req, res) {
                                     <p class="time">Posted time: ${postTime}</p> 
                                     <p>Description: ${contentPost}</p>
                                 </div>
-                                <p class="read-more"><a href="#" class="button">Read More</a></p>
+                                <p class="read-more"><a href="#" class="read-more-button">Read More</a></p>
                             </div>
                         </div>`;
                         let area = timelineDOM.window.document.querySelector('.post_content');
@@ -933,39 +776,24 @@ app.get("/timeline", function (req, res) {
     } else {
         res.redirect("/");
     }
-    connection.end();
 });
 
 app.post('/search-timeline', function (req, res) {
-    //res.setHeader('Content-Type', 'application/json');
-    let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
-    let timelineDOM = new JSDOM(timeline);
-
     let term = req.body.searchTerm;
 
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-
     if (req.session.loggedIn) {
-        connection.connect();
         connection.query(`SELECT * FROM BBY_15_User
         INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
         LEFT JOIN BBY_15_post_images 
         ON BBY_15_post.post_id = BBY_15_post_images.post_id 
-        WHERE LOWER(post_content) LIKE '%${term}%'
+        WHERE (LOWER(post_content) LIKE '%${term}%'
         OR LOWER(post_title) LIKE '%${term}%'
         OR LOWER(post_type) LIKE '%${term}%'
         OR LOWER(location) LIKE '%${term}%'
-        OR LOWER(weather_type) LIKE '%${term}%'
+        OR LOWER(weather_type) LIKE '%${term}%')
+        AND post_status = "approved"
         ORDER BY posted_time DESC`,
             function (error, results, fields) {
-                var timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
-                var timelineDOM = new JSDOM(timeline);
                 if (results.length >= 0) {
                     var template = "";
                     for (var i = 0; i < results.length; i++) {
@@ -992,9 +820,10 @@ app.post('/search-timeline', function (req, res) {
                                 <h4>Type: ${typeWeather}</h4> 
                                 <h5>Location: ${postlocation}</h5> 
                             </div>
-                            <div class="post-image">
-                            <img class='post-pic' src="${postImages}">`;
-
+                            <div class="post-image">`;
+                        if (postImages) {
+                            template += `<img class='post-pic' src="${postImages}">`;
+                        }
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
                             template += "<img class='post-pic' src=" + results[i].image_location + ">"
@@ -1005,7 +834,7 @@ app.post('/search-timeline', function (req, res) {
                                 <p class="time">Posted time: ${postTime}</p> 
                                 <p>Description: ${contentPost}</p>
                             </div>
-                            <p class="read-more"><a href="#" class="button">Read More</a></p>
+                            <p class="read-more"><a href="#" class="read-more-button">Read More</a></p>
                         </div>
                     </div>`;
                     }
@@ -1020,8 +849,6 @@ app.post('/search-timeline', function (req, res) {
     } else {
         res.redirect("/");
     }
-    connection.end();
-
 });
 
 
@@ -1030,16 +857,8 @@ app.post('/search-timeline', function (req, res) {
  * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
  */
 app.get("/post-list", function (req, res) {
-    // check to see if the user email and password match with data in database
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
     // check for a session first!
     if (req.session.loggedIn) {
-        connection.connect();
         connection.query(
             "SELECT * FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id ORDER BY posted_time DESC",
             [],
@@ -1095,18 +914,11 @@ app.get("/post-list", function (req, res) {
 app.post("/update-status", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
     // check for a session first!
     if (req.session.loggedIn) {
         let postID = req.body.postID;
         let status = req.body.postStatus;
 
-        connection.connect();
         connection.query(
             "UPDATE BBY_15_post SET post_status = ? WHERE post_id = ?",
             [status, postID],
@@ -1120,20 +932,12 @@ app.post("/update-status", function (req, res) {
     }
 });
 
+
 /**
  * Redirect to the my post and show all the posts that created by a user.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen
  */
-
 app.get("/my-post", function (req, res) {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-
     if (req.session.loggedIn) {
         connection.query(
             `SELECT posted_time, post_content, BBY_15_post.post_id, post_title, location, weather_type, image_location 
@@ -1153,20 +957,34 @@ app.get("/my-post", function (req, res) {
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
                         var my_post = `   
-                                </br>  
-                                <div class="my-post-content">
-                                    <div class="card">
-                                        <div class="post-image">
-                                            <img class="remove-icon"src="/assets/remove.png" width="15" height="15">
-                                            <img class="image"src="${postImages}">
-                                        </div>
+                        </br>  
+                        <div class="my-post-content">
+                            <div class="card">
+                                <div class="post-image">
+                                    
+                                    <div class="image">`;
+                        if (postImages) {
+                            my_post += `<div class="po-image">
+                            <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
+                            <img class='image' src="${postImages}">
+                            </div>`;
+                        }
+
+                        while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                            i++;
+                            my_post += `<div class="po-image">
+                            <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
+                            `
+                            my_post += "<img class='image' src=" + results[i].image_location + "></div>"
+                        }
+                        my_post += `</div>
                                         <div class="desc">
                                             <p class="post_id">` + postID + `</p> 
                                             <p class="posted_time">` + postTime + `</p> 
                                             <h3 class="weather_type"><span>` + typeWeather + `</span></h3> 
                                             <h4 class="post_title"><span>` + postTitle + `</span> </h4> 
                                             <p class="location"><span>` + postlocation + `</span></p>
-                                            <p class="post_content"><span>` + contentPost + `</span></p>
+                                            <div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
                                             <form id="upload-images">
                                                 <label>Change images's posts</label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
@@ -1192,24 +1010,15 @@ app.get("/my-post", function (req, res) {
         // if user has not logged in, redirect to login page
         res.redirect("/");
     }
-    connection.end();
 });
+
 
 /**
  * Delete post from users.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen
  */
-
-
 app.post('/delete-post', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-    connection.connect();
     connection.query('DELETE FROM BBY_15_post WHERE post_id = ?',
         [req.body.post_id],
         function (error, results, fields) {
@@ -1220,9 +1029,7 @@ app.post('/delete-post', function (req, res) {
                 status: "success",
                 msg: "Recorded deleted."
             });
-
         });
-    connection.end();
 });
 
 
@@ -1234,14 +1041,8 @@ app.post('/delete-post', function (req, res) {
 
 app.post("/update-post", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-    connection.query('UPDATE BBY_15_post SET post_content = ?, post_title = ?, location = ?, weather_type = ? WHERE post_id = ? AND user_id = ?',
-        [req.body.post_content, req.body.post_title, req.body.location, req.body.weather_type, req.body.post_id, req.session.user_id],
+    connection.query('UPDATE BBY_15_post SET post_title = ?, location = ?, weather_type = ? WHERE post_id = ? AND user_id = ?',
+        [req.body.post_title, req.body.location, req.body.weather_type, req.body.post_id, req.session.user_id],
         function (error, results, fields) {
             if (error) {
                 console.log(error);
@@ -1251,7 +1052,21 @@ app.post("/update-post", function (req, res) {
                 msg: "Recorded updated."
             });
         });
-    connection.end();
+});
+
+app.post("/update-post-content", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    connection.query('UPDATE BBY_15_post SET post_content = ? WHERE post_id = ? AND user_id = ?',
+        [req.body.post_content, req.body.post_id, req.session.user_id],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded updated."
+            });
+        });
 });
 
 // When adding images, this function saves the ID of the post ahead of the image itself
@@ -1266,28 +1081,18 @@ app.post("/change-images-post-data", function (req, res) {
  * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
  */
 app.post("/change-images-post", uploadPostImages.array("files"), function (req, res) {
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-    connection.connect();
-
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
-        let newpath = ".." + req.files[i].path.substring(3);
+        let newpath = req.files[i].path.substring(3);
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
             [req.session.postID, newpath],
             function (error, results, fields) {
-                console.log(newpath);
                 res.send({
                     status: "success",
                     msg: "Image information added to database."
                 });
             });
     }
-    connection.end();
 });
 
 
@@ -1297,13 +1102,6 @@ app.post("/change-images-post", uploadPostImages.array("files"), function (req, 
  */
 app.post('/delete-image', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-    connection.connect();
     connection.query('DELETE FROM BBY_15_post_images WHERE image_location=?',
         [req.body.image],
         function (error, results, fields) {
@@ -1315,9 +1113,4 @@ app.post('/delete-image', function (req, res) {
                 msg: "Recorded deleted."
             });
         });
-    connection.end();
 });
-
-// RUN SERVER
-let port = 8000;
-app.listen(port, function () {});

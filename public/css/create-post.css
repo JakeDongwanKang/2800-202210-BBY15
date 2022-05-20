@@ -327,11 +327,18 @@ footer {
         flex-direction: column;
         align-items: flex-start;
         color: #000;
-        background-color: lightblue;
+        background-color: #5ca1dc;
     }
 
     .toggle-button {
         display: flex;
+    }
+
+    .brand-title {
+        font-size: 1.5rem;
+        margin: .5rem;
+        color: white;
+        cursor: pointer;
     }
 
     .navbar-links {
@@ -359,8 +366,7 @@ footer {
 
     .navbar-links.active {
         display: flex;
-        background-color: #ffffff;
-    }
+    } 
 
     .singin {
         padding: 9px 30px;

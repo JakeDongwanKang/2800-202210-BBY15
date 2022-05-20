@@ -193,53 +193,60 @@ footer {
 }
 
 .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-    color: #000;
-    background-color: lightblue;
+  flex-direction: column;
+  align-items: flex-start;
+  color: #000;
+  background-color: #5ca1dc;
 }
 
 .toggle-button {
-    display: flex;
+  display: flex;
+}
+
+.brand-title {
+  font-size: 1.5rem;
+  margin: .5rem;
+  color: white;
+  cursor: pointer;
 }
 
 .navbar-links {
-    display: none;
-    width: 100%;
+  display: none;
+  width: 100%;
 }
 
 .navbar-links ul {
-    width: 100%;
-    flex-direction: column;
+  width: 100%;
+  flex-direction: column;
 }
 
 .navbar-links ul li {
-    text-align: center;
-    font-size: 18px;
+  text-align: center;
+  font-size: 18px;
 
 }
 
 .navbar-links ul li a {
-    padding: 1rem 1rem;
-    color: #000;
-    font-size: 18px;
+  padding: 1rem 1rem;
+  color: #000;
+  font-size: 18px;
 
 }
 
 .navbar-links.active {
-    display: flex;
-}
+  display: flex;
+} 
 
 .singin {
-    padding: 9px 30px;
-    background-color: rgba(52, 119, 249, 0.7);
-    border: none;
-    border-radius: 50px;
-    font-size: 18px;
-    cursor: pointer;
-    color: white;
-    transition: all 0.3s ease 0s;
-    margin-bottom: 30px;
+  padding: 9px 30px;
+  background-color: rgba(52, 119, 249, 0.7);
+  border: none;
+  border-radius: 50px;
+  font-size: 18px;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s ease 0s;
+  margin-bottom: 30px;
 }
 
 .branch {

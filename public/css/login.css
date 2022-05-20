@@ -70,9 +70,12 @@ footer {
 /*For the view under 800px*/
 @media (max-width: 800px) {
     #loginForm {
-        margin: 35% 10% auto 10%;
+        margin: 10% 10% auto 10%;
     }
 
+    h2 {
+        margin-top: 40%;
+    }
     input{
         margin-bottom: 50px;
     }
