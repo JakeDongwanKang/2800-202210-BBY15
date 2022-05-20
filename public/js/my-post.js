@@ -27,8 +27,8 @@ async function sendData(data) {
             body: JSON.stringify(data)
         });
         let parsedJSON = await responseObject.json();
+        console.log(data);
         if (parsedJSON.status == "success") {}
-
     } catch (error) {}
 }
 
@@ -40,10 +40,8 @@ for (let i = 0; i < records.length; i++) {
 
 //This function helps the user can edit the Cell and get the values readied to send to the serer side.
 function editCell(e) {
-
     let span_text = e.target.innerHTML;
     let parent = e.target.parentNode; //gets parent, so we know which user we're editing
-    e.target.remove();
     let text_box = document.createElement("input"); //creates the text box for accepting changes
     text_box.value = span_text;
     text_box.addEventListener("keyup", function (e) {
@@ -59,13 +57,53 @@ function editCell(e) {
                 weather_type: parent.parentNode.querySelector(".weather_type").innerText,
                 post_title: parent.parentNode.querySelector(".post_title").innerText,
                 location: parent.parentNode.querySelector(".location").innerText,
-                post_content: parent.parentNode.querySelector(".post_content").innerHTML
+                // post_content: parent.parentNode.querySelector(".post_content").innerText
             };
             sendData(dataToSend);
         }
     });
     parent.innerHTML = "";
     parent.appendChild(text_box);
+}
+
+
+var edit = true;
+
+function editContent(e) {
+    if (edit) {
+        console.log(e);
+        e.innerHTML = "<input class='new-content'/>";
+        let textBox = e.firstChild;
+        edit = false;
+        textBox.addEventListener("keyup", function (a) {
+            if (a.keyCode == 13) {
+                console.log(e.parentElement.children[0].innerText);
+                sendContent({
+                    post_id: e.parentElement.children[0].innerText,
+                    post_content: textBox.value
+                });
+            }
+
+        })
+    }
+}
+
+async function sendContent(data) {
+    try {
+        let responseObject = await fetch("/update-post-content", {
+            method: 'POST',
+            headers: {
+                "Accept": 'application/json',
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        let parsedJSON = await responseObject.json();
+        console.log(data);
+        if (parsedJSON.status == "success") {
+            console.log("aloooo");
+        }
+    } catch (error) {}
 }
 
 //This function sends the data of the users from the client side to the server side so that i can be deleted from the database.
@@ -89,7 +127,6 @@ async function sendDataToDelete(e) {
 
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
-            window.location.replace("/my-post")
         }
     } catch (error) {}
 }
@@ -107,8 +144,7 @@ async function sendDataToDeleteImage(e) {
     e.preventDefault();
     let parent = e.target.parentNode;
     let dataToSend = {
-        // image: parent.querySelector(".image").getAttribute("src")
-        image: e.target.nextElementSibling.getAttribute("src")
+        image: parent.querySelector(".image").getAttribute("src")
     };
     try {
         let responseObject = await fetch("/delete-image", {
@@ -122,7 +158,6 @@ async function sendDataToDeleteImage(e) {
         let parsedJSON = await responseObject.json();
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
-            window.location.replace("/my-post")
         }
     } catch (error) {}
 }
@@ -163,6 +198,7 @@ async function uploadImages(e) {
 async function sendDataToaddImage(e) {
     e.preventDefault();
     let parent = e.target.parentNode;
+    console.log(parent.children[0].innerText);
     let dataToSend = {
         p: parent.children[0].innerText
     };
@@ -176,9 +212,9 @@ async function sendDataToaddImage(e) {
             body: JSON.stringify(dataToSend)
         });
         let parsedJSON = await responseObject.json();
+        console.log(data);
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
-            window.location.replace("/my-post")
         }
     } catch (error) {}
 }

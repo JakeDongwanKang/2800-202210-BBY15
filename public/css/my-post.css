@@ -10,24 +10,16 @@ body {
     color: #000;
 }
 
-/* .my-post-content {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-} */
-
 .card {
     align-items: center;
     overflow: hidden;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6);
     background-color: white;
-    /* text-align: center; */
     position: relative;
     width: 600px;
     margin-bottom: 20px;
     margin-left: 15%;
     padding: 10px;
-    /* display: flex; */
 }
 
 .card:hover {
@@ -589,5 +581,6 @@ p {
 
     #selectFile {
         padding-top: 10px;
+
     }
 }
