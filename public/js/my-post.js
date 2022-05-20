@@ -68,23 +68,26 @@ function editCell(e) {
 }
 
 
+/**
+ * Edit the post content.
+ * We can not use the editCell() function to edit post content because the content text is formatted by the text editor in create-post
+ * page, making it have html elements inside.
+ */
 var edit = true;
-
 function editContent(e) {
     if (edit) {
-        console.log(e);
-        e.innerHTML = "<input class='new-content'/>";
+        let oldValue = e.innerText;
+        e.innerHTML = "<input class='new-content' value='" + oldValue + "'/>";
         let textBox = e.firstChild;
         edit = false;
         textBox.addEventListener("keyup", function (a) {
             if (a.keyCode == 13) {
-                console.log(e.parentElement.children[0].innerText);
+                e.innerText = textBox.value;
                 sendContent({
                     post_id: e.parentElement.children[0].innerText,
                     post_content: textBox.value
                 });
             }
-
         })
     }
 }
@@ -100,9 +103,7 @@ async function sendContent(data) {
             body: JSON.stringify(data)
         });
         let parsedJSON = await responseObject.json();
-        console.log(data);
         if (parsedJSON.status == "success") {
-            console.log("aloooo");
         }
     } catch (error) {}
 }
@@ -195,9 +196,6 @@ async function uploadImages(e) {
         ("Error:", err)
     });
 }
-// function to store imagines to the database
-// const upload_new_image = document.getElementById("upload-images");
-// upload_new_image.addEventListener("submit", sendDataToaddImage);
 
 async function sendDataToaddImage(e) {
     e.preventDefault();
