@@ -50,20 +50,60 @@ function editCell(e) {
             let filled_box = document.createElement("span"); //creates the HTML for after done editing
             filled_box.addEventListener("click", editCell); //makes thing clickable for next time want to edit
             filled_box.innerHTML = val;
-            parent.innerHTML = "";
+            parent.innerHTML = ""; //clears parent node pointer
             parent.appendChild(filled_box);
             let dataToSend = {
                 post_id: parent.parentNode.querySelector(".post_id").innerText,
                 weather_type: parent.parentNode.querySelector(".weather_type").innerText,
                 post_title: parent.parentNode.querySelector(".post_title").innerText,
                 location: parent.parentNode.querySelector(".location").innerText,
-                post_content: parent.parentNode.querySelector(".post_content").innerText
+                // post_content: parent.parentNode.querySelector(".post_content").innerText
             };
             sendData(dataToSend);
         }
     });
     parent.innerHTML = "";
     parent.appendChild(text_box);
+}
+
+
+var edit = true;
+
+function editContent(e) {
+    if (edit) {
+        console.log(e);
+        e.innerHTML = "<input class='new-content'/>";
+        let textBox = e.firstChild;
+        edit = false;
+        textBox.addEventListener("keyup", function (a) {
+            if (a.keyCode == 13) {
+                console.log(e.parentElement.children[0].innerText);
+                sendContent({
+                    post_id: e.parentElement.children[0].innerText,
+                    post_content: textBox.value
+                });
+            }
+
+        })
+    }
+}
+
+async function sendContent(data) {
+    try {
+        let responseObject = await fetch("/update-post-content", {
+            method: 'POST',
+            headers: {
+                "Accept": 'application/json',
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        let parsedJSON = await responseObject.json();
+        console.log(data);
+        if (parsedJSON.status == "success") {
+            console.log("aloooo");
+        }
+    } catch (error) {}
 }
 
 //This function sends the data of the users from the client side to the server side so that i can be deleted from the database.
@@ -96,7 +136,6 @@ let deleteRecords = document.getElementsByClassName("deletePost");
 for (let i = 0; i < deleteRecords.length; i++) {
     deleteRecords[i].addEventListener("click", sendDataToDelete);
 }
-
 
 
 //This function sends the data of the users from the client side to the server side so that i can be deleted from the database.
