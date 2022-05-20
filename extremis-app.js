@@ -9,21 +9,6 @@ const {
     JSDOM
 } = require('jsdom');
 const multer = require("multer");
-const {
-    Console
-} = require('console');
-const storage_post_images = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, "./app/images/post-images/")
-    },
-    filename: function (req, file, callback) {
-        callback(null, req.session.userID + "AT" + Date.now() + "AND" + file.originalname);
-    }
-});
-const uploadPostImages = multer({
-    storage: storage_post_images
-});
-
 
 app.use("/assets", express.static("./public/assets"));
 app.use("/css", express.static("./public/css"));
@@ -42,8 +27,6 @@ app.use(express.urlencoded({
     extended: true
 }));
 
-// //default
-// app.use(fileUpload());
 
 
 /**
@@ -112,6 +95,19 @@ app.get("/add-user", function (req, res) {
 
 });
 
+app.get("/weather-forecast", function (req, res) {
+    if (req.session.loggedIn && !req.session.isAdmin) {
+        let doc = fs.readFileSync("./app/html/weather-forecast.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        let dashboard_jsdom = new JSDOM(doc);
+        res.write(dashboard_jsdom.serialize());
+        res.end();
+    } else {
+        res.redirect("/");
+    }
+
+});
+
 //function needed for getting list of all users in user-list
 app.get("/user-list", function (req, res) {
     if (req.session.loggedIn) {
@@ -167,7 +163,6 @@ app.get("/edit", function (req, res) {
         let doc = fs.readFileSync("./app/html/edit.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         let dashboard_jsdom = new JSDOM(doc);
-        // dashboard_jsdom.window.document.getElementById("header-name").innerHTML = "<h5 class='um-subtitle'> Welcome " + req.session.firstName + "</h5>";
         res.write(dashboard_jsdom.serialize());
         res.end();
     } else {
@@ -230,6 +225,19 @@ app.get("/admin-list", function (req, res) {
 app.get("/admin-list", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/admin-list.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        res.send(doc);
+    } else {
+        // if user has not logged in, redirect to login page
+        res.redirect("/");
+    }
+
+});
+
+//function needed for redirecting to manage admins list in dashboard
+app.get("/about-us", function (req, res) {
+    if (req.session.loggedIn) {
+        let doc = fs.readFileSync("./app/html/about-us.html", "utf8");
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
     } else {
@@ -398,8 +406,6 @@ app.post("/add-user-as-admin", function (req, res) {
                     status: "success",
                     msg: "Record added."
                 });
-                // req.session.loggedIn = true;
-                // req.session.save(function (err) { });
             });
 
         connection.query(
@@ -407,13 +413,7 @@ app.post("/add-user-as-admin", function (req, res) {
             [req.body.email, req.body.password, req.body.firstName, req.body.lastName],
             function (error, results, fields) {
 
-                if (results.length > 0) {
-                    // user authenticated, create a session
-                    // req.session.user_id = results[0].user_id;
-                    // req.session.save(function (err) {
-                    //     //session saved
-                    // });
-                } else {
+                if (results.length > 0) {} else {
                     res.send({
                         status: "fail",
                         msg: "User account not found."
@@ -734,6 +734,8 @@ app.get("/create-post", function (req, res) {
 });
 
 
+const sanitizeHtml = require("sanitize-html");
+
 /**
  * Store text data of user's post into the database.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
@@ -748,17 +750,40 @@ app.post("/add-post", function (req, res) {
         database: 'COMP2800'
     });
 
+    // Sanitize html code on the server (https://www.npmjs.com/package//sanitize-html)
+    const stringToSanitize = req.body.postContent;
+    const clean = sanitizeHtml(stringToSanitize, {
+        allowedTags: [
+            "address", "article", "aside", "footer", "header", "h1", "h2", "h3", "h4",
+            "h5", "h6", "hgroup", "main", "nav", "section", "blockquote", "dd", "div",
+            "dl", "dt", "figcaption", "figure", "hr", "li", "main", "ol", "p", "pre",
+            "ul", "a", "abbr", "b", "bdi", "bdo", "br", "cite", "code", "data", "dfn",
+            "em", "i", "kbd", "mark", "q", "rb", "rp", "rt", "rtc", "ruby", "s", "samp",
+            "small", "span", "strong", "sub", "sup", "time", "u", "var", "wbr", "caption",
+            "col", "colgroup", "table", "tbody", "td", "tfoot", "th", "thead", "tr", "span"
+        ],
+        disallowedTagsMode: ['discard'],
+        allowedAttributes: {
+            a: ['href', 'name', 'target'],
+            img: ['srcset', 'alt', 'title', 'width', 'height', 'loading'],
+            span: ['style']
+        },
+        selfClosing: ['br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
+
+        allowedIframeHostnames: ['www.youtube.com']
+    });
+
     let post_type = req.body.postType;
     let post_title = req.body.postTitle;
     let post_location = req.body.postLocation;
-    let post_content = req.body.postContent;
+    let post_content = clean;
     let weather_type = req.body.weatherType;
     let userID = req.session.userID;
     let post_time = new Date(Date.now());
     let post_status = "pending";
 
     connection.connect();
-    connection.query('INSERT INTO BBY_15_post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    connection.query('INSERT INTO BBY_15_Post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         [userID, post_time, post_content, post_title, post_type, post_location, post_status, weather_type],
         function (error, results, fields) {
             req.session.postID = results.insertId;
@@ -778,6 +803,18 @@ app.post("/add-post", function (req, res) {
  * Store images information into the database. These images are uploaded by users when they create a post.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
  */
+const storage_post_images = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, "./app/images/post-images/")
+    },
+    filename: function (req, file, callback) {
+        callback(null, req.session.userID + "AT" + Date.now() + "AND" + file.originalname);
+    }
+});
+const uploadPostImages = multer({
+    storage: storage_post_images
+});
+
 app.post('/upload-post-images', uploadPostImages.array("files"), function (req, res) {
     let connection = mysql.createConnection({
         host: 'localhost',
@@ -787,19 +824,31 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
     });
     connection.connect();
 
-    for (let i = 0; i < req.files.length; i++) {
-        req.files[i].filename = req.files[i].originalname;
-        let newpathImages = ".." + req.files[i].path.substring(3);
+    if (req.files.length > 0) {
+        for (let i = 0; i < req.files.length; i++) {
+            req.files[i].filename = req.files[i].originalname;
+            let newpathImages = req.files[i].path.substring(3);
 
-        connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-            [req.session.postID, newpathImages],
-            function (error, results, fields) {
-                res.send({
-                    status: "success",
-                    msg: "Image information added to database."
+            connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
+                [req.session.postID, newpathImages],
+                function (error, results, fields) {
+
                 });
-                req.session.save(function (err) {});
-            });
+        }
+        res.send({
+            status: "success",
+            msg: "Image information added to database."
+        });
+        req.session.save(function (err) {});
+    } else {
+        connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
+            [req.session.postID, null],
+            function (error, results, fields) {});
+        res.send({
+            status: "success",
+            msg: "No image has been uploaded"
+        });
+        req.session.save(function (err) {});
     }
 
     connection.end();
@@ -807,7 +856,7 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
 
 
 
-//Get the post and event information from the database and display information on the profile page
+//Get the post and event information from the database and display information on the timeline page
 app.get("/timeline", function (req, res) {
     // check to see if the user email and password match with data in database
     const mysql = require("mysql2");
@@ -821,14 +870,18 @@ app.get("/timeline", function (req, res) {
     // check for a session first!
     if (req.session.loggedIn) {
         connection.connect();
-        connection.query(
-            "SELECT * FROM BBY_15_post INNER JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id",
-            [],
+        connection.query(`SELECT * FROM BBY_15_User 
+            INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
+            LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id 
+            ORDER BY posted_time DESC`,
             function (error, results, fields) {
                 let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
                 let timelineDOM = new JSDOM(timeline);
                 if (results.length >= 0) {
                     for (var i = 0; i < results.length; i++) {
+                        let firstName = results[i].first_name;
+                        let lastName = results[i].last_name;
+                        let profilePic = results[i].profile_picture;
                         let postTime = results[i].posted_time;
                         let contentPost = results[i].post_content;
                         let postTitle = results[i].post_title;
@@ -839,32 +892,37 @@ app.get("/timeline", function (req, res) {
                         </br>  
                         <div class="post_content">
                             <div class="card">
-                                <div class="post-image">
-                                    <img src="${postImages}">
+                                <div class="post-user">
+                                    <img class="profile-pic" src="${profilePic}">
+                                    <span><h4>&ensp;${firstName} ${lastName}</h4></span>
                                 </div>
+                
+                                <div class="post-header">
+                                    <h3><b>${postTitle}</b></h3> 
+                                    <h4>Type: ${typeWeather}</h4> 
+                                    <h5>Location: ${postlocation}</h5> 
+                                </div>
+                                <div class="post-image">`;
+
+                        if (postImages) {
+                            template += `<img class='post-pic' src="${postImages}">`;
+                        }
+
+
+
+                        while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                            i++;
+                            template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                        }
+
+                        template += `</div>
                                 <div class="desc">
-                                    <h3><b>${typeWeather}</b></h3> 
-                                    <h4>Title: ${postTitle} </h4> 
                                     <p class="time">Posted time: ${postTime}</p> 
-                                    <p>Location: ${postlocation}</p> 
                                     <p>Description: ${contentPost}</p>
                                 </div>
-                                <div class="share-social">
-                                    <ul>
-                                        <li><a href="#" class="social-link"><i class="fa fa-facebook-f"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-twitter"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-instagram"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-linkedin"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-reddit-alien"></i></a></li>
-                                        <li"><a href="#" class="social-link"><i class="fa fa-whatsapp"></i></a></li>
-                                    </ul> 
-                                </div>
-
+                                <p class="read-more"><a href="#" class="button">Read More</a></p>
                             </div>
-                        </div>
-
-
-                    `;
+                        </div>`;
                         let area = timelineDOM.window.document.querySelector('.post_content');
                         area.innerHTML += template;
                     }
@@ -872,16 +930,394 @@ app.get("/timeline", function (req, res) {
                 }
             }
         )
-        res.set("Server", "Wazubi Engine");
-        res.set("X-Powered-By", "Wazubi");
     } else {
         res.redirect("/");
     }
     connection.end();
 });
 
+app.post('/search-timeline', function (req, res) {
+    //res.setHeader('Content-Type', 'application/json');
+    let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
+    let timelineDOM = new JSDOM(timeline);
+
+    let term = req.body.searchTerm;
+
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+
+    if (req.session.loggedIn) {
+        connection.connect();
+        connection.query(`SELECT * FROM BBY_15_User
+        INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
+        LEFT JOIN BBY_15_post_images 
+        ON BBY_15_post.post_id = BBY_15_post_images.post_id 
+        WHERE LOWER(post_content) LIKE '%${term}%'
+        OR LOWER(post_title) LIKE '%${term}%'
+        OR LOWER(post_type) LIKE '%${term}%'
+        OR LOWER(location) LIKE '%${term}%'
+        OR LOWER(weather_type) LIKE '%${term}%'
+        ORDER BY posted_time DESC`,
+            function (error, results, fields) {
+                var timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
+                var timelineDOM = new JSDOM(timeline);
+                if (results.length >= 0) {
+                    var template = "";
+                    for (var i = 0; i < results.length; i++) {
+                        let firstName = results[i].first_name;
+                        let lastName = results[i].last_name;
+                        let profilePic = results[i].profile_picture;
+                        let postTime = results[i].posted_time;
+                        let contentPost = results[i].post_content;
+                        let postTitle = results[i].post_title;
+                        let postlocation = results[i].location;
+                        let typeWeather = results[i].weather_type;
+                        let postImages = results[i].image_location;
+                        template += `   
+                    </br>  
+                    <div class="post_content">
+                        <div class="card">
+                            <div class="post-user">
+                                <img class="profile-pic" src="${profilePic}">
+                                <span><h4>&ensp;${firstName} ${lastName}</h4></span>
+                            </div>
+            
+                            <div class="post-header">
+                                <h3><b>${postTitle}</b></h3> 
+                                <h4>Type: ${typeWeather}</h4> 
+                                <h5>Location: ${postlocation}</h5> 
+                            </div>
+                            <div class="post-image">
+                            <img class='post-pic' src="${postImages}">`;
+
+                        while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                            i++;
+                            template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                        }
+
+                        template += `</div>
+                            <div class="desc">
+                                <p class="time">Posted time: ${postTime}</p> 
+                                <p>Description: ${contentPost}</p>
+                            </div>
+                            <p class="read-more"><a href="#" class="button">Read More</a></p>
+                        </div>
+                    </div>`;
+                    }
+                    //res.send(timelineDOM.serialize());
+                    res.send({
+                        status: "success",
+                        message: template
+                    });
+                }
+            }
+        )
+    } else {
+        res.redirect("/");
+    }
+    connection.end();
+
+});
 
 
-//RUN SERVER
+/**
+ * Display all posts on the Manage-Post page using the card template in post-list.html.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
+ */
+app.get("/post-list", function (req, res) {
+    // check to see if the user email and password match with data in database
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    // check for a session first!
+    if (req.session.loggedIn) {
+        connection.connect();
+        connection.query(
+            "SELECT * FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id ORDER BY posted_time DESC",
+            [],
+            function (error, results, fields) {
+                let postList = fs.readFileSync("./app/html/post-list.html", "utf8");
+                let postListDOM = new JSDOM(postList);
+                let cardTemplate = postListDOM.window.document.getElementById("postCardTemplate");
+                if (results.length >= 0) {
+                    for (var i = 0; i < results.length; i++) {
+                        let newcard = cardTemplate.content.cloneNode(true);
+                        newcard.querySelector('.current-status').innerHTML = results[i].post_status;
+                        newcard.querySelector('.userID').innerHTML = "<b>User ID: </b>" + results[i].user_id;
+                        newcard.querySelector('.post-type').innerHTML = "<b>Type: </b>" + results[i].post_type;
+                        newcard.querySelector('.post-title').innerHTML = "<b>Title: </b>" + results[i].post_title;
+                        newcard.querySelector('.weather-type').innerHTML = "<b>Weather Type: </b>" + results[i].weather_type;
+                        newcard.querySelector('.post-location').innerHTML = "<b>Location: </b>" + results[i].location;
+                        newcard.querySelector('.post-time').innerHTML = "<b>Time: </b>" + results[i].posted_time;
+                        newcard.querySelector('.post-content').innerHTML = "<b>Content: </b>" + results[i].post_content;
+                        newcard.querySelector('.postID').innerHTML = results[i].post_id;
+
+                        if (!results[i].image_location) {
+                            // Set src property of img tag as default and display property as none if the post has no images
+                            newcard.querySelector('.card-images').innerHTML = '<img class="card-image" src="/images/post-images/test.jpg" alt="no image" style="display: none" />';
+                        } else {
+                            let str = '<img class="card-image" src="' + results[i].image_location + '" onclick = "expandImage(this)" alt="post image"/>';
+                            // Set src property of img tag as the image path
+                            while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
+                                i++;
+                                str += '<img class="card-image" src="' + results[i].image_location + '" onclick = "expandImage(this)" alt="post image"/>';
+                            }
+                            newcard.querySelector('.card-images').innerHTML = str;
+                        }
+
+                        //Add Read more button if the total length of the post content is more than 500
+                        if (results[i].post_content.length >= 500) {
+                            let p = postListDOM.window.document.createElement("p");
+                            p.setAttribute("class", "read-more");
+                            newcard.querySelector('.sidebar-box').appendChild(p);
+                            newcard.querySelector('.read-more').innerHTML = '<button onclick="expandText(this)" class="more-button">Read More</button>';
+
+                        }
+                        postListDOM.window.document.getElementById("post-goes-here").appendChild(newcard);
+                    }
+                }
+                res.send(postListDOM.serialize());
+            })
+    } else {
+        res.redirect("/");
+    }
+});
+
+
+app.post("/update-status", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    // check for a session first!
+    if (req.session.loggedIn) {
+        let postID = req.body.postID;
+        let status = req.body.postStatus;
+
+        connection.connect();
+        connection.query(
+            "UPDATE BBY_15_post SET post_status = ? WHERE post_id = ?",
+            [status, postID],
+            function (error, results, fields) {
+                res.send({
+                    status: "success",
+                    msg: "Post status has been updated in database."
+                });
+                req.session.save(function (err) {});
+            })
+    }
+});
+
+/**
+ * Redirect to the my post and show all the posts that created by a user.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen
+ */
+
+app.get("/my-post", function (req, res) {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+
+    if (req.session.loggedIn) {
+        connection.query(
+            `SELECT posted_time, post_content, BBY_15_post.post_id, post_title, location, weather_type, image_location 
+            FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id WHERE user_id = ?`,
+            [req.session.user_id],
+            function (error, results, fields) {
+                let doc = fs.readFileSync("./app/html/my-post.html", "utf8");
+                let my_post_jsdom = new JSDOM(doc);
+                res.setHeader("Content-Type", "text/html");
+                if (results != null) {
+                    for (let i = 0; i < results.length; i++) {
+                        let postTime = results[i].posted_time;
+                        let contentPost = results[i].post_content;
+                        let postID = results[i].post_id;
+                        let postTitle = results[i].post_title;
+                        let postlocation = results[i].location;
+                        let typeWeather = results[i].weather_type;
+                        let postImages = results[i].image_location;
+                        var my_post = `   
+                                </br>  
+                                <div class="my-post-content">
+                                    <div class="card">
+                                        <div class="post-image">
+                                            <img class="remove-icon"src="/assets/remove.png" width="15" height="15">
+                                            <img class="image"src="${postImages}">
+                                        </div>
+                                        <div class="desc">
+                                            <p class="post_id">` + postID + `</p> 
+                                            <p class="posted_time">` + postTime + `</p> 
+                                            <h3 class="weather_type"><span>` + typeWeather + `</span></h3> 
+                                            <h4 class="post_title"><span>` + postTitle + `</span> </h4> 
+                                            <p class="location"><span>` + postlocation + `</span></p>
+                                            <p class="post_content"><span>` + contentPost + `</span></p>
+                                            <form id="upload-images">
+                                                <label>Change images's posts</label>
+                                                <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
+                                                    multiple="multiple" />
+                                                <p class="errorMsg"></p>
+                                                <div class="button-update-images">
+                                                    <input class="form-input" type="submit" id="upload" value="Upload images" />
+                                                    <button type='button' class='deletePost'>Delete post</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="form-box-image">
+                                    </div>
+                                </div>
+                            `;
+                        my_post_jsdom.window.document.getElementById("my-post-content").innerHTML += my_post;
+                    }
+                }
+                res.send(my_post_jsdom.serialize());
+            }
+        )
+    } else {
+        // if user has not logged in, redirect to login page
+        res.redirect("/");
+    }
+    connection.end();
+});
+
+/**
+ * Delete post from users.
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen
+ */
+
+
+app.post('/delete-post', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.connect();
+    connection.query('DELETE FROM BBY_15_post WHERE post_id = ?',
+        [req.body.post_id],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded deleted."
+            });
+
+        });
+    connection.end();
+});
+
+
+
+/**
+ * Redirect to the my post and update new posts that changed based on the user's input
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
+ */
+
+app.post("/update-post", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.query('UPDATE BBY_15_post SET post_content = ?, post_title = ?, location = ?, weather_type = ? WHERE post_id = ? AND user_id = ?',
+        [req.body.post_content, req.body.post_title, req.body.location, req.body.weather_type, req.body.post_id, req.session.user_id],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded updated."
+            });
+        });
+    connection.end();
+});
+
+// When adding images, this function saves the ID of the post ahead of the image itself
+app.post("/change-images-post-data", function (req, res) {
+    req.session.postID = req.body.p;
+    res.send();
+    req.session.save(function (err) {});
+})
+
+/**
+ * Redirect to the my post and update the new images if user changes post's images
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
+ */
+app.post("/change-images-post", uploadPostImages.array("files"), function (req, res) {
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.connect();
+
+    for (let i = 0; i < req.files.length; i++) {
+        req.files[i].filename = req.files[i].originalname;
+        let newpath = ".." + req.files[i].path.substring(3);
+        connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
+            [req.session.postID, newpath],
+            function (error, results, fields) {
+                console.log(newpath);
+                res.send({
+                    status: "success",
+                    msg: "Image information added to database."
+                });
+            });
+    }
+    connection.end();
+});
+
+
+/**
+ * Delete an image on the post
+ * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
+ */
+app.post('/delete-image', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.connect();
+    connection.query('DELETE FROM BBY_15_post_images WHERE image_location=?',
+        [req.body.image],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded deleted."
+            });
+        });
+    connection.end();
+});
+
+// RUN SERVER
 let port = 8000;
 app.listen(port, function () {});

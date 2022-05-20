@@ -168,13 +168,12 @@ input{
 }
 
 footer {
-  overflow-x: hidden;
-  position: absolute;
-  top: 98%;
-  width: 99%;
-  text-align: center;
-  color: #ffffff;
-  background-color: #484848;
+  position:fixed;
+  left:0;
+    bottom:0;
+    width:100%;
+    text-align: center;
+    color: #000;
 }
 
 /*For the view under 800px*/

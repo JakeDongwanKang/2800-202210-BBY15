@@ -24,9 +24,10 @@
         </a>
         <div class="navbar-links">
             <ul>
-                <li><a href="#">Home</a></li>
+                <li><a href="/main">Home</a></li>
                 <li><a href="/profile">Profile</a></li>
-                <li><a href="#">About Us</a></li>
+                <li><a href="/my-post">My post</a></li>
+                <li><a href="/about-us">About Us</a></li>
                 <li>
                     <form action="/logout" method="get">
                         <input type="submit" class="singin" value="Sign out" />
@@ -42,12 +43,14 @@
                 <div id="header-name"></div>
                 <h1 class="branch">Extremis</h1>
             </header>
-
-            <p class="main-button">
-                <a class="timeline" href="/timeline/" role="button">Timeline</a>
-                <a class="forecastButton" href="/weather-forecast/" role="button">Weather Forecast</a>
-            </p>
-            <a class="howitwork" href="/about/#works" role="button">How it works</a>
+            <div id="content">
+            <div class="button" id="timeline-button">
+                <p> <a class="timeline" href="/timeline/" role="button">Timeline</a></p>
+            </div>
+            <div class="button" id="forecast-button">
+                <p>  <a class="forecastButton" href="/weather-forecast/" role="button">Weather Forecast</a></p>
+            </div>
+            </div>
         </div>
 
     </div>

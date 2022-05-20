@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <title>Post List</title>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <link rel="stylesheet" href="/css/post-list.css">
+</head>
+
+<body>
+  <!-- Navbar area -->
+  <nav class="navbar">
+    <div class="brand-title">Extremis</div>
+
+    <!-- Create a hamburger menu  -->
+    <a href="#" class="toggle-button">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </a>
+    <div class="navbar-links">
+      <ul>
+        <li><a href="/main">Home</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/my-post">My post</a></li>
+                <li><a href="/about-us">About Us</a></li>
+        <li>
+          <form action="/logout" method="get">
+            <input type="submit" class="singin" value="Sign out" />
+          </form>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <header>
+    <h1>Manage Posts</h1>
+  </header>
+
+  <!-- Dropdown menu for the Filter button -->
+  <form class="dropdown">
+    <div class="select">
+      <span class="selected">All</span>
+      <div class="caret"></div>
+    </div>
+    <ul class="menu">
+      <li class="active">All</li>
+      <li>Pending</li>
+      <li>Approved</li>
+      <li>Rejected</li>
+    </ul>
+  </form>
+
+  <!-- All posts will be displayed here -->
+  <div class="post-container">
+    <div id="post-goes-here">
+
+    </div>
+  </div>
+
+  <!-- Templates for populating posts as cards, not displayed -->
+  <template id="postCardTemplate">
+    <div class="post">
+      <div class="post-body">
+        <div class="userID"></div>
+        <div class="postID"></div>
+        <div class="post-status">
+          <b>Status: </b><button class='current-status'></button>
+          <button class="cancel-btn" onclick="cancel(this)">Cancel</button>
+          <button class="approve-btn" onclick="approve(this)">Approve</button>
+          <button class="reject-btn" onclick="reject(this)">Reject</button>
+        </div>
+        <div class="post-type"></div>
+        <div class="post-title">Card title</div>
+        <div class="weather-type"></div>
+        <div class="post-location"></div>
+        <div class="post-time"></div>
+        <div class="sidebar-box">
+          <p class="post-content">Some quick example text to build on the card title and make up the bulk of the
+            card's content</p>
+        </div>
+
+      </div>
+
+      <div class="card-images">
+      </div>
+    </div>
+  </template>
+
+
+  <footer>&copy; 2022 Burnaby-15</footer>
+
+  <script src="/js/post-list.js"></script>
+</body>
+
+</html>

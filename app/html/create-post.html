@@ -6,6 +6,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/create-post.css" />
+
+    <!-- Load the js for text editor from https://www.tiny.cloud/ -->
+    <script src="https://cdn.tiny.cloud/1/173v1w4jt7c34wqvz1y6n77p431z5ziqka4n057tpifnntto/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
 </head>
 
 <body>
@@ -23,7 +27,8 @@
             <ul>
                 <li><a href="/main">Home</a></li>
                 <li><a href="/profile">Profile</a></li>
-                <li><a href="/about">About Us</a></li>
+                <li><a href="/my-post">My post</a></li>
+                <li><a href="/about-us">About Us</a></li>
                 <li>
                     <form action="/logout" method="get">
                         <input type="submit" class="singin" value="Sign out" />
@@ -35,7 +40,6 @@
 
     <!-- The create-a-post form goes here -->
     <header>
-        <!-- <h2><span></span></h2> -->
     </header>
 
     <div id="createPostForm">
@@ -73,8 +77,8 @@
 
         <div class="form-box">
             <label>Description*</label>
-            <textarea class="form-input" id="postContent" rows="7" onfocus="removeErrorMsg()" required="required"
-                placeholder="Write a description"></textarea>
+            <textarea id="postContent" rows="10" onfocus="removeErrorMsg()" required="required"
+                style="height:150px"></textarea>
         </div>
 
         <div class="form-box">

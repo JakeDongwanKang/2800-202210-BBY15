@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Extremis</title>
+
+    <!-- CSS goes here -->
+    <link rel="stylesheet" href="/css/weather-forecast.css" />
+  </head>
+
+  <body>
+    <!-- Navbar area -->
+    <nav class="navbar">
+      <div class="brand-title">Extremis</div>
+
+      <!-- Create a hamburger menu  -->
+      <a href="#" class="toggle-button">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </a>
+      <div class="navbar-links">
+        <ul>
+            <li><a href="/main">Home</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/my-post">My post</a></li>
+            <li><a href="/about-us">About Us</a></li>
+          <li>
+            <form action="/logout" method="get">
+              <input type="submit" class="singin" value="Sign out" />
+            </form>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+    <div class="card">
+      <div class="search">
+        <input type="text" class="search-bar" placeholder="Enter a City" />
+        <button id = "search-button">Search</button>
+      </div>
+      <div class="weather">
+          <h2 class="city"></h2>
+          <h1 class="temperature"></h1>
+          <div class="description"></div>
+          <div class="humidity"></div>
+          <div class="wind"></div>
+      </div>
+    </div>
+
+    <footer>&copy; 2022 Burnaby-15</footer>
+    <!-- Javascript goes here-->
+    <script src="/js/weather-forecast.js" defer></script>
+  </body>
+</html>
