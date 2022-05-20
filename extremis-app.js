@@ -586,6 +586,8 @@ app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
                 req.session.save(function (err) {});
             });
     }
+
+
     connection.end();
 
 });
@@ -871,6 +873,7 @@ app.get("/timeline", function (req, res) {
         connection.query(`SELECT * FROM BBY_15_User 
             INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
             LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id 
+            WHERE post_status = "approved"
             ORDER BY posted_time DESC`,
             function (error, results, fields) {
                 let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
@@ -906,8 +909,6 @@ app.get("/timeline", function (req, res) {
                             template += `<img class='post-pic' src="${postImages}">`;
                         }
 
-
-
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
                             template += "<img class='post-pic' src=" + results[i].image_location + ">"
@@ -918,7 +919,7 @@ app.get("/timeline", function (req, res) {
                                     <p class="time">Posted time: ${postTime}</p> 
                                     <p>Description: ${contentPost}</p>
                                 </div>
-                                <p class="read-more"><a href="#" class="button">Read More</a></p>
+                                <p class="read-more"><a href="#" class="read-more-button">Read More</a></p>
                             </div>
                         </div>`;
                         let area = timelineDOM.window.document.querySelector('.post_content');
@@ -935,10 +936,7 @@ app.get("/timeline", function (req, res) {
 });
 
 app.post('/search-timeline', function (req, res) {
-    //res.setHeader('Content-Type', 'application/json');
     let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
-    let timelineDOM = new JSDOM(timeline);
-
     let term = req.body.searchTerm;
 
     const mysql = require("mysql2");
@@ -955,15 +953,14 @@ app.post('/search-timeline', function (req, res) {
         INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
         LEFT JOIN BBY_15_post_images 
         ON BBY_15_post.post_id = BBY_15_post_images.post_id 
-        WHERE LOWER(post_content) LIKE '%${term}%'
+        WHERE (LOWER(post_content) LIKE '%${term}%'
         OR LOWER(post_title) LIKE '%${term}%'
         OR LOWER(post_type) LIKE '%${term}%'
         OR LOWER(location) LIKE '%${term}%'
-        OR LOWER(weather_type) LIKE '%${term}%'
+        OR LOWER(weather_type) LIKE '%${term}%')
+        AND post_status = "approved"
         ORDER BY posted_time DESC`,
             function (error, results, fields) {
-                var timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
-                var timelineDOM = new JSDOM(timeline);
                 if (results.length >= 0) {
                     var template = "";
                     for (var i = 0; i < results.length; i++) {
@@ -990,8 +987,11 @@ app.post('/search-timeline', function (req, res) {
                                 <h4>Type: ${typeWeather}</h4> 
                                 <h5>Location: ${postlocation}</h5> 
                             </div>
-                            <div class="post-image">
-                            <img class='post-pic' src="${postImages}">`;
+                            <div class="post-image">`;
+
+                        if (postImages) {
+                            template += `<img class='post-pic' src="${postImages}">`;
+                        }
 
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
@@ -1003,7 +1003,7 @@ app.post('/search-timeline', function (req, res) {
                                 <p class="time">Posted time: ${postTime}</p> 
                                 <p>Description: ${contentPost}</p>
                             </div>
-                            <p class="read-more"><a href="#" class="button">Read More</a></p>
+                            <p class="read-more"><a href="#" class="read-more-button">Read More</a></p>
                         </div>
                     </div>`;
                     }
@@ -1151,36 +1151,21 @@ app.get("/my-post", function (req, res) {
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
                         var my_post = `   
-                        </br>  
-                        <div class="my-post-content">
-                            <div class="card">
-                                <div class="post-image">
-                                    
-                                    <div class="image">`;
-                        if (postImages) {
-                            my_post += `<div class="po-image">
-                            <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
-                            <img class='image' src="${postImages}">
-                            </div>`;
-                        }
-
-                        while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
-                            i++;
-                            my_post += `<div class="po-image">
-                            <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
-                            `
-                            my_post += "<img class='image' src=" + results[i].image_location + "></div>"
-                        }
-                        my_post += `</div>
+                                </br>  
+                                <div class="my-post-content">
+                                    <div class="card">
+                                        <div class="post-image">
+                                            <img class="remove-icon"src="/assets/remove.png" width="15" height="15">
+                                            <img class="image"src="${postImages}">
+                                        </div>
                                         <div class="desc">
                                             <p class="post_id">` + postID + `</p> 
                                             <p class="posted_time">` + postTime + `</p> 
                                             <h3 class="weather_type"><span>` + typeWeather + `</span></h3> 
                                             <h4 class="post_title"><span>` + postTitle + `</span> </h4> 
                                             <p class="location"><span>` + postlocation + `</span></p>
-                                            <h5 class="post_content" spellcheck="true"><span>` + contentPost + `</span></h5>`
-
-                        my_post += `<form id="upload-images">
+                                            <div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
+                                            <form id="upload-images">
                                                 <label>Change images's posts</label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
                                                     multiple="multiple" />
@@ -1267,6 +1252,28 @@ app.post("/update-post", function (req, res) {
     connection.end();
 });
 
+app.post("/update-post-content", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.query('UPDATE BBY_15_post SET post_content = ? WHERE post_id = ? AND user_id = ?',
+        [req.body.post_content, req.body.post_id, req.session.user_id],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded updated."
+            });
+        });
+    connection.end();
+});
+
 // When adding images, this function saves the ID of the post ahead of the image itself
 app.post("/change-images-post-data", function (req, res) {
     req.session.postID = req.body.p;
@@ -1293,6 +1300,7 @@ app.post("/change-images-post", uploadPostImages.array("files"), function (req, 
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
             [req.session.postID, newpath],
             function (error, results, fields) {
+                console.log(newpath);
                 res.send({
                     status: "success",
                     msg: "Image information added to database."
