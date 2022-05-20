@@ -106,6 +106,7 @@ async function sendDataToDeleteImage(e) {
     let dataToSend = {
         image: parent.querySelector(".image").getAttribute("src")
     };
+    console.log("Delete an image: " + dataToSend);
     try {
         let responseObject = await fetch("/delete-image", {
             method: 'POST',
@@ -127,8 +128,6 @@ let deleteImageRecords = document.getElementsByClassName("remove-icon");
 for (let i = 0; i < deleteImageRecords.length; i++) {
     deleteImageRecords[i].addEventListener("click", sendDataToDeleteImage);
 }
-
-
 
 const upLoadForm = document.getElementById("upload-images");
 upLoadForm.addEventListener("submit", uploadImages);

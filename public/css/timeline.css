@@ -4,129 +4,15 @@ body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    background: white;
-    color: #000;
+    background-image:url("/assets/background-web-rain.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     background-size: cover;
+    color: #000;
     font-family: 'Montserrat', sans-serif;
 }
 
-.all-events {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.post_content {
-    display: flex;
-    flex-wrap: wrap;
-    
-    width: 65%;
-}
-
-.card {
-    overflow: hidden;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6);
-    background-color: white;
-    text-align: center;
-    position: relative;
-    width: 100%;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    margin-left: 10px;
-    padding: 10px;
-}
-
-.card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-}
-
-.post-user {
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-}
-
-.profile-pic {
-    width: 48px;
-    height: 48px;
-    vertical-align: middle;
-    margin-right: 5px;
-    border-radius: 50%;
-}
-
-h3 {
-    font-size: 24px;
-    font-weight:normal; 
-    margin-bottom: 5px;
-}
-
-h4 {
-    font-size: 20px;
-    font-weight:normal; 
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-h5 {
-    font-size: 18px;
-    font-weight:normal; 
-    margin-top: 5px;
-    text-align: left;
-}
-
-.post-pic {
-    border-radius: 5px 5px 0 0;
-    width: 90%;
-    height: auto;
-    margin-bottom: 0;
-}
-
-.desc {
-    font-size: 16px;
-    margin-top: 0;
-}
-
-.body-allevents {
-    display: flex;
-}
-
-p {
-    text-align: left;
-    text-align: justify;
-}
-
-h3 {
-    text-align: left;
-    margin-top: 0;
-    text-transform: uppercase;
-}
-
-h4 {
-    text-align: left;
-}
-
-.createPost {
-    display: inline-block;
-    padding: 12px 12px;
-    font-size: 16px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    outline: none;
-    color: #fff;
-    background-color: rgba(52, 119, 249, 0.9);
-    border: none;
-    border-radius: 12px;
-    margin-bottom: 10px;
-    text-align: center;
-    margin-left: 10px;
-}
-
-.createPost:hover {
-    background-color: rgba(52, 119, 249, 0.7);
-}
-
-/* Navbar area */
+/* Navbar */
 
 .navbar {
     display: flex;
@@ -140,8 +26,30 @@ h4 {
 .brand-title {
     font-size: 1.5rem;
     margin: .5rem;
-    color: #3477F9;
+    color: #fff;
     cursor: pointer;
+}
+
+#content {
+    grid-column: 2;
+    grid-row: 3;
+    padding: 3%;
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+    display: inline-block;
+    width: 200px;
+    height: 50px;
+    margin: 16px;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 15px;
+    color: rgba(52, 119, 249, 0.9);
+    background-color: #fff;
+    text-align: center;
+    text-decoration: none;
 }
 
 .navbar-links {
@@ -171,7 +79,7 @@ h4 {
 }
 
 .navbar-links li a:hover {
-    color: rgba(52, 119, 249, 1.5);
+    color: white;
 }
 
 
@@ -196,12 +104,12 @@ h4 {
 .singin {
     margin-top: 8px;
     padding: 9px 25px;
-    background-color: rgba(52, 119, 249, 0.7);
+    background-color: #fff;
     border: none;
     border-radius: 50px;
     font-size: 16px;
     cursor: pointer;
-    color: white;
+    color: rgba(52, 119, 249, 0.7);
     transition: all 0.3s ease 0s;
     letter-spacing: 1.5px;
 }
@@ -216,18 +124,163 @@ button:hover {
 
 .um-subtitle {
     font-weight: 500;
-    letter-spacing: 0.5rem;
     font-size: 15px;
 }
 
 .branch {
     font-size: 5rem;
     font-weight: 700;
+    color:#fff;
 }
 
 .container {
     padding: 0;
     text-align: center;
+}
+
+/* Navbar ends */
+
+.body-allevents {
+    display: flex;
+    justify-content: center;
+}
+
+.allevents-titlesearch {
+    width: 30%;
+}
+
+#allevents-search-keyword {
+    width: 80%;
+    border-radius: 15px;
+    outline: solid 0.5px #484848;
+    font-size: 18px;
+    margin-top: 15px;
+    padding-left: 10px;
+    height: 32px;
+    font-family: 'Montserrat';
+    border: none;
+}
+
+#search-button {
+    font-size: 26px;
+}
+
+.createPost {
+    display: inline-block;
+    padding: 12px 12px;
+    font-size: 16px;
+    font-weight : bold ;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: rgba(52, 119, 249, 0.9);
+    background-color: #fff;
+    border: none;
+    border-radius: 12px;
+    margin: 10px;
+    text-align: center;
+    margin-right: 0;
+}
+
+.createPost:hover {
+    background-color: rgba(52, 119, 249, 0.7);
+}
+
+.all-events {
+    display: flex;
+    justify-content: center;
+}
+
+.post_content {
+    margin-left: auto;
+    margin-right: auto;
+    width: 65%;
+}
+
+.card {
+    overflow: hidden;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6);
+    background-color: white;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.post-user {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.profile-pic {
+    object-fit: cover;
+    border-radius:50%;
+    width: 48px;
+    height: 48px;
+}
+
+h3 {
+    font-size: 24px;
+    font-weight:normal; 
+    margin-bottom: 5px;
+}
+
+h4 {
+    font-size: 20px;
+    font-weight:normal; 
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+h5 {
+    font-size: 18px;
+    font-weight:normal; 
+    margin-top: 5px;
+    text-align: left;
+}
+
+.post-pic {
+    border-radius: 5px 5px 0 0;
+    width: 90%;
+    height: auto;
+    margin-bottom: 0;
+}
+
+.post-header {
+    margin-left: 5%;
+}
+
+.desc {
+    font-size: 16px;
+    margin-top: 0;
+}
+
+.body-allevents {
+    display: flex;
+}
+
+p {
+    text-align: left;
+    text-align: justify;
+}
+
+h3 {
+    text-align: left;
+    margin-top: 0;
+    text-transform: uppercase;
+}
+
+h4 {
+    text-align: left;
 }
 
 .read-more {
@@ -245,19 +298,8 @@ footer {
 /*For the view under 800px*/
 
 @media (max-width: 800px) {
-    body {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        background: white;
-        color: #000;
-        background-size: cover;
-        font-family: 'Montserrat', sans-serif;
-        background-position: center;
-    }
-
     .brand-title {
-        color: rgba(52, 119, 249, 1.5);
+        color: #fff;
         text-decoration: solid;
         font-size: 28px;
     }
@@ -266,7 +308,6 @@ footer {
         flex-direction: column;
         align-items: flex-start;
         color: #000;
-        background-color: white;
     }
 
     .toggle-button {
@@ -298,6 +339,7 @@ footer {
 
     .navbar-links.active {
         display: flex;
+        background:white;
     }
 
     .singin {
@@ -322,7 +364,6 @@ footer {
 
     .um-subtitle {
         font-weight: 500;
-        letter-spacing: 0.5rem;
         font-size: 12px;
     }
 
@@ -337,12 +378,6 @@ footer {
         align-items: center;
     }
 
-    .howitwork {
-        font-size: 20px;
-        word-spacing: 2px;
-        color: black;
-    }
-
     .createPost {
         display: inline-block;
         padding: 10px 10px;
@@ -351,8 +386,6 @@ footer {
         text-align: center;
         text-decoration: none;
         outline: none;
-        color: #fff;
-        background-color: rgba(52, 119, 249, 0.9);
         border: none;
         border-radius: 12px;
         margin-bottom: 10px;
@@ -366,11 +399,15 @@ footer {
 
     .post_content{
         width: 100%;
-        justify-content: center;
+    }
+
+    .allevents-titlesearch {
+        width: auto;
     }
 
     #allevents-search-keyword {
-        width: 150px;
+        margin-top: 10px;
+        width: 170px;
     }
 
     h3 {
@@ -392,6 +429,14 @@ footer {
         margin-top: 5px;
         text-align: left;
     }
+
+    .post-pic {
+        width: 100%;
+    }
+
+    .post-header {
+        margin-left: 0;
+    }
     
     .desc {
         font-size: 12px;
@@ -401,11 +446,12 @@ footer {
     .card {
         width: 300px;
         max-height: 350px;
-        position: relative;
+        margin-left: auto;
+        margin-right: auto;
         overflow: hidden;
       }
     
-    .card .read-more { 
+    .card .read-more-button { 
         visibility: visible;
         position: absolute; 
         bottom: 0; 
