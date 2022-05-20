@@ -59,13 +59,52 @@ function editCell(e) {
                 weather_type: parent.parentNode.querySelector(".weather_type").innerText,
                 post_title: parent.parentNode.querySelector(".post_title").innerText,
                 location: parent.parentNode.querySelector(".location").innerText,
-                post_content: parent.parentNode.querySelector(".post_content").innerHTML
             };
             sendData(dataToSend);
         }
     });
     parent.innerHTML = "";
     parent.appendChild(text_box);
+}
+
+
+var edit = true;
+
+function editContent(e) {
+    if (edit) {
+        console.log(e);
+        e.innerHTML = "<input class='new-content'/>";
+        let textBox = e.firstChild;
+        edit = false;
+        textBox.addEventListener("keyup", function (a) {
+            if (a.keyCode == 13) {
+                console.log(e.parentElement.children[0].innerText);
+                sendContent({
+                    post_id: e.parentElement.children[0].innerText,
+                    post_content: textBox.value
+                });
+            }
+
+        })
+    }
+}
+
+async function sendContent(data) {
+    try {
+        let responseObject = await fetch("/update-post-content", {
+            method: 'POST',
+            headers: {
+                "Accept": 'application/json',
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        let parsedJSON = await responseObject.json();
+        console.log(data);
+        if (parsedJSON.status == "success") {
+            console.log("aloooo");
+        }
+    } catch (error) {}
 }
 
 //This function sends the data of the users from the client side to the server side so that i can be deleted from the database.

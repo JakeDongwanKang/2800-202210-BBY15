@@ -985,11 +985,9 @@ app.post('/search-timeline', function (req, res) {
                                 <h5>Location: ${postlocation}</h5> 
                             </div>
                             <div class="post-image">`;
-                            
-                            if (postImages) {
-                                template += `<img class='post-pic' src="${postImages}">`;
-                            }
-
+                        if (postImages) {
+                            template += `<img class='post-pic' src="${postImages}">`;
+                        }
                             while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                                 i++;
                                 template += "<img class='post-pic' src=" + results[i].image_location + ">"
@@ -1175,9 +1173,8 @@ app.get("/my-post", function (req, res) {
                                             <h3 class="weather_type"><span>` + typeWeather + `</span></h3> 
                                             <h4 class="post_title"><span>` + postTitle + `</span> </h4> 
                                             <p class="location"><span>` + postlocation + `</span></p>
-                                            <h5 class="post_content" spellcheck="true"><span>` + contentPost + `</span></h5>`
-
-                        my_post += `<form id="upload-images">
+                                            <div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
+                                            <form id="upload-images">
                                                 <label>Change images's posts</label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
                                                     multiple="multiple" />
@@ -1250,8 +1247,30 @@ app.post("/update-post", function (req, res) {
         password: '',
         database: 'COMP2800'
     });
-    connection.query('UPDATE BBY_15_post SET post_content = ?, post_title = ?, location = ?, weather_type = ? WHERE post_id = ? AND user_id = ?',
-        [req.body.post_content, req.body.post_title, req.body.location, req.body.weather_type, req.body.post_id, req.session.user_id],
+    connection.query('UPDATE BBY_15_post SET post_title = ?, location = ?, weather_type = ? WHERE post_id = ? AND user_id = ?',
+        [req.body.post_title, req.body.location, req.body.weather_type, req.body.post_id, req.session.user_id],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            res.send({
+                status: "success",
+                msg: "Recorded updated."
+            });
+        });
+    connection.end();
+});
+
+app.post("/update-post-content", function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'COMP2800'
+    });
+    connection.query('UPDATE BBY_15_post SET post_content = ? WHERE post_id = ? AND user_id = ?',
+        [req.body.post_content, req.body.post_id, req.session.user_id],
         function (error, results, fields) {
             if (error) {
                 console.log(error);
