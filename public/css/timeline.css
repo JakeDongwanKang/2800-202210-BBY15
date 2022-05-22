@@ -459,7 +459,11 @@ footer {
         width: 300px; 
         text-align: center; 
         margin: 0; padding: 30px 10px; 
-        background-image: linear-gradient(to bottom, transparent, lightgrey);
+        background-image: linear-gradient(to bottom, transparent, darkgrey);
+    }
+
+    .read-more-button {
+        background-color: #fff;
     }
 
       /* "Read More" Styling Ends */

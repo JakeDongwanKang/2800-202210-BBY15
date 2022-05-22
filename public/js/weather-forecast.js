@@ -32,7 +32,6 @@
         const { icon, description } = data.weather[0];
         const { temp, humidity } = data.main;
         const { speed } = data.wind;
-        console.log(name, icon, description, temp, humidity, speed);
         document.querySelector(".city").innerText = "Weather in " + name;
         document.querySelector(".description").innerText = description;
         document.querySelector(".temperature").innerText = temp + "°c";
@@ -44,6 +43,41 @@
  }
 };
 
-document.querySelector(".search button").addEventListener("click", function () {
+document.getElementById("search-button").addEventListener("click", function () {
     weather.search();
 });
+
+/**
+ * The following codes follow an example on W3Schools (https://www.w3schools.com/html/html5_geolocation.asp)
+ * and Geeks for Geeks (https://www.geeksforgeeks.org/how-to-get-city-name-by-using-geolocation/)
+ * with changes and adjustments made by Vincent.
+ */
+ function getLocation() {
+    navigator.geolocation.getCurrentPosition(showPosition);
+}
+
+function showPosition(position) {
+  var coordinates = [position.coords.latitude, position.coords.longitude];
+  getCity(coordinates);
+}
+
+function getCity(coordinates) {
+  var xhr = new XMLHttpRequest();
+  var lat = coordinates[0];
+  var lng = coordinates[1];
+
+  // Paste your LocationIQ token below.
+  xhr.open('GET', "https://us1.locationiq.com/v1/reverse.php?key=pk.d0436933238c32ce026236ff72afc4d0&lat=" +
+  lat + "&lon=" + lng + "&format=json", true);
+  xhr.send();
+  xhr.onreadystatechange = processRequest;
+
+  function processRequest(e) {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+          var response = JSON.parse(xhr.responseText);
+          document.querySelector(".search-bar").value = response.address.city;
+          weather.search();
+          return;
+      }
+  }
+}

@@ -165,28 +165,12 @@ h3 {
     width: 100%;
 }
 
-.user-card {
-    border: solid 1px #484848;
-    border-radius: 15px;
-    display: grid;
-    grid-template-columns: 25% 75%;
-    width: 80%;
-    margin-top: 0.1%;
-    margin-bottom: 0.1%;
-    margin-left: auto;
-    margin-right: auto;
+.first_name, .last_name, .email, .password {
+    border-bottom: 0.3px solid black;
 }
 
-.profile-pic-div {
-    grid-column: 1;
-    display: flex;
-    justify-content: center;
-}
-
-.profile-pic {
-    margin-top: auto;
-    margin-bottom: auto;
-    max-width:90%;
+.material-icons {
+    float: right;
 }
 
 .user-list-button {
@@ -213,6 +197,7 @@ td {
 @media only screen and (max-width: 960px) {
     body {
         grid-template-columns: 5% 90% 5%;
+        font-size: 14px;
     }
     
     .user-card {
@@ -295,16 +280,11 @@ td {
 		display: block; 
 	}
 
-    /* tr:first-child, tr:nth-child(2) {
-        display:inline-block;
-    } */
-
 	thead tr { 
 		position: absolute;
 		top: -9999px;
 		left: -9999px;
 	}
-	
 
 	td { 
 		/* Behave  like a "row" */
@@ -312,18 +292,20 @@ td {
 		border-bottom: 1px solid #eee; 
 		position: relative;
 		padding-left: 50%; 
+        height: 25px;
 	}
 
     td:before { 
-		/* Now like a table header */
 		position: absolute;
-		/* Top/left values mimic padding */
-		top: 6px;
 		left: 6px;
 		width: 45%; 
 		padding-right: 10px; 
 		white-space: nowrap;
 	}
+
+    .id {
+        background-color: #5ca1dc
+    }
 
     td:nth-of-type(1):before { content: "ID"; }
 	td:nth-of-type(2):before { content: "First Name"; }
