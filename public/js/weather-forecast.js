@@ -48,7 +48,7 @@ document.getElementById("search-button").addEventListener("click", function () {
 });
 
 /**
- * The following codes follow an example on W3Schools (https://www.w3schools.com/html/html5_geolocation.asp)
+ * The following codes are a combination of examples from W3Schools (https://www.w3schools.com/html/html5_geolocation.asp)
  * and Geeks for Geeks (https://www.geeksforgeeks.org/how-to-get-city-name-by-using-geolocation/)
  * with changes and adjustments made by Vincent.
  */
@@ -66,7 +66,6 @@ function getCity(coordinates) {
   var lat = coordinates[0];
   var lng = coordinates[1];
 
-  // Paste your LocationIQ token below.
   xhr.open('GET', "https://us1.locationiq.com/v1/reverse.php?key=pk.d0436933238c32ce026236ff72afc4d0&lat=" +
   lat + "&lon=" + lng + "&format=json", true);
   xhr.send();

@@ -21,6 +21,8 @@ async function sendData(data) {
         let parsedJSON = await responseObject.json();
         if(parsedJSON.status == "fail") {
             document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
+        } else if (parsedJSON.status == "duplicate") {
+            document.getElementById("emptyError").innerHTML = "<small>*This email is already registered to an account*</small>";
         } else {
             window.location.replace("/main");
         }

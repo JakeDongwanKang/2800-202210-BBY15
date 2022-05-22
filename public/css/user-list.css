@@ -275,7 +275,6 @@ td {
         margin-top: 1rem;
     }
 
-    /* Force table to not be like tables anymore */
 	thead, tbody, th, table, td, tr { 
 		display: block; 
 	}
@@ -287,7 +286,6 @@ td {
 	}
 
 	td { 
-		/* Behave  like a "row" */
 		border: none;
 		border-bottom: 1px solid #eee; 
 		position: relative;
