@@ -339,8 +339,6 @@ app.post("/login", function (req, res) {
 
 //Authenticating user, checks if they can be added to the database, then creates and add the user info into the database.
 app.post("/add-user", function (req, res) {
-    res.setHeader('Content-Type', 'application/json');
-
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
     let signupemail = req.body.email;
@@ -356,15 +354,23 @@ app.post("/add-user", function (req, res) {
         connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
             [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
             function (error, results, fields) {
-                res.send({
-                    status: "success",
-                    msg: "Record added."
-                });
-                req.session.loggedIn = true;
-                req.session.user_id = results.insertId;
-                req.session.firstName = req.body.firstName;
-                req.session.save(function (err) {});
-            });
+                if(!results) {
+                    res.send({
+                        status: "duplicate",
+                        msg: "This email is already registered to an account."
+                    });
+                } else {
+                    res.send({
+                        status: "success",
+                        msg: "Record added."
+                    });
+                    req.session.loggedIn = true;
+                    req.session.user_id = results.insertId;
+                    req.session.firstName = req.body.firstName;
+                    req.session.save(function (err) {});
+                }
+            }
+        );
     }
 });
 
