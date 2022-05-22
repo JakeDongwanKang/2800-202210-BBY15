@@ -51,14 +51,14 @@ function editCell(e) {
             let filled_box = document.createElement("span"); //creates the HTML for after done editing
             filled_box.addEventListener("click", editCell); //makes thing clickable for next time want to edit
             filled_box.innerHTML = val;
-            parent.innerHTML = ""; //clears parent node pointer
+            parent.innerHTML = "<div class='material-icons'>edit</div>"; //clears parent node pointer
             parent.appendChild(filled_box);
             let dataToSend = {
                 id: parent.parentNode.querySelector(".id").innerHTML,
-                firstName: parent.parentNode.querySelector(".first_name :nth-child(1)").innerHTML,
-                lastName: parent.parentNode.querySelector(".last_name :nth-child(1)").innerHTML,
-                email: parent.parentNode.querySelector(".email :nth-child(1)").innerHTML,
-                password: parent.parentNode.querySelector(".password :nth-child(1)").innerHTML
+                firstName: parent.parentNode.querySelector(".first_name :nth-child(2)").innerHTML,
+                lastName: parent.parentNode.querySelector(".last_name :nth-child(2)").innerHTML,
+                email: parent.parentNode.querySelector(".email :nth-child(2)").innerHTML,
+                password: parent.parentNode.querySelector(".password :nth-child(2)").innerHTML
             };
             sendData(dataToSend);
         }

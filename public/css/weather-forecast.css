@@ -144,13 +144,14 @@ input.search-bar {
     border:3px solid rgba(52, 119, 249, 0.9);
 }
 
-#search-button {
+.forecast-button {
     color: #fff;
     background-color: rgba(52, 119, 249, 0.9);
     border-radius: 15px;
     margin: 16px;
     padding: 8px 16px;
     border:none;
+    cursor: pointer;
 }
 
 footer {

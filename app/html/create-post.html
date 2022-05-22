@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Create a post</title>
+    <title>Create a post | Extremis</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/create-post.css" />
@@ -73,7 +73,9 @@
             <label>Location*</label>
             <input class="form-input" id="postLocation" onfocus="removeErrorMsg()" required="required"
                 placeholder="Enter the location">
+                <button class="form-input" id="coords" onclick="getLocation()">Get My Current Location</button>
         </div>
+        
 
         <div class="form-box">
             <label>Description*</label>

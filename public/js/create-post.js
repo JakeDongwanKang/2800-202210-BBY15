@@ -214,6 +214,41 @@ imagesUpload.addEventListener("change", function () {
 });
 
 /**
+ * The following codes follow an example on W3Schools (https://www.w3schools.com/html/html5_geolocation.asp)
+ * and Geeks for Geeks (https://www.geeksforgeeks.org/how-to-get-city-name-by-using-geolocation/)
+ * with changes and adjustments made by Vincent.
+ */
+function getLocation() {
+      navigator.geolocation.getCurrentPosition(showPosition);
+}
+  
+function showPosition(position) {
+    var coordinates = [position.coords.latitude, position.coords.longitude];
+    getCity(coordinates);
+}
+
+function getCity(coordinates) {
+    var xhr = new XMLHttpRequest();
+    var lat = coordinates[0];
+    var lng = coordinates[1];
+  
+    // Paste your LocationIQ token below.
+    xhr.open('GET', "https://us1.locationiq.com/v1/reverse.php?key=pk.d0436933238c32ce026236ff72afc4d0&lat=" +
+    lat + "&lon=" + lng + "&format=json", true);
+    xhr.send();
+    xhr.onreadystatechange = processRequest;
+  
+    function processRequest(e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var response = JSON.parse(xhr.responseText);
+            var city = response.address.city;
+            document.getElementById("postLocation").value = city + " " + lat + ", " + lng;
+            return;
+        }
+    }
+}
+
+/**
  * Add text-editor feature so users can edit the content of the post they are creating.
  * The following code comes from https://www.tiny.cloud/ with changes and adjustment made by Linh.
  */
