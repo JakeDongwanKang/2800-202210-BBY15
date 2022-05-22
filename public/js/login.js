@@ -53,3 +53,10 @@ function removeErrorMsg() {
 document.getElementById("sign-up-link").addEventListener("click", function (e) {
     window.location.replace("/sign-up");
 });
+
+document.getElementById("userPassword").onkeydown = function (e){if (e.which == 13) {
+    sendData({
+        email: document.getElementById("userEmail").value,
+        password: document.getElementById("userPassword").value
+    });
+}}
