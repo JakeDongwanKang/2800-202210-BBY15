@@ -164,10 +164,19 @@ app.get("/user-list", function (req, res) {
                 for (let i = 0; i < results.length; i++) {
 
                     user_list += ("<tbody><tr><td class='id'>" + results[i]['user_id'] +
-                        "</td><td class='first_name'><span>" + results[i]['first_name'] +
-                        "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
-                        "</span></td><td class='email'><span>" + results[i]['email'] +
-                        "</span></td><td class='password'><span>" + results[i]['user_password'] +
+
+                    // "</td><td class='first_name'><span>" + results[i]['first_name'] +
+                    // "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
+                    // "</span></td><td class='email'><span>" + results[i]['email'] +
+                    // "</span></td><td class='password'><span>" + results[i]['user_password'] +
+                    // "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
+                    // "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
+                    // "</button></td></tr></tbody>"
+
+                        "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i]['first_name'] +
+                        "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i]['last_name'] +
+                        "</span></td><td class='email'><div class='material-icons'>edit</div><span>" + results[i]['email'] +
+                        "</span></td><td class='password'><div class='material-icons'>edit</div><span>" + results[i]['user_password'] +
                         "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
                         "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
                         "</button></td></tr></tbody>"
@@ -980,11 +989,11 @@ app.get("/my-post", function (req, res) {
                         my_post += `</div>
                                         <div class="desc">
                                             <p class="post_id">` + postID + `</p> 
-                                            <p class="posted_time">` + postTime + `</p> 
-                                            <h3 class="weather_type"><span>` + typeWeather + `</span></h3> 
-                                            <h4 class="post_title"><span>` + postTitle + `</span> </h4> 
-                                            <p class="location"><span>` + postlocation + `</span></p>
-                                            <div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
+                                            <p class="posted_time">` + postTime + `</p><br> 
+                                            Weather Type: <div class='material-icons'>edit</div> <h3 class="weather_type"><span>` + typeWeather + `</span></h3><br>
+                                            Title: <div class='material-icons'>edit</div> <h4 class="post_title"><span>` + postTitle + `</span></h4><br> 
+                                            Location: <div class='material-icons'>edit</div> <p class="location"><span>` + postlocation + `</span></p><br> 
+                                            Description: <div class='material-icons'>edit</div> <div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
                                             <form id="upload-images">
                                                 <label>Change images's posts</label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"

@@ -10,12 +10,6 @@ body {
     color: #000;
 }
 
-/* .my-post-content {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-} */
-
 .card {
     align-items: center;
     overflow: hidden;
@@ -35,6 +29,7 @@ body {
 }
 
 .post_content {
+    display: inline;
     font-size: 14px;
     margin-top: 0;
     text-align: left;
@@ -78,21 +73,27 @@ body {
 }
 
 p {
+    display: inline;
     text-align: left;
     text-align: justify;
 }
 
 h3 {
+    display: inline;
     text-align: left;
     margin-top: 0;
     text-transform: uppercase;
 }
 
 h4 {
+    display: inline;
     text-align: left;
 }
 
 
+.material-icons{
+    display:inline;
+}
 
 
 
@@ -191,7 +192,7 @@ p {
 }
 
 .deletePost {
-    background-color: red;
+    background-color: rgb(255, 122, 122);
     color: white;
     cursor: pointer;
     margin-left: 20px;
@@ -201,7 +202,8 @@ p {
 }
 
 #upload {
-    background-color: rgba(52, 119, 249, 0.5);
+    background-color: blue;
+    color: white;
     padding: 5px;
     cursor: pointer;
     border: none;
