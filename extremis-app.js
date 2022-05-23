@@ -434,19 +434,19 @@ app.get("/profile", function (req, res) {
                             <div id="user_content">
                                 <div class="form-group">
                                     <label for="firstName">First Name</label>
-                                    <input type="text" class="um-input" id="firstName" placeholder=${firstname}>
+                                    <input type="text" class="um-input" id="firstName" value=${firstname}>
                                 </div>
                                 <div class="form-group">
                                     <label for="lastName">Last Name</label>
-                                    <input type="text" class="um-input" id="lastName" placeholder=${lastname}>
+                                    <input type="text" class="um-input" id="lastName" value=${lastname}>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input type="email" class="um-input" id="userEmail" placeholder=${useremail}>
+                                    <input type="email" class="um-input" id="userEmail" value=${useremail}>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Password</label>
-                                    <input type="password" class="um-input" id="userPassword" placeholder=${password}>
+                                    <input type="password" class="um-input" id="userPassword" value=${password}>
                                 </div>
                                 
                             </div>
