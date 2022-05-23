@@ -955,7 +955,7 @@ app.post("/update-status", function (req, res) {
 app.get("/my-post", function (req, res) {
     if (req.session.loggedIn) {
         connection.query(
-            `SELECT posted_time, post_content, BBY_15_post.post_id, post_title, location, weather_type, image_location 
+            `SELECT posted_time, post_content, BBY_15_post.post_id, post_title, location, weather_type, image_location, post_status 
             FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id WHERE user_id = ?`,
             [req.session.user_id],
             function (error, results, fields) {
@@ -971,6 +971,7 @@ app.get("/my-post", function (req, res) {
                         let postlocation = results[i].location;
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
+                        let postStatus = results[i].post_status;
                         var my_post = `   
                         </br>  
                         <div class="my-post-content">
@@ -995,11 +996,16 @@ app.get("/my-post", function (req, res) {
                         my_post += `</div>
                                         <div class="desc">
                                             <p class="post_id">` + postID + `</p> 
-                                            <p class="posted_time">` + postTime + `</p><br> 
-                                            Weather Type: <div class='material-icons'>edit</div> <h3 class="weather_type"><span>` + typeWeather + `</span></h3><br>
-                                            Title: <div class='material-icons'>edit</div> <h4 class="post_title"><span>` + postTitle + `</span></h4><br> 
-                                            Location: <div class='material-icons'>edit</div> <p class="location"><span>` + postlocation + `</span></p><br> 
-                                            Description: <div class='material-icons'>edit</div> <div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
+                                            <p class="posted_time">Posted time: ` + postTime + `</p><br> 
+                                            <p class="post_status">Post status: ` + postStatus + `</p> </br>                                            
+                                            Weather Type: &#x270e;        
+                                            <h3 class="weather_type"><span>` + typeWeather + `</span></h3><br>
+                                            Title: &#x270e;      
+                                            <h4 class="post_title"><span>` + postTitle + `</span></h4><br> 
+                                            Location: &#x270e;            
+                                            <p class="location"><span>` + postlocation + `</span></p><br> 
+                                            Description: &#x270e;         
+                                            </br><div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
                                             <form id="upload-images">
                                                 <label>Change images's posts</label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
