@@ -2,25 +2,76 @@
 
 body{
     font-family: 'Montserrat';
+    font-size: 13.5px;
 }
 
-#loginForm {
-    margin: 10% 20% auto 20%;
+#container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 100%;
+    height: 45vh;
+    margin: 25vh auto 0 auto;
+    width: 56vw;
+    text-align: center;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+#left {
+    grid-row: 1;
+    grid-column: 1;
+    background-color: #3477f9;
+    height: inherit;
+}
+
+#logo1, #logo2 {
+    width: 50%;
+    margin-top: 10%;
+
+}
+
+#logo2{
+    display: none
 }
 
 h2{
-    margin-top: 5%;
     text-align: center;
-    font-size: 30px;
-    color: #3477f9;
+    font-size: 25px;
+    color: #ffffff;
 }
+
+ p {
+     color: #ffffff;
+ }
+
+#sign-up-link{
+    font-family: 'Montserrat';
+    cursor: pointer;
+    background-color: #3477f9;
+    color: #ffffff;
+    font-size: 13.5px;
+    border: 0.5px solid #ffffff;
+    border-radius: 10px;
+    width: 35%;
+    line-height: 35px;
+}
+
+#sign-up-link:hover{
+    box-shadow: 0 0 5px #ffffff;    
+}
+
+#loginForm {
+    grid-column: 2;
+    grid-row: 1;
+    margin: auto 10% auto 10%;
+}
+
 
 input{
     display: block;
-    width: 100%;
+    width: 95%;
     border-radius: 15px;
     outline: solid 0.5px #484848;
-    font-size: 18px;
+    font-size: 13.5px;
     margin-top: 10px;
     padding-left: 10px;
     height: 40px;
@@ -44,18 +95,24 @@ input:hover{
     cursor: pointer;
     background-color: #3477f9;
     color: #ffffff;
-    font-size: 20px;
+    font-size: 17px;
     outline: transparent;
+    font-weight: 500;
 }
 
-#text{
-    text-align: center;
+#submit:hover{
+    box-shadow: 0 0 5px #3477F9;
 }
 
-#sign-up-link{
-    text-decoration: none;
-    color: #3477f9;
-    font-weight: 600;
+#togglePassword {
+    position: absolute;
+    margin-top: -28px; 
+    margin-left: 9%;
+    cursor: pointer;
+}
+
+#sign-up2 {
+    display: none;
 }
 
 footer {
@@ -69,19 +126,64 @@ footer {
 
 /*For the view under 800px*/
 @media (max-width: 800px) {
+    #container {
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: 40% 60%;
+        text-align: center;
+        width: 90vw;
+        height: fit-content;
+        margin-top: 10vh;
+        box-shadow: none;
+    }
+
+    #left {
+        grid-column: 1;
+        grid-row: 1;
+        height: max-content;
+        background-color: #ffffff;
+    }
+
+    #logo1{
+        display: none;
+    }
+
+    #logo2 {
+        margin-top: 10px;
+        display: inline;
+    }
+
+    h2{
+        color: #3477f9;
+    }
+    #sign-up1 {
+        display: none;
+    }
+
     #loginForm {
-        margin: 10% 10% auto 10%;
+        grid-column: 1;
+        grid-row: 2;
+        text-align: left;
     }
 
-    h2 {
-        margin-top: 40%;
-    }
-    input{
-        margin-bottom: 50px;
+    #togglePassword {
+        margin-left: 65%;
     }
 
-    #sign-up-link {
-        display: block;
-        line-height: 30px;
+    #sign-up2 {
+        display: inherit;
+        text-align: center;
+    }
+
+    #sign-up2 p {
+        color: #000;
+        margin-bottom: 0;
+    }
+
+    #sign-up2 a {
+        color: #3477f9;
+        background-color: #ffffff;
+        text-decoration: none;
+        font-weight: 600;
     }
 }

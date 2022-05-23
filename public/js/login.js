@@ -54,9 +54,29 @@ document.getElementById("sign-up-link").addEventListener("click", function (e) {
     window.location.replace("/sign-up");
 });
 
+// Send data when user uses enter key
 document.getElementById("userPassword").onkeydown = function (e){if (e.which == 13) {
     sendData({
         email: document.getElementById("userEmail").value,
         password: document.getElementById("userPassword").value
     });
 }}
+document.getElementById("userEmail").onkeydown = function (e){if (e.which == 13) {
+    sendData({
+        email: document.getElementById("userEmail").value,
+        password: document.getElementById("userPassword").value
+    });
+}}
+
+
+// Display/Hide password (https://www.csestack.org/hide-show-password-eye-icon-html-javascript/)
+const togglePassword = document.querySelector('#togglePassword');
+  const password = document.querySelector('#userPassword');
+ 
+  togglePassword.addEventListener('click', function (e) {
+    // toggle the type attribute
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    // toggle the eye slash icon
+    this.classList.toggle('fa-eye-slash');
+});
