@@ -18,7 +18,9 @@ body {
 
 h2 {
     text-align: center;
-    text-transform: uppercase;
+    text-transform: capitalize;
+    font-size: 20px;
+    padding-bottom: 30px;
 }
 
 .form-group>input {
@@ -91,14 +93,14 @@ h2 {
 .profile-pic {
     display: block;
     margin: 0 auto;
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     border-color: rebeccapurple;
     object-fit: cover;
     overflow: hidden;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0), 0 6px 36px, rgba(0, 0, 0, 0.13);
-    border: 1px solid black;
+    border: 1px solid white;
 }
 
 #selectFile {
@@ -194,9 +196,9 @@ p {
 }
 
 .footer {
-    left:0;
-    bottom:0;
-    width:100%;
+    left: 0;
+    bottom: 0;
+    width: 100%;
     text-align: center;
     color: #000;
 }
