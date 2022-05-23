@@ -165,13 +165,13 @@ app.get("/user-list", function (req, res) {
 
                     user_list += ("<tbody><tr><td class='id'>" + results[i]['user_id'] +
 
-                    // "</td><td class='first_name'><span>" + results[i]['first_name'] +
-                    // "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
-                    // "</span></td><td class='email'><span>" + results[i]['email'] +
-                    // "</span></td><td class='password'><span>" + results[i]['user_password'] +
-                    // "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
-                    // "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
-                    // "</button></td></tr></tbody>"
+                        // "</td><td class='first_name'><span>" + results[i]['first_name'] +
+                        // "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
+                        // "</span></td><td class='email'><span>" + results[i]['email'] +
+                        // "</span></td><td class='password'><span>" + results[i]['user_password'] +
+                        // "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
+                        // "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
+                        // "</button></td></tr></tbody>"
 
                         "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i]['first_name'] +
                         "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i]['last_name'] +
@@ -266,16 +266,16 @@ app.get("/admin-list", function (req, res) {
 app.get("/about-us", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/about-us.html", "utf8");
-        res.setHeader("Content-Type", "text/html"); 
+        res.setHeader("Content-Type", "text/html");
         let aboutUsDOM = new JSDOM(doc);
         // Display My Post on navbar if the user is not an admin
-        if (!req.session.isAdmin){
+        if (!req.session.isAdmin) {
             res.send(doc);
         } else {
             aboutUsDOM.window.document.getElementById("myPostLink").remove();
             res.send(aboutUsDOM.serialize());
         }
-        
+
     } else {
         // if user has not logged in, redirect to login page
         res.redirect("/");
@@ -354,7 +354,7 @@ app.post("/add-user", function (req, res) {
         connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
             [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
             function (error, results, fields) {
-                if(!results) {
+                if (!results) {
                     res.send({
                         status: "duplicate",
                         msg: "This email is already registered to an account."
@@ -457,14 +457,14 @@ app.get("/profile", function (req, res) {
                         let area = profileDOM.window.document.querySelector('#user_content');
                         area.innerHTML += template;
                     }
-        // Display My Post on navbar if the user is not an admin
-        if (!req.session.isAdmin){
-            res.send(profileDOM.serialize());
-        } else {
-            profileDOM.window.document.getElementById("myPostLink").remove();
-            res.send(profileDOM.serialize());
-        }
-                    
+                    // Display My Post on navbar if the user is not an admin
+                    if (!req.session.isAdmin) {
+                        res.send(profileDOM.serialize());
+                    } else {
+                        profileDOM.window.document.getElementById("myPostLink").remove();
+                        res.send(profileDOM.serialize());
+                    }
+
                 }
             }
         )
@@ -998,8 +998,8 @@ app.get("/my-post", function (req, res) {
                                             <p class="posted_time">` + postTime + `</p><br> 
                                             Weather Type: <div class='material-icons'>edit</div> <h3 class="weather_type"><span>` + typeWeather + `</span></h3><br>
                                             Title: <div class='material-icons'>edit</div> <h4 class="post_title"><span>` + postTitle + `</span></h4><br> 
-                                            Location: <div class='material-icons'>edit</div> <p class="location"><span>` + postlocation + `</span></p><br> 
-                                            Description: <div class='material-icons'>edit</div> <div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
+                                            Location: <div class='material-icons'>edit</div> </br><p class="location"><span>` + postlocation + `</span></p><br> 
+                                            Description: <div class='material-icons'>edit</div> </br><div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
                                             <form id="upload-images">
                                                 <label>Change images's posts</label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
