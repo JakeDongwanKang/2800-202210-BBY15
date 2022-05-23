@@ -165,13 +165,13 @@ app.get("/user-list", function (req, res) {
 
                     user_list += ("<tbody><tr><td class='id'>" + results[i]['user_id'] +
 
-                    // "</td><td class='first_name'><span>" + results[i]['first_name'] +
-                    // "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
-                    // "</span></td><td class='email'><span>" + results[i]['email'] +
-                    // "</span></td><td class='password'><span>" + results[i]['user_password'] +
-                    // "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
-                    // "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
-                    // "</button></td></tr></tbody>"
+                        // "</td><td class='first_name'><span>" + results[i]['first_name'] +
+                        // "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
+                        // "</span></td><td class='email'><span>" + results[i]['email'] +
+                        // "</span></td><td class='password'><span>" + results[i]['user_password'] +
+                        // "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
+                        // "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
+                        // "</button></td></tr></tbody>"
 
                         "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i]['first_name'] +
                         "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i]['last_name'] +
@@ -266,16 +266,16 @@ app.get("/admin-list", function (req, res) {
 app.get("/about-us", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/about-us.html", "utf8");
-        res.setHeader("Content-Type", "text/html"); 
+        res.setHeader("Content-Type", "text/html");
         let aboutUsDOM = new JSDOM(doc);
         // Display My Post on navbar if the user is not an admin
-        if (!req.session.isAdmin){
+        if (!req.session.isAdmin) {
             res.send(doc);
         } else {
             aboutUsDOM.window.document.getElementById("myPostLink").remove();
             res.send(aboutUsDOM.serialize());
         }
-        
+
     } else {
         // if user has not logged in, redirect to login page
         res.redirect("/");
@@ -354,7 +354,7 @@ app.post("/add-user", function (req, res) {
         connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
             [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
             function (error, results, fields) {
-                if(!results) {
+                if (!results) {
                     res.send({
                         status: "duplicate",
                         msg: "This email is already registered to an account."
@@ -433,19 +433,19 @@ app.get("/profile", function (req, res) {
                             </div>
                             <div id="user_content">
                                 <div class="form-group">
-                                    <label for="firstName">First Name</label>
-                                    <input type="text" class="um-input" id="firstName" value=${firstname}>
+                                    <label for="firstName">First Name  &#x270e;</label>
+                                    <input type="text" class="um-input" id="firstName" value=${firstname}> 
                                 </div>
                                 <div class="form-group">
-                                    <label for="lastName">Last Name</label>
+                                    <label for="lastName">Last Name  &#x270e;</label>
                                     <input type="text" class="um-input" id="lastName" value=${lastname}>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Email</label>
+                                    <label for="email">Email  &#x270e;</label>
                                     <input type="email" class="um-input" id="userEmail" value=${useremail}>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password">Password</label>
+                                    <label for="password">Password  &#x270e;</label>
                                     <input type="password" class="um-input" id="userPassword" value=${password}>
                                 </div>
                                 
@@ -457,14 +457,14 @@ app.get("/profile", function (req, res) {
                         let area = profileDOM.window.document.querySelector('#user_content');
                         area.innerHTML += template;
                     }
-        // Display My Post on navbar if the user is not an admin
-        if (!req.session.isAdmin){
-            res.send(profileDOM.serialize());
-        } else {
-            profileDOM.window.document.getElementById("myPostLink").remove();
-            res.send(profileDOM.serialize());
-        }
-                    
+                    // Display My Post on navbar if the user is not an admin
+                    if (!req.session.isAdmin) {
+                        res.send(profileDOM.serialize());
+                    } else {
+                        profileDOM.window.document.getElementById("myPostLink").remove();
+                        res.send(profileDOM.serialize());
+                    }
+
                 }
             }
         )
@@ -955,7 +955,7 @@ app.post("/update-status", function (req, res) {
 app.get("/my-post", function (req, res) {
     if (req.session.loggedIn) {
         connection.query(
-            `SELECT posted_time, post_content, BBY_15_post.post_id, post_title, location, weather_type, image_location 
+            `SELECT posted_time, post_content, BBY_15_post.post_id, post_title, location, weather_type, image_location, post_status 
             FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id WHERE user_id = ?`,
             [req.session.user_id],
             function (error, results, fields) {
@@ -971,6 +971,7 @@ app.get("/my-post", function (req, res) {
                         let postlocation = results[i].location;
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
+                        let postStatus = results[i].post_status;
                         var my_post = `   
                         </br>  
                         <div class="my-post-content">
@@ -995,11 +996,16 @@ app.get("/my-post", function (req, res) {
                         my_post += `</div>
                                         <div class="desc">
                                             <p class="post_id">` + postID + `</p> 
-                                            <p class="posted_time">` + postTime + `</p><br> 
-                                            Weather Type: <div class='material-icons'>edit</div> <h3 class="weather_type"><span>` + typeWeather + `</span></h3><br>
-                                            Title: <div class='material-icons'>edit</div> <h4 class="post_title"><span>` + postTitle + `</span></h4><br> 
-                                            Location: <div class='material-icons'>edit</div> <p class="location"><span>` + postlocation + `</span></p><br> 
-                                            Description: <div class='material-icons'>edit</div> <div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
+                                            <p class="posted_time">Posted time: ` + postTime + `</p><br> 
+                                            <p class="post_status">Post status: ` + postStatus + `</p> </br>                                            
+                                            Weather Type: &#x270e;        
+                                            <h3 class="weather_type"><span>` + typeWeather + `</span></h3><br>
+                                            Title: &#x270e;      
+                                            <h4 class="post_title"><span>` + postTitle + `</span></h4><br> 
+                                            Location: &#x270e;            
+                                            <p class="location"><span>` + postlocation + `</span></p><br> 
+                                            Description: &#x270e;         
+                                            </br><div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
                                             <form id="upload-images">
                                                 <label>Change images's posts</label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
