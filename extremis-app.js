@@ -165,13 +165,13 @@ app.get("/user-list", function (req, res) {
 
                     user_list += ("<tbody><tr><td class='id'>" + results[i]['user_id'] +
 
-                    // "</td><td class='first_name'><span>" + results[i]['first_name'] +
-                    // "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
-                    // "</span></td><td class='email'><span>" + results[i]['email'] +
-                    // "</span></td><td class='password'><span>" + results[i]['user_password'] +
-                    // "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
-                    // "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
-                    // "</button></td></tr></tbody>"
+                        // "</td><td class='first_name'><span>" + results[i]['first_name'] +
+                        // "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
+                        // "</span></td><td class='email'><span>" + results[i]['email'] +
+                        // "</span></td><td class='password'><span>" + results[i]['user_password'] +
+                        // "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
+                        // "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
+                        // "</button></td></tr></tbody>"
 
                         "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i]['first_name'] +
                         "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i]['last_name'] +
@@ -266,16 +266,16 @@ app.get("/admin-list", function (req, res) {
 app.get("/about-us", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/about-us.html", "utf8");
-        res.setHeader("Content-Type", "text/html"); 
+        res.setHeader("Content-Type", "text/html");
         let aboutUsDOM = new JSDOM(doc);
         // Display My Post on navbar if the user is not an admin
-        if (!req.session.isAdmin){
+        if (!req.session.isAdmin) {
             res.send(doc);
         } else {
             aboutUsDOM.window.document.getElementById("myPostLink").remove();
             res.send(aboutUsDOM.serialize());
         }
-        
+
     } else {
         // if user has not logged in, redirect to login page
         res.redirect("/");
@@ -354,7 +354,7 @@ app.post("/add-user", function (req, res) {
         connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
             [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
             function (error, results, fields) {
-                if(!results) {
+                if (!results) {
                     res.send({
                         status: "duplicate",
                         msg: "This email is already registered to an account."
@@ -433,19 +433,19 @@ app.get("/profile", function (req, res) {
                             </div>
                             <div id="user_content">
                                 <div class="form-group">
-                                    <label for="firstName">First Name</label>
-                                    <input type="text" class="um-input" id="firstName" value=${firstname}>
+                                    <label for="firstName">First Name  &#x270e;</label>
+                                    <input type="text" class="um-input" id="firstName" value=${firstname}> 
                                 </div>
                                 <div class="form-group">
-                                    <label for="lastName">Last Name</label>
+                                    <label for="lastName">Last Name  &#x270e;</label>
                                     <input type="text" class="um-input" id="lastName" value=${lastname}>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Email</label>
+                                    <label for="email">Email  &#x270e;</label>
                                     <input type="email" class="um-input" id="userEmail" value=${useremail}>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password">Password</label>
+                                    <label for="password">Password  &#x270e;</label>
                                     <input type="password" class="um-input" id="userPassword" value=${password}>
                                 </div>
                                 
@@ -457,14 +457,14 @@ app.get("/profile", function (req, res) {
                         let area = profileDOM.window.document.querySelector('#user_content');
                         area.innerHTML += template;
                     }
-        // Display My Post on navbar if the user is not an admin
-        if (!req.session.isAdmin){
-            res.send(profileDOM.serialize());
-        } else {
-            profileDOM.window.document.getElementById("myPostLink").remove();
-            res.send(profileDOM.serialize());
-        }
-                    
+                    // Display My Post on navbar if the user is not an admin
+                    if (!req.session.isAdmin) {
+                        res.send(profileDOM.serialize());
+                    } else {
+                        profileDOM.window.document.getElementById("myPostLink").remove();
+                        res.send(profileDOM.serialize());
+                    }
+
                 }
             }
         )
