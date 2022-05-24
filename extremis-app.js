@@ -427,7 +427,14 @@ app.get("/profile", function (req, res) {
                         </br>  
                         <div class="account-body"> 
                         <div class='profile-pic-div'>
-                            <img class='profile-pic' src='${userprofile}'</div>                              
+                            <img class='profile-pic' src='${userprofile}'>
+                            <label for="selectFile">
+                                <img class="camera" src="/assets/camera-icon1.jpg" width="28" height="28"/>
+                            </label>
+                            <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
+                            multiple="multiple" />
+
+                        </div>                         
                             <div id="user_title">
                             <h2>${firstname} ${lastname} </h2>
                             </div>
@@ -441,14 +448,18 @@ app.get("/profile", function (req, res) {
                                     <input type="text" class="um-input" id="lastName" value=${lastname}>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Email  &#x270e;</label>
+                                    <label for="email">Email</label>
                                     <input type="email" class="um-input" id="userEmail" value=${useremail}>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Password  &#x270e;</label>
-                                    <input type="password" class="um-input" id="userPassword" value=${password}>
+                                    <input type="password" id="userPassword" required="required"value=${password} />
                                 </div>
-                                
+                                <div class="form-group">
+                                    <label for="password">Confirm password</label>
+                                    <input type="password" id="userConfirmPassword" required="required"
+                                    value=${password} onkeyup="validate_password()"/>
+                                </div>
                             </div>
                                 
                             </div>  
@@ -996,24 +1007,24 @@ app.get("/my-post", function (req, res) {
                         my_post += `</div>
                                         <div class="desc">
                                             <p class="post_id">` + postID + `</p> 
-                                            <p class="posted_time">Posted time: ` + postTime + `</p><br> 
-                                            <p class="post_status">Post status: ` + postStatus + `</p> </br>                                            
-                                            Weather Type: &#x270e;        
+                                            <p class="posted_time"><u>Posted time:</u>  ` + postTime + `</p><br> 
+                                            <p class="post_status"><u>Post status:</u> ` + postStatus + `</p> </br>                                            
+                                            <u>Weather Type:</u>  &#x270e;        
                                             <h3 class="weather_type"><span>` + typeWeather + `</span></h3><br>
-                                            Title: &#x270e;      
+                                            <u>Title:</u>&#x270e;      
                                             <h4 class="post_title"><span>` + postTitle + `</span></h4><br> 
-                                            Location: &#x270e;            
+                                            <u>Location:</u> &#x270e;            
                                             <p class="location"><span>` + postlocation + `</span></p><br> 
-                                            Description: &#x270e;         
+                                            <u>Description:</u> &#x270e;         
                                             </br><div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
                                             <form id="upload-images">
-                                                <label>Change images's posts</label>
+                                                <label>Change images's posts: </label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
                                                     multiple="multiple" />
                                                 <p class="errorMsg"></p>
                                                 <div class="button-update-images">
-                                                    <input class="form-input" type="submit" id="upload" value="Upload images" />
-                                                    <button type='button' class='deletePost'>Delete post</button>
+                                                <button type='button' class='deletePost'>Delete post</button>    
+                                                <input class="form-input" type="submit" id="upload" value="Upload image" />                                                    
                                                 </div>
                                             </form>
                                         </div>
