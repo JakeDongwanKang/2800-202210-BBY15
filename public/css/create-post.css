@@ -30,6 +30,7 @@ body{
     margin: .5rem;
     color: #3477F9;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .navbar-links {

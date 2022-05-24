@@ -133,6 +133,7 @@ h4 {
     margin: .5rem;
     color: #3477F9;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .navbar-links {
@@ -259,13 +260,6 @@ p {
 
     .toggle-button {
         display: flex;
-    }
-
-    .brand-title {
-        font-size: 1.5rem;
-        margin: .5rem;
-        color: white;
-        cursor: pointer;
     }
 
     .navbar-links {

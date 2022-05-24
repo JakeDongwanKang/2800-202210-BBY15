@@ -30,6 +30,7 @@ body{
     margin: .5rem;
     color: #3477F9;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .navbar-links {
@@ -352,7 +353,7 @@ footer {
 
     body{
         font-family: 'Montserrat', sans-serif;
-        line-height: 25px;
+        line-height: 28px;
     }
 
     /* navbar css starts */
@@ -360,6 +361,7 @@ footer {
         color: rgba(52, 119, 249, 1.5);
         text-decoration: solid;
         font-size: 28px;
+        color: white;
     }
 
     .navbar {
@@ -371,13 +373,6 @@ footer {
 
     .toggle-button {
         display: flex;
-    }
-
-    .brand-title {
-        font-size: 1.5rem;
-        margin: .5rem;
-        color: white;
-        cursor: pointer;
     }
 
     .navbar-links {

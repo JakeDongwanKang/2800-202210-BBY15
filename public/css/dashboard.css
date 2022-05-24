@@ -93,6 +93,7 @@ a {
     margin: .5rem;
     color: #fff;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .navbar-links {

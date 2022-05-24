@@ -62,3 +62,8 @@ document.getElementById("signUpButton").addEventListener("click", function(e) {
 function removeErrorMsg() {
     document.getElementById("emptyError").innerHTML = "";
 }
+
+// Go to dashboard when user clicks on "Cancel"
+document.getElementById("cancel").addEventListener("click", function (e) {
+    window.location.replace("/dashboard");
+})
