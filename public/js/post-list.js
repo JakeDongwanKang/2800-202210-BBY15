@@ -257,27 +257,15 @@ function expandText(e) {
 
 
 /**
- * Display the full image when users click on that image.
+ * Expand the image when users click on that image.
  * Return to the original size when users click on that image again. 
  * @param {*} e the current img element
  */
-var expandImg = true;
 function expandImage(e) {
-    if (expandImg) {
-        e.style.transform = "scale(3)";
-        e.style.position = 'absolute';
-        if (!x.matches) {
-            e.style.top = "20%";
-            e.style.left = "-20%";
-        }
-        e.style.zIndex = "1";
-        expandImg = false;
-    } else {
-        e.style.transform = "scale(1.0)";
-        e.style.position = '';
-        e.style.top = "";
-        e.style.right = "";
-        e.style.zIndex = "";
-        expandImg = true;
-    }
+    document.querySelector('.popup-image').style.display = "block";
+    document.querySelector('.popup-image img').src = e.getAttribute('src');
+}
+
+document.querySelector('.popup-image span').onclick = () => {
+    document.querySelector('.popup-image').style.display = "none";
 }

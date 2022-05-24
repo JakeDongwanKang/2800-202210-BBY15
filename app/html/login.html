@@ -4,21 +4,22 @@
 <head>
     <title>Login | Extremis</title>
     <meta charset="utf-8" />
-    <link rel="icon" href="data:,">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Linh to css stylesheet -->
     <link rel="stylesheet" href="./css/login.css" />
+    <!-- Script for use of fontawesome -->
     <script src="https://kit.fontawesome.com/c14c02f185.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <div id="container">
         <div id="left">
-            <img id="logo1" src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/logoOnBlue.png"/>
-            <img id="logo2" src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/logoOnWhite.png"/>
+            <img id="logo1" src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/logoOnBlue.png" />
+            <img id="logo2" src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/logoOnWhite.png" />
             <h2>Welcome to Login</h2>
             <div id="sign-up1">
                 <p>Don't have an account yet?</p>
-                <button id="sign-up-link">Join now!</button>
+                <button class="sign-up-link">Join now!</button>
             </div>
         </div>
 
@@ -27,7 +28,7 @@
             <div class="form-box">
                 <i class="fa-regular fa-envelope"></i>
                 <label> Email</label>
-                <input type="email" id="userEmail" required="required" oninput="removeErrorMsg()" 
+                <input type="email" id="userEmail" required="required" oninput="removeErrorMsg()"
                     placeholder='Enter your email'>
                 <p class="errorMsg" id="emailError"></p>
             </div>
@@ -42,7 +43,7 @@
             <input type="button" value="Login" id="submit">
             <div id="sign-up2">
                 <p>Don't have an account yet?</p>
-                <a href="#" id="sign-up-link">Join Extremis now!</a>
+                <a href="/sign-up" class="sign-up-link">Join Extremis now!</a>
             </div>
         </form>
     </div>

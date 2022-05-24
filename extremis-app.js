@@ -419,7 +419,7 @@ app.get("/profile", function (req, res) {
                         let lastname = results[i].last_name;
                         let useremail = results[i].email;
                         let password = results[i].user_password;
-                        let userprofile = '/assets/default-profile.jpg';
+                        let userprofile = 'https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg';
                         if (results[i].profile_picture != null) {
                             userprofile = results[i].profile_picture;
                         };
@@ -884,7 +884,7 @@ app.get("/post-list", function (req, res) {
                 if (results.length >= 0) {
                     for (var i = 0; i < results.length; i++) {
                         let newcard = cardTemplate.content.cloneNode(true);
-                        newcard.querySelector('.current-status').innerHTML = results[i].post_status;
+                        newcard.querySelector('.current-status').innerHTML = results[i].post_status + ' <i class="fa-solid fa-pen"></i>';
                         newcard.querySelector('.userID').innerHTML = "<b>User ID: </b>" + results[i].user_id;
                         newcard.querySelector('.post-type').innerHTML = "<b>Type: </b>" + results[i].post_type;
                         newcard.querySelector('.post-title').innerHTML = "<b>Title: </b>" + results[i].post_title;

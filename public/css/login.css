@@ -9,7 +9,7 @@ body{
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: 100%;
-    height: 45vh;
+    height: 50vh;
     margin: 25vh auto 0 auto;
     width: 56vw;
     text-align: center;
@@ -43,7 +43,7 @@ h2{
      color: #ffffff;
  }
 
-#sign-up-link{
+.sign-up-link{
     font-family: 'Montserrat';
     cursor: pointer;
     background-color: #3477f9;
@@ -53,9 +53,10 @@ h2{
     border-radius: 10px;
     width: 35%;
     line-height: 35px;
+    font-weight: bold;
 }
 
-#sign-up-link:hover{
+.sign-up-link:hover{
     box-shadow: 0 0 5px #ffffff;    
 }
 

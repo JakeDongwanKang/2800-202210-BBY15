@@ -50,7 +50,7 @@ function removeErrorMsg() {
 }
 
 // Go to sign-up when user clicks on "Join Extremis now!"
-document.getElementById("sign-up-link").addEventListener("click", function (e) {
+document.querySelector(".sign-up-link").addEventListener("click", function (e) {
     window.location.replace("/sign-up");
 });
 
