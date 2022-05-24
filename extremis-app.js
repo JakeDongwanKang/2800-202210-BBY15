@@ -427,7 +427,14 @@ app.get("/profile", function (req, res) {
                         </br>  
                         <div class="account-body"> 
                         <div class='profile-pic-div'>
-                            <img class='profile-pic' src='${userprofile}'</div>                              
+                            <img class='profile-pic' src='${userprofile}'>
+                            <label for="selectFile">
+                                <img class="camera" src="/assets/camera-icon1.jpg" width="28" height="28"/>
+                            </label>
+                            <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
+                            multiple="multiple" />
+
+                        </div>                         
                             <div id="user_title">
                             <h2>${firstname} ${lastname} </h2>
                             </div>
