@@ -50,6 +50,7 @@ h2 {
 
 #updateAccount {
     padding: 10px 15px;
+    width: 90px;
     font-size: 12px;
     cursor: pointer;
     text-align: center;
@@ -71,6 +72,7 @@ h2 {
 #cancel {
     padding: 10px 15px;
     font-size: 12px;
+    width: 90px;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
@@ -101,7 +103,7 @@ h2 {
     overflow: hidden;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0), 0 6px 36px, rgba(0, 0, 0, 0.13);
     border: 1px solid white;
-    cursor: pointer;
+
 }
 
 /* #selectFile {
@@ -181,7 +183,6 @@ h2 {
 .navbar-links li a:hover {
     color: rgba(52, 119, 249, 1.5);
 }
-
 
 .toggle-button {
     position: absolute;
@@ -463,7 +464,7 @@ p {
         overflow: hidden;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0), 0 6px 36px, rgba(0, 0, 0, 0.13);
         border: 1px solid white;
-        cursor: pointer;
+
     }
 
 }
