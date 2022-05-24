@@ -441,14 +441,18 @@ app.get("/profile", function (req, res) {
                                     <input type="text" class="um-input" id="lastName" value=${lastname}>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Email  &#x270e;</label>
+                                    <label for="email">Email</label>
                                     <input type="email" class="um-input" id="userEmail" value=${useremail}>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Password  &#x270e;</label>
-                                    <input type="password" class="um-input" id="userPassword" value=${password}>
+                                    <input type="password" id="userPassword" required="required"value=${password} />
                                 </div>
-                                
+                                <div class="form-group">
+                                    <label for="password">Confirm password</label>
+                                    <input type="password" id="userConfirmPassword" required="required"
+                                    value=${password} onkeyup="validate_password()"/>
+                                </div>
                             </div>
                                 
                             </div>  
