@@ -19,6 +19,7 @@ body {
     margin: .5rem;
     color: #3477F9;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .navbar-links {
@@ -198,6 +199,7 @@ td {
     body {
         grid-template-columns: 5% 90% 5%;
         font-size: 14px;
+        margin: 0;
     }
     
     .user-card {
@@ -205,7 +207,7 @@ td {
     }
 
     .brand-title {
-        color: rgba(52, 119, 249, 1.5);
+        color: white;
         text-decoration: solid;
         font-size: 28px;
     }
@@ -219,13 +221,6 @@ td {
 
     .toggle-button {
         display: flex;
-    }
-
-    .brand-title {
-        font-size: 1.5rem;
-        margin: .5rem;
-        color: white;
-        cursor: pointer;
     }
 
     .navbar-links {
@@ -267,6 +262,11 @@ td {
         margin-bottom: 30px;
     }
 
+    #user-container {
+        margin: 0 auto 0 auto;
+        width: 90vw;
+    }
+
     .branch {
         font-size: 4rem;
     }
@@ -302,7 +302,8 @@ td {
 	}
 
     .id {
-        background-color: #5ca1dc
+        background-color: #5ca1dc;
+        color: white;
     }
 
     td:nth-of-type(1):before { content: "ID"; }

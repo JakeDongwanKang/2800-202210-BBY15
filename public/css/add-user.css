@@ -5,6 +5,7 @@ body {
   margin: 0;
 }
 
+/* navbar css starts */
 .navbar {
   display: flex;
   position: relative;
@@ -52,7 +53,6 @@ body {
   color: rgba(52, 119, 249, 1.5);
 }
 
-
 .toggle-button {
   position: absolute;
   top: .75rem;
@@ -82,34 +82,14 @@ body {
   color: white;
   transition: all 0.3s ease 0s;
   letter-spacing: 1.5px;
+  outline: none;
 }
 
-button:hover {
-  background-color: rgba(52, 119, 249, 0.3);
-}
-
-.main-button {
-  margin-top: 2rem;
-}
-
-.um-subtitle {
-  font-weight: 500;
-  letter-spacing: 0.5rem;
-  font-size: 15px;
-}
-
-.branch {
-  font-size: 5rem;
-  font-weight: 700;
-}
-
-.container {
-  padding: 0;
-  text-align: center;
-}
-
-#signUpForm {
-  margin: 5% 20% auto 20%;
+/* navbar css ends  */
+#signUpPanel {
+  margin: 5vh auto 5vh auto;
+  width: 60vw;
+  max-width: 500px;
 }
 
 .errorMsg {
@@ -117,11 +97,12 @@ button:hover {
   margin: 0 0 20px 0;
 }
 
-input {
+input:not(.singin) {
   display: block;
   width: 100%;
   border-radius: 15px;
-  border: solid 0.5px #484848;
+  border: none;
+  outline: solid 0.5px #484848;
   font-size: 18px;
   margin-top: 10px;
   padding-left: 10px;
@@ -129,44 +110,50 @@ input {
   font-family: 'Montserrat';
 }
 
+input:hover {
+  outline: 0.5px solid #3477F9;
+}
+
 #signUpForm {
   color: #40403e;
 }
 
-#signUpForm>input[type="button"] {
-  width: 50%;
-  margin: 30px auto 20px auto;
+#btn {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#btn>input[type="button"] {
+  width: 40%;
+  margin: 10px auto 10px auto;
   cursor: pointer;
   background-color: #3477f9;
   color: #ffffff;
-  font-size: 20px;
-  border-color: transparent;
+  font-size: 18px;
+  border: none;
+  outline: none;
 }
 
 .label {
-  font-size: 12pt;
+  font-size: 15px;
 }
 
 #signUpTitle {
   color: #3477f9;
   font-weight: bold;
   text-align: center;
+  font-size: 30px;
 }
 
-#signUpForm>input[type="button"]:hover {
-  color: white;
-  border-color: white;
-  opacity: 0.7;
+#btn>input[type="button"]:hover {
+  box-shadow: 0 0 5px #3477F9;
 }
 
-#text {
-  text-align: center;
-}
-
-#log-in-link {
-  text-decoration: none;
-  color: #3477f9;
-  font-weight: 600;
+#togglePassword {
+  position: absolute;
+  margin-top: -28px; 
+  margin-left: 470px;
+  cursor: pointer;
 }
 
 footer {
@@ -177,20 +164,10 @@ footer {
   color: #000;
 }
 
-.wrong_pass_alert {
-  text-align: center;
-}
-
 /*For the view under 800px*/
 @media (max-width: 800px) {
-  #signUpForm>input[type="button"] {
-    width: 100%;
-  }
 
-  .user-card {
-    width: 100%;
-  }
-
+  /* navbar css starts  */
   .brand-title {
     color: rgba(52, 119, 249, 1.5);
     text-decoration: solid;
@@ -207,13 +184,6 @@ footer {
 
   .toggle-button {
     display: flex;
-  }
-
-  .brand-title {
-    font-size: 1.5rem;
-    margin: .5rem;
-    color: white;
-    cursor: pointer;
   }
 
   .navbar-links {
@@ -255,11 +225,37 @@ footer {
     margin-bottom: 30px;
   }
 
-  .branch {
-    font-size: 4rem;
+  #signUpPanel {
+    margin: 5vh auto 5vh auto;
+    width: 70vw;
+    max-width: 500px;
   }
 
-  .main-button {
-    margin-top: 1rem;
+  #signUpTitle {
+    font-size: 25px;
+  }
+
+  #btn {
+    display: block;
+    margin: 0 auto 0 auto;
+    width: 100%;
+  }
+
+  input:not(.singin) {
+    font-size: 15px;
+    height: 35px;
+  }
+
+  #btn>input[type="button"] {
+    width: 70%;
+    max-width: 200px;
+    margin-bottom: 20px;
+    height: 35px;
+    font-size: 15px;
+  }
+
+  #togglePassword{
+    margin-top: -25px;
+    margin-left: 63%;
   }
 }

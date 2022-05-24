@@ -164,15 +164,6 @@ app.get("/user-list", function (req, res) {
                 for (let i = 0; i < results.length; i++) {
 
                     user_list += ("<tbody><tr><td class='id'>" + results[i]['user_id'] +
-
-                        // "</td><td class='first_name'><span>" + results[i]['first_name'] +
-                        // "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
-                        // "</span></td><td class='email'><span>" + results[i]['email'] +
-                        // "</span></td><td class='password'><span>" + results[i]['user_password'] +
-                        // "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
-                        // "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
-                        // "</button></td></tr></tbody>"
-
                         "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i]['first_name'] +
                         "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i]['last_name'] +
                         "</span></td><td class='email'><div class='material-icons'>edit</div><span>" + results[i]['email'] +
@@ -519,7 +510,7 @@ app.post("/profile", function (req, res) {
 app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
-        let newpath = ".." + req.files[i].path.substring(3);
+        let newpath = req.files[i].path.substring(3);
         connection.query('UPDATE BBY_15_User SET profile_picture=? WHERE user_id=?',
             [newpath, req.session.user_id],
             function (error, results, fields) {
@@ -765,7 +756,7 @@ app.get("/timeline", function (req, res) {
                         <div class="post_content">
                             <div class="card">
                                 <div class="post-user">
-                                    <img class="profile-pic" src="${profilePic}">
+                                    <img class="profile-pic" src="${profilePic}" onclick='expandImage(this)'>
                                     <span><h4>&ensp;${firstName} ${lastName}</h4></span>
                                 </div>
                 
@@ -776,12 +767,12 @@ app.get("/timeline", function (req, res) {
                                 </div>
                                 <div class="post-image">`;
                         if (postImages) {
-                            template += `<img class='post-pic' src="${postImages}">`;
+                            template += `<img class='post-pic' src="${postImages}" onclick="expandImage(this)">`;
                         }
 
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
-                            template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                            template += "<img class='post-pic' src=" + results[i].image_location + " onclick='expandImage(this)'>"
                         }
 
                         template += `</div>
@@ -848,11 +839,11 @@ app.post('/search-timeline', function (req, res) {
                             </div>
                             <div class="post-image">`;
                         if (postImages) {
-                            template += `<img class='post-pic' src="${postImages}">`;
+                            template += `<img class='post-pic' src="${postImages}"  onclick="expandImage(this)">`;
                         }
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
-                            template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                            template += "<img class='post-pic' src=" + results[i].image_location + " onclick='expandImage(this)'>"
                         }
 
                         template += `</div>

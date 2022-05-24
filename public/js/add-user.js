@@ -62,3 +62,20 @@ document.getElementById("signUpButton").addEventListener("click", function(e) {
 function removeErrorMsg() {
     document.getElementById("emptyError").innerHTML = "";
 }
+
+// Go to dashboard when user clicks on "Cancel"
+document.getElementById("cancel").addEventListener("click", function (e) {
+    window.location.replace("/dashboard");
+})
+
+// Display/Hide password (https://www.csestack.org/hide-show-password-eye-icon-html-javascript/)
+const togglePassword = document.querySelector('#togglePassword');
+  const password = document.querySelector('#userPassword');
+ 
+  togglePassword.addEventListener('click', function (e) {
+    // toggle the type attribute
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    // toggle the eye slash icon
+    this.classList.toggle('fa-eye-slash');
+});
