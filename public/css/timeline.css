@@ -226,6 +226,7 @@ button:hover {
     border-radius:50%;
     width: 48px;
     height: 48px;
+    cursor: pointer;
 }
 
 h3 {
@@ -253,6 +254,7 @@ h5 {
     width: 90%;
     height: auto;
     margin-bottom: 0;
+    cursor: pointer;
 }
 
 .post-header {
@@ -285,6 +287,39 @@ h4 {
 
 .read-more {
     visibility: hidden;
+}
+
+/* popup box for image expanded */
+.popup-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.9);
+    height: 100%;
+    width: 100vw;
+    z-index: 100;
+    display: none;
+}
+
+.popup-image span {
+    position: absolute;
+    top:10px;
+    right: 10px;
+    font-size: 35px;
+    font-weight: bold;
+    color: #ffffff;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.popup-image img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    width: 70vw;
+    object-fit: cover;
 }
 
 footer {
@@ -467,4 +502,8 @@ footer {
     }
 
       /* "Read More" Styling Ends */
+
+    .popup-image img {
+        width: 90%;
+    }
 }

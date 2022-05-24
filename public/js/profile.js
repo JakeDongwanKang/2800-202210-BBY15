@@ -29,7 +29,7 @@ async function sendData(data) {
         if (parsedJSON.status == "fail") {
             document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
         } else {
-            window.location.replace("/main");
+            window.location.reload();
         }
     } catch (error) {}
 }

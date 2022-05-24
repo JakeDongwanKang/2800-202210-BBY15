@@ -86,21 +86,21 @@ function displayPost(selectedStatus) {
     if (selectedStatus == "Approved") {
         // Display all approved posts
         for (let i = 0; i < postStatus.length; i++) {
-            if (postStatus[i].innerText != "approved") {
+            if (postStatus[i].innerText != "approved ") {
                 postStatus[i].parentElement.parentElement.parentElement.style.display = "none";
             }
         }
     } else if (selectedStatus == "Pending") {
         // Display all pending posts
         for (let i = 0; i < postStatus.length; i++) {
-            if (postStatus[i].innerText != "pending") {
+            if (postStatus[i].innerText != "pending ") {
                 postStatus[i].parentElement.parentElement.parentElement.style.display = "none";
             }
         }
     } else if (selectedStatus == "Rejected") {
         // Display all rejected/deleted posts
         for (let i = 0; i < postStatus.length; i++) {
-            if (postStatus[i].innerText != "rejected") {
+            if (postStatus[i].innerText != "rejected ") {
                 postStatus[i].parentElement.parentElement.parentElement.style.display = "none";
             }
         }
@@ -226,7 +226,7 @@ for (let i = 0; i < allPosts.length; i++) {
             // Change the grid_column property of the post-body element if users are using web app on desktop/laptop.
             postBodyElement.style.gridColumn = "1 / span 2";
         }
-        
+
     }
 }
 
@@ -258,7 +258,6 @@ function expandText(e) {
 
 /**
  * Expand the image when users click on that image.
- * Return to the original size when users click on that image again. 
  * @param {*} e the current img element
  */
 function expandImage(e) {
@@ -266,6 +265,15 @@ function expandImage(e) {
     document.querySelector('.popup-image img').src = e.getAttribute('src');
 }
 
+/**
+ * Return to the original size when users click on close button (X) or enter escape key. 
+ */
 document.querySelector('.popup-image span').onclick = () => {
     document.querySelector('.popup-image').style.display = "none";
+}
+
+document.body.onkeydown = function (e) {
+    if (e.which == 27) {
+        document.querySelector('.popup-image').style.display = "none";
+    }
 }

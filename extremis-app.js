@@ -508,7 +508,7 @@ app.post("/profile", function (req, res) {
 app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
-        let newpath = ".." + req.files[i].path.substring(3);
+        let newpath = req.files[i].path.substring(3);
         connection.query('UPDATE BBY_15_User SET profile_picture=? WHERE user_id=?',
             [newpath, req.session.user_id],
             function (error, results, fields) {
@@ -754,7 +754,7 @@ app.get("/timeline", function (req, res) {
                         <div class="post_content">
                             <div class="card">
                                 <div class="post-user">
-                                    <img class="profile-pic" src="${profilePic}">
+                                    <img class="profile-pic" src="${profilePic}" onclick='expandImage(this)'>
                                     <span><h4>&ensp;${firstName} ${lastName}</h4></span>
                                 </div>
                 
@@ -765,12 +765,12 @@ app.get("/timeline", function (req, res) {
                                 </div>
                                 <div class="post-image">`;
                         if (postImages) {
-                            template += `<img class='post-pic' src="${postImages}">`;
+                            template += `<img class='post-pic' src="${postImages}" onclick="expandImage(this)">`;
                         }
 
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
-                            template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                            template += "<img class='post-pic' src=" + results[i].image_location + " onclick='expandImage(this)'>"
                         }
 
                         template += `</div>
@@ -837,11 +837,11 @@ app.post('/search-timeline', function (req, res) {
                             </div>
                             <div class="post-image">`;
                         if (postImages) {
-                            template += `<img class='post-pic' src="${postImages}">`;
+                            template += `<img class='post-pic' src="${postImages}"  onclick="expandImage(this)">`;
                         }
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
-                            template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                            template += "<img class='post-pic' src=" + results[i].image_location + " onclick='expandImage(this)'>"
                         }
 
                         template += `</div>
