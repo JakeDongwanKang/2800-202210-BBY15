@@ -13,39 +13,41 @@ async function sendData(data) {
     try {
         let responseObject = await fetch("/add-user", {
             method: 'POST',
-            headers: { "Accept": 'application/json',
-                       "Content-Type": 'application/json'
+            headers: {
+                "Accept": 'application/json',
+                "Content-Type": 'application/json'
             },
             body: JSON.stringify(data)
         });
         let parsedJSON = await responseObject.json();
-        if(parsedJSON.status == "fail") {
+        if (parsedJSON.status == "fail") {
             document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
         } else if (parsedJSON.status == "duplicate") {
             document.getElementById("emptyError").innerHTML = "<small>*This email is already registered to an account*</small>";
         } else {
             window.location.replace("/main");
         }
-    } catch(error) {}
+    } catch (error) {}
 }
 
 
 //Send user's email and password to server for authentication
-document.getElementById("signUpButton").addEventListener("click", function(e) {
+document.getElementById("signUpButton").addEventListener("click", function (e) {
     let firstName = document.getElementById("firstName").value;
     let lastName = document.getElementById("lastName").value;
     let email = document.getElementById("userEmail").value;
     let password = document.getElementById("userPassword").value;
 
-    if(!firstName || !lastName || !email || !password){
-    document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
+    if (!firstName || !lastName || !email || !password) {
+        document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
     } else {
-    sendData({firstName: document.getElementById("firstName").value,
-              lastName: document.getElementById("lastName").value,
-              email: document.getElementById("userEmail").value,
-              password: document.getElementById("userPassword").value
-            });
-        }
+        sendData({
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+            email: document.getElementById("userEmail").value,
+            password: document.getElementById("userPassword").value
+        });
+    }
 });
 
 //This function removes the error message once one of the columns are clicked.
@@ -54,6 +56,34 @@ function removeErrorMsg() {
 }
 
 // Go to sign-up when user clicks on "Login Now!"
-document.getElementById("log-in-link").addEventListener("click", function(e) {
+document.getElementById("log-in-link").addEventListener("click", function (e) {
     window.location.replace("/");
 })
+
+//Function to check the password is matched or not made by Anh
+function validate_password() {
+
+    var pass = document.getElementById('userPassword').value;
+    var confirm_pass = document.getElementById('userConfirmPassword').value;
+    if (pass != confirm_pass) {
+        document.getElementById('wrong_pass_alert').style.color = 'red';
+        document.getElementById('wrong_pass_alert').innerHTML = '☒ Please enter the same password';
+        document.getElementById('signUpButton').disabled = true;
+        document.getElementById('signUpButton').style.opacity = (0.4);
+    } else {
+        document.getElementById('wrong_pass_alert').style.color = 'green';
+        document.getElementById('wrong_pass_alert').innerHTML =
+            '🗹 Password Matched';
+        document.getElementById('signUpButton').disabled = false;
+        document.getElementById('signUpButton').style.opacity = (1);
+    }
+}
+
+function wrong_pass_alert() {
+    if (document.getElementById('userPassword').value != "" &&
+        document.getElementById('userConfirmPassword').value != "") {
+        alert("Your response is submitted");
+    } else {
+        alert("Please fill all the fields");
+    }
+}

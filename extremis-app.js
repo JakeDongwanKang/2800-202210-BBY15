@@ -1000,24 +1000,24 @@ app.get("/my-post", function (req, res) {
                         my_post += `</div>
                                         <div class="desc">
                                             <p class="post_id">` + postID + `</p> 
-                                            <p class="posted_time">Posted time: ` + postTime + `</p><br> 
-                                            <p class="post_status">Post status: ` + postStatus + `</p> </br>                                            
-                                            Weather Type: &#x270e;        
+                                            <p class="posted_time"><u>Posted time:</u>  ` + postTime + `</p><br> 
+                                            <p class="post_status"><u>Post status:</u> ` + postStatus + `</p> </br>                                            
+                                            <u>Weather Type:</u>  &#x270e;        
                                             <h3 class="weather_type"><span>` + typeWeather + `</span></h3><br>
-                                            Title: &#x270e;      
+                                            <u>Title:</u>&#x270e;      
                                             <h4 class="post_title"><span>` + postTitle + `</span></h4><br> 
-                                            Location: &#x270e;            
+                                            <u>Location:</u> &#x270e;            
                                             <p class="location"><span>` + postlocation + `</span></p><br> 
-                                            Description: &#x270e;         
+                                            <u>Description:</u> &#x270e;         
                                             </br><div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
                                             <form id="upload-images">
-                                                <label>Change images's posts</label>
+                                                <label>Change images's posts: </label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
                                                     multiple="multiple" />
                                                 <p class="errorMsg"></p>
                                                 <div class="button-update-images">
-                                                    <input class="form-input" type="submit" id="upload" value="Upload images" />
-                                                    <button type='button' class='deletePost'>Delete post</button>
+                                                <button type='button' class='deletePost'>Delete post</button>    
+                                                <input class="form-input" type="submit" id="upload" value="Upload image" />                                                    
                                                 </div>
                                             </form>
                                         </div>

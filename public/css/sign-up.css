@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap%27');
 
-body{
-    font-family: 'Montserrat';
+body {
+  font-family: 'Montserrat';
 }
 
 .navbar {
@@ -107,15 +107,15 @@ button:hover {
 }
 
 #signUpForm {
-    margin: 5% 20% auto 20%;
+  margin: 5% 20% auto 20%;
 }
 
-.errorMsg{
+.errorMsg {
   color: red;
   margin: 0 0 20px 0;
 }
 
-input{
+input {
   display: block;
   width: 100%;
   border-radius: 15px;
@@ -131,14 +131,14 @@ input{
   color: #40403e;
 }
 
-#signUpForm > input[type="button"] {
+#signUpForm>input[type="button"] {
   width: 50%;
-    margin: 30px auto 20px auto;
-    cursor: pointer;
-    background-color: #3477f9;
-    color: #ffffff;
-    font-size: 20px;
-    border-color: transparent;
+  margin: 30px auto 20px auto;
+  cursor: pointer;
+  background-color: #3477f9;
+  color: #ffffff;
+  font-size: 20px;
+  border-color: transparent;
 }
 
 .label {
@@ -151,109 +151,113 @@ input{
   text-align: center;
 }
 
-#signUpForm > input[type="button"]:hover {
+#signUpForm>input[type="button"]:hover {
   color: white;
   border-color: white;
   opacity: 0.7;
 }
 
-#text{
+#text {
   text-align: center;
 }
 
-#log-in-link{
+#log-in-link {
   text-decoration: none;
   color: #3477f9;
   font-weight: 600;
 }
 
 footer {
-  position:fixed;
-  left:0;
-    bottom:0;
-    width:100%;
-    text-align: center;
-    color: #000;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  color: #000;
+}
+
+.wrong_pass_alert {
+  text-align: center;
 }
 
 /*For the view under 800px*/
 @media (max-width: 800px) {
-  #signUpForm > input[type="button"] {
-    width : 100%;
+  #signUpForm>input[type="button"] {
+    width: 100%;
   }
 
   .user-card {
     width: 100%;
-}
+  }
 
-.brand-title {
+  .brand-title {
     color: rgba(52, 119, 249, 1.5);
     text-decoration: solid;
     font-size: 28px;
-}
+  }
 
-.navbar {
-  flex-direction: column;
-  align-items: flex-start;
-  color: #000;
-  background-color: #5ca1dc;
-}
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    color: #000;
+    background-color: #5ca1dc;
+  }
 
-.toggle-button {
-  display: flex;
-}
+  .toggle-button {
+    display: flex;
+  }
 
-.brand-title {
-  font-size: 1.5rem;
-  margin: .5rem;
-  color: white;
-  cursor: pointer;
-}
+  .brand-title {
+    font-size: 1.5rem;
+    margin: .5rem;
+    color: white;
+    cursor: pointer;
+  }
 
-.navbar-links {
-  display: none;
-  width: 100%;
-}
+  .navbar-links {
+    display: none;
+    width: 100%;
+  }
 
-.navbar-links ul {
-  width: 100%;
-  flex-direction: column;
-}
+  .navbar-links ul {
+    width: 100%;
+    flex-direction: column;
+  }
 
-.navbar-links ul li {
-  text-align: center;
-  font-size: 18px;
+  .navbar-links ul li {
+    text-align: center;
+    font-size: 18px;
 
-}
+  }
 
-.navbar-links ul li a {
-  padding: 1rem 1rem;
-  color: #000;
-  font-size: 18px;
+  .navbar-links ul li a {
+    padding: 1rem 1rem;
+    color: #000;
+    font-size: 18px;
 
-}
+  }
 
-.navbar-links.active {
-  display: flex;
-} 
+  .navbar-links.active {
+    display: flex;
+  }
 
-.singin {
-  padding: 9px 30px;
-  background-color: rgba(52, 119, 249, 0.7);
-  border: none;
-  border-radius: 50px;
-  font-size: 18px;
-  cursor: pointer;
-  color: white;
-  transition: all 0.3s ease 0s;
-  margin-bottom: 30px;
-}
+  .singin {
+    padding: 9px 30px;
+    background-color: rgba(52, 119, 249, 0.7);
+    border: none;
+    border-radius: 50px;
+    font-size: 18px;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease 0s;
+    margin-bottom: 30px;
+  }
 
-.branch {
+  .branch {
     font-size: 4rem;
-}
+  }
 
-.main-button {
+  .main-button {
     margin-top: 1rem;
-}
+  }
 }
