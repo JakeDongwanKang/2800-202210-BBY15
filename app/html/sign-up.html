@@ -14,6 +14,9 @@
       <img id="logo" src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/logoOnWhite.png" />
     </header>
 
+    <br>
+    <br>
+
     <div id="container">
       <h2 id="signUpTitle">Create an Account!</h2>
       <form id="signUpForm">
@@ -31,12 +34,10 @@
         <br />
         <label for="userConfirmPassword" class="label">Confirm Password</label><br />
         <input id="userConfirmPassword" type="password" required="required" onfocus="removeErrorMsg()"
-          onkeyup="validate_password()" placeholder="Confirm your password" />
-        <br />
+          onkeyup="validate_password()" placeholder="Confirm Password" />
         <p class="errorMsg" id="emptyError"></p>
         <span id="wrong_pass_alert"></span> <br>
         <input type="button" value="Create Account" id="signUpButton" onclick="wrong_pass_alert()" />
-        <br />
         <br />
         <p id="text">Already have an account? <a href="#" id="log-in-link">Login Now!</a></p>
       </form>
