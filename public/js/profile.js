@@ -79,3 +79,31 @@ function uploadImages(e) {
             ("Error:", err)
         });
 };
+
+//Function to check the password is matched or not
+function validate_password() {
+
+    var pass = document.getElementById('userPassword').value;
+    var confirm_pass = document.getElementById('userConfirmPassword').value;
+    if (pass != confirm_pass) {
+        document.getElementById('wrong_pass_alert').style.color = 'red';
+        document.getElementById('wrong_pass_alert').innerHTML = '☒ Please enter the same password';
+        document.getElementById('updateAccount').disabled = true;
+        document.getElementById('updateAccount').style.opacity = (0.4);
+    } else {
+        document.getElementById('wrong_pass_alert').style.color = 'green';
+        document.getElementById('wrong_pass_alert').innerHTML =
+            '🗹 Password Matched';
+        document.getElementById('updateAccount').disabled = false;
+        document.getElementById('updateAccount').style.opacity = (1);
+    }
+}
+
+function wrong_pass_alert() {
+    if (document.getElementById('userPassword').value != "" &&
+        document.getElementById('userConfirmPassword').value != "") {
+        alert("Your response is submitted");
+    } else {
+        alert("Please fill all the fields");
+    }
+}

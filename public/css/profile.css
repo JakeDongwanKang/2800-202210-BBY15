@@ -38,7 +38,7 @@ h2 {
 }
 
 .user_content {
-    padding-bottom: 20px;
+    padding-bottom: 5px;
 }
 
 .buttonProfile {
@@ -105,6 +105,16 @@ h2 {
 
 #selectFile {
     margin-left: 30px;
+    margin-top: 10px;
+}
+
+#togglePassword {
+    position: absolute;
+    margin-top: -40px;
+    margin-left: 30%;
+    background-color: red;
+
+    cursor: pointer;
 }
 
 /* CSS for the Navbar */
@@ -113,7 +123,6 @@ h2 {
     position: relative;
     justify-content: space-between;
     align-items: center;
-    background-color: none;
     color: black;
     text-decoration: solid;
 }
@@ -203,6 +212,7 @@ p {
     color: #000;
 }
 
+
 /*For the view under 800px*/
 @media (max-width: 800px) {
     #signUpForm>input[type="button"] {
@@ -223,7 +233,7 @@ p {
     }
 
     .brand-title {
-        color: rgba(52, 119, 249, 1.5);
+        color: white;
         text-decoration: solid;
         font-size: 28px;
     }
@@ -232,11 +242,18 @@ p {
         flex-direction: column;
         align-items: flex-start;
         color: #000;
-        background-color: white;
+        background-color: #5ca1dc;
     }
 
     .toggle-button {
         display: flex;
+    }
+
+    .brand-title {
+        font-size: 1.5rem;
+        margin: .5rem;
+        color: white;
+        cursor: pointer;
     }
 
     .navbar-links {
@@ -264,6 +281,7 @@ p {
 
     .navbar-links.active {
         display: flex;
+        background-color: white;
     }
 
     .singin {
