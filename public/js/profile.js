@@ -87,7 +87,7 @@ function validate_password() {
     var confirm_pass = document.getElementById('userConfirmPassword').value;
     if (pass != confirm_pass) {
         document.getElementById('wrong_pass_alert').style.color = 'red';
-        document.getElementById('wrong_pass_alert').innerHTML = '☒ Please enter the same password';
+        document.getElementById('wrong_pass_alert').innerHTML = '☒ Password are not matching';
         document.getElementById('updateAccount').disabled = true;
         document.getElementById('updateAccount').style.opacity = (0.4);
     } else {
@@ -102,7 +102,7 @@ function validate_password() {
 function wrong_pass_alert() {
     if (document.getElementById('userPassword').value != "" &&
         document.getElementById('userConfirmPassword').value != "") {
-        alert("Your response is submitted");
+        alert("Your change is submitted");
     } else {
         alert("Please fill all the fields");
     }
