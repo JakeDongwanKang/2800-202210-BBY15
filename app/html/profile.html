@@ -48,8 +48,10 @@
                 <p class="errorMsg" id="emptyError"></p>
 
                 <div class="buttonProfile">
-                    <input class="form-input" type="submit" id="updateAccount" value="Save" />
-                    <input class="form-input" type="button" value="Cancel" id="cancel">
+                    <span id="wrong_pass_alert"></span> <br>
+                    <input class="form-input" type="submit" id="updateAccount" value="Save"
+                        onclick="wrong_pass_alert()" />
+                    <input class=" form-input" type="button" value="Cancel" id="cancel">
                 </div>
             </form>
         </div>
