@@ -164,10 +164,10 @@ app.get("/user-list", function (req, res) {
                 for (let i = 0; i < results.length; i++) {
 
                     user_list += ("<tbody><tr><td class='id'>" + results[i]['user_id'] +
-                        "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i]['first_name'] +
-                        "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i]['last_name'] +
-                        "</span></td><td class='email'><div class='material-icons'>edit</div><span>" + results[i]['email'] +
-                        "</span></td><td class='password'><div class='material-icons'>edit</div><span>" + results[i]['user_password'] +
+                        "</td><td class='first_name'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['first_name'] +
+                        "</span></td><td class='last_name'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['last_name'] +
+                        "</span></td><td class='email'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['email'] +
+                        "</span></td><td class='password'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['user_password'] +
                         "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
                         "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
                         "</button></td></tr></tbody>"
@@ -218,10 +218,11 @@ app.get("/admin-list", function (req, res) {
                 for (let i = 0; i < results.length; i++) {
                     if (req.session.user_id != results[i]['user_id']) {
                         admin_list += ("<tr><td class='id'>" + results[i]['user_id'] +
-                            "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i]['first_name'] +
-                            "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i]['last_name'] +
-                            "</span></td><td class='email'><div class='material-icons'>edit</div><span>" + results[i]['email'] +
-                            "</span></td><td class='password'><div class='material-icons'>edit</div><span>" + results[i]['user_password'] +
+
+                            "</td><td class='first_name'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['first_name'] +
+                            "</span></td><td class='last_name'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['last_name'] +
+                            "</span></td><td class='email'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['email'] +
+                            "</span></td><td class='password'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['user_password'] +
                             "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_user'>Make User" +
                             "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
                             "</button></td></tr>"
@@ -446,11 +447,19 @@ app.get("/profile", function (req, res) {
                             </div>
                             <div id="user_content">
                                 <div class="form-group">
-                                    <label for="firstName">First Name  &#x270e;</label>
+                                    <label for="firstName">First Name
+                                        <div class="tooltip">&#x270e;
+                                            <span class="tooltiptext">Editable</span>
+                                        </div>  
+                                    </label>
                                     <input type="text" class="um-input" id="firstName" value=${firstname}> 
                                 </div>
                                 <div class="form-group">
-                                    <label for="lastName">Last Name  &#x270e;</label>
+                                    <label for="lastName">Last Name
+                                        <div class="tooltip">&#x270e;
+                                            <span class="tooltiptext">Editable</span>
+                                        </div> 
+                                    </label>
                                     <input type="text" class="um-input" id="lastName" value=${lastname}>
                                 </div>
                                 <div class="form-group">
@@ -458,11 +467,19 @@ app.get("/profile", function (req, res) {
                                     <input type="email" class="um-input" id="userEmail" disabled value=${useremail}>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password">Password  &#x270e;</label>
+                                    <label for="password">Password
+                                        <div class="tooltip">&#x270e;
+                                            <span class="tooltiptext">Editable</span>
+                                        </div> 
+                                    </label>
                                     <input type="password" id="userPassword" required="required"value=${password} />
                                 </div>
                                 <div class="form-group">
-                                    <label for="password">Confirm password</label>
+                                    <label for="password">Confirm password
+                                        <div class="tooltip">&#x270e;
+                                            <span class="tooltiptext">Editable</span>
+                                        </div> 
+                                    </label>
                                     <input type="password" id="userConfirmPassword" required="required"
                                     value=${password} onkeyup="validate_password()"/>
                                 </div>
@@ -506,6 +523,14 @@ const uploadAvatar = multer({
 app.post("/profile", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
+    let regex = new RegExp("^[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
+
+    if (!regex.test(req.body.email)) {
+        res.send({
+            status: "invalid email",
+            msg: "This email is invalid."
+        });
+    } else { 
     //connecting to the database, then creating and adding the user info into the database.
     connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE user_id=?',
         [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.session.user_id],
@@ -519,6 +544,7 @@ app.post("/profile", function (req, res) {
             req.session.email = req.body.email;
             req.session.save(function (err) {});
         });
+    }
 });
 
 //Upload the user profle into the database
@@ -758,7 +784,7 @@ app.get("/timeline", function (req, res) {
         connection.query(`SELECT * FROM BBY_15_User 
             INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
             LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id 
-            WHERE post_status = "approved"
+            WHERE post_status = "approved" OR post_status = "pending"
             ORDER BY posted_time DESC`,
             function (error, results, fields) {
                 let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
@@ -831,7 +857,7 @@ app.post('/search-timeline', function (req, res) {
         OR LOWER(post_type) LIKE '%${term}%'
         OR LOWER(location) LIKE '%${term}%'
         OR LOWER(weather_type) LIKE '%${term}%')
-        AND post_status = "approved"
+        AND (post_status = "approved" OR post_status = "pending")
         ORDER BY posted_time DESC`,
             function (error, results, fields) {
                 if (results.length >= 0) {
@@ -1023,20 +1049,49 @@ app.get("/my-post", function (req, res) {
                                             <p class="post_id">` + postID + `</p> 
                                             <p class="posted_time"><u>Posted time:</u>  ` + postTime + `</p><br> 
                                             <p class="post_status"><u>Post status:</u> ` + postStatus + `</p> </br>                                            
-                                            <u>Weather Type:</u>  &#x270e;        
+                                            <u>Weather Type:</u>  
+                                            <div class="tooltip">&#x270e;
+                                                <span class="tooltiptext">Editable</span>
+                                            </div>    
                                             <h3 class="weather_type"><span>` + typeWeather + `</span></h3><br>
-                                            <u>Title:</u>&#x270e;      
+                                            <u>Title:</u>
+                                            <div class="tooltip">&#x270e;
+                                                <span class="tooltiptext">Editable</span>
+                                            </div>      
                                             <h4 class="post_title"><span>` + postTitle + `</span></h4><br> 
-                                            <u>Location:</u> &#x270e;            
+                                            <u>Location:</u> 
+                                            <div class="tooltip">&#x270e;
+                                                <span class="tooltiptext">Editable</span>
+                                            </div>             
                                             <p class="location"><span>` + postlocation + `</span></p><br> 
-                                            <u>Description:</u> &#x270e;         
+                                            <u>Description:</u> 
+                                            <div class="tooltip">&#x270e;
+                                                <span class="tooltiptext">Editable</span>
+                                            </div>        
                                             </br><div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
                                             <form id="upload-images">
                                                 <label>Change images's posts: </label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"/>
                                                 <p class="errorMsg"></p>
+                                                
                                                 <div class="button-update-images">
-                                                <button type='button' class='deletePost'>Delete post</button>    
+                                                    <button class="modelButton" onclick="document.getElementById('modal').style.display='block'">Delete</button> 
+                                                    <div id="modal" class="modal">
+                                                        <div onclick="document.getElementById('modal').style.display='none'" class="close"
+                                                            title="Close Modal">&times;</div>
+                                                        <form class="modal-content">
+                                                            <div class="container">
+                                                                <h3>Delete post</h3><br>
+                                                                <p>Deleting this post is permanent and will remove all content of your post.</br>
+                                                                Are you sure you want to delete your post?
+                                                                </p>
+                                                                <div class="clearfix">
+                                                                    <button type="button" id="cancelbtn" class="cancelbtn">Cancel</button>
+                                                                    <button type="button" id="deletePost" class="deletePost">Delete</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 <input class="form-input" type="submit" id="upload" value="Upload image" />                                                    
                                                 </div>
                                             </form>

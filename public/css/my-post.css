@@ -20,7 +20,7 @@ body {
     position: relative;
     width: 600px;
     margin-bottom: 20px;
-    margin-left: 25%;
+    margin-left: 20%;
     padding: 40px;
 
 }
@@ -197,7 +197,8 @@ h4 {
 }
 
 button:hover {
-    background-color: rgba(52, 119, 249, 0.3);
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
 }
 
 p {
@@ -211,7 +212,7 @@ p {
 }
 
 .deletePost {
-    background-color: lightgray;
+    background-color: red;
     color: black;
     cursor: pointer;
     margin-right: 20px;
@@ -221,7 +222,7 @@ p {
     width: 110px;
 }
 
-#upload {
+input#upload.form-input {
     background-color: #3477F9;
     color: white;
     padding: 6px 15px;
@@ -229,6 +230,21 @@ p {
     border: none;
     border-radius: 5px;
     width: 110px;
+    font-size: 12px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+button.modelButton {
+    background-color: lightgray;
+    color: black;
+    cursor: pointer;
+    margin-right: 20px;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 15px;
+    width: 110px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
 }
 
 
@@ -240,7 +256,6 @@ input#selectFile.btn {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* footer css starts */
 footer {
     left: 0;
     bottom: 0;
@@ -249,7 +264,111 @@ footer {
     color: #000;
 }
 
-/* footer css ends */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+@media (max-width: 800px) and (min-width: 500px) {
+=======
+/* Float cancel and delete buttons and add an equal width */
+.cancelbtn, .deletePost {
+    margin-top: 10px;
+    width: 20%;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+}
+
+.cancelbtn {
+    background-color: #3477F9;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    margin-right: 10px;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 6px 15px;
+    width: 95px;
+}
+
+.cancelbtn:hover {
+    background-color: #3477F9;
+}
+
+
+.container {
+    padding: 15px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.modal {
+    font-size: 12px;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    overflow: auto;
+    background-color: #474e5d;
+    color: white;
+    top: 30%;
+    left: 20%;
+    width: 60%;
+    height: 30%;
+    border-radius: 20px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto 10% auto;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 20px;
+}
+
+
+/* The Modal Close Button (x) */
+.close {
+    position: absolute;
+    right: 40px;
+    top: 5px;
+    font-size: 30px;
+    color: white;
+}
+
+.close:hover,
+.close:focus {
+    color: #f44336;
+    cursor: pointer;
+}
+
+/* Clear floats */
+.clearfix::after {
+    clear: both;
+    display: flex;
+}
+
+
 
 @media screen and (max-width: 999px) and (min-width: 700px) {
     body {
@@ -666,5 +785,85 @@ footer {
     input#selectFile.btn {
         padding-top: 10px;
         font-family: 'Montserrat', sans-serif;
+    }
+
+
+    /* Float cancel and delete buttons and add an equal width */
+    .cancelbtn, .deletePost {
+        margin-top: 10px;
+        width: 20%;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+    }
+
+    .cancelbtn {
+        background-color: #3477F9;
+        color: white;
+        border-radius: 5px;
+        border: none;
+        margin-right: 10px;
+        font-size: 12px;
+        cursor: pointer;
+        padding: 6px 15px;
+        width: 85px;
+    }
+
+    .cancelbtn:hover {
+        background-color: #3477F9;
+    }
+
+    .deletePost:hover {
+        background-color: red;
+    }
+
+
+    .container {
+        padding: 15px;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .modal {
+        font-size: 12px;
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        overflow: auto;
+        background-color: #474e5d;
+        color: white;
+        top: 15%;
+        width: 100%;
+        height: 30%;
+        padding-top: 10px;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto 15% auto;
+        border: 1px solid #888;
+        width: 80%;
+        border-radius: 20px;
+    }
+
+    .close {
+        position: absolute;
+        right: 40px;
+        top: 5px;
+        font-size: 30px;
+        color: white;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #f44336;
+        cursor: pointer;
+    }
+
+    /* Clear floats */
+    .clearfix::after {
+        clear: both;
+        display: flex;
     }
 }
