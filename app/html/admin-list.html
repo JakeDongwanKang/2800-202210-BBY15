@@ -7,6 +7,7 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <link rel="stylesheet" href="/css/user-list.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- Favicon goes here  -->
   <link rel="icon" type="image/png" href="https://extremis-bby15.s3.ca-central-1.amazonaws.com/favicon.ico">
 </head>
@@ -41,6 +42,19 @@
   </header>
 
   <table id="user-container"></table>
+
+  <div id="err-popup">
+    <div id="err-popup-container">
+        <img src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/warning.png"/>
+        <h2>Are you sure?</h2>
+        <p id="warning-message"></p>
+        <button id="confirm"></button>
+        <button id="cancel2">Cancel</button>
+    </div>
+  </div>
+
+  <br />
+  <br />
 
   <footer>&copy; 2022 Burnaby-15</footer>
   <script src="/js/user-list.js"></script>
