@@ -1012,8 +1012,25 @@ app.get("/my-post", function (req, res) {
                                                 <label>Change images's posts: </label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"/>
                                                 <p class="errorMsg"></p>
+                                                
                                                 <div class="button-update-images">
-                                                <button type='button' class='deletePost'>Delete post</button>    
+                                                    <button class="modelButton" onclick="document.getElementById('modal').style.display='block'">Delete</button> 
+                                                    <div id="modal" class="modal">
+                                                        <div onclick="document.getElementById('modal').style.display='none'" class="close"
+                                                            title="Close Modal">&times;</div>
+                                                        <form class="modal-content">
+                                                            <div class="container">
+                                                                <h3>Delete post</h3><br>
+                                                                <p>Deleting this post is permanent and will remove all content of your post.</br>
+                                                                Are you sure you want to delete your post?
+                                                                </p>
+                                                                <div class="clearfix">
+                                                                    <button type="button" id="cancelbtn" class="cancelbtn">Cancel</button>
+                                                                    <button type="button" id="deletePost" class="deletePost">Delete</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 <input class="form-input" type="submit" id="upload" value="Upload image" />                                                    
                                                 </div>
                                             </form>
