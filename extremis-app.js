@@ -435,7 +435,7 @@ app.get("/profile", function (req, res) {
                         <div class='profile-pic-div'>
                             <img class='profile-pic' src='${userprofile}'>
                             <label for="selectFile">
-                                <img class="camera" src="/assets/camera-icon1.jpg" width="28" height="28"/>
+                                <img class="camera" src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/camera-icon1.jpg" width="28" height="28"/>
                             </label>
                             <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
                             multiple="multiple" />
@@ -460,11 +460,13 @@ app.get("/profile", function (req, res) {
                                 <div class="form-group">
                                     <label for="password">Password  &#x270e;</label>
                                     <input type="password" id="userPassword" required="required"value=${password} />
+                                    <i class="fa-solid fa-eye togglePassword"></i>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Confirm password</label>
                                     <input type="password" id="userConfirmPassword" required="required"
                                     value=${password} onkeyup="validate_password()"/>
+                                    <i class="fa-solid fa-eye togglePassword"></i>
                                 </div>
                             </div>
                                 

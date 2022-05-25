@@ -41,57 +41,60 @@ h2 {
     padding-bottom: 5px;
 }
 
+.togglePassword {
+    position: absolute;
+    margin-top: -40px; 
+    margin-left: 58%;
+    cursor: pointer;
+  }
+
+
 .buttonProfile {
-    margin-left: 30%;
     margin-bottom: 30px;
     margin-top: 10px;
     display: flex;
     align-items: center;
+    justify-content: space-evenly;
+}
 
+.buttonProfile input{
+    width: 30%;
+    max-width: 120px;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    padding: 10px 15px;
+    font-family: 'Montserrat';
+    border-radius: 8px;
+    border: none;
 }
 
 #updateAccount {
-    padding: 10px 15px;
-    width: 90px;
-    font-size: 14px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    outline: none;
     color: #fff;
     background-color: rgba(52, 119, 249, 0.9);
-    border: none;
-    border-radius: 8px;
-    font-family: 'Montserrat';
-    display: inline-block;
-    margin: 0 30px;
 }
 
-.updateAccount:hover {
-    background-color: rgba(52, 119, 249, 0.7);
-}
-
-#cancel {
-    padding: 10px 15px;
-    font-size: 14px;
-    width: 90px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    outline: none;
+#cancel, #reset {
     color: black;
     background-color: lightgrey;
-    border: none;
-    font-family: 'Montserrat';
     object-fit: cover;
     overflow: hidden;
-    display: inline-block;
-    /* margin-left: 20px; */
-    border-radius: 8px;
+}
+
+#updateAccount:hover{
+    box-shadow: 0 0 5px #3477F9;
 }
 
 #cancel:hover {
-    background-color: red;
+    background-color: #ff605c;
+    color:#fff;
+}
+
+#reset:hover{
+    background-color: #00ca4e;
+    color:#fff;
 }
 
 .profile-pic {
@@ -107,11 +110,6 @@ h2 {
     border: 1px solid white;
 
 }
-
-/* #selectFile {
-    margin-left: 30px;
-    margin-top: 10px;
-} */
 
 #selectFile {
     position: absolute;
@@ -236,7 +234,7 @@ p {
 
 
 /*For the view under 800px and over 500px*/
-@media screen and (max-device-width: 799px) and (min-device-width: 500px) {
+@media screen and (max-width: 799px) and (min-width: 500px) {
     #signUpForm>input[type="button"] {
         width: 100%;
     }
@@ -355,7 +353,7 @@ p {
 
 }
 
-@media screen and (max-device-width: 499px) {
+@media screen and (max-width: 499px) {
     #signUpForm>input[type="button"] {
         width: 100%;
     }
@@ -476,11 +474,12 @@ p {
         margin-bottom: 30px;
         margin-top: 0;
         align-items: center;
-        margin-left: 0%;
+        margin-left: -20px;
+        margin-right: -20px;
+        gap: 15px;
     }
 
     #updateAccount {
-        /* padding: 10px 10px; */
         width: 180px;
         font-size: 12px;
         cursor: pointer;
@@ -498,8 +497,7 @@ p {
         background-color: rgba(52, 119, 249, 0.7);
     }
 
-    #cancel {
-        /* padding: 10px 10px; */
+    #cancel, #reset {
         font-size: 12px;
         width: 180px;
         cursor: pointer;
@@ -516,8 +514,7 @@ p {
         border-radius: 8px;
     }
 
-    #cancel:hover {
-        background-color: red;
+    .togglePassword {
+        margin-left: 55%;
     }
-
 }

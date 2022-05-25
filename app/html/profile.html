@@ -6,6 +6,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/profile.css" />
+    <!-- Script for use of fontawesome -->
+  <script src="https://kit.fontawesome.com/c14c02f185.js" crossorigin="anonymous"></script>
     <!-- Favicon goes here  -->
     <link rel="icon" type="image/png" href="https://extremis-bby15.s3.ca-central-1.amazonaws.com/favicon.ico">
 </head>
@@ -45,10 +47,10 @@
             <form id="upload-images">
                 <span id="wrong_pass_alert"></span> <br>
                 <div class="buttonProfile">
-
+                    <input class=" form-input" type="button" value="Cancel" id="cancel">
                     <input class="form-input" type="submit" id="updateAccount" value="Save"
                         onclick="wrong_pass_alert()" />
-                    <input class=" form-input" type="button" value="Cancel" id="cancel">
+                    <input class=" form-input" type="button" value="Reset" id="reset">
                 </div>
             </form>
         </div>
