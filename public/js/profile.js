@@ -39,12 +39,13 @@ async function sendData(data) {
 
 //Send the update information of users to server for authentication
 document.getElementById("updateAccount").addEventListener("click", function (e) {
-    let firstName = document.getElementById("firstName").value;
-    let lastName = document.getElementById("lastName").value;
-    let email = document.getElementById("userEmail").value;
-    let password = document.getElementById("userPassword").value;
+    let firstName = document.getElementById("firstName").value.trim();
+    let lastName = document.getElementById("lastName").value.trim();
+    let email = document.getElementById("userEmail").value.trim();
+    let password = document.getElementById("userPassword").value.trim();
+    let confirmedPassword = document.getElementById('userConfirmPassword').value.trim();
 
-    if (!firstName || !lastName || !email || !password) {
+    if (!firstName || !lastName || !email || !password || !confirmedPassword) {
         document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
     } else {
         sendData({
@@ -102,11 +103,30 @@ function validate_password() {
     }
 }
 
-function wrong_pass_alert() {
-    if (document.getElementById('userPassword').value.trim() != "" &&
-        document.getElementById('userConfirmPassword').value.trim() != "") {
-        alert("Your change is submitted");
-    } else {
-        alert("Please fill all the fields");
-    }
+
+/**
+ * Reset all field values as origin if users click on "Reset" button
+ */
+var oldFirstName = document.querySelector("#firstName").value;
+var oldLastName = document.querySelector("#lastName").value;
+var oldPassword = document.querySelector("#userPassword").value;
+
+document.getElementById("reset").addEventListener("click", function () {
+    document.querySelector("#firstName").value = oldFirstName;
+    document.querySelector("#lastName").value = oldLastName;
+    document.querySelector("#userPassword").value = oldPassword;
+})
+
+// Display/Hide password (https://www.csestack.org/hide-show-password-eye-icon-html-javascript/)
+var togglePasswords = document.querySelectorAll('.togglePassword');
+for (let i = 0; i < togglePasswords.length; i++) {
+    console.log(togglePasswords[i]);
+    togglePasswords[i].addEventListener('click', function (e) {
+        const password = e.target.previousElementSibling;
+        // toggle the type attribute
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        // toggle the eye slash icon
+        this.classList.toggle('fa-eye-slash');
+    });
 }

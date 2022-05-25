@@ -18,8 +18,7 @@ body {
     background-color: rgba(52, 119, 249, 0.1);
     position: relative;
     width: 600px;
-    margin-bottom: 20px;
-    margin-left: 20%;
+    margin: 0 auto 20px auto;
     padding: 40px;
 
 }
@@ -183,7 +182,6 @@ h4 {
 
 .signout {
     margin-top: 8px;
-    padding: 9px 25px;
     background-color: rgba(52, 119, 249, 0.7);
     border: none;
     border-radius: 50px;
@@ -209,7 +207,6 @@ p {
     margin-left: 32%;
     padding-top: 15px;
 }
-
 /* Popup message starts */
 #err-popup {
     position: fixed;
@@ -247,7 +244,6 @@ p {
     cursor: pointer;
     border-radius: 5px;
     border: none;
-
 }
 
 #cancel2 {
@@ -259,11 +255,11 @@ p {
     background-color: rgba(255, 0, 0, 0.8);
     color: #ffffff;
 }
-
 /* Popup message ends  */
 
 #selectFile {
     font-family: 'Montserrat', sans-serif;
+    width: max-content;
 }
 
 input#selectFile.btn {
@@ -300,6 +296,7 @@ footer {
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
+
 
 .delete1 {
     background-color: lightgray;
@@ -391,7 +388,7 @@ footer {
     }
 
     .signout {
-        padding: 9px 30px;
+        text-align: center;
         background-color: rgba(52, 119, 249, 0.7);
         border: none;
         border-radius: 50px;
@@ -498,7 +495,6 @@ footer {
         margin-left: 30%;
         display: flex;
     }
-
     #selectFile {
         font-family: 'Montserrat', sans-serif;
     }
@@ -634,10 +630,9 @@ footer {
     }
 
     .signout {
-        padding: 9px 30px;
         background-color: rgba(52, 119, 249, 0.7);
         border: none;
-        border-radius: 50px;
+        border-radius: 30px;
         font-size: 18px;
         cursor: pointer;
         color: white;
@@ -652,9 +647,8 @@ footer {
         background-color: rgba(52, 119, 249, 0.1);
         text-align: left;
         position: relative;
-        width: 250px;
-        margin-bottom: 10px;
-        margin-left: 12%;
+        width: 270px;
+        margin: 0 auto 10px auto;
         align-content: center;
         padding: 20px;
     }
@@ -739,10 +733,9 @@ footer {
     .button-update-images {
         align-items: center;
         font-size: 10px;
-        margin-left: 12%;
+        margin-left: 15%;
         display: flex;
     }
-
     .delete1 {
         background-color: lightgray;
         color: black;
