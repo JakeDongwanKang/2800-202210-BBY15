@@ -139,7 +139,7 @@ document.getElementById("create").addEventListener("click", function (e) {
     } else {
         weatherType = document.getElementById("weatherType").value;
     }
-    
+
     if (myContent.split(" ").length > 1000) {
         // If post content (description) has more than 1000 words, a popup message will show up
         document.querySelector("#err-popup").style.display = "block";
@@ -163,7 +163,7 @@ document.getElementById("create").addEventListener("click", function (e) {
  * If users click on "Keep" button in popup message, all data of post will be validated again.
  * Then, if all data is sucessfully entered and validated, send data to server to store into database.
  */
-document.getElementById("keep").addEventListener("click", function(){
+document.getElementById("keep").addEventListener("click", function () {
     let postType = document.getElementById("postType").innerText;
     let weatherType;
     let postTitle = document.getElementById("postTitle").value;
@@ -193,8 +193,10 @@ document.getElementById("keep").addEventListener("click", function(){
 /**
  * If users click on "Cancel" button in popup message, hide the popup message so that users can edit all input.
  */
-document.getElementById("cancel2").addEventListener("click", function(){
+document.getElementById("cancel2").addEventListener("click", function () {
     document.querySelector("#err-popup").style.display = "none";
+    // All images stored in formData files will be deleted to avoid appending repetitive images
+    formData.delete('files');
 })
 
 /**
@@ -202,6 +204,8 @@ document.getElementById("cancel2").addEventListener("click", function(){
  */
 function removeErrorMsg() {
     document.querySelector(".errorMsg").innerHTML = "";
+    // All images stored in formData files will be deleted to avoid appending repetitive images
+    formData.delete('files');
 }
 
 // Go to timeline when user clicks on "Cancel"
@@ -259,9 +263,9 @@ imagesUpload.addEventListener("change", function () {
  * with changes and adjustments made by Vincent.
  */
 function getLocation() {
-      navigator.geolocation.getCurrentPosition(showPosition);
+    navigator.geolocation.getCurrentPosition(showPosition);
 }
-  
+
 function showPosition(position) {
     var coordinates = [position.coords.latitude, position.coords.longitude];
     getCity(coordinates);
@@ -271,13 +275,13 @@ function getCity(coordinates) {
     var xhr = new XMLHttpRequest();
     var lat = coordinates[0];
     var lng = coordinates[1];
-  
+
     // Paste your LocationIQ token below.
     xhr.open('GET', "https://us1.locationiq.com/v1/reverse.php?key=pk.d0436933238c32ce026236ff72afc4d0&lat=" +
-    lat + "&lon=" + lng + "&format=json", true);
+        lat + "&lon=" + lng + "&format=json", true);
     xhr.send();
     xhr.onreadystatechange = processRequest;
-  
+
     function processRequest(e) {
         if (xhr.readyState == 4 && xhr.status == 200) {
             var response = JSON.parse(xhr.responseText);
@@ -299,4 +303,3 @@ tinymce.init({
     toolbar_mode: 'floating',
     tinycomments_mode: 'embedded'
 });
-
