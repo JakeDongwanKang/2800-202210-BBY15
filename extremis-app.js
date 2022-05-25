@@ -1134,3 +1134,12 @@ app.post('/delete-image', function (req, res) {
             });
         });
 });
+
+/**
+ * Redirect to the error page if users are trying to access to an unavailable page.
+ */
+app.get("*", function (req, res) {
+        let doc = fs.readFileSync("./app/html/error-page.html", "utf8");
+        res.setHeader("Content-Type", "text/html");
+        res.send(doc);
+});
