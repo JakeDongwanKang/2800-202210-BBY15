@@ -455,7 +455,7 @@ app.get("/profile", function (req, res) {
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input type="email" class="um-input" id="userEmail" value=${useremail}>
+                                    <input type="email" class="um-input" id="userEmail" disabled value=${useremail}>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Password  &#x270e;</label>

@@ -35,12 +35,13 @@ async function sendData(data) {
 
 //Send user's email and password to server for authentication
 document.getElementById("signUpButton").addEventListener("click", function (e) {
-    let firstName = document.getElementById("firstName").value;
-    let lastName = document.getElementById("lastName").value;
-    let email = document.getElementById("userEmail").value;
-    let password = document.getElementById("userPassword").value;
+    let firstName = document.getElementById("firstName").value.trim();
+    let lastName = document.getElementById("lastName").value.trim();
+    let email = document.getElementById("userEmail").value.trim();
+    let password = document.getElementById("userPassword").value.trim();
+    let confirmed_password = document.getElementById('userConfirmPassword').value.trim();
 
-    if (!firstName || !lastName || !email || !password) {
+    if (!firstName || !lastName || !email || !password || !confirmed_password) {
         document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
     } else {
         sendData({
@@ -64,7 +65,6 @@ document.getElementById("log-in-link").addEventListener("click", function (e) {
 
 //Function to check the password is matched or not made by Anh
 function validate_password() {
-
     var pass = document.getElementById('userPassword').value.trim();
     var confirm_pass = document.getElementById('userConfirmPassword').value.trim();
     if (pass != confirm_pass) {
@@ -81,11 +81,16 @@ function validate_password() {
     }
 }
 
-function wrong_pass_alert() {
-    if (document.getElementById('userPassword').value.trim() != "" &&
-        document.getElementById('userConfirmPassword').value.trim() != "") {
-        alert("Your response is submitted");
-    } else {
-        alert("Please fill all the fields");
-    }
+// Display/Hide password (https://www.csestack.org/hide-show-password-eye-icon-html-javascript/)
+var togglePasswords = document.querySelectorAll('.togglePassword');
+for (let i = 0; i < togglePasswords.length; i++) {
+    console.log(togglePasswords[i]);
+    togglePasswords[i].addEventListener('click', function (e) {
+        const password = e.target.previousElementSibling;
+        // toggle the type attribute
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        // toggle the eye slash icon
+        this.classList.toggle('fa-eye-slash');
+    });
 }
