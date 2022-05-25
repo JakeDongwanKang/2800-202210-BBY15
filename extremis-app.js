@@ -506,6 +506,14 @@ const uploadAvatar = multer({
 app.post("/profile", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
+    let regex = new RegExp("^[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
+
+    if (!regex.test(req.body.email)) {
+        res.send({
+            status: "invalid email",
+            msg: "This email is invalid."
+        });
+    } else { 
     //connecting to the database, then creating and adding the user info into the database.
     connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE user_id=?',
         [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.session.user_id],
@@ -519,6 +527,7 @@ app.post("/profile", function (req, res) {
             req.session.email = req.body.email;
             req.session.save(function (err) {});
         });
+    }
 });
 
 //Upload the user profle into the database

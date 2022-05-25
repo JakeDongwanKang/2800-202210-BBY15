@@ -226,6 +226,11 @@ p {
     text-align: center;
 }
 
+.errorMsg {
+    color: red;
+    margin: 0 0 20px 0;
+  }
+
 .footer {
     left: 0;
     bottom: 0;
