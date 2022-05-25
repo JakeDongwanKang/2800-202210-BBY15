@@ -174,8 +174,7 @@ app.get("/user-list", function (req, res) {
                     );
                 }
                 user_list_jsdom.window.document.getElementById("user-container").innerHTML = user_list;
-                res.write(user_list_jsdom.serialize());
-                res.end;
+                res.send(user_list_jsdom.serialize());
             }
         )
     } else {
@@ -230,8 +229,7 @@ app.get("/admin-list", function (req, res) {
                     }
                 }
                 admin_list_jsdom.window.document.getElementById("user-container").innerHTML = admin_list;
-                res.write(admin_list_jsdom.serialize());
-                res.end;
+                res.send(admin_list_jsdom.serialize());
             }
         )
     } else {
