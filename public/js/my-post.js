@@ -113,10 +113,7 @@ async function sendContent(data) {
 async function sendDataToDelete(e) {
     e.preventDefault();
     let c = e.target.parentNode;
-    let d = c.parentNode.parentNode;
-    let parent = d.parentNode.parentNode;
-
-    console.log("parent: " + parent);
+    let parent = c.parentNode.parentNode;
     let dataToSend = {
         post_id: parent.parentNode.parentNode.querySelector(".post_id").innerText
     };
@@ -225,7 +222,9 @@ async function sendDataToaddImage(e) {
     } catch (error) {}
 }
 
-// Go to my post when user clicks on "Cancel"
-document.getElementById("cancelbtn").addEventListener("click", function (e) {
-    window.location.replace("/my-post");
+/**
+ * If users click on "Cancel" button in popup message, hide the popup message so that users can edit all input.
+ */
+document.getElementById("cancel2").addEventListener("click", function () {
+    document.querySelector("#err-popup").style.display = "none";
 })
