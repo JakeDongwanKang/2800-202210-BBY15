@@ -1010,8 +1010,7 @@ app.get("/my-post", function (req, res) {
                                             </br><div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
                                             <form id="upload-images">
                                                 <label>Change images's posts: </label>
-                                                <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
-                                                    multiple="multiple" />
+                                                <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"/>
                                                 <p class="errorMsg"></p>
                                                 <div class="button-update-images">
                                                 <button type='button' class='deletePost'>Delete post</button>    
