@@ -56,9 +56,9 @@ function editCell(e) {
             parent.appendChild(filled_box);
             let dataToSend = {
                 post_id: parent.parentNode.querySelector(".post_id").innerText,
-                weather_type: parent.parentNode.querySelector(".weather_type").innerText,
-                post_title: parent.parentNode.querySelector(".post_title").innerText,
-                location: parent.parentNode.querySelector(".location").innerText,
+                weather_type: parent.parentNode.querySelector(".weather_type").innerText.trim(),
+                post_title: parent.parentNode.querySelector(".post_title").innerText.trim(),
+                location: parent.parentNode.querySelector(".location").innerText.trim(),
             };
             sendData(dataToSend);
         }
@@ -84,8 +84,8 @@ function editContent(e) {
             if (a.keyCode == 13) {
                 e.innerText = textBox.value;
                 sendContent({
-                    post_id: e.parentElement.children[0].innerText,
-                    post_content: textBox.value
+                    post_id: e.parentElement.children[0].innerText.trim(),
+                    post_content: textBox.value.trim()
                 });
             }
         })

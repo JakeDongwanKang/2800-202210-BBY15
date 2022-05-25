@@ -218,10 +218,10 @@ app.get("/admin-list", function (req, res) {
                 for (let i = 0; i < results.length; i++) {
                     if (req.session.user_id != results[i]['user_id']) {
                         admin_list += ("<tr><td class='id'>" + results[i]['user_id'] +
-                            "</td><td class='first_name'><span>" + results[i]['first_name'] +
-                            "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
-                            "</span></td><td class='email'><span>" + results[i]['email'] +
-                            "</span></td><td class='password'><span>" + results[i]['user_password'] +
+                            "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i]['first_name'] +
+                            "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i]['last_name'] +
+                            "</span></td><td class='email'><div class='material-icons'>edit</div><span>" + results[i]['email'] +
+                            "</span></td><td class='password'><div class='material-icons'>edit</div><span>" + results[i]['user_password'] +
                             "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_user'>Make User" +
                             "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
                             "</button></td></tr>"
@@ -332,6 +332,7 @@ app.post("/add-user", function (req, res) {
     let lastName = req.body.lastName;
     let signupemail = req.body.email;
     let signuppassword = req.body.password;
+    let regex = new RegExp("^[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
 
     //Checking to see if any columns in the sign-up page is NULL : if they are, the account cannot be made.
     if (!firstName || !lastName || !signupemail || !signuppassword) {
@@ -340,7 +341,13 @@ app.post("/add-user", function (req, res) {
             msg: "Every column has to be filled."
         });
     } else {
-        connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
+        if (!regex.test(signupemail)) {
+            res.send({
+                status: "invalid email",
+                msg: "This email is invalid."
+            });
+        } else {
+            connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
             [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
             function (error, results, fields) {
                 if (!results) {
@@ -360,6 +367,8 @@ app.post("/add-user", function (req, res) {
                 }
             }
         );
+        }
+
     }
 });
 
@@ -371,6 +380,7 @@ app.post("/add-user-as-admin", function (req, res) {
     let lastName = req.body.lastName;
     let signupemail = req.body.email;
     let signuppassword = req.body.password;
+    let regex = new RegExp("^[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
 
     //Checking to see if any columns in the sign-up page is NULL : if they are, the account cannot be made.
     if (!firstName || !lastName || !signupemail || !signuppassword) {
@@ -379,6 +389,12 @@ app.post("/add-user-as-admin", function (req, res) {
             msg: "Every column has to be filled."
         });
     } else {
+        if (!regex.test(signupemail)) {
+            res.send({
+                status: "invalid email",
+                msg: "This email is invalid."
+            });
+        } else {
         //connecting to the database, then creating and adding the user info into the database.
         connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
             [req.body.firstName, req.body.lastName, req.body.email, req.body.password, ],
@@ -388,6 +404,7 @@ app.post("/add-user-as-admin", function (req, res) {
                     msg: "Record added."
                 });
             });
+        }
     }
 });
 
@@ -541,17 +558,25 @@ app.get("/logout", function (req, res) {
 app.post('/update-user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ? WHERE user_id = ?',
-        [req.body.firstName, req.body.lastName, req.body.email, req.body.password, parseInt(req.body.id)],
-        function (error, results, fields) {
-            if (error) {
-                console.log(error);
-            }
+    let regex = new RegExp("^[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
+        if (!regex.test(req.body.email)) {
             res.send({
-                status: "success",
-                msg: "Recorded updated."
+                status: "invalid email",
+                msg: "This email is invalid."
             });
-        });
+        } else {
+            connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ? WHERE user_id = ?',
+            [req.body.firstName, req.body.lastName, req.body.email, req.body.password, parseInt(req.body.id)],
+            function (error, results, fields) {
+                if (error) {
+                    console.log(error);
+                }
+                res.send({
+                    status: "success",
+                    msg: "Recorded updated."
+                });
+            });
+        }
 });
 
 /** POST: we are changing stuff on the server!!!

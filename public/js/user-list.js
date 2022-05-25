@@ -29,7 +29,11 @@ async function sendData(data) {
             body: JSON.stringify(data)
         });
         let parsedJSON = await responseObject.json();
-        if (parsedJSON.status == "success") {}
+        if (parsedJSON.status == "invalid email") {
+            document.getElementById("emptyError").innerHTML = "<small>*Invalid email address*</small>";
+        } else if (parsedJSON.status == "success") {
+            document.getElementById("emptyError").innerHTML = "";
+        }
     } catch (error) {}
 }
 
@@ -51,14 +55,14 @@ function editCell(e) {
             let filled_box = document.createElement("span"); //creates the HTML for after done editing
             filled_box.addEventListener("click", editCell); //makes thing clickable for next time want to edit
             filled_box.innerHTML = val;
-            parent.innerHTML = "<div class='material-icons'>edit</div>"; //clears parent node pointer
+            parent.innerHTML = "<div class='material-icons'>edit</div>"; //clears parent node pointer except for edit icon
             parent.appendChild(filled_box);
             let dataToSend = {
                 id: parent.parentNode.querySelector(".id").innerHTML,
-                firstName: parent.parentNode.querySelector(".first_name :nth-child(2)").innerHTML,
-                lastName: parent.parentNode.querySelector(".last_name :nth-child(2)").innerHTML,
-                email: parent.parentNode.querySelector(".email :nth-child(2)").innerHTML,
-                password: parent.parentNode.querySelector(".password :nth-child(2)").innerHTML
+                firstName: parent.parentNode.querySelector(".first_name :nth-child(2)").innerHTML.trim(),
+                lastName: parent.parentNode.querySelector(".last_name :nth-child(2)").innerHTML.trim(),
+                email: parent.parentNode.querySelector(".email :nth-child(2)").innerHTML.trim(),
+                password: parent.parentNode.querySelector(".password :nth-child(2)").innerHTML.trim()
             };
             sendData(dataToSend);
         }
@@ -67,27 +71,33 @@ function editCell(e) {
     parent.appendChild(text_box);
 }
 
-//This function sends the data of the users from the client side to the server side so that i can be deleted from the database.
+//This function sends the data of the users from the client side to the server side so that it can be deleted from the database.
 async function sendDataToDelete(e) {
     e.preventDefault();
-    let parent = e.target.parentNode;
-    let dataToSend = {
-        id: parent.parentNode.querySelector(".id").innerHTML
-    };
-    try {
-        let responseObject = await fetch("/delete-user", {
-            method: 'POST',
-            headers: {
-                "Accept": 'application/json',
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify(dataToSend)
-        });
-        let parsedJSON = await responseObject.json();
-        if (parsedJSON.status == "success") {
-            parent.parentNode.remove();
-        }
-    } catch (error) {}
+    document.getElementById("warning-message").innerHTML = "The user will be permanantly deleted. This cannot be undone.";
+    document.getElementById("confirm").innerHTML = "Delete";
+    document.querySelector("#err-popup").style.display = "block";
+    document.getElementById("confirm").addEventListener("click", async function(){
+        let parent = e.target.parentNode;
+        let dataToSend = {
+            id: parent.parentNode.querySelector(".id").innerHTML
+        };
+        try {
+            let responseObject = await fetch("/delete-user", {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json',
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            });
+            let parsedJSON = await responseObject.json();
+            if (parsedJSON.status == "success") {
+                parent.parentNode.remove();
+            }
+            document.querySelector("#err-popup").style.display = "none";
+        } catch (error) {}
+    })
 }
 
 //This for loop adds the event listeners to the delete user button
@@ -111,6 +121,10 @@ for (let i = 0; i < makeAdminRecords.length; i++) {
 //This data sends the user data from the client side to the server side so that the specified admin user can become regular user.
 async function sendDataToMakeUser(e) {
     e.preventDefault();
+    document.getElementById("warning-message").innerHTML = "This user will lose admin privileges.";
+    document.getElementById("confirm").innerHTML = "Make User";
+    document.querySelector("#err-popup").style.display = "block";
+    document.getElementById("confirm").addEventListener("click", async function(){
     let parent = e.target.parentNode;
     let dataToSend = {
         id: parent.parentNode.querySelector(".id").innerHTML
@@ -128,12 +142,18 @@ async function sendDataToMakeUser(e) {
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
         }
+        document.querySelector("#err-popup").style.display = "none";
     } catch (error) {}
+})
 }
 
 //This data sends the user data from the client side to the server side so that the specified regular user can become admin user.
 async function sendDataToMakeAdmin(e) {
     e.preventDefault();
+    document.getElementById("warning-message").innerHTML = "This user will have admin privileges.";
+    document.getElementById("confirm").innerHTML = "Make Admin";
+    document.querySelector("#err-popup").style.display = "block";
+    document.getElementById("confirm").addEventListener("click", async function(){
     let parent = e.target.parentNode;
     let dataToSend = {
         id: parent.parentNode.querySelector(".id").innerHTML
@@ -151,5 +171,14 @@ async function sendDataToMakeAdmin(e) {
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
         }
+        document.querySelector("#err-popup").style.display = "none";
     } catch (error) {}
+})
 }
+
+/**
+ * If users click on "Cancel" button in popup message, hide the popup message so that users can edit all input.
+ */
+ document.getElementById("cancel2").addEventListener("click", function(){
+    document.querySelector("#err-popup").style.display = "none";
+})
