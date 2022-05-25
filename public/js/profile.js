@@ -28,7 +28,10 @@ async function sendData(data) {
         let parsedJSON = await responseObject.json();
         if (parsedJSON.status == "fail") {
             document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
-        } else {
+        } else if (parsedJSON.status == "invalid email") {
+            document.getElementById("emptyError").innerHTML = "<small>*Invalid email address*</small>";
+        }
+        else {
             window.location.reload();
         }
     } catch (error) {}
@@ -45,10 +48,10 @@ document.getElementById("updateAccount").addEventListener("click", function (e) 
         document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
     } else {
         sendData({
-            firstName: document.getElementById("firstName").value,
-            lastName: document.getElementById("lastName").value,
-            email: document.getElementById("userEmail").value,
-            password: document.getElementById("userPassword").value
+            firstName: document.getElementById("firstName").value.trim(),
+            lastName: document.getElementById("lastName").value.trim(),
+            email: document.getElementById("userEmail").value.trim(),
+            password: document.getElementById("userPassword").value.trim()
         });
     }
 });
@@ -83,8 +86,8 @@ function uploadImages(e) {
 //Function to check the password is matched or not
 function validate_password() {
 
-    var pass = document.getElementById('userPassword').value;
-    var confirm_pass = document.getElementById('userConfirmPassword').value;
+    var pass = document.getElementById('userPassword').value.trim();
+    var confirm_pass = document.getElementById('userConfirmPassword').value.trim();
     if (pass != confirm_pass) {
         document.getElementById('wrong_pass_alert').style.color = 'red';
         document.getElementById('wrong_pass_alert').innerHTML = '☒ Password are not matching';
@@ -100,8 +103,8 @@ function validate_password() {
 }
 
 function wrong_pass_alert() {
-    if (document.getElementById('userPassword').value != "" &&
-        document.getElementById('userConfirmPassword').value != "") {
+    if (document.getElementById('userPassword').value.trim() != "" &&
+        document.getElementById('userConfirmPassword').value.trim() != "") {
         alert("Your change is submitted");
     } else {
         alert("Please fill all the fields");

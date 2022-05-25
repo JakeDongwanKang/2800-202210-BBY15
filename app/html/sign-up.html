@@ -13,33 +13,38 @@
 <body>
   <div id="signUpPanel">
     <header>
-      <h2 id="signUpTitle">Create an Account!</h2>
+      <img id="logo" src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/logoOnWhite.png" />
     </header>
-    <form id="signUpForm">
 
-      <label for="firstName" class="label">First Name</label><br />
-      <input id="firstName" type="text" required="required" onfocus="removeErrorMsg()" placeholder="First Name" />
-      <br />
-      <label for="lastName" class="label">Last Name</label><br />
-      <input id="lastName" type="text" required="required" onfocus="removeErrorMsg()" placeholder="Last Name" />
-      <br />
-      <label for="userEmail" class="label">E-mail</label><br />
-      <input id="userEmail" type="email" required="required" onfocus="removeErrorMsg()" placeholder="Email" />
-      <br />
-      <label for="userPassword" class="label">Password</label><br />
-      <input id="userPassword" type="password" required="required" onfocus="removeErrorMsg()" placeholder="Password" />
-      <br />
-      <label for="userConfirmPassword" class="label">Confirm Password</label><br />
-      <input id="userConfirmPassword" type="password" required="required" onfocus="removeErrorMsg()"
-        onkeyup="validate_password()" placeholder="Confirm your password" />
-      <br />
-      <p class="errorMsg" id="emptyError"></p>
-      <span id="wrong_pass_alert"></span> <br>
-      <input type="button" value="Create Account" id="signUpButton" onclick="wrong_pass_alert()" />
-      <br />
-      <br />
-      <p id="text">Already have an account? <a href="#" id="log-in-link">Login Now!</a></p>
-    </form>
+    <br>
+    <br>
+
+    <div id="container">
+      <h2 id="signUpTitle">Create an Account!</h2>
+      <form id="signUpForm">
+        <label for="firstName" class="label">First Name</label><br />
+        <input id="firstName" type="text" required="required" onfocus="removeErrorMsg()" placeholder="First Name" />
+        <br />
+        <label for="lastName" class="label">Last Name</label><br />
+        <input id="lastName" type="text" required="required" onfocus="removeErrorMsg()" placeholder="Last Name" />
+        <br />
+        <label for="userEmail" class="label">E-mail</label><br />
+        <input id="userEmail" type="email" required="required" onfocus="removeErrorMsg()" placeholder="Email" />
+        <br />
+        <label for="userPassword" class="label">Password</label><br />
+        <input id="userPassword" type="password" required="required" onfocus="removeErrorMsg()" placeholder="Password" />
+        <br />
+        <label for="userConfirmPassword" class="label">Confirm Password</label><br />
+        <input id="userConfirmPassword" type="password" required="required" onfocus="removeErrorMsg()"
+          onkeyup="validate_password()" placeholder="Confirm Password" />
+        <p class="errorMsg" id="emptyError"></p>
+        <span id="wrong_pass_alert"></span> <br>
+        <input type="button" value="Create Account" id="signUpButton" onclick="wrong_pass_alert()" />
+        <br />
+        <p id="text">Already have an account? <a href="#" id="log-in-link">Login Now!</a></p>
+      </form>
+    </div>
+
   </div>
 
   <footer>&copy; 2022 Burnaby-15</footer>

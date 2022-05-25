@@ -103,9 +103,19 @@ button:hover {
   font-weight: 700;
 }
 
-.container {
-  padding: 0;
+#logo {
+  width: 15%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#container {
   text-align: center;
+  margin:auto;
+  width:40%;
+  padding:10px;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
 #signUpForm {
@@ -139,7 +149,7 @@ input {
   cursor: pointer;
   background-color: #3477f9;
   color: #ffffff;
-  font-size: 20px;
+  font-size: 15px;
   border-color: transparent;
 }
 
@@ -170,11 +180,11 @@ input {
 }
 
 footer {
-  left: 0;
-  bottom: 0;
-  width: 100%;
+  color: black;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  font-size: 14px;
   text-align: center;
-  color: #000;
 }
 
 .wrong_pass_alert {
@@ -243,6 +253,14 @@ footer {
     display: flex;
   }
 
+  #container {
+    text-align: center;
+    margin:auto;
+    width:90%;
+    padding:10px;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  }
+
   .singin {
     padding: 9px 30px;
     background-color: rgba(52, 119, 249, 0.7);
@@ -253,6 +271,10 @@ footer {
     color: white;
     transition: all 0.3s ease 0s;
     margin-bottom: 30px;
+  }
+
+  #logo {
+    width:35%;
   }
 
   .branch {

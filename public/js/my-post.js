@@ -56,9 +56,9 @@ function editCell(e) {
             parent.appendChild(filled_box);
             let dataToSend = {
                 post_id: parent.parentNode.querySelector(".post_id").innerText,
-                weather_type: parent.parentNode.querySelector(".weather_type").innerText,
-                post_title: parent.parentNode.querySelector(".post_title").innerText,
-                location: parent.parentNode.querySelector(".location").innerText,
+                weather_type: parent.parentNode.querySelector(".weather_type").innerText.trim(),
+                post_title: parent.parentNode.querySelector(".post_title").innerText.trim(),
+                location: parent.parentNode.querySelector(".location").innerText.trim(),
             };
             sendData(dataToSend);
         }
@@ -74,6 +74,7 @@ function editCell(e) {
  * page, making it have html elements inside.
  */
 var edit = true;
+
 function editContent(e) {
     if (edit) {
         let oldValue = e.innerText;
@@ -84,8 +85,8 @@ function editContent(e) {
             if (a.keyCode == 13) {
                 e.innerText = textBox.value;
                 sendContent({
-                    post_id: e.parentElement.children[0].innerText,
-                    post_content: textBox.value
+                    post_id: e.parentElement.children[0].innerText.trim(),
+                    post_content: textBox.value.trim()
                 });
             }
         })
@@ -103,8 +104,7 @@ async function sendContent(data) {
             body: JSON.stringify(data)
         });
         let parsedJSON = await responseObject.json();
-        if (parsedJSON.status == "success") {
-        }
+        if (parsedJSON.status == "success") {}
     } catch (error) {}
 }
 
@@ -112,10 +112,15 @@ async function sendContent(data) {
 //Delete whole post
 async function sendDataToDelete(e) {
     e.preventDefault();
-    let parent = e.target.parentNode;
+    let c = e.target.parentNode;
+    let d = c.parentNode.parentNode;
+    let parent = d.parentNode.parentNode;
+
+    console.log("parent: " + parent);
     let dataToSend = {
         post_id: parent.parentNode.parentNode.querySelector(".post_id").innerText
     };
+    console.log("data to send" + dataToSend);
     try {
         let responseObject = await fetch("/delete-post", {
             method: 'POST',
@@ -219,3 +224,8 @@ async function sendDataToaddImage(e) {
         }
     } catch (error) {}
 }
+
+// Go to my post when user clicks on "Cancel"
+document.getElementById("cancelbtn").addEventListener("click", function (e) {
+    window.location.replace("/my-post");
+})

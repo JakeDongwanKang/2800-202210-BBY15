@@ -57,14 +57,14 @@ document.querySelector(".sign-up-link").addEventListener("click", function (e) {
 // Send data when user uses enter key
 document.getElementById("userPassword").onkeydown = function (e){if (e.which == 13) {
     sendData({
-        email: document.getElementById("userEmail").value,
-        password: document.getElementById("userPassword").value
+        email: document.getElementById("userEmail").value.trim(),
+        password: document.getElementById("userPassword").value.trim()
     });
 }}
 document.getElementById("userEmail").onkeydown = function (e){if (e.which == 13) {
     sendData({
-        email: document.getElementById("userEmail").value,
-        password: document.getElementById("userPassword").value
+        email: document.getElementById("userEmail").value.trim(),
+        password: document.getElementById("userPassword").value.trim()
     });
 }}
 
