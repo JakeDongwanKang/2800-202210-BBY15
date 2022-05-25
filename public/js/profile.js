@@ -28,7 +28,10 @@ async function sendData(data) {
         let parsedJSON = await responseObject.json();
         if (parsedJSON.status == "fail") {
             document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
-        } else {
+        } else if (parsedJSON.status == "invalid email") {
+            document.getElementById("emptyError").innerHTML = "<small>*Invalid email address*</small>";
+        }
+        else {
             window.location.reload();
         }
     } catch (error) {}
