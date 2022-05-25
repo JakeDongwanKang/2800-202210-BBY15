@@ -19,8 +19,7 @@ body {
     background-color: rgba(52, 119, 249, 0.1);
     position: relative;
     width: 600px;
-    margin-bottom: 20px;
-    margin-left: 20%;
+    margin: 0 auto 20px auto;
     padding: 40px;
 
 }
@@ -184,7 +183,6 @@ h4 {
 
 .signout {
     margin-top: 8px;
-    padding: 9px 25px;
     background-color: rgba(52, 119, 249, 0.7);
     border: none;
     border-radius: 50px;
@@ -211,15 +209,21 @@ p {
     padding-top: 15px;
 }
 
+.button-update-images button, input{
+    font-family: 'Montserrat';
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    width: 110px;
+    height: 35px;
+    text-align: center;
+}
+
 .deletePost {
     background-color: red;
     color: black;
     cursor: pointer;
     margin-right: 20px;
-    border: none;
-    border-radius: 5px;
-    padding: 6px 15px;
-    width: 110px;
 }
 
 input#upload.form-input {
@@ -247,9 +251,13 @@ button.modelButton {
     font-size: 12px;
 }
 
+#upload:hover {
+    box-shadow: 0 0 5px #3477F9;
+}
 
 #selectFile {
     font-family: 'Montserrat', sans-serif;
+    width: max-content;
 }
 
 input#selectFile.btn {
@@ -288,7 +296,7 @@ footer {
 }
 
 @media (max-width: 800px) and (min-width: 500px) {
-=======
+
 /* Float cancel and delete buttons and add an equal width */
 .cancelbtn, .deletePost {
     margin-top: 10px;
@@ -368,7 +376,7 @@ footer {
     display: flex;
 }
 
-
+}
 
 @media screen and (max-width: 999px) and (min-width: 700px) {
     body {
@@ -430,7 +438,7 @@ footer {
     }
 
     .signout {
-        padding: 9px 30px;
+        text-align: center;
         background-color: rgba(52, 119, 249, 0.7);
         border: none;
         border-radius: 50px;
@@ -538,26 +546,22 @@ footer {
         display: flex;
     }
 
+    .button-update-images button, input{
+        width: 95px;
+        height: 30px;
+    }
+
     .deletePost {
         background-color: lightgray;
         color: black;
         font-size: 12px;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-        padding: 6px 15px;
-        width: 95px;
+        
     }
 
     #upload {
         background-color: rgba(52, 119, 249, 1);
-        padding: 5px;
         font-size: 12px;
-        cursor: pointer;
-        border: none;
         border-radius: 5px;
-        width: 95px;
-        padding: 6px 15px;
     }
 
     #selectFile {
@@ -643,10 +647,9 @@ footer {
     }
 
     .signout {
-        padding: 9px 30px;
         background-color: rgba(52, 119, 249, 0.7);
         border: none;
-        border-radius: 50px;
+        border-radius: 30px;
         font-size: 18px;
         cursor: pointer;
         color: white;
@@ -661,9 +664,8 @@ footer {
         background-color: rgba(52, 119, 249, 0.1);
         text-align: left;
         position: relative;
-        width: 250px;
-        margin-bottom: 10px;
-        margin-left: 12%;
+        width: 270px;
+        margin: 0 auto 10px auto;
         align-content: center;
         padding: 20px;
     }
@@ -748,28 +750,25 @@ footer {
     .button-update-images {
         align-items: center;
         font-size: 10px;
-        margin-left: 12%;
+        margin-left: 15%;
         display: flex;
+    }
+
+    .button-update-images button, input {
+        height: 25px;
+        width: 85px;
     }
 
     .deletePost {
         background-color: lightgray;
         color: black;
         font-size: 10px;
-        cursor: pointer;
-        border: none;
         border-radius: 5px;
-        padding: 6px 15px;
-        width: 85px;
     }
 
     #upload {
         background-color: rgba(52, 119, 249, 0.9);
-        padding: 6px 15px;
-        width: 85px;
         font-size: 10px;
-        cursor: pointer;
-        border: none;
         border-radius: 5px;
     }
 
