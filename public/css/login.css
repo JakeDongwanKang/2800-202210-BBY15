@@ -2,7 +2,7 @@
 
 body{
     font-family: 'Montserrat';
-    font-size: 13.5px;
+    font-size: 15px;
 }
 
 #container {
@@ -48,7 +48,7 @@ h2{
     cursor: pointer;
     background-color: #3477f9;
     color: #ffffff;
-    font-size: 13.5px;
+    font-size: 15px;
     border: 0.5px solid #ffffff;
     border-radius: 10px;
     width: 35%;
@@ -66,13 +66,20 @@ h2{
     margin: auto 10% auto 10%;
 }
 
+label, i {
+    float: left;
+    margin-bottom: 5px;
+}
 
+i{
+    margin-right: 5px;
+}
 input{
     display: block;
     width: 95%;
     border-radius: 15px;
     outline: solid 0.5px #484848;
-    font-size: 13.5px;
+    font-size: 15px;
     margin-top: 10px;
     padding-left: 10px;
     height: 40px;
