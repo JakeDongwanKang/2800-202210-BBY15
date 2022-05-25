@@ -149,11 +149,11 @@ document.getElementById("create").addEventListener("click", function (e) {
             document.querySelector(".errorMsg").innerHTML = "<small>*All required fields have to be filled*</small>";
         } else {
             sendData({
-                postType: postType,
-                postTitle: postTitle,
-                postLocation: postLocation,
-                postContent: myContent,
-                weatherType: weatherType
+                postType: postType.trim(),
+                postTitle: postTitle.trim(),
+                postLocation: postLocation.trim(),
+                postContent: myContent.trim(),
+                weatherType: weatherType.trim()
             });
         }
     }
@@ -181,11 +181,11 @@ document.getElementById("keep").addEventListener("click", function(){
         document.querySelector(".errorMsg").innerHTML = "<small>*All required fields have to be filled*</small>";
     } else {
         sendData({
-            postType: document.getElementById("postType").innerText,
-            postTitle: document.getElementById("postTitle").value,
-            postLocation: document.getElementById("postLocation").value,
-            postContent: tinymce.get("postContent").getContent(),
-            weatherType: weatherType
+            postType: document.getElementById("postType").innerText.trim(),
+            postTitle: document.getElementById("postTitle").value.trim(),
+            postLocation: document.getElementById("postLocation").value.trim(),
+            postContent: tinymce.get("postContent").getContent().trim(),
+            weatherType: weatherType.trim()
         });
     }
 })
@@ -254,7 +254,7 @@ imagesUpload.addEventListener("change", function () {
 });
 
 /**
- * The following codes follow an example on W3Schools (https://www.w3schools.com/html/html5_geolocation.asp)
+ * The following codes is a combination of examples from W3Schools (https://www.w3schools.com/html/html5_geolocation.asp)
  * and Geeks for Geeks (https://www.geeksforgeeks.org/how-to-get-city-name-by-using-geolocation/)
  * with changes and adjustments made by Vincent.
  */

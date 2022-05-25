@@ -24,6 +24,8 @@ async function sendData(data) {
             document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
         } else if (parsedJSON.status == "duplicate") {
             document.getElementById("emptyError").innerHTML = "<small>*This email is already registered to an account*</small>";
+        } else if (parsedJSON.status == "invalid email") {
+            document.getElementById("emptyError").innerHTML = "<small>*Invalid email address*</small>";
         } else {
             window.location.replace("/main");
         }
@@ -42,10 +44,10 @@ document.getElementById("signUpButton").addEventListener("click", function (e) {
         document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
     } else {
         sendData({
-            firstName: document.getElementById("firstName").value,
-            lastName: document.getElementById("lastName").value,
-            email: document.getElementById("userEmail").value,
-            password: document.getElementById("userPassword").value
+            firstName: document.getElementById("firstName").value.trim(),
+            lastName: document.getElementById("lastName").value.trim(),
+            email: document.getElementById("userEmail").value.trim(),
+            password: document.getElementById("userPassword").value.trim()
         });
     }
 });
@@ -63,8 +65,8 @@ document.getElementById("log-in-link").addEventListener("click", function (e) {
 //Function to check the password is matched or not made by Anh
 function validate_password() {
 
-    var pass = document.getElementById('userPassword').value;
-    var confirm_pass = document.getElementById('userConfirmPassword').value;
+    var pass = document.getElementById('userPassword').value.trim();
+    var confirm_pass = document.getElementById('userConfirmPassword').value.trim();
     if (pass != confirm_pass) {
         document.getElementById('wrong_pass_alert').style.color = 'red';
         document.getElementById('wrong_pass_alert').innerHTML = '☒ Please enter the same password';
@@ -80,8 +82,8 @@ function validate_password() {
 }
 
 function wrong_pass_alert() {
-    if (document.getElementById('userPassword').value != "" &&
-        document.getElementById('userConfirmPassword').value != "") {
+    if (document.getElementById('userPassword').value.trim() != "" &&
+        document.getElementById('userConfirmPassword').value.trim() != "") {
         alert("Your response is submitted");
     } else {
         alert("Please fill all the fields");

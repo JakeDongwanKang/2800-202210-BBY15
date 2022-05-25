@@ -50,10 +50,10 @@ document.getElementById("signUpButton").addEventListener("click", function(e) {
     if(!firstName || !lastName || !email || !password){
     document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
     } else {
-    sendData({firstName: document.getElementById("firstName").value,
-              lastName: document.getElementById("lastName").value,
-              email: document.getElementById("userEmail").value,
-              password: document.getElementById("userPassword").value
+    sendData({firstName: document.getElementById("firstName").value.trim(),
+              lastName: document.getElementById("lastName").value.trim(),
+              email: document.getElementById("userEmail").value.trim(),
+              password: document.getElementById("userPassword").value.trim()
             });
         }
 });
