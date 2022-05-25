@@ -184,15 +184,40 @@ h3 {
 }
 
 footer {
-    left:0;
-    bottom:0;
-    width:100%;
+    left: 0;
+    bottom: 0;
+    width: 100%;
     text-align: center;
     color: #000;
 }
 
 td {
-    text-align : center;
+    text-align: center;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+    /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
 }
 
 @media only screen and (max-width: 960px) {
@@ -201,7 +226,7 @@ td {
         font-size: 14px;
         margin: 0;
     }
-    
+
     .user-card {
         width: 100%;
     }
@@ -248,7 +273,7 @@ td {
 
     .navbar-links.active {
         display: flex;
-    } 
+    }
 
     .singin {
         padding: 9px 30px;
@@ -275,42 +300,62 @@ td {
         margin-top: 1rem;
     }
 
-	thead, tbody, th, table, td, tr { 
-		display: block; 
-	}
+    thead, tbody, th, table, td, tr {
+        display: block;
+    }
 
-	thead tr { 
-		position: absolute;
-		top: -9999px;
-		left: -9999px;
-	}
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
 
-	td { 
-		border: none;
-		border-bottom: 1px solid #eee; 
-		position: relative;
-		padding-left: 50%; 
+    td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
         height: 25px;
-	}
+    }
 
-    td:before { 
-		position: absolute;
-		left: 6px;
-		width: 45%; 
-		padding-right: 10px; 
-		white-space: nowrap;
-	}
+    td:before {
+        position: absolute;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+    }
 
     .id {
         background-color: #5ca1dc;
         color: white;
     }
 
-    td:nth-of-type(1):before { content: "ID"; }
-	td:nth-of-type(2):before { content: "First Name"; }
-	td:nth-of-type(3):before { content: "Last Name"; }
-	td:nth-of-type(4):before { content: "Email"; }
-	td:nth-of-type(5):before { content: "Password"; }
-	td:nth-of-type(6):before { content: "Role"; }
-	td:nth-of-type(7):before { content: "Delete"; }
+    td:nth-of-type(1):before {
+        content: "ID";
+    }
+
+    td:nth-of-type(2):before {
+        content: "First Name";
+    }
+
+    td:nth-of-type(3):before {
+        content: "Last Name";
+    }
+
+    td:nth-of-type(4):before {
+        content: "Email";
+    }
+
+    td:nth-of-type(5):before {
+        content: "Password";
+    }
+
+    td:nth-of-type(6):before {
+        content: "Role";
+    }
+
+    td:nth-of-type(7):before {
+        content: "Delete";
+    }
 }
