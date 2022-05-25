@@ -11,7 +11,6 @@ body {
     color: #000;
 }
 
-
 .card {
     align-items: center;
     overflow: hidden;
@@ -208,52 +207,55 @@ p {
     margin-left: 32%;
     padding-top: 15px;
 }
+/* Popup message starts */
+#err-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.9);
+    height: 100%;
+    width: 100vw;
+    z-index: 100;
+    display: none;
+}
 
-.button-update-images button, input{
-    font-family: 'Montserrat';
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    width: 110px;
-    height: 35px;
+#err-popup-container {
     text-align: center;
+    width: 40%;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 15px;
+    padding: 10px 20px;
 }
 
-.deletePost {
-    background-color: red;
-    color: black;
+#err-popup-container img {
+    width: 100px;
+}
+
+#err-popup-container button {
+    width: 100px;
+    margin-left: 10px;
+    font-family: 'Montserrat', sans-serif;
+    height: 40px;
+    font-size: 16px;
     cursor: pointer;
-    margin-right: 20px;
+    border-radius: 5px;
+    border: none;
 }
 
-input#upload.form-input {
+#cancel2 {
     background-color: #3477F9;
-    color: white;
-    padding: 6px 15px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    width: 110px;
-    font-size: 12px;
-    font-family: 'Montserrat', sans-serif;
+    color: #ffffff;
 }
 
-button.modelButton {
-    background-color: lightgray;
-    color: black;
-    cursor: pointer;
-    margin-right: 20px;
-    border: none;
-    border-radius: 5px;
-    padding: 6px 15px;
-    width: 110px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
+#deletePost {
+    background-color: rgba(255, 0, 0, 0.8);
+    color: #ffffff;
 }
-
-#upload:hover {
-    box-shadow: 0 0 5px #3477F9;
-}
+/* Popup message ends  */
 
 #selectFile {
     font-family: 'Montserrat', sans-serif;
@@ -295,87 +297,35 @@ footer {
     visibility: visible;
 }
 
-@media (max-width: 800px) and (min-width: 500px) {
 
-/* Float cancel and delete buttons and add an equal width */
-.cancelbtn, .deletePost {
-    margin-top: 10px;
-    width: 20%;
-    font-family: 'Montserrat', sans-serif;
+.delete1 {
+    background-color: lightgray;
+    color: black;
     font-size: 12px;
-}
-
-.cancelbtn {
-    background-color: #3477F9;
-    color: white;
-    border-radius: 5px;
+    cursor: pointer;
     border: none;
-    margin-right: 10px;
-    font-size: 12px;
-    cursor: pointer;
+    border-radius: 5px;
     padding: 6px 15px;
-    width: 95px;
+    width: 120px;
+    margin-right: 15px;
 }
 
-.cancelbtn:hover {
-    background-color: #3477F9;
-}
-
-
-.container {
-    padding: 15px;
-    text-align: center;
+#upload {
+    background-color: rgba(52, 119, 249, 0.5);
+    padding: 5px;
     font-size: 12px;
-}
-
-.modal {
-    font-size: 12px;
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    overflow: auto;
-    background-color: #474e5d;
-    color: white;
-    top: 30%;
-    left: 20%;
-    width: 60%;
-    height: 30%;
-    border-radius: 20px;
-}
-
-/* Modal Content/Box */
-.modal-content {
-    background-color: #fefefe;
-    margin: 10% auto 10% auto;
-    border: 1px solid #888;
-    width: 80%;
-    border-radius: 20px;
-}
-
-
-/* The Modal Close Button (x) */
-.close {
-    position: absolute;
-    right: 40px;
-    top: 5px;
-    font-size: 30px;
-    color: white;
-}
-
-.close:hover,
-.close:focus {
-    color: #f44336;
     cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    width: 120px;
+    padding: 6px 15px;
+    text-align: center;
+    padding-left: 15px;
 }
 
-/* Clear floats */
-.clearfix::after {
-    clear: both;
-    display: flex;
-}
-
+#upload:hover {
+    background-color: rgba(52, 119, 249, 1);
+    color: white;
 }
 
 @media screen and (max-width: 999px) and (min-width: 700px) {
@@ -545,25 +495,6 @@ footer {
         margin-left: 30%;
         display: flex;
     }
-
-    .button-update-images button, input{
-        width: 95px;
-        height: 30px;
-    }
-
-    .deletePost {
-        background-color: lightgray;
-        color: black;
-        font-size: 12px;
-        
-    }
-
-    #upload {
-        background-color: rgba(52, 119, 249, 1);
-        font-size: 12px;
-        border-radius: 5px;
-    }
-
     #selectFile {
         font-family: 'Montserrat', sans-serif;
     }
@@ -571,6 +502,58 @@ footer {
     input#selectFile.btn {
         font-family: 'Montserrat', sans-serif;
     }
+
+    /* Popup message starts */
+    #err-popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.9);
+        height: 100%;
+        width: 100vw;
+        z-index: 100;
+        display: none;
+    }
+
+    #err-popup-container {
+        text-align: center;
+        width: 40%;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border-radius: 15px;
+        padding: 10px 20px;
+    }
+
+    #err-popup-container img {
+        width: 100px;
+    }
+
+    #err-popup-container button {
+        width: 150px;
+        margin-left: 20px;
+        font-family: 'Montserrat', sans-serif;
+        height: 40px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        /* display: table; */
+    }
+
+    #cancel2 {
+        background-color: #3477F9;
+        color: #ffffff;
+    }
+
+    #deletePost {
+        background-color: rgba(255, 0, 0, 0.8);
+        color: #ffffff;
+    }
+
+    /* Popup message ends  */
 }
 
 
@@ -753,23 +736,34 @@ footer {
         margin-left: 15%;
         display: flex;
     }
-
-    .button-update-images button, input {
-        height: 25px;
-        width: 85px;
-    }
-
-    .deletePost {
+    .delete1 {
         background-color: lightgray;
         color: black;
-        font-size: 10px;
+        font-size: 12px;
+        cursor: pointer;
+        border: none;
         border-radius: 5px;
+        padding: 6px 15px;
+        width: 90px;
+        margin-right: 15px;
     }
 
     #upload {
-        background-color: rgba(52, 119, 249, 0.9);
-        font-size: 10px;
+        background-color: rgba(52, 119, 249, 0.5);
+        padding: 5px;
+        font-size: 12px;
+        cursor: pointer;
+        border: none;
         border-radius: 5px;
+        width: 90px;
+        padding: 6px 15px;
+        text-align: center;
+        padding-left: 15px;
+    }
+
+    #upload:hover {
+        background-color: rgba(52, 119, 249, 1);
+        color: white;
     }
 
     input {
@@ -786,83 +780,29 @@ footer {
         font-family: 'Montserrat', sans-serif;
     }
 
+    /* Popup message starts */
 
-    /* Float cancel and delete buttons and add an equal width */
-    .cancelbtn, .deletePost {
-        margin-top: 10px;
-        width: 20%;
-        font-family: 'Montserrat', sans-serif;
-        font-size: 12px;
-    }
-
-    .cancelbtn {
-        background-color: #3477F9;
-        color: white;
-        border-radius: 5px;
-        border: none;
-        margin-right: 10px;
-        font-size: 12px;
-        cursor: pointer;
-        padding: 6px 15px;
-        width: 85px;
-    }
-
-    .cancelbtn:hover {
-        background-color: #3477F9;
-    }
-
-    .deletePost:hover {
-        background-color: red;
-    }
-
-
-    .container {
-        padding: 15px;
-        text-align: center;
-        font-size: 12px;
-    }
-
-    .modal {
-        font-size: 12px;
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        overflow: auto;
-        background-color: #474e5d;
-        color: white;
-        top: 15%;
-        width: 100%;
-        height: 30%;
-        padding-top: 10px;
-    }
-
-    .modal-content {
-        background-color: #fefefe;
-        margin: 5% auto 15% auto;
-        border: 1px solid #888;
+    #err-popup-container {
         width: 80%;
-        border-radius: 20px;
+        font-size: 13px;
+        line-height: 20px;
+        padding: 5px 10px;
     }
 
-    .close {
-        position: absolute;
-        right: 40px;
-        top: 5px;
-        font-size: 30px;
-        color: white;
+    #err-popup-container img {
+        width: 60px;
     }
 
-    .close:hover,
-    .close:focus {
-        color: #f44336;
-        cursor: pointer;
+    #err-popup-container h2 {
+        font-size: 20px;
+        margin: 0;
     }
 
-    /* Clear floats */
-    .clearfix::after {
-        clear: both;
-        display: flex;
+    #err-popup-container button {
+        height: 30px;
+        margin-bottom: 10px;
+        font-size: 13px;
+        margin-left: 5px;
+        width: 120px;
     }
 }

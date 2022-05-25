@@ -349,25 +349,25 @@ app.post("/add-user", function (req, res) {
             });
         } else {
             connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
-            [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
-            function (error, results, fields) {
-                if (!results) {
-                    res.send({
-                        status: "duplicate",
-                        msg: "This email is already registered to an account."
-                    });
-                } else {
-                    res.send({
-                        status: "success",
-                        msg: "Record added."
-                    });
-                    req.session.loggedIn = true;
-                    req.session.user_id = results.insertId;
-                    req.session.firstName = req.body.firstName;
-                    req.session.save(function (err) {});
+                [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
+                function (error, results, fields) {
+                    if (!results) {
+                        res.send({
+                            status: "duplicate",
+                            msg: "This email is already registered to an account."
+                        });
+                    } else {
+                        res.send({
+                            status: "success",
+                            msg: "Record added."
+                        });
+                        req.session.loggedIn = true;
+                        req.session.user_id = results.insertId;
+                        req.session.firstName = req.body.firstName;
+                        req.session.save(function (err) {});
+                    }
                 }
-            }
-        );
+            );
         }
 
     }
@@ -396,15 +396,15 @@ app.post("/add-user-as-admin", function (req, res) {
                 msg: "This email is invalid."
             });
         } else {
-        //connecting to the database, then creating and adding the user info into the database.
-        connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
-            [req.body.firstName, req.body.lastName, req.body.email, req.body.password, ],
-            function (error, results, fields) {
-                res.send({
-                    status: "success",
-                    msg: "Record added."
+            //connecting to the database, then creating and adding the user info into the database.
+            connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
+                [req.body.firstName, req.body.lastName, req.body.email, req.body.password, ],
+                function (error, results, fields) {
+                    res.send({
+                        status: "success",
+                        msg: "Record added."
+                    });
                 });
-            });
         }
     }
 });
@@ -532,20 +532,20 @@ app.post("/profile", function (req, res) {
             status: "invalid email",
             msg: "This email is invalid."
         });
-    } else { 
-    //connecting to the database, then creating and adding the user info into the database.
-    connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE user_id=?',
-        [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.session.user_id],
-        function (error, results, fields) {
-            res.send({
-                status: "success",
-                msg: "Record added."
+    } else {
+        //connecting to the database, then creating and adding the user info into the database.
+        connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE user_id=?',
+            [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.session.user_id],
+            function (error, results, fields) {
+                res.send({
+                    status: "success",
+                    msg: "Record added."
+                });
+                req.session.loggedIn = true;
+                req.session.firstName = req.body.firstName;
+                req.session.email = req.body.email;
+                req.session.save(function (err) {});
             });
-            req.session.loggedIn = true;
-            req.session.firstName = req.body.firstName;
-            req.session.email = req.body.email;
-            req.session.save(function (err) {});
-        });
     }
 });
 
@@ -587,13 +587,13 @@ app.post('/update-user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     let regex = new RegExp("^[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
-        if (!regex.test(req.body.email)) {
-            res.send({
-                status: "invalid email",
-                msg: "This email is invalid."
-            });
-        } else {
-            connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ? WHERE user_id = ?',
+    if (!regex.test(req.body.email)) {
+        res.send({
+            status: "invalid email",
+            msg: "This email is invalid."
+        });
+    } else {
+        connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ? WHERE user_id = ?',
             [req.body.firstName, req.body.lastName, req.body.email, req.body.password, parseInt(req.body.id)],
             function (error, results, fields) {
                 if (error) {
@@ -604,7 +604,7 @@ app.post('/update-user', function (req, res) {
                     msg: "Recorded updated."
                 });
             });
-        }
+    }
 });
 
 /** POST: we are changing stuff on the server!!!
@@ -1075,24 +1075,18 @@ app.get("/my-post", function (req, res) {
                                                 <label>Change images's posts: </label>
                                                 <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"/>
                                                 <p class="errorMsg"></p>
-                                                
                                                 <div class="button-update-images">
-                                                    <button class="modelButton" onclick="document.getElementById('modal').style.display='block'">Delete</button> 
-                                                    <div id="modal" class="modal">
-                                                        <div onclick="document.getElementById('modal').style.display='none'" class="close"
-                                                            title="Close Modal">&times;</div>
-                                                        <form class="modal-content">
-                                                            <div class="container">
-                                                                <h3>Delete post</h3><br>
-                                                                <p>Deleting this post is permanent and will remove all content of your post.</br>
-                                                                Are you sure you want to delete your post?
-                                                                </p>
-                                                                <div class="clearfix">
-                                                                    <button type="button" id="cancelbtn" class="cancelbtn">Cancel</button>
-                                                                    <button type="button" id="deletePost" class="deletePost">Delete</button>
-                                                                </div>
-                                                            </div>
-                                                        </form>
+                                                    <button class="delete1" onclick="document.getElementById('err-popup').style.display='block'">Delete</button> 
+                                                    <div id="err-popup">
+                                                        <div id="err-popup-container">
+                                                            <img src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/warning.png"/>
+                                                            <h2>Are you sure?</h2>
+                                                            <p>Deleting this post is permanent and will remove all content of your post.</br>
+                                                            Do you really want to delete your post?</p></br>
+                                                            </br>
+                                                            <button id="cancel2">Cancel</button>
+                                                            <button id="deletePost" class="deletePost">Delete</button>                                                            
+                                                        </div>    
                                                     </div>
                                                 <input class="form-input" type="submit" id="upload" value="Upload image" />                                                    
                                                 </div>
@@ -1221,7 +1215,7 @@ app.post('/delete-image', function (req, res) {
  * Redirect to the error page if users are trying to access to an unavailable page.
  */
 app.get("*", function (req, res) {
-        let doc = fs.readFileSync("./app/html/error-page.html", "utf8");
-        res.setHeader("Content-Type", "text/html");
-        res.send(doc);
+    let doc = fs.readFileSync("./app/html/error-page.html", "utf8");
+    res.setHeader("Content-Type", "text/html");
+    res.send(doc);
 });
