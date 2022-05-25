@@ -132,30 +132,70 @@ document.getElementById("create").addEventListener("click", function (e) {
     let weatherType;
     let postTitle = document.getElementById("postTitle").value;
     let postLocation = document.getElementById("postLocation").value;
-    var myContent = tinymce.get("postContent").getContent();
-    let postContent = myContent;
-
+    let myContent = tinymce.get("postContent").getContent();
     if (!document.getElementById("weatherType")) {
         // Set weatherType as "none" if user does not create a post about weather condition
         weatherType = "none";
     } else {
         weatherType = document.getElementById("weatherType").value;
     }
+    
+    if (myContent.split(" ").length > 1000) {
+        // If post content (description) has more than 1000 words, a popup message will show up
+        document.querySelector("#err-popup").style.display = "block";
+    } else {
+        if (postType == "Select type" || !postTitle || !postLocation || !myContent) {
+            // Display error message if user does not fill in required fields.
+            document.querySelector(".errorMsg").innerHTML = "<small>*All required fields have to be filled*</small>";
+        } else {
+            sendData({
+                postType: postType,
+                postTitle: postTitle,
+                postLocation: postLocation,
+                postContent: myContent,
+                weatherType: weatherType
+            });
+        }
+    }
+});
 
-    if (postType == "Select type" || !postTitle || !postLocation || !postContent) {
+/**
+ * If users click on "Keep" button in popup message, all data of post will be validated again.
+ * Then, if all data is sucessfully entered and validated, send data to server to store into database.
+ */
+document.getElementById("keep").addEventListener("click", function(){
+    let postType = document.getElementById("postType").innerText;
+    let weatherType;
+    let postTitle = document.getElementById("postTitle").value;
+    let postLocation = document.getElementById("postLocation").value;
+    let myContent = tinymce.get("postContent").getContent();
+    if (!document.getElementById("weatherType")) {
+        // Set weatherType as "none" if user does not create a post about weather condition
+        weatherType = "none";
+    } else {
+        weatherType = document.getElementById("weatherType").value;
+    }
+    document.querySelector("#err-popup").style.display = "none";
+    if (postType == "Select type" || !postTitle || !postLocation || !myContent) {
         // Display error message if user does not fill in required fields.
         document.querySelector(".errorMsg").innerHTML = "<small>*All required fields have to be filled*</small>";
     } else {
         sendData({
-            postType: postType,
-            postTitle: postTitle,
-            postLocation: postLocation,
-            postContent: postContent,
+            postType: document.getElementById("postType").innerText,
+            postTitle: document.getElementById("postTitle").value,
+            postLocation: document.getElementById("postLocation").value,
+            postContent: tinymce.get("postContent").getContent(),
             weatherType: weatherType
         });
     }
-});
+})
 
+/**
+ * If users click on "Cancel" button in popup message, hide the popup message so that users can edit all input.
+ */
+document.getElementById("cancel2").addEventListener("click", function(){
+    document.querySelector("#err-popup").style.display = "none";
+})
 
 /**
  * Removes the error message when user enters input.
@@ -254,8 +294,9 @@ function getCity(coordinates) {
  */
 tinymce.init({
     selector: '#postContent',
-    plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinycomments tinymcespellchecker',
+    plugins: 'wordcount a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinycomments tinymcespellchecker',
     toolbar: 'a11ycheck alignleft aligncenter alignright alignfull bold italic underline forecolor fontname fontsize casechange checklist formatpainter pageembed table',
     toolbar_mode: 'floating',
     tinycomments_mode: 'embedded'
 });
+
