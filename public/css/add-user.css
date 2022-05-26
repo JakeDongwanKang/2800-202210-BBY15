@@ -151,7 +151,7 @@ input:hover {
 
 #togglePassword {
   position: absolute;
-  margin-top: -28px; 
+  margin-top: -28px;
   margin-left: 470px;
   cursor: pointer;
 }
@@ -211,6 +211,7 @@ footer {
 
   .navbar-links.active {
     display: flex;
+    background-color: white;
   }
 
   .singin {
@@ -254,7 +255,7 @@ footer {
     font-size: 15px;
   }
 
-  #togglePassword{
+  #togglePassword {
     margin-top: -25px;
     margin-left: 63%;
   }
