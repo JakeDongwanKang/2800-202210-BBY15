@@ -7,7 +7,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-body{
+body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
@@ -94,6 +94,7 @@ body{
     transition: all 0.3s ease 0s;
     letter-spacing: 1.5px;
 }
+
 /* navbar css ends */
 
 /* Dropdown menu for Filter button css starts here  */
@@ -360,7 +361,7 @@ footer {
 
 .menu li:hover {
     background: #3477F9;
-    color:#ffffff;
+    color: #ffffff;
 }
 
 .menu-open {
@@ -378,12 +379,12 @@ h1 {
     font-size: 35px;
 }
 
-.post-container{
+.post-container {
     margin: 0 auto 0 auto;
     font-size: 15px;
 }
 
-.post{
+.post {
     display: grid;
     grid-template-rows: 100%;
     grid-template-columns: 50% 50%;
@@ -400,13 +401,15 @@ h1 {
 .post:last-child {
     margin-bottom: 5%;
 }
+
 .post-body {
     grid-row: 1;
     grid-column: 1;
     padding: 2% 3% 1% 5%;
     margin: auto 0 auto 0;
 }
-.postID{
+
+.postID {
     display: none;
 }
 
@@ -421,16 +424,16 @@ button {
     width: 120px;
 }
 
-button:hover{
+button:hover {
     box-shadow: 0 0 5px #3477F9;
 }
 
 .cancel-btn, .approve-btn, .reject-btn {
-    display:none;
+    display: none;
     outline: none;
 }
 
-.cancel-btn{
+.cancel-btn {
     background-color: #c0c8c7;
 }
 
@@ -450,27 +453,28 @@ button:hover{
     overflow: hidden;
 }
 
-.sidebar-box .read-more { 
-    position: absolute; 
-    bottom: 0; 
+.sidebar-box .read-more {
+    position: absolute;
+    bottom: 0;
     left: 0;
-    width: 100%; 
-    text-align: center; 
-    margin: 0; padding: 30px 0; 
-      
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 30px 0;
+
     /* "transparent" only works here because == rgba(0,0,0,0) */
     background-image: linear-gradient(to bottom, transparent, #ffffff);
 }
 
-.read-more button{
+.read-more button {
     background-color: #3477F9;
     width: 120px;
     margin-bottom: 0;
     color: #ffffff;
 }
 
-p{
-    margin:0;
+p {
+    margin: 0;
 }
 
 .card-images {
@@ -481,7 +485,7 @@ p{
     justify-content: space-evenly;
     flex-wrap: wrap;
     position: relative;
-    gap : 5px;
+    gap: 5px;
 }
 
 .card-image {
@@ -492,7 +496,7 @@ p{
     image-rendering: pixelated;
 }
 
-.card-image:hover{
+.card-image:hover {
     transform: scale(1.1);
 }
 
@@ -500,7 +504,7 @@ p{
     position: fixed;
     top: 0;
     left: 0;
-    background: rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.9);
     height: 100%;
     width: 100vw;
     z-index: 100;
@@ -509,7 +513,7 @@ p{
 
 .popup-image span {
     position: absolute;
-    top:10px;
+    top: 10px;
     right: 10px;
     font-size: 35px;
     font-weight: bold;
@@ -518,7 +522,7 @@ p{
     z-index: 100;
 }
 
-.popup-image img{
+.popup-image img {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -532,13 +536,14 @@ p{
 
 /* footer css starts */
 footer {
-    left:0;
-    bottom:0;
-    width:100%;
+    left: 0;
+    bottom: 0;
+    width: 100%;
     text-align: center;
     color: #000;
     overflow: hidden;
 }
+
 /* footer css ends */
 
 /* footer css ends */
@@ -564,6 +569,7 @@ footer {
         align-items: flex-start;
         color: #000;
         background-color: #5ca1dc;
+
     }
 
     .toggle-button {
