@@ -298,8 +298,8 @@ function getCity(coordinates) {
  */
 tinymce.init({
     selector: '#postContent',
-    plugins: 'wordcount a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinycomments tinymcespellchecker',
-    toolbar: 'a11ycheck alignleft aligncenter alignright alignfull bold italic underline forecolor fontname fontsize casechange checklist formatpainter pageembed table',
+    plugins: 'wordcount a11ychecker advcode casechange export formatpainter linkchecker autolink lists checklist permanentpen powerpaste tinymcespellchecker',
+    toolbar: 'a11ycheck alignleft aligncenter alignright alignfull bold italic underline forecolor fontname fontsize casechange checklist formatpainter',
     toolbar_mode: 'floating',
     tinycomments_mode: 'embedded'
 });
