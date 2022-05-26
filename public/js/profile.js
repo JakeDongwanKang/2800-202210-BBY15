@@ -120,7 +120,6 @@ document.getElementById("reset").addEventListener("click", function () {
 // Display/Hide password (https://www.csestack.org/hide-show-password-eye-icon-html-javascript/)
 var togglePasswords = document.querySelectorAll('.togglePassword');
 for (let i = 0; i < togglePasswords.length; i++) {
-    console.log(togglePasswords[i]);
     togglePasswords[i].addEventListener('click', function (e) {
         const password = e.target.previousElementSibling;
         // toggle the type attribute

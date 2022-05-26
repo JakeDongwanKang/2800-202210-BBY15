@@ -43,6 +43,7 @@ document.getElementById("signUpButton").addEventListener("click", function (e) {
 
     if (!firstName || !lastName || !email || !password || !confirmed_password) {
         document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
+        document.getElementById("signUpButton").style.disabled = true;
     } else {
         sendData({
             firstName: document.getElementById("firstName").value.trim(),
@@ -56,6 +57,7 @@ document.getElementById("signUpButton").addEventListener("click", function (e) {
 //This function removes the error message once one of the columns are clicked.
 function removeErrorMsg() {
     document.getElementById("emptyError").innerHTML = "";
+    document.getElementById("signUpButton").style.disabled = true;
 }
 
 // Go to sign-up when user clicks on "Login Now!"
@@ -84,7 +86,6 @@ function validate_password() {
 // Display/Hide password (https://www.csestack.org/hide-show-password-eye-icon-html-javascript/)
 var togglePasswords = document.querySelectorAll('.togglePassword');
 for (let i = 0; i < togglePasswords.length; i++) {
-    console.log(togglePasswords[i]);
     togglePasswords[i].addEventListener('click', function (e) {
         const password = e.target.previousElementSibling;
         // toggle the type attribute

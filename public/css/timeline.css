@@ -164,6 +164,7 @@ button:hover {
 
 #search-button {
     font-size: 26px;
+    cursor: pointer;
 }
 
 .createPost {
