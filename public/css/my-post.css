@@ -20,7 +20,7 @@ body {
     width: 600px;
     margin: 0 auto 20px auto;
     padding: 40px;
-
+    line-height: 20px;
 }
 
 .card:hover {
@@ -33,6 +33,7 @@ body {
     margin-top: 0;
     text-align: left;
     padding-bottom: 20px;
+    cursor: pointer;
 }
 
 .posted_time {
@@ -77,6 +78,22 @@ body {
     text-align: left;
 }
 
+.new-content {
+    width: 100%;
+}
+
+#reminder {
+    width: 150px;
+    background-color: #3477F9;
+    color:#ffffff;
+    right: 5%;
+    top:50%;
+    position: fixed;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 5px;
+    display: none;
+}
 
 .remove-icon {
     margin-left: 570px;
@@ -182,6 +199,7 @@ h4 {
 
 .signout {
     margin-top: 8px;
+    padding: 9px 25px;
     background-color: rgba(52, 119, 249, 0.7);
     border: none;
     border-radius: 50px;
@@ -190,7 +208,7 @@ h4 {
     color: white;
     transition: all 0.3s ease 0s;
     letter-spacing: 1.5px;
-    padding-bottom: 5px;
+    font-family: 'Montserrat';
 }
 
 button:hover {
@@ -204,8 +222,11 @@ p {
 
 .button-update-images {
     align-items: center;
-    margin-left: 32%;
     padding-top: 15px;
+    width: 70%;
+    margin : 0 auto;
+    display: flex;
+    justify-content: space-evenly;
 }
 /* Popup message starts */
 #err-popup {
@@ -246,6 +267,11 @@ p {
     border: none;
 }
 
+#warning-message span{
+    display: block;
+    margin-bottom: 20px;;
+}
+
 #cancel2 {
     background-color: #3477F9;
     color: #ffffff;
@@ -257,15 +283,34 @@ p {
 }
 /* Popup message ends  */
 
-#selectFile {
+.selectFile {
     font-family: 'Montserrat', sans-serif;
     width: max-content;
 }
 
-input#selectFile.btn {
+input.selectFile.btn {
     font-family: 'Montserrat', sans-serif;
 }
 
+.form-input{
+    background-color: #3477F9;
+    padding: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    width: 120px;
+    padding: 6px 15px;
+    text-align: center;
+    padding-left: 15px;
+    font-family: 'Montserrat', sans-serif;
+    color: #ffffff;
+    height: 30px;
+}
+
+span{
+    cursor: pointer;
+}
 footer {
     left: 0;
     bottom: 0;
@@ -301,13 +346,15 @@ footer {
 .delete1 {
     background-color: lightgray;
     color: black;
-    font-size: 12px;
+    font-size: 14px;
     cursor: pointer;
     border: none;
     border-radius: 5px;
     padding: 6px 15px;
     width: 120px;
     margin-right: 15px;
+    font-family: 'Montserrat', sans-serif;
+    height: 30px;
 }
 
 #upload {
@@ -409,10 +456,9 @@ footer {
         text-align: left;
         position: relative;
         width: 500px;
-        margin-bottom: 10px;
+        margin: 0 auto 10px auto;
         padding: 10px;
         background-color: rgba(52, 119, 249, 0.1);
-        margin-left: 15%;
     }
 
     .card:hover {
@@ -492,14 +538,15 @@ footer {
     .button-update-images {
         align-items: center;
         font-size: 10px;
-        margin-left: 30%;
+        justify-content: space-evenly;
         display: flex;
+        width: 100%;
     }
-    #selectFile {
+    .selectFile {
         font-family: 'Montserrat', sans-serif;
     }
 
-    input#selectFile.btn {
+    input.selectFile.btn {
         font-family: 'Montserrat', sans-serif;
     }
 
@@ -733,8 +780,10 @@ footer {
     .button-update-images {
         align-items: center;
         font-size: 10px;
-        margin-left: 15%;
+        width: 100%;
+        margin: 0 auto;
         display: flex;
+        justify-content: space-evenly;
     }
     .delete1 {
         background-color: lightgray;
@@ -744,18 +793,18 @@ footer {
         border: none;
         border-radius: 5px;
         padding: 6px 15px;
-        width: 90px;
+        width: 110px;
         margin-right: 15px;
     }
 
-    #upload {
-        background-color: rgba(52, 119, 249, 0.5);
+    .form-input {
+        background-color: #3477F9;
         padding: 5px;
         font-size: 12px;
         cursor: pointer;
         border: none;
         border-radius: 5px;
-        width: 90px;
+        width: 110px;
         padding: 6px 15px;
         text-align: center;
         padding-left: 15px;
@@ -770,12 +819,12 @@ footer {
         font-size: 10px;
     }
 
-    #selectFile {
+    .selectFile {
         padding-top: 10px;
         font-family: 'Montserrat', sans-serif;
     }
 
-    input#selectFile.btn {
+    input.selectFile.btn {
         padding-top: 10px;
         font-family: 'Montserrat', sans-serif;
     }

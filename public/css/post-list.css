@@ -7,7 +7,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-body {
+body{
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
@@ -94,9 +94,7 @@ body {
     transition: all 0.3s ease 0s;
     letter-spacing: 1.5px;
 }
-
 /* navbar css ends */
-
 
 /* Dropdown menu for Filter button css starts here  */
 .dropdown {
@@ -346,10 +344,202 @@ footer {
     left: 0;
     bottom: 0;
     width: 100%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: 0.2s;
+    z-index: 1;
+    left: 50%;
+    display: none;
+    background-color: #ffffff;
+}
+
+.menu li {
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.menu li:hover {
+    background: #3477F9;
+    color:#ffffff;
+}
+
+.menu-open {
+    display: block;
+    opacity: 1;
+}
+
+/* Dropdown menu for Filter button css ends here  */
+
+
+/* post css starts */
+h1 {
+    color: #3477F9;
+    text-align: center;
+    font-size: 35px;
+}
+
+.post-container{
+    margin: 0 auto 0 auto;
+    font-size: 15px;
+}
+
+.post{
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 50% 50%;
+    margin: 5vh 5% 8vh 5%;
+    box-shadow: 0 0 5px #484848;
+    border-radius: 10px;
+}
+
+.post:hover {
+    outline: solid 1px #3477f9;
+    box-shadow: 0 0 5px #3477F9;
+}
+
+.post:last-child {
+    margin-bottom: 5%;
+}
+.post-body {
+    grid-row: 1;
+    grid-column: 1;
+    padding: 2% 3% 1% 5%;
+    margin: auto 0 auto 0;
+}
+.postID{
+    display: none;
+}
+
+button {
+    font-size: 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 30px;
+    border: none;
+    margin-left: 10px;
+    font-family: 'Montserrat', sans-serif;
+    width: 120px;
+}
+
+button:hover{
+    box-shadow: 0 0 5px #3477F9;
+}
+
+.cancel-btn, .approve-btn, .reject-btn {
+    display:none;
+    outline: none;
+}
+
+.cancel-btn{
+    background-color: #c0c8c7;
+}
+
+.approve-btn {
+    background-color: #00ca4e;
+    color: white;
+}
+
+.reject-btn {
+    background-color: #ff605c;
+    color: white;
+}
+
+.sidebar-box {
+    max-height: 150px;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-box .read-more { 
+    position: absolute; 
+    bottom: 0; 
+    left: 0;
+    width: 100%; 
+    text-align: center; 
+    margin: 0; padding: 30px 0; 
+      
+    /* "transparent" only works here because == rgba(0,0,0,0) */
+    background-image: linear-gradient(to bottom, transparent, #ffffff);
+}
+
+.read-more button{
+    background-color: #3477F9;
+    width: 120px;
+    margin-bottom: 0;
+    color: #ffffff;
+}
+
+p{
+    margin:0;
+}
+
+.card-images {
+    grid-row: 1;
+    grid-column: 2;
+    align-items: center;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    position: relative;
+    gap : 5px;
+}
+
+.card-image {
+    width: 45%;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+    /* The next code is from https://tutorialsclass.com/code/css-code-to-fix-blurry-image-when-scaling-down/ */
+    image-rendering: pixelated;
+}
+
+.card-image:hover{
+    transform: scale(1.1);
+}
+
+.popup-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.9);
+    height: 100%;
+    width: 100vw;
+    z-index: 100;
+    display: none;
+}
+
+.popup-image span {
+    position: absolute;
+    top:10px;
+    right: 10px;
+    font-size: 35px;
+    font-weight: bold;
+    color: #ffffff;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.popup-image img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    width: 70vw;
+    object-fit: cover;
+}
+
+/* post css ends */
+
+/* footer css starts */
+footer {
+    left:0;
+    bottom:0;
+    width:100%;
     text-align: center;
     color: #000;
     overflow: hidden;
 }
+/* footer css ends */
 
 /* footer css ends */
 
