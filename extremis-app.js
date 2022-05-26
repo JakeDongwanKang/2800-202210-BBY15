@@ -164,10 +164,10 @@ app.get("/user-list", function (req, res) {
                 for (let i = 0; i < results.length; i++) {
 
                     user_list += ("<tbody><tr><td class='id'>" + results[i]['user_id'] +
-                        "</td><td class='first_name'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['first_name'] +
-                        "</span></td><td class='last_name'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['last_name'] +
-                        "</span></td><td class='email'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['email'] +
-                        "</span></td><td class='password'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['user_password'] +
+                        "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i]['first_name'] +
+                        "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i]['last_name'] +
+                        "</span></td><td class='email'><div class='material-icons'>edit</div><span>" + results[i]['email'] +
+                        "</span></td><td class='password'><div class='material-icons'>edit</div><span>" + results[i]['user_password'] +
                         "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
                         "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
                         "</button></td></tr></tbody>"
@@ -218,11 +218,10 @@ app.get("/admin-list", function (req, res) {
                 for (let i = 0; i < results.length; i++) {
                     if (req.session.user_id != results[i]['user_id']) {
                         admin_list += ("<tr><td class='id'>" + results[i]['user_id'] +
-
-                            "</td><td class='first_name'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['first_name'] +
-                            "</span></td><td class='last_name'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['last_name'] +
-                            "</span></td><td class='email'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['email'] +
-                            "</span></td><td class='password'><div class='tooltip'>&#x270e;<span class='tooltiptext'>Editable</span></div><span>" + results[i]['user_password'] +
+                            "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i]['first_name'] +
+                            "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i]['last_name'] +
+                            "</span></td><td class='email'><div class='material-icons'>edit</div><span>" + results[i]['email'] +
+                            "</span></td><td class='password'><div class='material-icons'>edit</div><span>" + results[i]['user_password'] +
                             "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_user'>Make User" +
                             "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
                             "</button></td></tr>"

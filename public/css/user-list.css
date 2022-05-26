@@ -168,7 +168,7 @@ h3 {
     text-align: center;
     color: red;
     margin: 0 0 20px 0;
-  }
+}
 
 #user-container {
     width: 100%;
@@ -206,14 +206,14 @@ button {
     position: fixed;
     top: 0;
     left: 0;
-    background: rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.9);
     height: 100%;
     width: 100vw;
     z-index: 100;
     display: none;
 }
 
-#err-popup-container{
+#err-popup-container {
     text-align: center;
     width: 40%;
     position: absolute;
@@ -225,7 +225,7 @@ button {
     padding: 10px 20px;
 }
 
-#err-popup-container img{
+#err-popup-container img {
     width: 100px;
 }
 
@@ -242,13 +242,14 @@ button {
 
 #cancel2 {
     background-color: #3477F9;
-    color:#ffffff;
+    color: #ffffff;
 }
 
 #confirm {
     background-color: #c1c1c1;
     color: #ffffff;
 }
+
 /* Popup message ends  */
 
 
@@ -262,31 +263,6 @@ footer {
 
 td {
     text-align: center;
-}
-
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black;
-    /* If you want dots under the hoverable text */
-}
-
-/* Tooltip text */
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-
-    position: absolute;
-    z-index: 1;
-}
-
-.tooltip:hover .tooltiptext {
-    visibility: visible;
 }
 
 @media only screen and (max-width: 960px) {
@@ -401,7 +377,6 @@ td {
         color: white;
     }
 
-
     td:nth-of-type(1):before {
         content: "ID";
     }
@@ -429,19 +404,10 @@ td {
     td:nth-of-type(7):before {
         content: "Delete";
     }
-}
-
-    td:nth-of-type(1):before { content: "ID"; }
-	td:nth-of-type(2):before { content: "First Name"; }
-	td:nth-of-type(3):before { content: "Last Name"; }
-	td:nth-of-type(4):before { content: "Email"; }
-	td:nth-of-type(5):before { content: "Password"; }
-	td:nth-of-type(6):before { content: "Role"; }
-	td:nth-of-type(7):before { content: "Delete"; }
 
     /* Mobile Table Ends*/
 
-    #err-popup-container{
+    #err-popup-container {
         width: 80%;
         font-size: 13px;
         line-height: 20px;
@@ -452,7 +418,7 @@ td {
         width: 60px;
     }
 
-    #err-popup-container h2{
+    #err-popup-container h2 {
         font-size: 20px;
         margin: 0;
     }
@@ -465,4 +431,3 @@ td {
         width: 120px;
     }
 }
-
