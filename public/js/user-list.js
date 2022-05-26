@@ -30,9 +30,9 @@ async function sendData(data) {
         });
         let parsedJSON = await responseObject.json();
         if (parsedJSON.status == "invalid email") {
-            document.getElementById("emptyError").innerHTML = "<small>*Invalid email address*</small>";
+            document.getElementById("emptyError").innerHTML = `<small style="color:red;">*Invalid email address. Email not saved*</small>`;
         } else if (parsedJSON.status == "success") {
-            document.getElementById("emptyError").innerHTML = "";
+            document.getElementById("emptyError").innerHTML = `<small style="color:green;">*Changes saved*</small>`;
         }
     } catch (error) {}
 }
@@ -48,23 +48,39 @@ function editCell(e) {
     let span_text = e.target.innerHTML;
     let parent = e.target.parentNode; //gets parent, so we know which user we're editing
     let text_box = document.createElement("input"); //creates the text box for accepting changes
+    let regex = new RegExp("^[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
+
     text_box.value = span_text;
     text_box.addEventListener("keyup", function (e) {
         if (e.which == 13) { //recognize enter key
             let val = text_box.value;
-            let filled_box = document.createElement("span"); //creates the HTML for after done editing
-            filled_box.addEventListener("click", editCell); //makes thing clickable for next time want to edit
-            filled_box.innerHTML = val;
-            parent.innerHTML = "<div class='material-icons'>edit</div>"; //clears parent node pointer except for edit icon
-            parent.appendChild(filled_box);
-            let dataToSend = {
-                id: parent.parentNode.querySelector(".id").innerHTML,
-                firstName: parent.parentNode.querySelector(".first_name :nth-child(2)").innerHTML.trim(),
-                lastName: parent.parentNode.querySelector(".last_name :nth-child(2)").innerHTML.trim(),
-                email: parent.parentNode.querySelector(".email :nth-child(2)").innerHTML.trim(),
-                password: parent.parentNode.querySelector(".password :nth-child(2)").innerHTML.trim()
-            };
-            sendData(dataToSend);
+            if(val === "") {
+                let filled_box = document.createElement("span"); //creates the HTML for after done editing
+                filled_box.addEventListener("click", editCell); //makes thing clickable for next time want to edit
+                filled_box.innerHTML = span_text;
+                parent.innerHTML = "<div class='material-icons'>edit</div>"; //clears parent node pointer except for edit icon
+                parent.appendChild(filled_box);
+                document.getElementById("emptyError").innerHTML = `<small style="color:red;">*Field cannot be empty. Changes not saved*</small>`;
+            } else {
+                let filled_box = document.createElement("span"); //creates the HTML for after done editing
+                filled_box.addEventListener("click", editCell); //makes thing clickable for next time want to edit
+                filled_box.innerHTML = val;
+                parent.innerHTML = "<div class='material-icons'>edit</div>"; //clears parent node pointer except for edit icon
+                parent.appendChild(filled_box);
+                if(regex.test(parent.parentNode.querySelector(".email :nth-child(2)").innerHTML)) {
+                    let dataToSend = {
+                        id: parent.parentNode.querySelector(".id").innerHTML,
+                        firstName: parent.parentNode.querySelector(".first_name :nth-child(2)").innerHTML.trim(),
+                        lastName: parent.parentNode.querySelector(".last_name :nth-child(2)").innerHTML.trim(),
+                        email: parent.parentNode.querySelector(".email :nth-child(2)").innerHTML.trim(),
+                        password: parent.parentNode.querySelector(".password :nth-child(2)").innerHTML.trim()
+                    };
+                    sendData(dataToSend);
+                } else {
+                    document.getElementById("emptyError").innerHTML = `<small style="color:red;">*Invalid email address. Changes not saved*</small>`;
+                    filled_box.innerHTML = span_text;
+                }
+            }
         }
     });
     parent.innerHTML = "";
