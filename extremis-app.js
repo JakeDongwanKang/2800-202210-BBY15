@@ -766,7 +766,7 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
         req.session.save(function (err) {});
     } else {
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-            [req.session.postID, null],
+            [req.session.postID, "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg"],
             function (error, results, fields) {});
         res.send({
             status: "success",
@@ -794,13 +794,18 @@ app.get("/timeline", function (req, res) {
                     for (var i = 0; i < results.length; i++) {
                         let firstName = results[i].first_name;
                         let lastName = results[i].last_name;
-                        let profilePic = results[i].profile_picture;
                         let postTime = results[i].posted_time;
                         let contentPost = results[i].post_content;
                         let postTitle = results[i].post_title;
                         let postlocation = results[i].location;
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
+                        let profilePic;
+                        if (results[i].profile_picture != null) {
+                            profilePic = results[i].profile_picture;
+                        } else {
+                            profilePic = "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg";
+                        }
                         var template = `   
                         </br>  
                         <div class="post_content">
@@ -816,13 +821,15 @@ app.get("/timeline", function (req, res) {
                                     <h5>Location: ${postlocation}</h5> 
                                 </div>
                                 <div class="post-image">`;
-                        if (postImages) {
+                        if (postImages != "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
                             template += `<img class='post-pic' src="${postImages}" onclick="expandImage(this)">`;
                         }
 
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
-                            template += "<img class='post-pic' src=" + results[i].image_location + " onclick='expandImage(this)'>"
+                            if (results[i].image_location != "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
+                                template += "<img class='post-pic' src=" + results[i].image_location + " onclick='expandImage(this)'>"
+                            }
                         }
 
                         template += `</div>
@@ -888,12 +895,14 @@ app.post('/search-timeline', function (req, res) {
                                 <h5>Location: ${postlocation}</h5> 
                             </div>
                             <div class="post-image">`;
-                        if (postImages) {
+                        if (postImages != "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
                             template += `<img class='post-pic' src="${postImages}"  onclick="expandImage(this)">`;
                         }
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
-                            template += "<img class='post-pic' src=" + results[i].image_location + " onclick='expandImage(this)'>"
+                            if (results[i].image_location != "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
+                                template += "<img class='post-pic' src=" + results[i].image_location + " onclick='expandImage(this)'>"
+                            }
                         }
 
                         template += `</div>
@@ -1010,7 +1019,8 @@ app.get("/my-post", function (req, res) {
     if (req.session.loggedIn) {
         connection.query(
             `SELECT posted_time, post_content, BBY_15_post.post_id, post_title, location, weather_type, image_location, post_status 
-            FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id WHERE user_id = ?`,
+            FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id WHERE user_id = ?
+            ORDER BY posted_time DESC`,
             [req.session.user_id],
             function (error, results, fields) {
                 let doc = fs.readFileSync("./app/html/my-post.html", "utf8");
@@ -1033,7 +1043,7 @@ app.get("/my-post", function (req, res) {
                                 <div class="post-image">
                                     
                                     <div class="image">`;
-                        if (postImages) {
+                        if (postImages != "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
                             my_post += `<div class="po-image">
                             <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
                             <img class='image' src="${postImages}">
@@ -1042,10 +1052,12 @@ app.get("/my-post", function (req, res) {
 
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
-                            my_post += `<div class="po-image">
-                            <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
-                            `
-                            my_post += "<img class='image' src=" + results[i].image_location + "></div>"
+                            if (results[i].image_location != "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
+                                my_post += `<div class="po-image">
+                                <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
+                                `
+                                my_post += "<img class='image' src=" + results[i].image_location + "></div>"
+                            }
                         }
                         my_post += `</div>
                                         <div class="desc">
@@ -1072,23 +1084,13 @@ app.get("/my-post", function (req, res) {
                                                 <span class="tooltiptext">Editable</span>
                                             </div>        
                                             </br><div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
-                                            <form id="upload-images">
-                                                <label>Change images's posts: </label>
-                                                <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"/>
+                                            <form class="upload-images">
+                                                <label>Add image: </label>
+                                                <input type="file" class="btn selectFile" class="selectFile" accept="image/png, image/gif, image/jpeg"/>
                                                 <p class="errorMsg"></p>
                                                 <div class="button-update-images">
-                                                    <button class="delete1" onclick="document.getElementById('err-popup').style.display='block'">Delete</button> 
-                                                    <div id="err-popup">
-                                                        <div id="err-popup-container">
-                                                            <img src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/warning.png"/>
-                                                            <h2>Are you sure?</h2>
-                                                            <p>Deleting this post is permanent and will remove all content of your post.</br>
-                                                            Do you really want to delete your post?</p></br>
-                                                            </br>
-                                                            <button id="cancel2">Cancel</button>
-                                                            <button id="deletePost" class="deletePost">Delete</button>                                                            
-                                                        </div>    
-                                                    </div>
+                                                    <button class="delete1">Delete</button> 
+                                                    
                                                 <input class="form-input" type="submit" id="upload" value="Upload image" />                                                    
                                                 </div>
                                             </form>
