@@ -1,121 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap%27');
+/**
+* I found this font on this website https://fonts.google.com/specimen/Montserrat
+* The CSS decor that I learned from 1537 course and also I found more information on this website
+* https://www.w3schools.com/css/css_navbar.asp
+* https://www.w3schools.com/howto/howto_css_switch.asp
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 body {
     font-family: 'Montserrat', sans-serif;
-    align-items: center;
-    /* justify-content: center; */
-    padding: 0;
     margin: 0;
-    background: white;
-    font-size: 14px;
-    color: #000;
+    padding: 0;
+    line-height: 30px;
 }
 
 
-.card {
-    align-items: center;
-    overflow: hidden;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6);
-    background-color: rgba(52, 119, 249, 0.1);
-    position: relative;
-    width: 600px;
-    margin-bottom: 20px;
-    margin-left: 20%;
-    padding: 40px;
-
-}
-
-.card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.4);
-}
-
-.post_content {
-    display: inline;
-    font-size: 14px;
-    margin-top: 0;
-    text-align: left;
-    padding-bottom: 20px;
-}
-
-.posted_time {
-    font-size: 14px;
-    text-align: left;
-    margin-bottom: 0;
-
-}
-
-.post_status {
-    font-size: 14px;
-    padding-bottom: 15px;
-}
-
-.post_id {
-    display: none;
-    font-size: 14px;
-}
-
-#upload-images {
-    font-size: 14px;
-    text-align: left;
-    padding-top: 15px;
-}
-
-.image {
-    width: fit-content;
-    width: 100%;
-}
-
-.location {
-    font-size: 14px;
-    margin-top: 0;
-    text-align: left;
-    text-transform: capitalize;
-    margin-bottom: 10px;
-}
-
-.weather_type {
-    font-size: 14px;
-    margin-top: 0;
-    text-align: left;
-}
-
-
-.remove-icon {
-    margin-left: 570px;
-    padding-top: 10px;
-    cursor: pointer;
-    position: absolute;
-
-}
-
-
-p {
-    display: inline;
-    text-align: left;
-    text-align: justify;
-    font-size: 14px;
-}
-
-h3 {
-    display: inline;
-    text-align: left;
-    margin-top: 0;
-    text-transform: uppercase;
-    font-size: 14px;
-}
-
-h4 {
-    display: inline;
-    text-align: left;
-    font-size: 14px;
-}
-
-
-.material-icons {
-    display: inline;
-}
-
-/* CSS for the Navbar */
+/* navbar css starts */
 .navbar {
     display: flex;
     position: relative;
@@ -182,7 +82,7 @@ h4 {
     border-radius: 10px;
 }
 
-.signout {
+.singin {
     margin-top: 8px;
     padding: 9px 25px;
     background-color: rgba(52, 119, 249, 0.7);
@@ -193,177 +93,280 @@ h4 {
     color: white;
     transition: all 0.3s ease 0s;
     letter-spacing: 1.5px;
-    padding-bottom: 5px;
 }
 
-button:hover {
-    background-color: rgba(255, 0, 0, 0.8);
-    color: white;
-}
+/* navbar css ends */
 
-p {
+
+/* Dropdown menu for Filter button css starts here  */
+.dropdown {
+    position: relative;
+    width: 150px;
+    margin: 0 auto 0 auto;
     text-align: center;
 }
 
-.button-update-images {
+.dropdown * {
+    box-sizing: border-box;
+}
+
+.select {
+    border-radius: 10px;
     align-items: center;
-    margin-left: 32%;
-    padding-top: 15px;
-}
-
-.deletePost {
-    background-color: red;
-    color: black;
+    outline: 1px solid #484848;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
     cursor: pointer;
-    margin-right: 20px;
-    border: none;
-    border-radius: 5px;
-    padding: 6px 15px;
-    width: 110px;
+    transition: background 0.3s;
 }
 
-input#upload.form-input {
-    background-color: #3477F9;
+.select:hover {
+    outline: solid 2px #3477f9;
+    box-shadow: 0 0 5px #3477F9;
+    text-transform: none;
+}
+
+.select-clicked {
+    outline: solid 2px #3477f9;
+    box-shadow: 0 0 5px #3477F9;
+}
+
+.caret {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid black;
+    margin-right: 10px;
+}
+
+.caret-rotate {
+    transform: rotate(180deg);
+}
+
+.menu {
+    list-style: none;
+    padding: 10px 10px;
+    outline: solid 2px #3477f9;
+    border-radius: 10px;
+    position: absolute;
+    width: 100%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: 0.2s;
+    z-index: 1;
+    left: 50%;
+    display: none;
+    background-color: #ffffff;
+}
+
+.menu li {
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.menu li:hover {
+    background: #3477F9;
+    color: #ffffff;
+}
+
+.menu-open {
+    display: block;
+    opacity: 1;
+}
+
+/* Dropdown menu for Filter button css ends here  */
+
+
+/* post css starts */
+h1 {
+    color: #3477F9;
+    text-align: center;
+    font-size: 35px;
+}
+
+.post-container {
+    margin: 0 auto 0 auto;
+    font-size: 15px;
+}
+
+.post {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 50% 50%;
+    margin: 5vh 5% 8vh 5%;
+    box-shadow: 0 0 5px #484848;
+    border-radius: 10px;
+}
+
+.post:hover {
+    outline: solid 1px #3477f9;
+    box-shadow: 0 0 5px #3477F9;
+}
+
+.post:last-child {
+    margin-bottom: 5%;
+}
+
+.post-body {
+    grid-row: 1;
+    grid-column: 1;
+    padding: 2% 3% 1% 5%;
+    margin: auto 0 auto 0;
+}
+
+.postID {
+    display: none;
+}
+
+button {
+    font-size: 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 30px;
+    border: none;
+    margin-left: 10px;
+    font-family: 'Montserrat', sans-serif;
+    width: 120px;
+}
+
+button:hover {
+    box-shadow: 0 0 5px #3477F9;
+}
+
+.cancel-btn, .approve-btn, .reject-btn {
+    display: none;
+    outline: none;
+}
+
+.cancel-btn {
+    background-color: #c0c8c7;
+}
+
+.approve-btn {
+    background-color: #00ca4e;
     color: white;
-    padding: 6px 15px;
+}
+
+.reject-btn {
+    background-color: #ff605c;
+    color: white;
+}
+
+.sidebar-box {
+    max-height: 150px;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-box .read-more {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 30px 0;
+
+    /* "transparent" only works here because == rgba(0,0,0,0) */
+    background-image: linear-gradient(to bottom, transparent, #ffffff);
+}
+
+.read-more button {
+    background-color: #3477F9;
+    width: 120px;
+    margin-bottom: 0;
+    color: #ffffff;
+}
+
+p {
+    margin: 0;
+}
+
+.card-images {
+    grid-row: 1;
+    grid-column: 2;
+    align-items: center;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    position: relative;
+    gap: 5px;
+}
+
+.card-image {
+    width: 45%;
     cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    width: 110px;
-    font-size: 12px;
-    font-family: 'Montserrat', sans-serif;
+    transition: transform 0.5s ease;
+    /* The next code is from https://tutorialsclass.com/code/css-code-to-fix-blurry-image-when-scaling-down/ */
+    image-rendering: pixelated;
 }
 
-button.modelButton {
-    background-color: lightgray;
-    color: black;
+.card-image:hover {
+    transform: scale(1.1);
+}
+
+.popup-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.9);
+    height: 100%;
+    width: 100vw;
+    z-index: 100;
+    display: none;
+}
+
+.popup-image span {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 35px;
+    font-weight: bold;
+    color: #ffffff;
     cursor: pointer;
-    margin-right: 20px;
-    border: none;
+    z-index: 100;
+}
+
+.popup-image img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     border-radius: 5px;
-    padding: 6px 15px;
-    width: 110px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
+    width: 70vw;
+    object-fit: cover;
 }
 
+/* post css ends */
 
-#selectFile {
-    font-family: 'Montserrat', sans-serif;
-}
-
-input#selectFile.btn {
-    font-family: 'Montserrat', sans-serif;
-}
-
+/* footer css starts */
 footer {
     left: 0;
     bottom: 0;
     width: 100%;
     text-align: center;
     color: #000;
+    overflow: hidden;
 }
 
-
-/* Float cancel and delete buttons and add an equal width */
-.cancelbtn, .deletePost {
-    margin-top: 10px;
-    width: 20%;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
-}
-
-.cancelbtn {
-    background-color: #3477F9;
-    color: white;
-    border-radius: 5px;
-    border: none;
-    margin-right: 10px;
-    font-size: 12px;
-    cursor: pointer;
-    padding: 6px 15px;
-    width: 95px;
-}
-
-.cancelbtn:hover {
-    background-color: #3477F9;
-}
+/* footer css ends */
 
 
-.container {
-    padding: 15px;
-    text-align: center;
-    font-size: 12px;
-}
+@media (max-width: 800px) {
 
-.modal {
-    font-size: 12px;
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    overflow: auto;
-    background-color: #474e5d;
-    color: white;
-    top: 30%;
-    left: 20%;
-    width: 60%;
-    height: 30%;
-    border-radius: 20px;
-}
-
-/* Modal Content/Box */
-.modal-content {
-    background-color: #fefefe;
-    margin: 10% auto 10% auto;
-    border: 1px solid #888;
-    width: 80%;
-    border-radius: 20px;
-}
-
-
-/* The Modal Close Button (x) */
-.close {
-    position: absolute;
-    right: 40px;
-    top: 5px;
-    font-size: 30px;
-    color: white;
-}
-
-.close:hover,
-.close:focus {
-    color: #f44336;
-    cursor: pointer;
-}
-
-/* Clear floats */
-.clearfix::after {
-    clear: both;
-    display: flex;
-}
-
-
-
-@media screen and (max-width: 999px) and (min-width: 700px) {
     body {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        background: white;
-        color: #000;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: cover;
         font-family: 'Montserrat', sans-serif;
-        background-position: center;
+        line-height: 28px;
     }
 
+    /* navbar css starts */
     .brand-title {
-        color: white;
+        color: rgba(52, 119, 249, 1.5);
         text-decoration: solid;
         font-size: 28px;
+        color: white;
     }
 
     .navbar {
@@ -402,223 +405,10 @@ footer {
 
     .navbar-links.active {
         display: flex;
-        background-color: white;
-    }
-
-    .signout {
-        padding: 9px 30px;
-        background-color: rgba(52, 119, 249, 0.7);
-        border: none;
-        border-radius: 50px;
-        font-size: 18px;
-        cursor: pointer;
-        color: white;
-        transition: all 0.3s ease 0s;
-        margin-bottom: 30px;
-    }
-
-
-    .card {
-        align-items: center;
-        font-size: 13px;
-        overflow: hidden;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6);
-        background-color: white;
-        text-align: left;
-        position: relative;
-        width: 500px;
-        margin-bottom: 10px;
-        padding: 10px;
-        background-color: rgba(52, 119, 249, 0.1);
-        margin-left: 15%;
-    }
-
-    .card:hover {
-        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-    }
-
-    .post_content {
-        font-size: 13px;
-        margin-top: 0;
-        text-align: left;
-        padding-bottom: 5px;
-    }
-
-    .weather_type {
-        font-size: 13px;
-        margin-top: 0;
-        text-align: left;
-    }
-
-    .post_title {
-        font-size: 13px;
-        margin-top: 0;
-        text-align: left;
-    }
-
-    .posted_time {
-        font-size: 13px;
-        text-align: left;
-        margin-bottom: 0;
-    }
-
-    .post_id {
-        display: none;
-        font-size: 10px;
-    }
-
-    #upload-images {
-        font-size: 13px;
-        text-align: left;
-    }
-
-    .image {
-        width: fit-content;
-        width: 100%;
-    }
-
-    .location {
-        font-size: 13px;
-        margin-top: 0;
-        text-align: left;
-        text-transform: capitalize;
-    }
-
-
-    .remove-icon {
-        margin-left: 480px;
-        cursor: pointer;
-        position: absolute;
-
-    }
-
-    p {
-        text-align: left;
-        text-align: justify;
-    }
-
-    h3 {
-        text-align: left;
-        margin-top: 0;
-        text-transform: uppercase;
-    }
-
-    h4 {
-        text-align: left;
-    }
-
-    .button-update-images {
-        align-items: center;
-        font-size: 10px;
-        margin-left: 30%;
-        display: flex;
-    }
-
-    .deletePost {
-        background-color: lightgray;
-        color: black;
-        font-size: 12px;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-        padding: 6px 15px;
-        width: 95px;
-    }
-
-    #upload {
-        background-color: rgba(52, 119, 249, 1);
-        padding: 5px;
-        font-size: 12px;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-        width: 95px;
-        padding: 6px 15px;
-    }
-
-    #selectFile {
-        font-family: 'Montserrat', sans-serif;
-    }
-
-    input#selectFile.btn {
-        font-family: 'Montserrat', sans-serif;
-    }
-}
-
-
-/*For the view under 700px*/
-@media screen and (max-width: 699px) and (min-width: 250px) {
-    body {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
         background: white;
-        color: #000;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: cover;
-        font-family: 'Montserrat', sans-serif;
-        background-position: center;
-        font-size: 12px;
     }
 
-    .brand-title {
-        color: white;
-        text-decoration: solid;
-        font-size: 18px;
-    }
-
-    .toggle-button {
-        display: flex;
-    }
-
-    .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-        color: #000;
-        background-color: #5ca1dc;
-    }
-
-    .toggle-button {
-        display: flex;
-    }
-
-    .brand-title {
-        font-size: 1.5rem;
-        margin: .5rem;
-        color: white;
-        cursor: pointer;
-    }
-
-    .navbar-links {
-        display: none;
-        width: 100%;
-    }
-
-    .navbar-links ul {
-        width: 100%;
-        flex-direction: column;
-    }
-
-    .navbar-links ul li {
-        text-align: center;
-        font-size: 18px;
-
-    }
-
-    .navbar-links ul li a {
-        padding: 1rem 1rem;
-        color: #000;
-        font-size: 18px;
-
-    }
-
-    .navbar-links.active {
-        display: flex;
-        background-color: white;
-    }
-
-    .signout {
+    .singin {
         padding: 9px 30px;
         background-color: rgba(52, 119, 249, 0.7);
         border: none;
@@ -630,216 +420,72 @@ footer {
         margin-bottom: 30px;
     }
 
-    .card {
-        align-items: center;
-        overflow: hidden;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6);
-        background-color: rgba(52, 119, 249, 0.1);
-        text-align: left;
-        position: relative;
-        width: 250px;
-        margin-bottom: 10px;
-        margin-left: 12%;
-        align-content: center;
-        padding: 20px;
-    }
+    /* navbar css ends  */
 
-
-    .card:hover {
-        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-    }
-
-    .post_content {
-        font-size: 10px;
-        margin-top: 0;
-        text-align: left;
-        padding-bottom: 5px;
-    }
-
-    .weather_type {
-        font-size: 10px;
-        margin-top: 0;
-        text-align: left;
-    }
-
-    .post_status {
-        font-size: 10px;
-    }
-
-    .post_title {
-        font-size: 12px;
-        margin-top: 0;
-        text-align: left;
-    }
-
-    .posted_time {
-        font-size: 10px;
-        text-align: left;
-        margin-bottom: 0;
-    }
-
-    .post_id {
-        font-size: 10px;
-    }
-
-    #upload-images {
-        font-size: 10px;
-        text-align: left;
-        padding-top: 5px;
-    }
-
-    .image {
-        width: fit-content;
-        width: 100%;
-    }
-
-    .location {
-        font-size: 10px;
-        margin-top: 0;
-        text-align: left;
-        text-transform: capitalize;
-    }
-
-    .remove-icon {
-        margin-left: 225px;
-        cursor: pointer;
-        position: absolute;
-    }
-
-    p {
-        text-align: left;
-        text-align: justify;
-    }
-
-    h3 {
-        text-align: left;
-        margin-top: 0;
-        text-transform: uppercase;
-    }
-
-    h4 {
-        text-align: left;
-    }
-
-    .button-update-images {
-        align-items: center;
-        font-size: 10px;
-        margin-left: 12%;
-        display: flex;
-    }
-
-    .deletePost {
-        background-color: lightgray;
-        color: black;
-        font-size: 10px;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-        padding: 6px 15px;
-        width: 85px;
-    }
-
-    #upload {
-        background-color: rgba(52, 119, 249, 0.9);
-        padding: 6px 15px;
-        width: 85px;
-        font-size: 10px;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-    }
-
-    input {
-        font-size: 10px;
-    }
-
-    #selectFile {
-        padding-top: 10px;
-        font-family: 'Montserrat', sans-serif;
-    }
-
-    input#selectFile.btn {
-        padding-top: 10px;
-        font-family: 'Montserrat', sans-serif;
-    }
-
-
-    /* Float cancel and delete buttons and add an equal width */
-    .cancelbtn, .deletePost {
-        margin-top: 10px;
-        width: 20%;
-        font-family: 'Montserrat', sans-serif;
-        font-size: 12px;
-    }
-
-    .cancelbtn {
-        background-color: #3477F9;
-        color: white;
-        border-radius: 5px;
-        border: none;
-        margin-right: 10px;
-        font-size: 12px;
-        cursor: pointer;
-        padding: 6px 15px;
-        width: 85px;
-    }
-
-    .cancelbtn:hover {
-        background-color: #3477F9;
-    }
-
-    .deletePost:hover {
-        background-color: red;
-    }
-
-
-    .container {
-        padding: 15px;
-        text-align: center;
-        font-size: 12px;
-    }
-
-    .modal {
-        font-size: 12px;
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        overflow: auto;
-        background-color: #474e5d;
-        color: white;
-        top: 15%;
-        width: 100%;
-        height: 30%;
-        padding-top: 10px;
-    }
-
-    .modal-content {
-        background-color: #fefefe;
-        margin: 5% auto 15% auto;
-        border: 1px solid #888;
-        width: 80%;
-        border-radius: 20px;
-    }
-
-    .close {
-        position: absolute;
-        right: 40px;
-        top: 5px;
+    /* post css starts */
+    h1 {
         font-size: 30px;
-        color: white;
+        line-height: 50px;
     }
 
-    .close:hover,
-    .close:focus {
-        color: #f44336;
-        cursor: pointer;
-    }
-
-    /* Clear floats */
-    .clearfix::after {
-        clear: both;
+    #post-goes-here {
         display: flex;
+        position: relative;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+    }
+
+    .post {
+        font-size: 15px;
+        display: grid;
+        grid-template-rows: auto;
+        grid-template-columns: 100%;
+        margin: 5% 5% auto 5%;
+        width: 90%;
+        align-items: center;
+    }
+
+    .post:hover {
+        outline: solid 1px #3477f9;
+        box-shadow: 0 0 10px #3477F9;
+    }
+
+    .post-body {
+        grid-row: 1;
+        grid-column: 1;
+        padding: 0 30px 0 30px;
+    }
+
+    button {
+        font-size: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        height: 25px;
+        margin-left: 10px;
+        margin-bottom: 5px;
+        border: none;
+        font-family: 'Montserrat', sans-serif;
+        width: 100px;
+    }
+
+    .card-images {
+        grid-column: 1;
+        grid-row: 2;
+        text-align: center;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-evenly;
+        position: relative;
+        margin-bottom: 5px;
+        margin-top: 1vh;
+    }
+
+    .card-image {
+        width: 35%;
+        border-radius: 0;
+    }
+
+    .popup-image img {
+        width: 90%;
     }
 }

@@ -77,7 +77,7 @@ async function sendDataToDelete(e) {
     document.getElementById("warning-message").innerHTML = "The user will be permanantly deleted. This cannot be undone.";
     document.getElementById("confirm").innerHTML = "Delete";
     document.querySelector("#err-popup").style.display = "block";
-    document.getElementById("confirm").addEventListener("click", async function(){
+    document.getElementById("confirm").addEventListener("click", async function () {
         let parent = e.target.parentNode;
         let dataToSend = {
             id: parent.parentNode.querySelector(".id").innerHTML
@@ -124,27 +124,27 @@ async function sendDataToMakeUser(e) {
     document.getElementById("warning-message").innerHTML = "This user will lose admin privileges.";
     document.getElementById("confirm").innerHTML = "Make User";
     document.querySelector("#err-popup").style.display = "block";
-    document.getElementById("confirm").addEventListener("click", async function(){
-    let parent = e.target.parentNode;
-    let dataToSend = {
-        id: parent.parentNode.querySelector(".id").innerHTML
-    };
-    try {
-        let responseObject = await fetch("/make-user", {
-            method: 'POST',
-            headers: {
-                "Accept": 'application/json',
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify(dataToSend)
-        });
-        let parsedJSON = await responseObject.json();
-        if (parsedJSON.status == "success") {
-            parent.parentNode.remove();
-        }
-        document.querySelector("#err-popup").style.display = "none";
-    } catch (error) {}
-})
+    document.getElementById("confirm").addEventListener("click", async function () {
+        let parent = e.target.parentNode;
+        let dataToSend = {
+            id: parent.parentNode.querySelector(".id").innerHTML
+        };
+        try {
+            let responseObject = await fetch("/make-user", {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json',
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            });
+            let parsedJSON = await responseObject.json();
+            if (parsedJSON.status == "success") {
+                parent.parentNode.remove();
+            }
+            document.querySelector("#err-popup").style.display = "none";
+        } catch (error) {}
+    })
 }
 
 //This data sends the user data from the client side to the server side so that the specified regular user can become admin user.
@@ -153,32 +153,32 @@ async function sendDataToMakeAdmin(e) {
     document.getElementById("warning-message").innerHTML = "This user will have admin privileges.";
     document.getElementById("confirm").innerHTML = "Make Admin";
     document.querySelector("#err-popup").style.display = "block";
-    document.getElementById("confirm").addEventListener("click", async function(){
-    let parent = e.target.parentNode;
-    let dataToSend = {
-        id: parent.parentNode.querySelector(".id").innerHTML
-    };
-    try {
-        let responseObject = await fetch("/make-admin", {
-            method: 'POST',
-            headers: {
-                "Accept": 'application/json',
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify(dataToSend)
-        });
-        let parsedJSON = await responseObject.json();
-        if (parsedJSON.status == "success") {
-            parent.parentNode.remove();
-        }
-        document.querySelector("#err-popup").style.display = "none";
-    } catch (error) {}
-})
+    document.getElementById("confirm").addEventListener("click", async function () {
+        let parent = e.target.parentNode;
+        let dataToSend = {
+            id: parent.parentNode.querySelector(".id").innerHTML
+        };
+        try {
+            let responseObject = await fetch("/make-admin", {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json',
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            });
+            let parsedJSON = await responseObject.json();
+            if (parsedJSON.status == "success") {
+                parent.parentNode.remove();
+            }
+            document.querySelector("#err-popup").style.display = "none";
+        } catch (error) {}
+    })
 }
 
 /**
  * If users click on "Cancel" button in popup message, hide the popup message so that users can edit all input.
  */
- document.getElementById("cancel2").addEventListener("click", function(){
+document.getElementById("cancel2").addEventListener("click", function () {
     document.querySelector("#err-popup").style.display = "none";
 })
