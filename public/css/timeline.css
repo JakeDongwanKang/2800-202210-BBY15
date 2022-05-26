@@ -4,7 +4,7 @@ body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    background-image:url("/assets/background-web-rain.jpg");
+    background-image: url("/assets/background-web-rain.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -131,7 +131,7 @@ button:hover {
 .branch {
     font-size: 5rem;
     font-weight: 700;
-    color:#fff;
+    color: #fff;
 }
 
 .container {
@@ -171,7 +171,7 @@ button:hover {
     display: inline-block;
     padding: 12px 12px;
     font-size: 16px;
-    font-weight : bold ;
+    font-weight: bold;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
@@ -186,7 +186,7 @@ button:hover {
 }
 
 .createPost:hover {
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
 .all-events {
@@ -225,7 +225,7 @@ button:hover {
 
 .profile-pic {
     object-fit: cover;
-    border-radius:50%;
+    border-radius: 50%;
     width: 48px;
     height: 48px;
     cursor: pointer;
@@ -233,20 +233,20 @@ button:hover {
 
 h3 {
     font-size: 24px;
-    font-weight:normal; 
+    font-weight: normal;
     margin-bottom: 5px;
 }
 
 h4 {
     font-size: 20px;
-    font-weight:normal; 
+    font-weight: normal;
     margin-top: 5px;
     margin-bottom: 5px;
 }
 
 h5 {
     font-size: 18px;
-    font-weight:normal; 
+    font-weight: normal;
     margin-top: 5px;
     text-align: left;
 }
@@ -296,7 +296,7 @@ h4 {
     position: fixed;
     top: 0;
     left: 0;
-    background: rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.9);
     height: 100%;
     width: 100vw;
     z-index: 100;
@@ -305,7 +305,7 @@ h4 {
 
 .popup-image span {
     position: absolute;
-    top:10px;
+    top: 10px;
     right: 10px;
     font-size: 35px;
     font-weight: bold;
@@ -314,7 +314,7 @@ h4 {
     z-index: 100;
 }
 
-.popup-image img{
+.popup-image img {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -380,7 +380,7 @@ footer {
 
     .navbar-links.active {
         display: flex;
-        background:white;
+        background: white;
     }
 
     .singin {
@@ -438,7 +438,7 @@ footer {
         background-color: rgba(52, 119, 249, 0.7);
     }
 
-    .post_content{
+    .post_content {
         width: 100%;
     }
 
@@ -453,20 +453,20 @@ footer {
 
     h3 {
         font-size: 16px;
-        font-weight:normal; 
+        font-weight: normal;
         margin-bottom: 5px;
     }
-    
+
     h4 {
         font-size: 14px;
-        font-weight:normal; 
+        font-weight: normal;
         margin-top: 5px;
         margin-bottom: 5px;
     }
-    
+
     h5 {
         font-size: 14px;
-        font-weight:normal; 
+        font-weight: normal;
         margin-top: 5px;
         text-align: left;
     }
@@ -478,7 +478,7 @@ footer {
     .post-header {
         margin-left: 0;
     }
-    
+
     .desc {
         font-size: 12px;
     }
@@ -490,24 +490,28 @@ footer {
         margin-left: auto;
         margin-right: auto;
         overflow: hidden;
-      }
-    
-    .card .read-more-button { 
+    }
+
+    .card .read-more-button {
         visibility: visible;
-        position: absolute; 
-        bottom: 0; 
+        position: absolute;
+        bottom: 0;
         left: 0;
-        width: 300px; 
-        text-align: center; 
-        margin: 0; padding: 30px 10px; 
+        width: 300px;
+        text-align: center;
+        margin: 0;
+        padding: 30px 10px;
         background-image: linear-gradient(to bottom, transparent, darkgrey);
+        text-decoration: none;
+        color: #3477f9;
+        font-weight: 600;
     }
 
     .read-more-button {
         background-color: #fff;
     }
 
-      /* "Read More" Styling Ends */
+    /* "Read More" Styling Ends */
 
     .popup-image img {
         width: 90%;
