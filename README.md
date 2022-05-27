@@ -4,16 +4,15 @@
 * [Overview](#overview)
 * [Contents](#content)
 * [Guide](#guide)
-* [Feature](#feature)
-* [Credits, References, and Licences](#reference)
+* [Features](#features)
+* [Credits, References, and Lisences](#references)
 * [Test Plan](#test)
 * [Contact Us](#contact)
 
-## Project Title 
+## Title 
 EXTREMIS
 
-
-## Project Description
+## Description
 Our team BBY15 is developing Extremis to help people keep track of extreme weather conditions to protect themselves and their properties 
 by following real-time weather conditions and by sharing their current situations.
 	
@@ -119,7 +118,7 @@ It has the following subfolders and files:
 ```  
 
 
-## Guide start
+## Guide
 Here is the guideline on how to run our project:
 - Download Node.js at [Node](https://nodejs.org/en/download)
 - Download XAMPP at [XAMPP](https://www.apachefriends.org/download.html)
@@ -182,38 +181,39 @@ Here is the guideline on how to run our project:
 - App may be hosted by the user in any way they wish, our group used [Heroku](https://devcenter.heroku.com/articles/deploying-nodejs) 
     and set our GitHub repo to automatically deploy to Heroku. 
 
-## Fearture
+## Feartures
 How to use our application? 
-Here is some of core features of our application
-* Regular users:
-- Get real-time weather conditions
-- Create posts about weather conditions, supplies, safe places with images
-- Edit posts
-* Admin Users
-- User management
-- Other admin management
-- Post management
-- Add new users to web app
+Here is some of core features of our application.
+- REGULAR USER:
+    * Get real-time weather conditions
+    * Create posts about weather conditions, supplies, safe places with images
+    * Edit posts
+- ADMIN USERS:
+    * User management
+    * Other admin management
+    * Post management
+    * Add new users to web app
 
-## Credits, References, and Licence
+## References
 We want to say thank you to Arron and Jason for their examples and lectures on COMP2537
 Thanks to amazing resources and reference that helped us to create this application:
-* Images and Icons:
-- [Flaticon](https://www.flaticon.com/)
-- [Favicon](https://favicon.io/)
-* Font:
-- [Fontawesome](https://fontawesome.com/)
-- [Google font](https://fonts.google.com/)
-* Logos:
-- Created by Jake Dongwan Kang and Vincent Lam.
 
-## Test Plan
+- Images and Icons:
+    * [Flaticon](https://www.flaticon.com/)
+    * [Favicon](https://favicon.io/)
+- Fonts:
+    * [Fontawesome](https://fontawesome.com/)
+    * [Google font](https://fonts.google.com/)
+- Logos:
+    * Created by Jake Dongwan Kang and Vincent Lam.
+
+## Test
 * Tests on the website were done by checking database values after logins and registrations.
 * Tests were run manually on each page to check if each scene worked with all of its objects.
 * A list of tests done were done
 Click [Testing Log](https://docs.google.com/spreadsheets/d/1onjpp5LQvqqrM0Xsta7xTYl7vPLh-7MX15hi9F9XHmE/edit#gid=394496370) for our test plan
 
-## Contact us 
+## Contact
 Team BBY15 is made up of 4 students in the BCIT Computer Systems Technology Diploma program (COMP2800, Winter 2022)
 - Vincent Lam (CST Term 2) - [vince.lam120@gmail.com](vince.lam120@gmail.com) 
 - Jake Dongwan Kang (CST Term 2) - [mas7253@gmail.com](mas7253@gmail.com) 
