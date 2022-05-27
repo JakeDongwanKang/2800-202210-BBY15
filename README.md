@@ -37,14 +37,14 @@ Thank you for making these resources free so it's possible for us to create appl
     Users can upload images in their posts. Users can also edit/ delete their posts, add/delete images to their posts later. We also provide admin privileges including user management, admin management, and post management.
 
 - How our repo is organized
-* app - that holds all html files and images.
-* public - that holds all of the static resources such as assets, css, and javascript files.
+* App - that holds all html files and images.
+* Public - that holds all of the static resources such as assets, css, and javascript files.
 
 ## Test Plan
 - Tests on the website were done by checking database values after logins and registrations.
 - Tests were run manually on each page to check if each scene worked with all of its objects.
 - A list of tests done were done
-Click [here](https://docs.google.com/spreadsheets/d/1onjpp5LQvqqrM0Xsta7xTYl7vPLh-7MX15hi9F9XHmE/edit#gid=394496370) for our test plan
+Click [Testing Log](https://docs.google.com/spreadsheets/d/1onjpp5LQvqqrM0Xsta7xTYl7vPLh-7MX15hi9F9XHmE/edit#gid=394496370) for our test plan
 
 
 ## Content
@@ -57,8 +57,8 @@ Content of the project folder:
 ├── index.html
 ├── Procifile
 ├── package-lock.json
-├── Package.json
-└── README.md
+├── Package.json            
+└── README.md               
 
 It has the following subfolders and files:
 
@@ -75,9 +75,10 @@ It has the following subfolders and files:
 
 
 ## Guide
-- Download Node.js at [here](https://nodejs.org/en/download)
+- Download Node.js at [Node](https://nodejs.org/en/download)
+- Download XAMPP at [XAMPP](https://www.apachefriends.org/download.html)
 - Download Visual Studio Code or any text editor/IDE of your choice
-- Copy our repository link [here](https://github.com/JakeDongwanKang/2800-202210-BBY15.git)
+- Copy our repository link [Extremis](https://github.com/JakeDongwanKang/2800-202210-BBY15.git)
 - Clone the repository onto your machine and in command line navigate to the repository
 - Run the command `npm install express express-session mysql2`
 - Run XAMPP and start mysql or you can use any mysql software
