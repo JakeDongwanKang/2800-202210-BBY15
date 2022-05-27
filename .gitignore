@@ -1,5 +1,6 @@
-post-images/
 node_modules/
 package.json
 package-lock.json/
 avatar/
+post-images/
+
