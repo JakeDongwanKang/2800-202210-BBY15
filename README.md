@@ -195,7 +195,7 @@ Here is some of core features of our application.
     * Add new users to web app
 
 ## References
-We want to say thank you to Arron and Jason for their examples and lectures on COMP2537
+We want to say thank you to our instructors, Arron and Jason, for their examples and lectures on COMP2537 and Comp1537.
 Thanks to amazing resources and reference that helped us to create this application:
 
 - Images and Icons:
@@ -210,8 +210,8 @@ Thanks to amazing resources and reference that helped us to create this applicat
 ## Test
 * Tests on the website were done by checking database values after logins and registrations.
 * Tests were run manually on each page to check if each scene worked with all of its objects.
-* A list of tests done were done
-Click [Testing Log](https://docs.google.com/spreadsheets/d/1onjpp5LQvqqrM0Xsta7xTYl7vPLh-7MX15hi9F9XHmE/edit#gid=394496370) for our test plan
+* A list of tests was done:
+[Testing Log](https://docs.google.com/spreadsheets/d/1onjpp5LQvqqrM0Xsta7xTYl7vPLh-7MX15hi9F9XHmE/edit#gid=394496370) for our test plan
 
 ## Contact
 Team BBY15 is made up of 4 students in the BCIT Computer Systems Technology Diploma program (COMP2800, Winter 2022)
