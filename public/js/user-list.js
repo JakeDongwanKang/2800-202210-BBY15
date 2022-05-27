@@ -30,9 +30,11 @@ async function sendData(data) {
         });
         let parsedJSON = await responseObject.json();
         if (parsedJSON.status == "invalid email") {
-            document.getElementById("emptyError").innerHTML = `<small style="color:red;">*Invalid email address. Email not saved*</small>`;
+            document.getElementById("emptyError").innerHTML = `<small style="color:red;">*Invalid email address. Changes not saved*</small>`;
         } else if (parsedJSON.status == "success") {
             document.getElementById("emptyError").innerHTML = `<small style="color:green;">*Changes saved*</small>`;
+        } else if (parsedJSON.status == "duplicate") {
+            document.getElementById("emptyError").innerHTML = `<small style="color:red;">*Email already in use. Changes not saved*</small>`;
         }
     } catch (error) {}
 }
