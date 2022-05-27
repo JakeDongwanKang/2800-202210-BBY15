@@ -1,17 +1,21 @@
-## Extremis
-
-* [Team](#team)
+* [Project Tittle](#title)
+* [Project Description](#description)
 * [Technologies](#technologies)
 * [Overview](#overview)
 * [Contents](#content)
 * [Guide](#guide)
+* [Feature](#feature)
+* [Credits, References, and Licences](#reference)
+* [Test Plan](#test)
+* [Contact Us](#contact)
 
-## Team 
-Team BBY15 is made up of 4 students in the BCIT Computer Systems Technology Diploma program (COMP2800, Winter 2022)
-- Vincent Lam (CST Term 2)
-- Jake Dongwan (CST Term 2)
-- Anh Nguyen (CST Term 1)
-- Linh Nguyen (CST Term 1)
+## Project Title 
+EXTREMIS
+
+
+## Project Description
+Our team BBY15 is developing Extremis to help people keep track of extreme weather conditions to protect themselves and their properties 
+by following real-time weather conditions and by sharing their current situations.
 	
 ## Technologies
 This Extremis app is made possible because of amazing people that created:
@@ -43,11 +47,6 @@ We have two main folders:
     * App - that holds all of the static resources html files and images (avatars and post images that imports by users).
     * Public - that holds all of the static resources such as assets, css, and javascript files.
 
-## Test Plan
-* Tests on the website were done by checking database values after logins and registrations.
-* Tests were run manually on each page to check if each scene worked with all of its objects.
-* A list of tests done were done
-Click [Testing Log](https://docs.google.com/spreadsheets/d/1onjpp5LQvqqrM0Xsta7xTYl7vPLh-7MX15hi9F9XHmE/edit#gid=394496370) for our test plan
 
 
 ## Content
@@ -116,10 +115,12 @@ It has the following subfolders and files:
      |      └── weather-forecast.html                          
      └── images 
             ├── avatar                      # Folder for avatar    
-            └── post-images                 # Folder for post images       
+            └── post-images                 # Folder for post images    
+```  
 
 
 ## Guide start
+Here is the guideline on how to run our project:
 - Download Node.js at [Node](https://nodejs.org/en/download)
 - Download XAMPP at [XAMPP](https://www.apachefriends.org/download.html)
 - Download Visual Studio Code or any text editor/IDE of your choice
@@ -133,10 +134,10 @@ It has the following subfolders and files:
 - Open the window command line and enter `mysql -u root -p`
 - Set up database by following these codes:
 
-    `CREATE DATABASE IF NOT EXISTS COMP2800;
-    USE COMP2800;`
+``` CREATE DATABASE IF NOT EXISTS COMP2800;
+    USE COMP2800;
 
-    `CREATE TABLE IF NOT EXISTS BBY_15_User (
+    CREATE TABLE IF NOT EXISTS BBY_15_User (
     user_id int NOT NULL AUTO_INCREMENT,
     first_name varchar(25) NOT NULL,
     last_name varchar(25) NOT NULL,
@@ -146,9 +147,9 @@ It has the following subfolders and files:
     admin_role boolean NOT NULL,
     join_date datetime,
     num_posts int,
-    PRIMARY KEY (user_id));`
+    PRIMARY KEY (user_id));
 
-    `CREATE TABLE IF NOT EXISTS BBY_15_Post (
+    CREATE TABLE IF NOT EXISTS BBY_15_Post (
     post_id int NOT NULL AUTO_INCREMENT,
     user_id int NOT NULL,
     posted_time datetime NOT NULL,
@@ -158,21 +159,22 @@ It has the following subfolders and files:
     location varchar(60),
     post_status varchar(10) NOT NULL,
     weather_type varchar(20),
-    PRIMARY KEY (post_id));`
+    PRIMARY KEY (post_id));
 
-    `CREATE TABLE IF NOT EXISTS BBY_15_Post_Images (
+    CREATE TABLE IF NOT EXISTS BBY_15_Post_Images (
     image_id int NOT NULL AUTO_INCREMENT,
     post_id int NOT NULL,
     image_location varchar(150),
     PRIMARY KEY (image_id),
-    FOREIGN KEY (post_id) REFERENCES BBY_15_Post(post_id) ON DELETE CASCADE);`
+    FOREIGN KEY (post_id) REFERENCES BBY_15_Post(post_id) ON DELETE CASCADE);
 
-    `INSERT INTO BBY_15_User (first_name, last_name, email, user_password, admin_role, join_date, num_posts) VALUES 
+    INSERT INTO BBY_15_User (first_name, last_name, email, user_password, admin_role, join_date, num_posts) VALUES 
     ('Joe', 'Smith', 'joesmith@email.ca', 'password', FALSE, 20220503160135, 0),
-    ('Admin', 'Admin', 'admin@email.ca', 'password', TRUE, 20220503160212, 0);`
+    ('Admin', 'Admin', 'admin@email.ca', 'password', TRUE, 20220503160212, 0);
 
-    `INSERT INTO BBY_15_Post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES
-    (1, 20220516220604, "Bad weather here", "Weather", "weather condition", "Here", "approved", "Bad");`
+    INSERT INTO BBY_15_Post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES
+    (1, 20220516220604, "Bad weather here", "Weather", "weather condition", "Here", "approved", "Bad");
+```
 
 - Run the web app locally by executing `extremis-app.js` in command line
 - Open a web browser (Firefox or Chrome or Microsoft Edge is recommended)
@@ -180,5 +182,37 @@ It has the following subfolders and files:
 - App may be hosted by the user in any way they wish, our group used [Heroku](https://devcenter.heroku.com/articles/deploying-nodejs) 
     and set our GitHub repo to automatically deploy to Heroku. 
 
-```
+## Fearture
+How to use our application? 
+Here is some of core features of our application
+* Regular users:
+- Get real-time weather conditions
+- Create posts about weather conditions, supplies, safe places with images
+- Edit posts
+* Admin Users
+- User management
+- Other admin management
+- Post management
+- Add new users to web app
+
+## Credits, References, and Licence
+We want to say thank you to Arron and Jason for their examples and lectures on COMP2537
+Thanks to amazing resources and reference that helped us to create this application:
+* [Flaticon](https://www.flaticon.com/)
+* [Fontawesome](https://fontawesome.com/)
+* [Favicon](https://favicon.io/)
+* Logos created by Jake Dongwan Kang and Vincent Lam.
+
+## Test Plan
+* Tests on the website were done by checking database values after logins and registrations.
+* Tests were run manually on each page to check if each scene worked with all of its objects.
+* A list of tests done were done
+Click [Testing Log](https://docs.google.com/spreadsheets/d/1onjpp5LQvqqrM0Xsta7xTYl7vPLh-7MX15hi9F9XHmE/edit#gid=394496370) for our test plan
+
+## Contact us 
+Team BBY15 is made up of 4 students in the BCIT Computer Systems Technology Diploma program (COMP2800, Winter 2022)
+- Vincent Lam (CST Term 2) - [vince.lam120@gmail.com](vince.lam120@gmail.com) 
+- Jake Dongwan Kang (CST Term 2) - [mas7253@gmail.com](mas7253@gmail.com) 
+- Anh Nguyen (CST Term 1) - [ngocanhnt269@gmail.com](ngocanhnt269@gmail.com) 
+- Linh Nguyen (CST Term 1) - [k.linh2210@gmail.com](k.linh2210@gmail.com) 
 
