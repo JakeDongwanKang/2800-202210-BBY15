@@ -34,6 +34,7 @@ body {
     margin: .5rem;
     color: #fff;
     cursor: pointer;
+    text-decoration: none;
 }
 
 #content {
@@ -144,13 +145,14 @@ input.search-bar {
     border:3px solid rgba(52, 119, 249, 0.9);
 }
 
-#search-button {
+.forecast-button {
     color: #fff;
     background-color: rgba(52, 119, 249, 0.9);
     border-radius: 15px;
     margin: 16px;
     padding: 8px 16px;
     border:none;
+    cursor: pointer;
 }
 
 footer {
@@ -216,6 +218,10 @@ footer {
 
     }
 
+    .navbar-links li a:hover {
+        color: #3477f9;
+    }
+    
     .navbar-links.active {
         display: flex;
         background:white;

@@ -1,19 +1,17 @@
 "use strict";
 
 /**
- * I found how to do the toggleButton on 1537 course and 1800 course. 
- * I found some syntax and codes on this website that I can use to create a hambuger menu.
+ * We found how to do the toggleButton on 1537 course and 1800 course. 
+ * We found some syntax and codes on this website that I can use to create a hambuger menu.
  * https://www.educba.com/hamburger-menu-javascript/
  */
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
 
 toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active')
-})
+    navbarLinks.classList.toggle('active');
+});
 
-
-const dropdown = document.querySelector(".dropdown");
 const select = document.querySelector(".select");
 const caret = document.querySelector(".caret");
 const menu = document.querySelector(".menu");
@@ -86,21 +84,21 @@ function displayPost(selectedStatus) {
     if (selectedStatus == "Approved") {
         // Display all approved posts
         for (let i = 0; i < postStatus.length; i++) {
-            if (postStatus[i].innerText != "approved") {
+            if (postStatus[i].innerText != "approved ") {
                 postStatus[i].parentElement.parentElement.parentElement.style.display = "none";
             }
         }
     } else if (selectedStatus == "Pending") {
         // Display all pending posts
         for (let i = 0; i < postStatus.length; i++) {
-            if (postStatus[i].innerText != "pending") {
+            if (postStatus[i].innerText != "pending ") {
                 postStatus[i].parentElement.parentElement.parentElement.style.display = "none";
             }
         }
     } else if (selectedStatus == "Rejected") {
         // Display all rejected/deleted posts
         for (let i = 0; i < postStatus.length; i++) {
-            if (postStatus[i].innerText != "rejected") {
+            if (postStatus[i].innerText != "rejected ") {
                 postStatus[i].parentElement.parentElement.parentElement.style.display = "none";
             }
         }
@@ -138,7 +136,7 @@ for (let i = 0; i < postStatus.length; i++) {
         children[2].style.display = "inline-block";
         children[3].style.display = "inline-block";
         children[4].style.display = "inline-block";
-    })
+    });
 }
 
 
@@ -226,7 +224,7 @@ for (let i = 0; i < allPosts.length; i++) {
             // Change the grid_column property of the post-body element if users are using web app on desktop/laptop.
             postBodyElement.style.gridColumn = "1 / span 2";
         }
-        
+
     }
 }
 
@@ -257,27 +255,23 @@ function expandText(e) {
 
 
 /**
- * Display the full image when users click on that image.
- * Return to the original size when users click on that image again. 
+ * Expand the image when users click on that image.
  * @param {*} e the current img element
  */
-var expandImg = true;
 function expandImage(e) {
-    if (expandImg) {
-        e.style.transform = "scale(3)";
-        e.style.position = 'absolute';
-        if (!x.matches) {
-            e.style.top = "20%";
-            e.style.left = "-20%";
-        }
-        e.style.zIndex = "1";
-        expandImg = false;
-    } else {
-        e.style.transform = "scale(1.0)";
-        e.style.position = '';
-        e.style.top = "";
-        e.style.right = "";
-        e.style.zIndex = "";
-        expandImg = true;
-    }
+    document.querySelector('.popup-image').style.display = "block";
+    document.querySelector('.popup-image img').src = e.getAttribute('src');
 }
+
+/**
+ * Return to the original size when users click on close button (X) or enter escape key. 
+ */
+document.querySelector('.popup-image span').onclick = () => {
+    document.querySelector('.popup-image').style.display = "none";
+};
+
+document.body.onkeydown = function (e) {
+    if (e.which == 27) {
+        document.querySelector('.popup-image').style.display = "none";
+    }
+};

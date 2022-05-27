@@ -1,3 +1,9 @@
+/**
+ * These following codes is adapted from instructor Arron's 2537 examples and changes made by our team.
+ * @author Arron_Ferguson (1537 instructor) and students from team BBY15: Anh Nguyen, Linh Nguyen, Vincent Lam and Dongwan_Kang.
+ * @param {*} data user input
+ */
+
 "use strict";
 
 const express = require('express');
@@ -53,7 +59,9 @@ if (isHeroku) {
     var connection = mysql.createPool(connectionHeroku);
     let port = process.env.PORT || 3000;
     app.listen(port, function () {});
-
+    const {
+        uploadFile
+    } = require('./s3');
 } else {
     var connection = mysql.createPool(connectionLocal);
     let port = 8000;
@@ -163,21 +171,20 @@ app.get("/user-list", function (req, res) {
                 </tr></head>`;
                 for (let i = 0; i < results.length; i++) {
 
-                    user_list += ("<tbody><tr><td class='id'>" + results[i]['user_id'] +
-                        "</td><td class='first_name'><span>" + results[i]['first_name'] +
-                        "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
-                        "</span></td><td class='email'><span>" + results[i]['email'] +
-                        "</span></td><td class='password'><span>" + results[i]['user_password'] +
+                    user_list += ("<tbody><tr><td class='id'>" + results[i].user_id +
+                        "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i].first_name +
+                        "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i].last_name +
+                        "</span></td><td class='email'><div class='material-icons'>edit</div><span>" + results[i].email +
+                        "</span></td><td class='password'><div class='material-icons'>edit</div><span>" + results[i].user_password +
                         "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
                         "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
                         "</button></td></tr></tbody>"
                     );
                 }
                 user_list_jsdom.window.document.getElementById("user-container").innerHTML = user_list;
-                res.write(user_list_jsdom.serialize());
-                res.end;
+                res.send(user_list_jsdom.serialize());
             }
-        )
+        );
     } else {
         // if user has not logged in, redirect to login page
         res.redirect("/");
@@ -194,7 +201,7 @@ app.get("/edit", function (req, res) {
     } else {
         res.redirect("/");
     }
-})
+});
 
 // function for getting all admins for admin-list
 app.get("/admin-list", function (req, res) {
@@ -218,11 +225,11 @@ app.get("/admin-list", function (req, res) {
                 </tr></thead>`;
                 for (let i = 0; i < results.length; i++) {
                     if (req.session.user_id != results[i]['user_id']) {
-                        admin_list += ("<tr><td class='id'>" + results[i]['user_id'] +
-                            "</td><td class='first_name'><span>" + results[i]['first_name'] +
-                            "</span></td><td class='last_name'><span>" + results[i]['last_name'] +
-                            "</span></td><td class='email'><span>" + results[i]['email'] +
-                            "</span></td><td class='password'><span>" + results[i]['user_password'] +
+                        admin_list += ("<tr><td class='id'>" + results[i].user_id +
+                            "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i].first_name +
+                            "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i].last_name +
+                            "</span></td><td class='email'><div class='material-icons'>edit</div><span>" + results[i].email +
+                            "</span></td><td class='password'><div class='material-icons'>edit</div><span>" + results[i].user_password +
                             "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_user'>Make User" +
                             "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
                             "</button></td></tr>"
@@ -230,10 +237,9 @@ app.get("/admin-list", function (req, res) {
                     }
                 }
                 admin_list_jsdom.window.document.getElementById("user-container").innerHTML = admin_list;
-                res.write(admin_list_jsdom.serialize());
-                res.end;
+                res.send(admin_list_jsdom.serialize());
             }
-        )
+        );
     } else {
         // if user has not logged in, redirect to login page
         res.redirect("/");
@@ -257,16 +263,16 @@ app.get("/admin-list", function (req, res) {
 app.get("/about-us", function (req, res) {
     if (req.session.loggedIn) {
         let doc = fs.readFileSync("./app/html/about-us.html", "utf8");
-        res.setHeader("Content-Type", "text/html"); 
+        res.setHeader("Content-Type", "text/html");
         let aboutUsDOM = new JSDOM(doc);
         // Display My Post on navbar if the user is not an admin
-        if (!req.session.isAdmin){
+        if (!req.session.isAdmin) {
             res.send(doc);
         } else {
             aboutUsDOM.window.document.getElementById("myPostLink").remove();
             res.send(aboutUsDOM.serialize());
         }
-        
+
     } else {
         // if user has not logged in, redirect to login page
         res.redirect("/");
@@ -330,12 +336,11 @@ app.post("/login", function (req, res) {
 
 //Authenticating user, checks if they can be added to the database, then creates and add the user info into the database.
 app.post("/add-user", function (req, res) {
-    res.setHeader('Content-Type', 'application/json');
-
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
     let signupemail = req.body.email;
     let signuppassword = req.body.password;
+    let regex = new RegExp("[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
 
     //Checking to see if any columns in the sign-up page is NULL : if they are, the account cannot be made.
     if (!firstName || !lastName || !signupemail || !signuppassword) {
@@ -344,18 +349,34 @@ app.post("/add-user", function (req, res) {
             msg: "Every column has to be filled."
         });
     } else {
-        connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
-            [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
-            function (error, results, fields) {
-                res.send({
-                    status: "success",
-                    msg: "Record added."
-                });
-                req.session.loggedIn = true;
-                req.session.user_id = results.insertId;
-                req.session.firstName = req.body.firstName;
-                req.session.save(function (err) {});
+        if (!regex.test(signupemail)) {
+            res.send({
+                status: "invalid email",
+                msg: "This email is invalid."
             });
+        } else {
+            connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
+                [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
+                function (error, results, fields) {
+                    if (error && error.errno == 1062) {
+                        res.send({
+                            status: "duplicate",
+                            msg: "This email is already registered to an account."
+                        });
+                    } else {
+                        res.send({
+                            status: "success",
+                            msg: "Record added."
+                        });
+                        req.session.loggedIn = true;
+                        req.session.user_id = results.insertId;
+                        req.session.firstName = req.body.firstName;
+                        req.session.save(function (err) {});
+                    }
+                }
+            );
+        }
+
     }
 });
 
@@ -367,6 +388,7 @@ app.post("/add-user-as-admin", function (req, res) {
     let lastName = req.body.lastName;
     let signupemail = req.body.email;
     let signuppassword = req.body.password;
+    let regex = new RegExp("[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
 
     //Checking to see if any columns in the sign-up page is NULL : if they are, the account cannot be made.
     if (!firstName || !lastName || !signupemail || !signuppassword) {
@@ -375,15 +397,29 @@ app.post("/add-user-as-admin", function (req, res) {
             msg: "Every column has to be filled."
         });
     } else {
-        //connecting to the database, then creating and adding the user info into the database.
-        connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
-            [req.body.firstName, req.body.lastName, req.body.email, req.body.password, ],
-            function (error, results, fields) {
-                res.send({
-                    status: "success",
-                    msg: "Record added."
-                });
+        if (!regex.test(signupemail)) {
+            res.send({
+                status: "invalid email",
+                msg: "This email is invalid."
             });
+        } else {
+            //connecting to the database, then creating and adding the user info into the database.
+            connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
+                [req.body.firstName, req.body.lastName, req.body.email, req.body.password, ],
+                function (error, results, fields) {
+                    if (error && error.errno == 1062) {
+                        res.send({
+                            status: "duplicate",
+                            msg: "This email is already registered to an account."
+                        });
+                    } else {
+                        res.send({
+                            status: "success",
+                            msg: "Record added."
+                        });
+                    }
+                });
+        }
     }
 });
 
@@ -404,36 +440,65 @@ app.get("/profile", function (req, res) {
                         let lastname = results[i].last_name;
                         let useremail = results[i].email;
                         let password = results[i].user_password;
-                        let userprofile = '/assets/default-profile.jpg';
+                        let userprofile = 'https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg';
                         if (results[i].profile_picture != null) {
                             userprofile = results[i].profile_picture;
-                        };
+                        }
                         var template = `   
                         </br>  
                         <div class="account-body"> 
                         <div class='profile-pic-div'>
-                            <img class='profile-pic' src='${userprofile}'</div>                              
+                            <img class='profile-pic' src='${userprofile}'>
+                            <label for="selectFile">
+                                <img class="camera" src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/camera-icon1.jpg" width="28" height="28"/>
+                            </label>
+                            <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
+                            multiple="multiple" />
+
+                        </div>                         
                             <div id="user_title">
                             <h2>${firstname} ${lastname} </h2>
                             </div>
                             <div id="user_content">
                                 <div class="form-group">
-                                    <label for="firstName">First Name</label>
-                                    <input type="text" class="um-input" id="firstName" placeholder=${firstname}>
+                                    <label for="firstName">First Name
+                                        <div class="tooltip">&#x270e;
+                                            <p class="tooltiptext">Click on text to edit</p>
+                                        </div>  
+                                    </label>
+                                    <input type="text" class="um-input" id="firstName" value=${firstname}> 
                                 </div>
                                 <div class="form-group">
-                                    <label for="lastName">Last Name</label>
-                                    <input type="text" class="um-input" id="lastName" placeholder=${lastname}>
+                                    <label for="lastName">Last Name
+                                        <div class="tooltip">&#x270e;
+                                            <p class="tooltiptext">Click on text to edit</p>
+                                        </div> 
+                                    </label>
+                                    <input type="text" class="um-input" id="lastName" value=${lastname}>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input type="email" class="um-input" id="userEmail" placeholder=${useremail}>
+                                    <input type="email" class="um-input" id="userEmail" disabled value=${useremail}>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="um-input" id="userPassword" placeholder=${password}>
+                                    <label for="password">Password
+                                        <div class="tooltip">&#x270e;
+                                            <p class="tooltiptext">Click on text to edit</p>
+                                        </div> 
+                                    </label>
+                                    <input type="password" id="userPassword" required="required"value=${password} />
+                                    <i class="fa-solid fa-eye togglePassword"></i>
                                 </div>
-                                
+                                <div class="form-group">
+                                    <label for="password">Confirm password
+                                        <div class="tooltip">&#x270e;
+                                            <p class="tooltiptext">Click on text to edit</p>
+                                        </div> 
+                                    </label>
+                                    <input type="password" id="userConfirmPassword" required="required"
+                                    value=${password} onkeyup="validate_password()"/>
+                                    <i class="fa-solid fa-eye togglePassword"></i>
+                                </div>
                             </div>
                                 
                             </div>  
@@ -442,14 +507,14 @@ app.get("/profile", function (req, res) {
                         let area = profileDOM.window.document.querySelector('#user_content');
                         area.innerHTML += template;
                     }
-        // Display My Post on navbar if the user is not an admin
-        if (!req.session.isAdmin){
-            res.send(profileDOM.serialize());
-        } else {
-            profileDOM.window.document.getElementById("myPostLink").remove();
-            res.send(profileDOM.serialize());
-        }
-                    
+                    // Display My Post on navbar if the user is not an admin
+                    if (!req.session.isAdmin) {
+                        res.send(profileDOM.serialize());
+                    } else {
+                        profileDOM.window.document.getElementById("myPostLink").remove();
+                        res.send(profileDOM.serialize());
+                    }
+
                 }
             }
         )
@@ -458,44 +523,75 @@ app.get("/profile", function (req, res) {
     }
 });
 
-const storage_avatar = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, "./app/images/avatar/")
-    },
-    filename: function (req, file, callback) {
-        callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname.split('/').pop().trim());
-    }
-});
-const uploadAvatar = multer({
-    storage: storage_avatar
-});
-
 //Store user update information and avatar
 app.post("/profile", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    //connecting to the database, then creating and adding the user info into the database.
-    connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE user_id=?',
-        [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.session.user_id],
-        function (error, results, fields) {
-            res.send({
-                status: "success",
-                msg: "Record added."
-            });
-            req.session.loggedIn = true;
-            req.session.firstName = req.body.firstName;
-            req.session.email = req.body.email;
-            req.session.save(function (err) {});
+    let regex = new RegExp("[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
+
+    if (!regex.test(req.body.email)) {
+        res.send({
+            status: "invalid email",
+            msg: "This email is invalid."
         });
+    } else {
+        //connecting to the database, then creating and adding the user info into the database.
+        connection.query('UPDATE BBY_15_User SET first_name=?, last_name=?, email=?, user_password=? WHERE user_id=?',
+            [req.body.firstName, req.body.lastName, req.body.email, req.body.password, req.session.user_id],
+            function (error, results, fields) {
+                res.send({
+                    status: "success",
+                    msg: "Record added."
+                });
+                req.session.loggedIn = true;
+                req.session.firstName = req.body.firstName;
+                req.session.email = req.body.email;
+                req.session.save(function (err) {});
+            });
+    }
+});
+
+// Set up the storage and file name for uploaded images
+if (!isHeroku) {
+    // Store images in avatar folder in system if user is accessing through local host
+    var storage_avatar = multer.diskStorage({
+        destination: function (req, file, callback) {
+            callback(null, "./app/images/avatar/");
+        },
+        filename: function (req, file, callback) {
+            callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname.split('/').pop().trim());
+        }
+    });
+} else {
+    var storage_avatar = multer.diskStorage({
+        destination: function (req, file, callback) {
+            callback(null, "");
+        },
+        filename: function (req, file, callback) {
+            callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname);
+        }
+    });
+}
+const uploadAvatar = multer({
+    storage: storage_avatar
 });
 
 //Upload the user profle into the database
-app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
+app.post('/upload-avatar', uploadAvatar.array("files"), async function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
+        var newPath;
         req.files[i].filename = req.files[i].originalname;
-        let newpath = ".." + req.files[i].path.substring(3);
+        if (!isHeroku) {
+            newPath = req.files[i].path.substring(3);
+        } else {
+            // Upload image onto S3 bucket
+            let folderName = "avatar/";
+            const result = await s3.uploadFile(req.files[i], folderName);
+            newPath = result.Location;
+        }
+
         connection.query('UPDATE BBY_15_User SET profile_picture=? WHERE user_id=?',
-            [newpath, req.session.user_id],
+            [newPath, req.session.user_id],
             function (error, results, fields) {
                 res.send({
                     status: "success",
@@ -526,19 +622,30 @@ app.get("/logout", function (req, res) {
 app.post('/update-user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ? WHERE user_id = ?',
-        [req.body.firstName, req.body.lastName, req.body.email, req.body.password, parseInt(req.body.id)],
-        function (error, results, fields) {
-            if (error) {
-                console.log(error);
-            }
-            res.send({
-                status: "success",
-                msg: "Recorded updated."
-            });
+    let regex = new RegExp("[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
+    if (!regex.test(req.body.email)) {
+        res.send({
+            status: "invalid email",
+            msg: "This email is invalid."
         });
+    } else {
+        connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ? WHERE user_id = ?',
+            [req.body.firstName, req.body.lastName, req.body.email, req.body.password, parseInt(req.body.id)],
+            function (error, results, fields) {
+                if (error && error.errno == 1062) {
+                    res.send({
+                        status: "duplicate",
+                        msg: "This email is already registered to an account."
+                    });
+                } else {
+                    res.send({
+                        status: "success",
+                        msg: "Recorded updated."
+                    });
+                }
+            });
+    }
 });
-
 /** POST: we are changing stuff on the server!!!
  *  This user allows admins to click on delete user button to delete the user in the following row.
  */
@@ -670,23 +777,44 @@ app.post("/add-post", function (req, res) {
  * Store images information into the database. These images are uploaded by users when they create a post.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
  */
-const storage_post_images = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, "./app/images/post-images/")
-    },
-    filename: function (req, file, callback) {
-        callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname);
-    }
-});
-const uploadPostImages = multer({
+var s3 = require('./s3');
+if (!isHeroku) {
+    // Store images in post-images folder in system if user is accessing through local host
+    var storage_post_images = multer.diskStorage({
+        destination: function (req, file, callback) {
+            callback(null, "./app/images/post-images/")
+        },
+        filename: function (req, file, callback) {
+            callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname);
+        }
+    });
+
+} else {
+    var storage_post_images = multer.diskStorage({
+        destination: function (req, file, callback) {
+            callback(null, "")
+        },
+        filename: function (req, file, callback) {
+            callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname);
+        }
+    });
+}
+var uploadPostImages = multer({
     storage: storage_post_images
 });
 
-app.post('/upload-post-images', uploadPostImages.array("files"), function (req, res) {
+app.post('/upload-post-images', uploadPostImages.array("files"), async function (req, res) {
     if (req.files.length > 0) {
         for (let i = 0; i < req.files.length; i++) {
             req.files[i].filename = req.files[i].originalname;
-            let newpathImages = req.files[i].path.substring(3);
+            if (!isHeroku) {
+                var newpathImages = req.files[i].path.substring(3);
+            } else {
+                // Upload image onto S3 bucket
+                let folderName = "post-images/"
+                const result = await s3.uploadFile(req.files[i], folderName);
+                var newpathImages = result.Location;
+            }
 
             connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
                 [req.session.postID, newpathImages],
@@ -699,7 +827,7 @@ app.post('/upload-post-images', uploadPostImages.array("files"), function (req, 
         req.session.save(function (err) {});
     } else {
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
-            [req.session.postID, null],
+            [req.session.postID, "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg"],
             function (error, results, fields) {});
         res.send({
             status: "success",
@@ -718,7 +846,7 @@ app.get("/timeline", function (req, res) {
         connection.query(`SELECT * FROM BBY_15_User 
             INNER JOIN BBY_15_post ON BBY_15_User.user_id = BBY_15_Post.user_id 
             LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id 
-            WHERE post_status = "approved"
+            WHERE post_status = "approved" OR post_status = "pending"
             ORDER BY posted_time DESC`,
             function (error, results, fields) {
                 let timeline = fs.readFileSync("./app/html/timeline.html", "utf8");
@@ -727,19 +855,24 @@ app.get("/timeline", function (req, res) {
                     for (var i = 0; i < results.length; i++) {
                         let firstName = results[i].first_name;
                         let lastName = results[i].last_name;
-                        let profilePic = results[i].profile_picture;
                         let postTime = results[i].posted_time;
                         let contentPost = results[i].post_content;
                         let postTitle = results[i].post_title;
                         let postlocation = results[i].location;
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
+                        let profilePic;
+                        if (results[i].profile_picture != null) {
+                            profilePic = results[i].profile_picture;
+                        } else {
+                            profilePic = "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg";
+                        }
                         var template = `   
                         </br>  
                         <div class="post_content">
                             <div class="card">
                                 <div class="post-user">
-                                    <img class="profile-pic" src="${profilePic}">
+                                    <img class="profile-pic" src="${profilePic}" onclick='expandImage(this)'>
                                     <span><h4>&ensp;${firstName} ${lastName}</h4></span>
                                 </div>
                 
@@ -749,13 +882,15 @@ app.get("/timeline", function (req, res) {
                                     <h5>Location: ${postlocation}</h5> 
                                 </div>
                                 <div class="post-image">`;
-                        if (postImages) {
-                            template += `<img class='post-pic' src="${postImages}">`;
+                        if (postImages != "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
+                            template += `<img class='post-pic' src="${postImages}" onclick="expandImage(this)">`;
                         }
 
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
-                            template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                            if (results[i].image_location != "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
+                                template += "<img class='post-pic' src=" + results[i].image_location + " onclick='expandImage(this)'>"
+                            }
                         }
 
                         template += `</div>
@@ -791,7 +926,7 @@ app.post('/search-timeline', function (req, res) {
         OR LOWER(post_type) LIKE '%${term}%'
         OR LOWER(location) LIKE '%${term}%'
         OR LOWER(weather_type) LIKE '%${term}%')
-        AND post_status = "approved"
+        AND (post_status = "approved" OR post_status = "pending")
         ORDER BY posted_time DESC`,
             function (error, results, fields) {
                 if (results.length >= 0) {
@@ -799,13 +934,18 @@ app.post('/search-timeline', function (req, res) {
                     for (var i = 0; i < results.length; i++) {
                         let firstName = results[i].first_name;
                         let lastName = results[i].last_name;
-                        let profilePic = results[i].profile_picture;
                         let postTime = results[i].posted_time;
                         let contentPost = results[i].post_content;
                         let postTitle = results[i].post_title;
                         let postlocation = results[i].location;
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
+                        let profilePic;
+                        if (results[i].profile_picture != null) {
+                            profilePic = results[i].profile_picture;
+                        } else {
+                            profilePic = "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg";
+                        }
                         template += `   
                     </br>  
                     <div class="post_content">
@@ -821,12 +961,14 @@ app.post('/search-timeline', function (req, res) {
                                 <h5>Location: ${postlocation}</h5> 
                             </div>
                             <div class="post-image">`;
-                        if (postImages) {
-                            template += `<img class='post-pic' src="${postImages}">`;
+                        if (postImages != "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
+                            template += `<img class='post-pic' src="${postImages}"  onclick="expandImage(this)">`;
                         }
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
-                            template += "<img class='post-pic' src=" + results[i].image_location + ">"
+                            if (results[i].image_location != "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
+                                template += "<img class='post-pic' src=" + results[i].image_location + " onclick='expandImage(this)'>"
+                            }
                         }
 
                         template += `</div>
@@ -869,7 +1011,7 @@ app.get("/post-list", function (req, res) {
                 if (results.length >= 0) {
                     for (var i = 0; i < results.length; i++) {
                         let newcard = cardTemplate.content.cloneNode(true);
-                        newcard.querySelector('.current-status').innerHTML = results[i].post_status;
+                        newcard.querySelector('.current-status').innerHTML = results[i].post_status + ' <i class="fa-solid fa-pen"></i>';
                         newcard.querySelector('.userID').innerHTML = "<b>User ID: </b>" + results[i].user_id;
                         newcard.querySelector('.post-type').innerHTML = "<b>Type: </b>" + results[i].post_type;
                         newcard.querySelector('.post-title').innerHTML = "<b>Title: </b>" + results[i].post_title;
@@ -879,15 +1021,17 @@ app.get("/post-list", function (req, res) {
                         newcard.querySelector('.post-content').innerHTML = "<b>Content: </b>" + results[i].post_content;
                         newcard.querySelector('.postID').innerHTML = results[i].post_id;
 
-                        if (!results[i].image_location) {
+                        if (results[i].image_location == "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
                             // Set src property of img tag as default and display property as none if the post has no images
-                            newcard.querySelector('.card-images').innerHTML = '<img class="card-image" src="/images/post-images/test.jpg" alt="no image" style="display: none" />';
+                            newcard.querySelector('.card-images').innerHTML = '<img class="card-image" src="' + results[i].image_location + '" alt="no image" style="display: none" />';
                         } else {
                             let str = '<img class="card-image" src="' + results[i].image_location + '" onclick = "expandImage(this)" alt="post image"/>';
                             // Set src property of img tag as the image path
                             while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                                 i++;
-                                str += '<img class="card-image" src="' + results[i].image_location + '" onclick = "expandImage(this)" alt="post image"/>';
+                                if (results[i].image_location != "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
+                                    str += '<img class="card-image" src="' + results[i].image_location + '" onclick = "expandImage(this)" alt="post image"/>';
+                                }
                             }
                             newcard.querySelector('.card-images').innerHTML = str;
                         }
@@ -940,8 +1084,9 @@ app.post("/update-status", function (req, res) {
 app.get("/my-post", function (req, res) {
     if (req.session.loggedIn) {
         connection.query(
-            `SELECT posted_time, post_content, BBY_15_post.post_id, post_title, location, weather_type, image_location 
-            FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id WHERE user_id = ?`,
+            `SELECT posted_time, post_content, BBY_15_post.post_id, post_title, location, weather_type, image_location, post_status 
+            FROM BBY_15_post LEFT JOIN BBY_15_post_images ON BBY_15_post.post_id = BBY_15_post_images.post_id WHERE user_id = ?
+            ORDER BY posted_time DESC`,
             [req.session.user_id],
             function (error, results, fields) {
                 let doc = fs.readFileSync("./app/html/my-post.html", "utf8");
@@ -956,6 +1101,7 @@ app.get("/my-post", function (req, res) {
                         let postlocation = results[i].location;
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
+                        let postStatus = results[i].post_status;
                         var my_post = `   
                         </br>  
                         <div class="my-post-content">
@@ -963,7 +1109,7 @@ app.get("/my-post", function (req, res) {
                                 <div class="post-image">
                                     
                                     <div class="image">`;
-                        if (postImages) {
+                        if (postImages != "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
                             my_post += `<div class="po-image">
                             <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
                             <img class='image' src="${postImages}">
@@ -972,27 +1118,46 @@ app.get("/my-post", function (req, res) {
 
                         while (results[i].post_id && results[i + 1] && (results[i].post_id == results[i + 1].post_id)) {
                             i++;
-                            my_post += `<div class="po-image">
-                            <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
-                            `
-                            my_post += "<img class='image' src=" + results[i].image_location + "></div>"
+                            if (results[i].image_location != "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg") {
+                                my_post += `<div class="po-image">
+                                <img class="remove-icon"src="/assets/remove.png" width="18" height="18">
+                                `
+                                my_post += "<img class='image' src=" + results[i].image_location + "></div>"
+                            }
                         }
                         my_post += `</div>
                                         <div class="desc">
                                             <p class="post_id">` + postID + `</p> 
-                                            <p class="posted_time">` + postTime + `</p> 
-                                            <h3 class="weather_type"><span>` + typeWeather + `</span></h3> 
-                                            <h4 class="post_title"><span>` + postTitle + `</span> </h4> 
-                                            <p class="location"><span>` + postlocation + `</span></p>
-                                            <div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
-                                            <form id="upload-images">
-                                                <label>Change images's posts</label>
-                                                <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
-                                                    multiple="multiple" />
+                                            <p class="posted_time"><u>Posted time:</u>  ` + postTime + `</p><br> 
+                                            <p class="post_status"><u>Post status:</u> ` + postStatus + `</p> </br>                                            
+                                            <u>Weather Type:</u>  
+                                            <div class="tooltip">&#x270e;
+                                                <p class="tooltiptext">Click on text to edit</p>
+                                            </div>    
+                                            <h3 class="weather_type"><span>` + typeWeather + `</span></h3><br>
+                                            <u>Title:</u>
+                                            <div class="tooltip">&#x270e;
+                                                <p class="tooltiptext">Click on text to edit</p>
+                                            </div>      
+                                            <h4 class="post_title"><span>` + postTitle + `</span></h4><br> 
+                                            <u>Location:</u> 
+                                            <div class="tooltip">&#x270e;
+                                                <p class="tooltiptext">Click on text to edit</p>
+                                            </div>             
+                                            <p class="location"><span>` + postlocation + `</span></p><br> 
+                                            <u>Description:</u> 
+                                            <div class="tooltip">&#x270e;
+                                                <p class="tooltiptext">Click on text to edit</p>
+                                            </div>        
+                                            </br><div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
+                                            <form class="upload-images">
+                                                <label>Add image: </label>
+                                                <input type="file" class="btn selectFile" class="selectFile" accept="image/png, image/gif, image/jpeg"/>
                                                 <p class="errorMsg"></p>
                                                 <div class="button-update-images">
-                                                    <input class="form-input" type="submit" id="upload" value="Upload images" />
-                                                    <button type='button' class='deletePost'>Delete post</button>
+                                                    <button class="delete1">Delete</button> 
+                                                    
+                                                <input class="form-input" type="submit" id="upload" value="Upload image" />                                                    
                                                 </div>
                                             </form>
                                         </div>
@@ -1080,10 +1245,18 @@ app.post("/change-images-post-data", function (req, res) {
  * Redirect to the my post and update the new images if user changes post's images
  * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
  */
-app.post("/change-images-post", uploadPostImages.array("files"), function (req, res) {
+app.post("/change-images-post", uploadPostImages.array("files"), async function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
-        let newpath = req.files[i].path.substring(3);
+        if (!isHeroku) {
+            var newpath = req.files[i].path.substring(3);
+        } else {
+            // Upload image onto S3 bucket
+            let folderName = "post-images/"
+            const result = await s3.uploadFile(req.files[i], folderName);
+            var newpath = result.Location;
+        }
+
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
             [req.session.postID, newpath],
             function (error, results, fields) {
@@ -1113,4 +1286,13 @@ app.post('/delete-image', function (req, res) {
                 msg: "Recorded deleted."
             });
         });
+});
+
+/**
+ * Redirect to the error page if users are trying to access to an unavailable page.
+ */
+app.get("*", function (req, res) {
+    let doc = fs.readFileSync("./app/html/error-page.html", "utf8");
+    res.setHeader("Content-Type", "text/html");
+    res.send(doc);
 });

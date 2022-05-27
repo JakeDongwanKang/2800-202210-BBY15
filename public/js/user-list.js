@@ -1,16 +1,16 @@
 "use strict";
 
 /**
- * I found how to do the toggleButton on 1537 course and 1800 course. 
- * I found some syntax and codes on this website that I can use to create a hambuger menu.
+ * We found how to do the toggleButton on 1537 course and 1800 course. 
+ * We found some syntax and codes on this website that I can use to create a hambuger menu.
  * https://www.educba.com/hamburger-menu-javascript/
  */
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
 
 toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active')
-})
+    navbarLinks.classList.toggle('active');
+});
 
 /**
  * Sends the user data from the client side to the server side for authentication.
@@ -29,7 +29,13 @@ async function sendData(data) {
             body: JSON.stringify(data)
         });
         let parsedJSON = await responseObject.json();
-        if (parsedJSON.status == "success") {}
+        if (parsedJSON.status == "invalid email") {
+            document.getElementById("emptyError").innerHTML = `<small style="color:red;">*Invalid email address. Changes not saved*</small>`;
+        } else if (parsedJSON.status == "success") {
+            document.getElementById("emptyError").innerHTML = `<small style="color:green;">*Changes saved*</small>`;
+        } else if (parsedJSON.status == "duplicate") {
+            document.getElementById("emptyError").innerHTML = `<small style="color:red;">*Email already in use. Changes not saved*</small>`;
+        }
     } catch (error) {}
 }
 
@@ -44,50 +50,75 @@ function editCell(e) {
     let span_text = e.target.innerHTML;
     let parent = e.target.parentNode; //gets parent, so we know which user we're editing
     let text_box = document.createElement("input"); //creates the text box for accepting changes
+    let regex = new RegExp("[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
+
     text_box.value = span_text;
     text_box.addEventListener("keyup", function (e) {
+        document.getElementById("reminder").style.display = "block";
         if (e.which == 13) { //recognize enter key
+            document.getElementById("reminder").style.display = "none";
             let val = text_box.value;
-            let filled_box = document.createElement("span"); //creates the HTML for after done editing
-            filled_box.addEventListener("click", editCell); //makes thing clickable for next time want to edit
-            filled_box.innerHTML = val;
-            parent.innerHTML = ""; //clears parent node pointer
-            parent.appendChild(filled_box);
-            let dataToSend = {
-                id: parent.parentNode.querySelector(".id").innerHTML,
-                firstName: parent.parentNode.querySelector(".first_name :nth-child(1)").innerHTML,
-                lastName: parent.parentNode.querySelector(".last_name :nth-child(1)").innerHTML,
-                email: parent.parentNode.querySelector(".email :nth-child(1)").innerHTML,
-                password: parent.parentNode.querySelector(".password :nth-child(1)").innerHTML
-            };
-            sendData(dataToSend);
+            if (val === "") {
+                let filled_box = document.createElement("span"); //creates the HTML for after done editing
+                filled_box.addEventListener("click", editCell); //makes thing clickable for next time want to edit
+                filled_box.innerHTML = span_text;
+                parent.innerHTML = "<div class='material-icons'>edit</div>"; //clears parent node pointer except for edit icon
+                parent.appendChild(filled_box);
+                document.getElementById("emptyError").innerHTML = `<small style="color:red;">*Field cannot be empty. Changes not saved*</small>`;
+            } else {
+                let filled_box = document.createElement("span"); //creates the HTML for after done editing
+                filled_box.addEventListener("click", editCell); //makes thing clickable for next time want to edit
+                filled_box.innerHTML = val;
+                parent.innerHTML = "<div class='material-icons'>edit</div>"; //clears parent node pointer except for edit icon
+                parent.appendChild(filled_box);
+                if (regex.test(parent.parentNode.querySelector(".email :nth-child(2)").innerHTML)) {
+                    let dataToSend = {
+                        id: parent.parentNode.querySelector(".id").innerHTML,
+                        firstName: parent.parentNode.querySelector(".first_name :nth-child(2)").innerHTML.trim(),
+                        lastName: parent.parentNode.querySelector(".last_name :nth-child(2)").innerHTML.trim(),
+                        email: parent.parentNode.querySelector(".email :nth-child(2)").innerHTML.trim(),
+                        password: parent.parentNode.querySelector(".password :nth-child(2)").innerHTML.trim()
+                    };
+                    sendData(dataToSend);
+                } else {
+                    document.getElementById("emptyError").innerHTML = `<small style="color:red;">*Invalid email address. Changes not saved*</small>`;
+                    filled_box.innerHTML = span_text;
+                }
+            }
         }
     });
     parent.innerHTML = "";
     parent.appendChild(text_box);
 }
 
-//This function sends the data of the users from the client side to the server side so that i can be deleted from the database.
+//This function sends the data of the users from the client side to the server side so that it can be deleted from the database.
 async function sendDataToDelete(e) {
     e.preventDefault();
-    let parent = e.target.parentNode;
-    let dataToSend = {
-        id: parent.parentNode.querySelector(".id").innerHTML
-    };
-    try {
-        let responseObject = await fetch("/delete-user", {
-            method: 'POST',
-            headers: {
-                "Accept": 'application/json',
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify(dataToSend)
-        });
-        let parsedJSON = await responseObject.json();
-        if (parsedJSON.status == "success") {
-            parent.parentNode.remove();
-        }
-    } catch (error) {}
+    document.getElementById("warning-message").innerHTML = "The user will be permanantly deleted. This cannot be undone.";
+    document.getElementById("confirm").innerHTML = "Delete";
+    document.querySelector("#err-popup").style.display = "block";
+    document.getElementById("confirm").addEventListener("click", async function () {
+        let parent = e.target.parentNode;
+        let dataToSend = {
+            id: parent.parentNode.querySelector(".id").innerHTML
+        };
+        try {
+            let responseObject = await fetch("/delete-user", {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json',
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            });
+            let parsedJSON = await responseObject.json();
+            if (parsedJSON.status == "success") {
+                parent.parentNode.remove();
+                document.getElementById("emptyError").innerHTML = `<small style="color:green;">*Changes saved*</small>`;
+            }
+            document.querySelector("#err-popup").style.display = "none";
+        } catch (error) {}
+    });
 }
 
 //This for loop adds the event listeners to the delete user button
@@ -111,45 +142,66 @@ for (let i = 0; i < makeAdminRecords.length; i++) {
 //This data sends the user data from the client side to the server side so that the specified admin user can become regular user.
 async function sendDataToMakeUser(e) {
     e.preventDefault();
-    let parent = e.target.parentNode;
-    let dataToSend = {
-        id: parent.parentNode.querySelector(".id").innerHTML
-    };
-    try {
-        let responseObject = await fetch("/make-user", {
-            method: 'POST',
-            headers: {
-                "Accept": 'application/json',
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify(dataToSend)
-        });
-        let parsedJSON = await responseObject.json();
-        if (parsedJSON.status == "success") {
-            parent.parentNode.remove();
-        }
-    } catch (error) {}
+    document.getElementById("warning-message").innerHTML = "This user will lose admin privileges.";
+    document.getElementById("confirm").innerHTML = "Make User";
+    document.querySelector("#err-popup").style.display = "block";
+    document.getElementById("confirm").addEventListener("click", async function () {
+        let parent = e.target.parentNode;
+        let dataToSend = {
+            id: parent.parentNode.querySelector(".id").innerHTML
+        };
+        try {
+            let responseObject = await fetch("/make-user", {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json',
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            });
+            let parsedJSON = await responseObject.json();
+            if (parsedJSON.status == "success") {
+                parent.parentNode.remove();
+                document.getElementById("emptyError").innerHTML = `<small style="color:green;">*Changes saved*</small>`;
+            }
+            document.querySelector("#err-popup").style.display = "none";
+        } catch (error) {}
+    });
 }
 
 //This data sends the user data from the client side to the server side so that the specified regular user can become admin user.
 async function sendDataToMakeAdmin(e) {
     e.preventDefault();
-    let parent = e.target.parentNode;
-    let dataToSend = {
-        id: parent.parentNode.querySelector(".id").innerHTML
-    };
-    try {
-        let responseObject = await fetch("/make-admin", {
-            method: 'POST',
-            headers: {
-                "Accept": 'application/json',
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify(dataToSend)
-        });
-        let parsedJSON = await responseObject.json();
-        if (parsedJSON.status == "success") {
-            parent.parentNode.remove();
-        }
-    } catch (error) {}
+    document.getElementById("warning-message").innerHTML = "This user will have admin privileges.";
+    document.getElementById("confirm").innerHTML = "Make Admin";
+    document.querySelector("#err-popup").style.display = "block";
+    document.getElementById("confirm").addEventListener("click", async function () {
+        let parent = e.target.parentNode;
+        let dataToSend = {
+            id: parent.parentNode.querySelector(".id").innerHTML
+        };
+        try {
+            let responseObject = await fetch("/make-admin", {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json',
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            });
+            let parsedJSON = await responseObject.json();
+            if (parsedJSON.status == "success") {
+                parent.parentNode.remove();
+                document.getElementById("emptyError").innerHTML = `<small style="color:green;">*Changes saved*</small>`;
+            }
+            document.querySelector("#err-popup").style.display = "none";
+        } catch (error) {}
+    });
 }
+
+/**
+ * If users click on "Cancel" button in popup message, hide the popup message so that users can edit all input.
+ */
+document.getElementById("cancel2").addEventListener("click", function () {
+    document.querySelector("#err-popup").style.display = "none";
+});

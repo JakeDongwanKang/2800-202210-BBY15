@@ -3,37 +3,51 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Extremis - Sign Up!</title>
+  <title>Sign Up | Extremis</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="/css/sign-up.css" rel="stylesheet" />
+  <!-- Script for use of fontawesome -->
+  <script src="https://kit.fontawesome.com/c14c02f185.js" crossorigin="anonymous"></script>
+  <!-- Favicon goes here  -->
+  <link rel="icon" type="image/png" href="https://extremis-bby15.s3.ca-central-1.amazonaws.com/favicon.ico">
 </head>
 
 <body>
   <div id="signUpPanel">
     <header>
-      <h2 id="signUpTitle">Create an Account!</h2>
+      <img id="logo" src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/logoOnWhite.png" alt="warning" />
     </header>
-    <form id="signUpForm">
 
-      <label for="firstName" class="label">First Name</label><br />
-      <input id="firstName" type="text" required="required" onfocus="removeErrorMsg()" placeholder="First Name" />
-      <br />
-      <label for="lastName" class="label">Last Name</label><br />
-      <input id="lastName" type="text" required="required" onfocus="removeErrorMsg()" placeholder="Last Name" />
-      <br />
-      <label for="userEmail" class="label">E-mail</label><br />
-      <input id="userEmail" type="email" required="required" onfocus="removeErrorMsg()" placeholder="Email" />
-      <br />
-      <label for="userPassword" class="label">Password</label><br />
-      <input id="userPassword" type="password" required="required" onfocus="removeErrorMsg()" placeholder="Password" />
-      <br />
-      <br />
-      <p class="errorMsg" id="emptyError"></p>
-      <input type="button" value="Create Account" id="signUpButton" />
-      <br />
-      <br />
-      <p id="text">Already have an account? <a href="#" id="log-in-link">Login Now!</a></p>
-    </form>
+    <br>
+
+    <div id="container">
+      <h2 id="signUpTitle">Create an Account!</h2>
+      <form id="signUpForm">
+        <label for="firstName" class="label">First Name*</label><br />
+        <input id="firstName" type="text" required="required" onfocus="removeErrorMsg()" placeholder="First Name" />
+        <br />
+        <label for="lastName" class="label">Last Name*</label><br />
+        <input id="lastName" type="text" required="required" onfocus="removeErrorMsg()" placeholder="Last Name" />
+        <br />
+        <label for="userEmail" class="label">E-mail*</label><br />
+        <input id="userEmail" type="email" required="required" onfocus="removeErrorMsg()" placeholder="Email" />
+        <br />
+        <label for="userPassword" class="label">Password*</label><br />
+        <input id="userPassword" type="password" required="required" onfocus="removeErrorMsg()"
+          placeholder="Password" />
+        <i class="fa-solid fa-eye togglePassword"></i>
+        <br />
+        <label for="userConfirmPassword" class="label">Confirm Password*</label><br />
+        <input id="userConfirmPassword" type="password" required="required" onfocus="removeErrorMsg()"
+          onkeyup="validate_password()" placeholder="Confirm Password" />
+        <i class="fa-solid fa-eye togglePassword"></i>
+        <p class="errorMsg" id="emptyError"></p>
+        <span id="wrong_pass_alert"></span>
+        <input type="button" value="Create Account" id="signUpButton"/>
+        <p id="text">Already have an account? <a href="#" id="log-in-link">Login Now!</a></p>
+      </form>
+    </div>
+
   </div>
 
   <footer>&copy; 2022 Burnaby-15</footer>

@@ -93,6 +93,7 @@ a {
     margin: .5rem;
     color: #fff;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .navbar-links {
@@ -243,6 +244,10 @@ footer {
         color: #000;
         font-size: 18px;
 
+    }
+
+    .navbar-links li a:hover {
+        color: #3477f9;
     }
 
     .navbar-links.active {

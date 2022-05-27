@@ -34,6 +34,7 @@ body {
     margin: .5rem;
     color: #fff;
     cursor: pointer;
+    text-decoration: none;
 }
 
 #content {
@@ -233,6 +234,10 @@ footer {
 
     }
 
+    .navbar-links li a:hover {
+        color: #3477f9;
+    }
+    
     .navbar-links.active {
         display: flex;
         background:white;

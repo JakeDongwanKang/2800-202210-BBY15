@@ -3,47 +3,64 @@
 <html lang="en">
 
 <head>
-  <title>User List</title>
+  <title>User List | Extremis</title>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <link rel="stylesheet" href="/css/user-list.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Favicon goes here  -->
+  <link rel="icon" type="image/png" href="https://extremis-bby15.s3.ca-central-1.amazonaws.com/favicon.ico">
 </head>
 
 <body>
   <!-- Navbar area -->
   <nav class="navbar">
-    <div class="brand-title">Extremis</div>
+    <a class="brand-title" href="/">Extremis</a>
 
     <!-- Create a hamburger menu  -->
     <a href="#" class="toggle-button">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
     </a>
     <div class="navbar-links">
-        <ul>
-          <li><a href="/main">Home</a></li>
-          <li><a href="/profile">Profile</a></li>
-          <li><a href="/my-post">My post</a></li>
-          <li><a href="/about-us">About Us</a></li>
-            <li>
-                <form action="/logout" method="get">
-                    <input type="submit" class="singin" value="Sign out" />
-                </form>
-            </li>
-        </ul>
+      <ul>
+        <li><a href="/main">Home</a></li>
+        <li><a href="/profile">Profile</a></li>
+        <li><a href="/about-us">About Us</a></li>
+        <li>
+          <form action="/logout" method="get">
+            <input type="submit" class="singin" value="Sign out" />
+          </form>
+        </li>
+      </ul>
     </div>
-</nav>
+  </nav>
 
   <header>
     <h1>Manage Users</h1>
   </header>
 
+  <p class="errorMsg" id="emptyError"></p>
+
   <table id="user-container"></table>
 
-  <br/>
-  <br/>
-  
+  <div id="err-popup">
+    <div id="err-popup-container">
+      <img src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/warning.png" alt="warning" />
+      <h2>Are you sure?</h2>
+      <p id="warning-message"></p>
+      <button id="confirm"></button>
+      <button id="cancel2">Cancel</button>
+    </div>
+  </div>
+
+  <div id="reminder">
+    <p>Press ENTER to save changes!</p>
+  </div>
+  <br />
+  <br />
+
   <footer>&copy; 2022 Burnaby-15</footer>
 
   <script src="/js/user-list.js"></script>

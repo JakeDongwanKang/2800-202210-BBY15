@@ -2,17 +2,19 @@
 <html lang="en">
 
 <head>
-    <title>Login</title>
+    <title>My Post | Extremis</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/my-post.css" />
-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Favicon goes here  -->
+    <link rel="icon" type="image/png" href="https://extremis-bby15.s3.ca-central-1.amazonaws.com/favicon.ico">
 </head>
 
 <body>
     <!-- Navbar area -->
     <nav class="navbar">
-        <a class="brand-title">Extremis</a>
+        <a class="brand-title" href="/">Extremis</a>
         <!-- Create a hamburger menu  -->
         <a href="#" class="toggle-button">
             <div class="bar"></div>
@@ -27,7 +29,7 @@
                 <li><a href="/about-us">About Us</a></li>
                 <li>
                     <form action="/logout" method="get">
-                        <input type="submit" class="singout" value="Sign out" />
+                        <input type="submit" class="signout" value="Sign out" />
                     </form>
                 </li>
             </ul>
@@ -35,12 +37,23 @@
     </nav>
     <div class="wrapper">
         <div id="my-post-content" class="my-post-content"></div>
+
     </div>
+    <div id="err-popup">
+        <div id="err-popup-container">
+            <img src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/warning.png" alt="warning" />
+            <h2>Are you sure?</h2>
+            <p id="warning-message"></p>
+            <button class="deletePost"></button>
+            <button id="cancel2">Cancel</button>
+        </div>
+      </div>
 
-
-    <footer>
-        <p>&copy; Copyright 2022 Burnaby-15</p>
-    </footer>
+    <div id="reminder">
+        <p>Press ENTER to save changes!</p>
+    </div>
+    <!-- Footer area -->
+    <footer>&copy; 2022 Burnaby-15</footer>
 
     <!-- Javascript goes here-->
     <script src="/js/my-post.js"></script>

@@ -7,13 +7,13 @@
 
 "use strict";
 
-//Humbeger menu
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+//Hamburger menu
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
 
 toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active')
-})
+    navbarLinks.classList.toggle('active');
+});
 
 //Send the update of texts on each post
 async function sendData(data) {
@@ -40,14 +40,15 @@ for (let i = 0; i < records.length; i++) {
 
 //This function helps the user can edit the Cell and get the values readied to send to the serer side.
 function editCell(e) {
-
     let span_text = e.target.innerHTML;
     let parent = e.target.parentNode; //gets parent, so we know which user we're editing
     e.target.remove();
     let text_box = document.createElement("input"); //creates the text box for accepting changes
     text_box.value = span_text;
     text_box.addEventListener("keyup", function (e) {
+        document.getElementById("reminder").style.display = "block";
         if (e.which == 13) { //recognize enter key
+            document.getElementById("reminder").style.display = "none";
             let val = text_box.value;
             let filled_box = document.createElement("span"); //creates the HTML for after done editing
             filled_box.addEventListener("click", editCell); //makes thing clickable for next time want to edit
@@ -56,9 +57,9 @@ function editCell(e) {
             parent.appendChild(filled_box);
             let dataToSend = {
                 post_id: parent.parentNode.querySelector(".post_id").innerText,
-                weather_type: parent.parentNode.querySelector(".weather_type").innerText,
-                post_title: parent.parentNode.querySelector(".post_title").innerText,
-                location: parent.parentNode.querySelector(".location").innerText,
+                weather_type: parent.parentNode.querySelector(".weather_type").innerText.trim(),
+                post_title: parent.parentNode.querySelector(".post_title").innerText.trim(),
+                location: parent.parentNode.querySelector(".location").innerText.trim(),
             };
             sendData(dataToSend);
         }
@@ -74,24 +75,36 @@ function editCell(e) {
  * page, making it have html elements inside.
  */
 var edit = true;
+var oldValue = "";
+
 function editContent(e) {
     if (edit) {
-        let oldValue = e.innerText;
-        e.innerHTML = "<input class='new-content' value='" + oldValue + "'/>";
-        let textBox = e.firstChild;
         edit = false;
-        textBox.addEventListener("keyup", function (a) {
+        if (e.children.length == 0) {
+            oldValue = e.innerText;
+        } else {
+            for (let i = 0; i < e.children.length; i++) {
+                oldValue += e.children[i].innerText;
+            }
+        }
+        e.innerHTML = "<input class='new-content' style='height: 30px; width: 100%' value='" + oldValue + "'/>";
+        e.target = document.querySelector(".new-content");
+        document.querySelector(".new-content").addEventListener("keyup", (a) => {
+            let newValue = document.querySelector(".new-content").value.trim();
+            document.getElementById("reminder").style.display = "block";
             if (a.keyCode == 13) {
-                e.innerText = textBox.value;
+                e.innerText = document.querySelector(".new-content").value;
+                document.getElementById("reminder").style.display = "none";
                 sendContent({
-                    post_id: e.parentElement.children[0].innerText,
-                    post_content: textBox.value
+                    post_id: e.parentElement.children[0].innerText.trim(),
+                    post_content: newValue
                 });
             }
-        })
+        });
     }
 }
 
+// Passes post text info from editContent to server side to update database
 async function sendContent(data) {
     try {
         let responseObject = await fetch("/update-post-content", {
@@ -104,6 +117,7 @@ async function sendContent(data) {
         });
         let parsedJSON = await responseObject.json();
         if (parsedJSON.status == "success") {
+            window.location.replace("/my-post");
         }
     } catch (error) {}
 }
@@ -112,30 +126,37 @@ async function sendContent(data) {
 //Delete whole post
 async function sendDataToDelete(e) {
     e.preventDefault();
-    let parent = e.target.parentNode;
-    let dataToSend = {
-        post_id: parent.parentNode.parentNode.querySelector(".post_id").innerText
-    };
-    try {
-        let responseObject = await fetch("/delete-post", {
-            method: 'POST',
-            headers: {
-                "Accept": 'application/json',
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify(dataToSend)
-        });
-        let parsedJSON = await responseObject.json();
+    document.getElementById("warning-message").innerHTML = "Deleting this post is permanent and will remove all content of your post.<span style='text-align: center'>" +
+        "Do you really want to delete your post?</span>";
+    document.querySelector(".deletePost").innerHTML = "Delete";
+    document.querySelector("#err-popup").style.display = "block";
+    document.querySelector(".deletePost").addEventListener("click", async function () {
+        let dataToSend = {
+            post_id: e.target.parentNode.parentNode.parentNode.children[0].innerText
+        };
+        try {
+            let responseObject = await fetch("/delete-post", {
+                method: 'POST',
+                headers: {
+                    "Accept": 'application/json',
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            });
+            let parsedJSON = await responseObject.json();
 
-        if (parsedJSON.status == "success") {
-            parent.parentNode.remove();
-            window.location.replace("/my-post")
-        }
-    } catch (error) {}
+            if (parsedJSON.status == "success") {
+                e.target.parentNode.parentNode.parentNode.remove();
+                window.location.replace("/my-post");
+            }
+            document.querySelector("#err-popup").style.display = "none";
+        } catch (error) {}
+    });
+
 }
 
 //This for loop adds the event listeners to the delete post button
-let deleteRecords = document.getElementsByClassName("deletePost");
+let deleteRecords = document.getElementsByClassName("delete1");
 for (let i = 0; i < deleteRecords.length; i++) {
     deleteRecords[i].addEventListener("click", sendDataToDelete);
 }
@@ -162,7 +183,7 @@ async function sendDataToDeleteImage(e) {
         let parsedJSON = await responseObject.json();
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
-            window.location.replace("/my-post")
+            window.location.replace("/my-post");
         }
     } catch (error) {}
 }
@@ -173,13 +194,15 @@ for (let i = 0; i < deleteImageRecords.length; i++) {
     deleteImageRecords[i].addEventListener("click", sendDataToDeleteImage);
 }
 
-const upLoadForm = document.getElementById("upload-images");
-upLoadForm.addEventListener("submit", sendDataToaddImage);
-upLoadForm.addEventListener("submit", uploadImages);
+const upLoadForms = document.querySelectorAll(".form-input");
+for (let i = 0; i < upLoadForms.length; i++) {
+    upLoadForms[i].addEventListener("click", sendDataToaddImage);
+    upLoadForms[i].addEventListener("click", uploadImages);
+}
 
 async function uploadImages(e) {
     e.preventDefault();
-    const imageUpload = document.querySelector('#selectFile');
+    const imageUpload = e.target.parentNode.parentNode.querySelector('.selectFile');
     const formData = new FormData();
     for (let i = 0; i < imageUpload.files.length; i++) {
         // put the images from the input into the form data
@@ -190,16 +213,16 @@ async function uploadImages(e) {
         body: formData,
     };
     // now use fetch
-    await fetch("/change-images-post", options).then(function (res) {
+    await fetch("/change-images-post", options).then(function () {
         window.location.replace("/my-post");
     }).catch(function (err) {
-        ("Error:", err)
+        ("Error:", err);
     });
 }
 
 async function sendDataToaddImage(e) {
     e.preventDefault();
-    let parent = e.target.parentNode;
+    let parent = e.target.parentNode.parentNode.parentNode;
     let dataToSend = {
         p: parent.children[0].innerText
     };
@@ -215,7 +238,14 @@ async function sendDataToaddImage(e) {
         let parsedJSON = await responseObject.json();
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
-            window.location.replace("/my-post")
+            window.location.replace("/my-post");
         }
     } catch (error) {}
 }
+
+/**
+ * If users click on "Cancel" button in popup message, hide the popup message so that users can edit all input.
+ */
+document.getElementById("cancel2").addEventListener("click", function () {
+    document.querySelector("#err-popup").style.display = "none";
+});

@@ -7,7 +7,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-body{
+body {
     font-family: 'Montserrat', sans-serif;
     line-height: 30px;
     margin: 0;
@@ -30,6 +30,7 @@ body{
     margin: .5rem;
     color: #3477F9;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .navbar-links {
@@ -93,6 +94,7 @@ body{
     transition: all 0.3s ease 0s;
     letter-spacing: 1.5px;
 }
+
 /* navbar css ends */
 
 
@@ -107,7 +109,7 @@ body{
     margin: 13px;
 }
 
-.form-input{
+.form-input {
     display: block;
     border-radius: 10px;
     outline: solid 0.1px #484848;
@@ -120,7 +122,9 @@ body{
     width: 50%;
 }
 
-.form-input:hover, .btn:hover, .select:hover{
+.form-input:hover,
+.btn:hover,
+.select:hover {
     outline: solid 1px #3477f9;
     text-transform: none;
 }
@@ -198,7 +202,7 @@ body{
 
 .menu li:hover {
     background: #3477F9;
-    color:#ffffff;
+    color: #ffffff;
 }
 
 .active {
@@ -215,16 +219,20 @@ body{
     opacity: 1;
 }
 
-.__toolbar > select{
+.__toolbar>select {
     outline: solid 0.1px #484848;
 }
+
 #postContent {
     width: 100%;
     height: max-content;
     height: 150px;
 }
 
-label[for="selectFile"]:hover, #create:hover, #cancel:hover, .select:hover {
+label[for="selectFile"]:hover,
+#create:hover,
+#cancel:hover,
+.select:hover {
     cursor: pointer;
     box-shadow: 0 0 5px #3477F9;
 }
@@ -258,20 +266,21 @@ label[for="selectFile"] {
     flex-wrap: wrap;
 }
 
-figure{
+figure {
     width: 40%;
     margin: 0;
 }
 
-img{
+img {
     width: 100%;
 }
 
-figcaption{
+figcaption {
     text-align: center;
     font-size: 14px;
 }
-.errorMsg{
+
+.errorMsg {
     color: red;
     margin-left: inherit;
 }
@@ -282,7 +291,8 @@ figcaption{
     justify-content: space-evenly;
 }
 
-#create, #cancel {
+#create,
+#cancel {
     width: 35%;
     height: 40px;
 }
@@ -294,25 +304,76 @@ figcaption{
 }
 
 #cancel {
-    background-color:#ffffff;
+    background-color: #ffffff;
 }
+
 /* create-a-post form css ends */
 
+/* Popup message starts */
+#err-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.9);
+    height: 100%;
+    width: 100vw;
+    z-index: 100;
+    display: none;
+}
+
+#err-popup-container{
+    text-align: center;
+    width: 40%;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 15px;
+    padding: 10px 20px;
+}
+
+#err-popup-container img{
+    width: 100px;
+}
+
+#err-popup-container button {
+    width: 150px;
+    margin-left: 20px;
+    font-family: 'Montserrat', sans-serif;
+    height: 40px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+}
+
+#cancel2 {
+    background-color: #3477F9;
+    color:#ffffff;
+}
+
+#keep {
+    background-color: #c1c1c1;
+    color: #ffffff;
+}
+/* Popup message ends  */
 
 /* footer css starts */
 footer {
-    left:0;
-    bottom:0;
-    width:100%;
+    left: 0;
+    bottom: 0;
+    width: 100%;
     text-align: center;
     color: #000;
 }
+
 /* footer css ends */
 
 
 @media (max-width: 800px) {
 
-    body{
+    body {
         font-family: 'Montserrat', sans-serif;
         line-height: 35px;
     }
@@ -321,6 +382,7 @@ footer {
         color: rgba(52, 119, 249, 1.5);
         text-decoration: solid;
         font-size: 28px;
+        color: white;
     }
 
     .navbar {
@@ -332,13 +394,6 @@ footer {
 
     .toggle-button {
         display: flex;
-    }
-
-    .brand-title {
-        font-size: 1.5rem;
-        margin: .5rem;
-        color: white;
-        cursor: pointer;
     }
 
     .navbar-links {
@@ -366,7 +421,8 @@ footer {
 
     .navbar-links.active {
         display: flex;
-    } 
+        background: white;
+    }
 
     .singin {
         padding: 9px 30px;
@@ -396,7 +452,7 @@ footer {
         line-height: 35px;
     }
 
-    .__toolbar-item{
+    .__toolbar-item {
         margin-bottom: 8px;
     }
 
@@ -404,23 +460,50 @@ footer {
         height: 150px;
     }
 
-    figure{
-        width: 45%  ;
+    figure {
+        width: 45%;
     }
-    figcaption{
-        margin:0;
+
+    figcaption {
+        margin: 0;
         font-size: 8px;
         line-height: 10px;
     }
+
     #btn {
         display: block;
         width: 100%;
         align-items: center;
     }
 
-    #create, #cancel {
+    #create,
+    #cancel {
         width: 70%;
-        margin: 20px auto 0 auto; 
-        font-size: 18px;       
+        margin: 20px auto 0 auto;
+        font-size: 18px;
+    }
+
+    #err-popup-container{
+        width: 80%;
+        font-size: 13px;
+        line-height: 20px;
+        padding: 5px 10px;
+    }
+
+    #err-popup-container img {
+        width: 60px;
+    }
+
+    #err-popup-container h2{
+        font-size: 20px;
+        margin: 0;
+    }
+
+    #err-popup-container button {
+        height: 30px;
+        margin-bottom: 10px;
+        font-size: 13px;
+        margin-left: 5px;
+        width: 120px;
     }
 }

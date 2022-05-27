@@ -2,34 +2,53 @@
 <html lang="en">
 
 <head>
-    <title>Login</title>
+    <title>Login | Extremis</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Linh to css stylesheet -->
     <link rel="stylesheet" href="./css/login.css" />
+    <!-- Script for use of fontawesome -->
+    <script src="https://kit.fontawesome.com/c14c02f185.js" crossorigin="anonymous"></script>
+    <!-- Favicon goes here  -->
+    <link rel="icon" type="image/png" href="https://extremis-bby15.s3.ca-central-1.amazonaws.com/favicon.ico">
 </head>
 
 <body>
-    <header><h2><span>Login</span></h2></header>
-    <!-- Log in form goes here -->
-    <form id="loginForm">
-    
-        <div class="form-box">
-            <label>Email</label>
-            <input type="email" id="userEmail" required="required" onfocus="removeErrorMsg()"
-                placeholder="Enter your email">
-            <p class="errorMsg" id="emailError"></p>
+    <div id="container">
+        <div id="left">
+            <img id="logo1" src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/logoOnBlue.png" alt="firstLogo" />
+            <img id="logo2" src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/logoOnWhite.png" alt="secondLogo" />
+            <h2>Welcome to Login</h2>
+            <div id="sign-up1">
+                <p>Don't have an account yet?</p>
+                <button class="sign-up-link">Join now!</button>
+            </div>
         </div>
-        <div class="form-box">
-            <label>Password</label>
-            <input type="password" id="userPassword" required="required" onfocus="removeErrorMsg()"
-                placeholder="Enter your password">
-            <p class="errorMsg" id="passwordError"></p>
-        </div>
-        <input type="button" value="Login" id="submit">
 
-        <p id="text">Don't have an account yet? <a href="#" id="sign-up-link">Join Extremis now!</a></p>
-    </form>
-
+        <!-- Log in form goes here -->
+        <form id="loginForm">
+            <div class="form-box">
+                <i class="fa-regular fa-envelope"></i>
+                <label> Email</label>
+                <input type="email" id="userEmail" required="required" oninput="removeErrorMsg()"
+                    placeholder='Enter your email'>
+                <p class="errorMsg" id="emailError"></p>
+            </div>
+            <div class="form-box">
+                <i class="fa-solid fa-lock"></i>
+                <label> Password</label>
+                <input type="password" id="userPassword" required="required" oninput="removeErrorMsg()"
+                    placeholder="Enter your password" />
+                <i class="fa-solid fa-eye" id="togglePassword"></i>
+                <p class="errorMsg" id="passwordError"></p>
+            </div>
+            <input type="button" value="Login" id="submit">
+            <div id="sign-up2">
+                <p>Don't have an account yet?</p>
+                <a href="/sign-up" class="sign-up-link">Join Extremis now!</a>
+            </div>
+        </form>
+    </div>
     <footer>&copy; 2022 Burnaby-15</footer>
 
     <!-- Javascript goes here -->

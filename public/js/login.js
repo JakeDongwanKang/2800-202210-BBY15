@@ -35,7 +35,7 @@ async function sendData(data) {
 }
 
 //Send user's email and password to server for authentication
-document.getElementById("submit").addEventListener("click", function (e) {
+document.getElementById("submit").addEventListener("click", function () {
     sendData({
         email: document.getElementById("userEmail").value,
         password: document.getElementById("userPassword").value
@@ -50,6 +50,33 @@ function removeErrorMsg() {
 }
 
 // Go to sign-up when user clicks on "Join Extremis now!"
-document.getElementById("sign-up-link").addEventListener("click", function (e) {
+document.querySelector(".sign-up-link").addEventListener("click", function () {
     window.location.replace("/sign-up");
+});
+
+// Send data when user uses enter key
+document.getElementById("userPassword").onkeydown = function (e){if (e.which == 13) {
+    sendData({
+        email: document.getElementById("userEmail").value.trim(),
+        password: document.getElementById("userPassword").value.trim()
+    });
+}};
+document.getElementById("userEmail").onkeydown = function (e){if (e.which == 13) {
+    sendData({
+        email: document.getElementById("userEmail").value.trim(),
+        password: document.getElementById("userPassword").value.trim()
+    });
+}};
+
+
+// Display/Hide password (https://www.csestack.org/hide-show-password-eye-icon-html-javascript/)
+const togglePassword = document.querySelector('#togglePassword');
+  const password = document.querySelector('#userPassword');
+ 
+  togglePassword.addEventListener('click', function () {
+    // toggle the type attribute
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    // toggle the eye slash icon
+    this.classList.toggle('fa-eye-slash');
 });

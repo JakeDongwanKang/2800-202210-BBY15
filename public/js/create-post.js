@@ -1,19 +1,17 @@
 "use strict";
 
 /**
- * I found how to do the toggleButton on 1537 course and 1800 course. 
- * I found some syntax and codes on this website that I can use to create a hambuger menu.
+ * We found how to do the toggleButton on 1537 course and 1800 course. 
+ * We found some syntax and codes on this website that I can use to create a hambuger menu.
  * https://www.educba.com/hamburger-menu-javascript/
  */
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
 
 toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active')
-})
+    navbarLinks.classList.toggle('active');
+});
 
-
-const dropdown = document.querySelector(".dropdown");
 const select = document.querySelector(".select");
 const caret = document.querySelector(".caret");
 const menu = document.querySelector(".menu");
@@ -127,14 +125,12 @@ async function sendData(data) {
  * Send user's text input to server to store these data into database.
  * Display an error message if user did not fill in required fields.
  */
-document.getElementById("create").addEventListener("click", function (e) {
+document.getElementById("create").addEventListener("click", function () {
     let postType = document.getElementById("postType").innerText;
     let weatherType;
     let postTitle = document.getElementById("postTitle").value;
     let postLocation = document.getElementById("postLocation").value;
-    var myContent = tinymce.get("postContent").getContent();
-    let postContent = myContent;
-
+    let myContent = tinymce.get("postContent").getContent();
     if (!document.getElementById("weatherType")) {
         // Set weatherType as "none" if user does not create a post about weather condition
         weatherType = "none";
@@ -142,32 +138,78 @@ document.getElementById("create").addEventListener("click", function (e) {
         weatherType = document.getElementById("weatherType").value;
     }
 
-    if (postType == "Select type" || !postTitle || !postLocation || !postContent) {
+    if (myContent.split(" ").length > 1000) {
+        // If post content (description) has more than 1000 words, a popup message will show up
+        document.querySelector("#err-popup").style.display = "block";
+    } else {
+        if (postType == "Select type" || !postTitle || !postLocation || !myContent) {
+            // Display error message if user does not fill in required fields.
+            document.querySelector(".errorMsg").innerHTML = "<small>*All required fields have to be filled*</small>";
+        } else {
+            sendData({
+                postType: postType.trim(),
+                postTitle: postTitle.trim(),
+                postLocation: postLocation.trim(),
+                postContent: myContent.trim(),
+                weatherType: weatherType.trim()
+            });
+        }
+    }
+});
+
+/**
+ * If users click on "Keep" button in popup message, all data of post will be validated again.
+ * Then, if all data is sucessfully entered and validated, send data to server to store into database.
+ */
+document.getElementById("keep").addEventListener("click", function () {
+    let postType = document.getElementById("postType").innerText;
+    let weatherType;
+    let postTitle = document.getElementById("postTitle").value;
+    let postLocation = document.getElementById("postLocation").value;
+    let myContent = tinymce.get("postContent").getContent();
+    if (!document.getElementById("weatherType")) {
+        // Set weatherType as "none" if user does not create a post about weather condition
+        weatherType = "none";
+    } else {
+        weatherType = document.getElementById("weatherType").value;
+    }
+    document.querySelector("#err-popup").style.display = "none";
+    if (postType == "Select type" || !postTitle || !postLocation || !myContent) {
         // Display error message if user does not fill in required fields.
         document.querySelector(".errorMsg").innerHTML = "<small>*All required fields have to be filled*</small>";
     } else {
         sendData({
-            postType: postType,
-            postTitle: postTitle,
-            postLocation: postLocation,
-            postContent: postContent,
-            weatherType: weatherType
+            postType: document.getElementById("postType").innerText.trim(),
+            postTitle: document.getElementById("postTitle").value.trim(),
+            postLocation: document.getElementById("postLocation").value.trim(),
+            postContent: tinymce.get("postContent").getContent().trim(),
+            weatherType: weatherType.trim()
         });
     }
 });
 
+/**
+ * If users click on "Cancel" button in popup message, hide the popup message so that users can edit all input.
+ */
+document.getElementById("cancel2").addEventListener("click", function () {
+    document.querySelector("#err-popup").style.display = "none";
+    // All images stored in formData files will be deleted to avoid appending repetitive images
+    formData.delete('files');
+});
 
 /**
  * Removes the error message when user enters input.
  */
 function removeErrorMsg() {
     document.querySelector(".errorMsg").innerHTML = "";
+    // All images stored in formData files will be deleted to avoid appending repetitive images
+    formData.delete('files');
 }
 
 // Go to timeline when user clicks on "Cancel"
-document.getElementById("cancel").addEventListener("click", function (e) {
+document.getElementById("cancel").addEventListener("click", function () {
     window.location.replace("/timeline");
-})
+});
 
 
 /**
@@ -207,11 +249,49 @@ imagesUpload.addEventListener("change", function () {
             let img = document.createElement("img");
             img.setAttribute("src", reader.result);
             figure.insertBefore(img, figCaption);
-        })
+        });
         imageContainer.appendChild(figure);
         reader.readAsDataURL(imagesUpload.files[i]);
     }
 });
+
+/**
+ * The following codes is a combination of examples from W3Schools (https://www.w3schools.com/html/html5_geolocation.asp)
+ * and Geeks for Geeks (https://www.geeksforgeeks.org/how-to-get-city-name-by-using-geolocation/)
+ * with changes and adjustments made by Vincent.
+ */
+// Gets coordinates
+function getLocation() {
+    navigator.geolocation.getCurrentPosition(showPosition);
+}
+
+// Passes coordiantes to API
+function showPosition(position) {
+    var coordinates = [position.coords.latitude, position.coords.longitude];
+    getCity(coordinates);
+}
+
+// Finds city based on given coordinates
+function getCity(coordinates) {
+    var xhr = new XMLHttpRequest();
+    var lat = coordinates[0];
+    var lng = coordinates[1];
+
+    // Paste your LocationIQ token below.
+    xhr.open('GET', "https://us1.locationiq.com/v1/reverse.php?key=pk.d0436933238c32ce026236ff72afc4d0&lat=" +
+        lat + "&lon=" + lng + "&format=json", true);
+    xhr.send();
+    xhr.onreadystatechange = processRequest;
+
+    function processRequest() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var response = JSON.parse(xhr.responseText);
+            var city = response.address.city;
+            document.getElementById("postLocation").value = city;
+            return;
+        }
+    }
+}
 
 /**
  * Add text-editor feature so users can edit the content of the post they are creating.
@@ -219,8 +299,8 @@ imagesUpload.addEventListener("change", function () {
  */
 tinymce.init({
     selector: '#postContent',
-    plugins: 'a11ychecker advcode casechange export formatpainter image editimage linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tableofcontents tinycomments tinymcespellchecker',
-    toolbar: 'a11ycheck alignleft aligncenter alignright alignfull bold italic underline forecolor fontname fontsize casechange checklist formatpainter pageembed table',
+    plugins: 'wordcount a11ychecker advcode casechange export formatpainter linkchecker autolink lists checklist permanentpen powerpaste tinymcespellchecker',
+    toolbar: 'a11ycheck alignleft aligncenter alignright alignfull bold italic underline forecolor fontname fontsize casechange checklist formatpainter',
     toolbar_mode: 'floating',
     tinycomments_mode: 'embedded'
 });

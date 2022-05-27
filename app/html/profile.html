@@ -2,17 +2,20 @@
 <html lang="en">
 
 <head>
-    <title>Login</title>
+    <title>Profile | Extremis</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/profile.css" />
-
+    <!-- Script for use of fontawesome -->
+    <script src="https://kit.fontawesome.com/c14c02f185.js" crossorigin="anonymous"></script>
+    <!-- Favicon goes here  -->
+    <link rel="icon" type="image/png" href="https://extremis-bby15.s3.ca-central-1.amazonaws.com/favicon.ico">
 </head>
 
 <body>
     <!-- Navbar area -->
     <nav class="navbar">
-        <a class="brand-title">Extremis</a>
+        <a class="brand-title" href="/">Extremis</a>
         <!-- Create a hamburger menu  -->
         <a href="#" class="toggle-button">
             <span class="bar"></span>
@@ -40,16 +43,14 @@
             <div id="user_title" class="user_title"></div>
             <div id="user_content" class="user_content"></div>
         </div>
+        <p class="errorMsg" id="emptyError"></p>
         <div class="form-box-image">
             <form id="upload-images">
-                <label>Upload profile picture</label>
-                <input type="file" class="btn" id="selectFile" accept="image/png, image/gif, image/jpeg"
-                    multiple="multiple" />
-                <p class="errorMsg"></p>
-
+                <span id="wrong_pass_alert"></span> <br>
                 <div class="buttonProfile">
+                    <input class=" form-input" type="button" value="Cancel" id="cancel">
                     <input class="form-input" type="submit" id="updateAccount" value="Save" />
-                    <input class="form-input" type="button" value="Cancel" id="cancel">
+                    <input class=" form-input" type="button" value="Reset" id="reset">
                 </div>
             </form>
         </div>

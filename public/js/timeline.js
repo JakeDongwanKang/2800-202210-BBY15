@@ -1,16 +1,17 @@
 "use strict";
+
 //Hambuger menu
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
 
 toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active')
-})
+    navbarLinks.classList.toggle('active');
+});
 
 // Original jQuery code from https://css-tricks.com/text-fade-read-more/
 // Modified by Vincent Lam
 $(".card .read-more-button").click(function() {
-    var totalHeight = 0
+    var totalHeight = 0;
   
     var $el = $(this);
     var $p  = $el.parent();
@@ -35,9 +36,15 @@ $(".card .read-more-button").click(function() {
     return false;
   });
 
-document.getElementById("search-button").addEventListener("click", function(e) {
+document.getElementById("search-button").addEventListener("click", function() {
     sendData({searchTerm: document.getElementById("allevents-search-keyword").value});
-})
+});
+
+document.getElementById("allevents-search-keyword").onkeydown = function(e){
+  if (e.which == 13) {
+    sendData({searchTerm: document.getElementById("allevents-search-keyword").value});
+  }
+};
 
 async function sendData(data) {
     try {
@@ -52,7 +59,7 @@ async function sendData(data) {
         if(parsedJSON.status == "success") {
             document.querySelector('.post_content').innerHTML = parsedJSON.message;
               $(".card .read-more-button").click(function() {
-              var totalHeight = 0
+              var totalHeight = 0;
           
               var $el = $(this);
               var $p  = $el.parent();
@@ -79,3 +86,27 @@ async function sendData(data) {
         }
     } catch(error) {}
 }
+
+
+/**
+ * Expand the image when users click on that image.
+ * Return to the original size when users click on that image again. 
+ * @param {*} e the current img element
+ */
+ function expandImage(e) {
+  document.querySelector('.popup-image').style.display = "block";
+  document.querySelector('.popup-image img').src = e.getAttribute('src');
+}
+
+/**
+ * Return to the original size when users click on close button (X) or enter escape key. 
+ */
+ document.querySelector('.popup-image span').onclick = () => {
+  document.querySelector('.popup-image').style.display = "none";
+};
+
+document.body.onkeydown = function (e) {
+  if (e.which == 27) {
+      document.querySelector('.popup-image').style.display = "none";
+  }
+};

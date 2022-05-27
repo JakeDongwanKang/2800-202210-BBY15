@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <title>Post List | Extremis</title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <!-- Favicon goes here  -->
+    <link rel="icon" type="image/png" href="https://extremis-bby15.s3.ca-central-1.amazonaws.com/favicon.ico">
+    <!-- css style goes here  -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        header img {
+            max-width: 150px;
+        }
+
+        #container {
+            display: grid;
+            grid-template-columns: 50% 50%;
+            grid-template-rows: 100%;
+            width: 90%;
+            margin: 2vh auto 2vh auto;
+            gap: 20px;
+        }
+
+        #message {
+            padding: 30px 40px;
+            font-size: 20px;
+            line-height: 40px;
+        }
+
+        #image {
+            text-align: center;
+        }
+
+        img {
+            max-width: 70%;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        #back-btn {
+            height: 40px;
+            background-color: #3477F9;
+            width: 30%;
+            text-align: center;
+            border-radius: 15px;
+            margin: 0 auto 0 auto;
+            ;
+        }
+
+        #back-btn:hover {
+            box-shadow: 0 0 5px #3477F9;
+        }
+
+        footer {
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            color: #000;
+            position: absolute;
+        }
+
+        @media (max-width: 800px) {
+            #container {
+                display: grid;
+                grid-template-rows: 35% 60%;
+                grid-template-columns: 100%;
+                margin: 0;
+                width: 100%;
+            }
+
+            header img {
+                max-width: 100px;
+            }
+
+            h1 {
+                font-size: 25px;
+                text-align: center;
+            }
+
+            #message {
+                grid-row: 2;
+                padding: 0px 30px;
+                font-size: 14px;
+                line-height: 25px;
+                text-align: center;
+            }
+
+            #image {
+                grid-row: 1;
+                max-height: fit-content;
+            }
+
+            img {
+                max-height: 180px;
+            }
+
+            #back-btn {
+                width: 40%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            footer{
+                position: relative;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/logoOnWhite.png" alt="warning" />
+    </header>
+    <div id="container">
+        <div id="message">
+            <h1>Oops!</h1>
+            <h1><span style="color:#3477F9">Something went wrong</span></h1>
+            <p>We are very sorry for inconvenience. It looks like you are trying to access a page that either has been
+                deleted or never been existed</p>
+            <div id="back-btn"><a href="/"> Back </a></div>
+        </div>
+        <div id="image">
+            <img src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/errorPage.png" alt="warning" />
+        </div>
+    </div>
+
+    <footer>&copy; 2022 Burnaby-15</footer>
+
+</body>
+
+</html>

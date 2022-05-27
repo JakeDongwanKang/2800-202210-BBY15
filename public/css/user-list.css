@@ -19,6 +19,7 @@ body {
     margin: .5rem;
     color: #3477F9;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .navbar-links {
@@ -161,32 +162,23 @@ h3 {
     color: #3477f9;
 }
 
+.errorMsg {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin: 0 0 20px 0;
+}
+
 #user-container {
     width: 100%;
 }
 
-.user-card {
-    border: solid 1px #484848;
-    border-radius: 15px;
-    display: grid;
-    grid-template-columns: 25% 75%;
-    width: 80%;
-    margin-top: 0.1%;
-    margin-bottom: 0.1%;
-    margin-left: auto;
-    margin-right: auto;
+.first_name, .last_name, .email, .password {
+    border-bottom: 0.3px solid black;
 }
 
-.profile-pic-div {
-    grid-column: 1;
-    display: flex;
-    justify-content: center;
-}
-
-.profile-pic {
-    margin-top: auto;
-    margin-bottom: auto;
-    max-width:90%;
+.material-icons {
+    float: right;
 }
 
 .user-list-button {
@@ -198,31 +190,113 @@ h3 {
     cursor: pointer;
 }
 
+button {
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: white;
+    background-color: rgba(52, 119, 249, 0.7);
+    border: none;
+    border-radius: 50px;
+}
+
+span{
+    cursor: pointer;
+}
+
+#reminder {
+    width: 130px;
+    background-color: #3477F9;
+    color:#ffffff;
+    right: 45%;
+    top:50%;
+    position: fixed;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 10px;
+    display: none;
+    font-size: 14px;
+}
+
+/* Popup message starts */
+#err-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.9);
+    height: 100%;
+    width: 100vw;
+    z-index: 100;
+    display: none;
+}
+
+#err-popup-container {
+    text-align: center;
+    width: 40%;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 15px;
+    padding: 10px 20px;
+}
+
+#err-popup-container img {
+    width: 100px;
+}
+
+#err-popup-container button {
+    width: 150px;
+    margin-left: 20px;
+    font-family: 'Montserrat', sans-serif;
+    height: 40px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+}
+
+#cancel2 {
+    background-color: #3477F9;
+    color: #ffffff;
+}
+
+#confirm {
+    background-color: #c1c1c1;
+    color: #ffffff;
+}
+
+/* Popup message ends  */
+
+
 footer {
-    left:0;
-    bottom:0;
-    width:100%;
+    left: 0;
+    bottom: 0;
+    width: 100%;
     text-align: center;
     color: #000;
 }
 
 td {
-    text-align : center;
+    text-align: center;
 }
 
 @media only screen and (max-width: 960px) {
     body {
         grid-template-columns: 5% 90% 5%;
+        font-size: 14px;
+        margin: 0;
     }
-    
+
     .user-card {
         width: 100%;
     }
 
     .brand-title {
-        color: rgba(52, 119, 249, 1.5);
         text-decoration: solid;
         font-size: 28px;
+        color: white;
     }
 
     .navbar {
@@ -230,17 +304,11 @@ td {
         align-items: flex-start;
         color: #000;
         background-color: #5ca1dc;
+
     }
 
     .toggle-button {
         display: flex;
-    }
-
-    .brand-title {
-        font-size: 1.5rem;
-        margin: .5rem;
-        color: white;
-        cursor: pointer;
     }
 
     .navbar-links {
@@ -268,7 +336,8 @@ td {
 
     .navbar-links.active {
         display: flex;
-    } 
+        background-color: white;
+    }
 
     .singin {
         padding: 9px 30px;
@@ -282,6 +351,12 @@ td {
         margin-bottom: 30px;
     }
 
+    /* Mobile Table */
+    #user-container {
+        margin: 0 auto 0 auto;
+        width: 90vw;
+    }
+
     .branch {
         font-size: 4rem;
     }
@@ -290,46 +365,88 @@ td {
         margin-top: 1rem;
     }
 
-    /* Force table to not be like tables anymore */
-	thead, tbody, th, table, td, tr { 
-		display: block; 
-	}
+    thead, tbody, th, table, td, tr {
+        display: block;
+    }
 
-    /* tr:first-child, tr:nth-child(2) {
-        display:inline-block;
-    } */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
 
-	thead tr { 
-		position: absolute;
-		top: -9999px;
-		left: -9999px;
-	}
-	
+    td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        height: 25px;
+    }
 
-	td { 
-		/* Behave  like a "row" */
-		border: none;
-		border-bottom: 1px solid #eee; 
-		position: relative;
-		padding-left: 50%; 
-	}
+    td:before {
+        position: absolute;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+    }
 
-    td:before { 
-		/* Now like a table header */
-		position: absolute;
-		/* Top/left values mimic padding */
-		top: 6px;
-		left: 6px;
-		width: 45%; 
-		padding-right: 10px; 
-		white-space: nowrap;
-	}
+    .id {
+        background-color: #5ca1dc;
+        color: white;
+    }
 
-    td:nth-of-type(1):before { content: "ID"; }
-	td:nth-of-type(2):before { content: "First Name"; }
-	td:nth-of-type(3):before { content: "Last Name"; }
-	td:nth-of-type(4):before { content: "Email"; }
-	td:nth-of-type(5):before { content: "Password"; }
-	td:nth-of-type(6):before { content: "Role"; }
-	td:nth-of-type(7):before { content: "Delete"; }
+    td:nth-of-type(1):before {
+        content: "ID";
+    }
+
+    td:nth-of-type(2):before {
+        content: "First Name";
+    }
+
+    td:nth-of-type(3):before {
+        content: "Last Name";
+    }
+
+    td:nth-of-type(4):before {
+        content: "Email";
+    }
+
+    td:nth-of-type(5):before {
+        content: "Password";
+    }
+
+    td:nth-of-type(6):before {
+        content: "Role";
+    }
+
+    td:nth-of-type(7):before {
+        content: "Delete";
+    }
+
+    /* Mobile Table Ends*/
+
+    #err-popup-container {
+        width: 80%;
+        font-size: 13px;
+        line-height: 20px;
+        padding: 5px 10px;
+    }
+
+    #err-popup-container img {
+        width: 60px;
+    }
+
+    #err-popup-container h2 {
+        font-size: 20px;
+        margin: 0;
+    }
+
+    #err-popup-container button {
+        height: 30px;
+        margin-bottom: 10px;
+        font-size: 13px;
+        margin-left: 5px;
+        width: 120px;
+    }
 }

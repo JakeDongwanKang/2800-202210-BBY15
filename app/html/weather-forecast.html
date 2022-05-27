@@ -4,16 +4,18 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Extremis</title>
+    <title>Weather Forecast | Extremis</title>
 
     <!-- CSS goes here -->
     <link rel="stylesheet" href="/css/weather-forecast.css" />
+    <!-- Favicon goes here  -->
+    <link rel="icon" type="image/png" href="https://extremis-bby15.s3.ca-central-1.amazonaws.com/favicon.ico">
   </head>
 
   <body>
     <!-- Navbar area -->
     <nav class="navbar">
-      <div class="brand-title">Extremis</div>
+      <a class="brand-title" href="/">Extremis</a>
 
       <!-- Create a hamburger menu  -->
       <a href="#" class="toggle-button">
@@ -45,15 +47,18 @@
     <div class="card">
       <div class="search">
         <input type="text" class="search-bar" placeholder="Enter a City" />
-        <button id = "search-button">Search</button>
+        
       </div>
+      <button id = "search-button" class = "forecast-button">Search</button>
+      <button class = "forecast-button" onclick="getLocation()">My Location</button>
       <div class="weather">
-          <h2 class="city"></h2>
-          <h1 class="temperature"></h1>
+          <div class="city" style="font-size:20px; font-weight:600;"></div>
+          <div class="temperature" style="font-size:24px; font-weight:600;"></div>
           <div class="description"></div>
           <div class="humidity"></div>
           <div class="wind"></div>
       </div>
+      
     </div>
 
     <footer>&copy; 2022 Burnaby-15</footer>

@@ -2,20 +2,21 @@
 <html lang="en">
 
 <head>
-    <title>Create a post</title>
+    <title>Create a post | Extremis</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/create-post.css" />
-
     <!-- Load the js for text editor from https://www.tiny.cloud/ -->
     <script src="https://cdn.tiny.cloud/1/173v1w4jt7c34wqvz1y6n77p431z5ziqka4n057tpifnntto/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
+    <!-- Favicon goes here  -->
+    <link rel="icon" type="image/png" href="https://extremis-bby15.s3.ca-central-1.amazonaws.com/favicon.ico">
 </head>
 
 <body>
     <!-- Navbar area -->
     <nav class="navbar">
-        <div class="brand-title">Extremis</div>
+        <a class="brand-title" href="/">Extremis</a>
 
         <!-- Create a hamburger menu  -->
         <a href="#" class="toggle-button">
@@ -61,24 +62,26 @@
             </form>
         </div>
 
-        <div class="form-box" id="weather-type" onfocus="removeErrorMsg()"></div>
+        <div class="form-box" id="weather-type" oninput="removeErrorMsg()"></div>
 
         <div class="form-box title">
             <label>Title*</label>
-            <input class="form-input" id="postTitle" onfocus="removeErrorMsg()" required="required"
+            <input class="form-input" id="postTitle" oninput="removeErrorMsg()" required="required"
                 placeholder="Enter the title">
         </div>
 
         <div class="form-box">
             <label>Location*</label>
-            <input class="form-input" id="postLocation" onfocus="removeErrorMsg()" required="required"
+            <input class="form-input" id="postLocation" oninput="removeErrorMsg()" required="required"
                 placeholder="Enter the location">
+            <button class="form-input" id="coords" onclick="getLocation()">Get Current Location</button>
         </div>
+
 
         <div class="form-box">
             <label>Description*</label>
-            <textarea id="postContent" rows="10" onfocus="removeErrorMsg()" required="required"
-                style="height:150px"></textarea>
+            <textarea id="postContent" rows="10" oninput="removeErrorMsg()" required="required" style="height:150px"
+                placeholder="Maximum 1000 words"></textarea>
         </div>
 
         <div class="form-box">
@@ -96,7 +99,17 @@
                 </div>
             </form>
         </div>
+        <div id="err-popup">
+            <div id="err-popup-container">
+                <img src="https://extremis-bby15.s3.ca-central-1.amazonaws.com/warning.png" alt="warning" />
+                <h2>Are you sure?</h2>
+                <p>The description has more than 1000 words! Some text cannot be displayed later. Do you really want to
+                    keep it?</p>
+                <button id="keep">Keep and create</button>
+                <button id="cancel2">Cancel</button>
+            </div>
 
+        </div>
     </div>
 
     <!-- Footer area -->
