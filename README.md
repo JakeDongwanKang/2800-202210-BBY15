@@ -42,9 +42,9 @@ We have two main folders:
     * Public - that holds all of the static resources such as assets, css, and javascript files.
 
 ## Test Plan
-- Tests on the website were done by checking database values after logins and registrations.
-- Tests were run manually on each page to check if each scene worked with all of its objects.
-- A list of tests done were done
+* Tests on the website were done by checking database values after logins and registrations.
+* Tests were run manually on each page to check if each scene worked with all of its objects.
+* A list of tests done were done
 Click [Testing Log](https://docs.google.com/spreadsheets/d/1onjpp5LQvqqrM0Xsta7xTYl7vPLh-7MX15hi9F9XHmE/edit#gid=394496370) for our test plan
 
 
@@ -116,21 +116,21 @@ It has the following subfolders and files:
 
 
 ## Guide start
-- Download Node.js at [Node](https://nodejs.org/en/download)
-- Download XAMPP at [XAMPP](https://www.apachefriends.org/download.html)
-- Download Visual Studio Code or any text editor/IDE of your choice
-- Copy our repository link [Extremis](https://github.com/JakeDongwanKang/2800-202210-BBY15.git)
-- Clone the repository onto your machine and in command line navigate to the repository
-- Run `cd 2800-202210-BBY15` and open the app on VSC by typing `. code `
-- Run the command with this codes: `npm install express express-session mysql2`
-- Run XAMPP and start mysql or you can use any mysql software
-- Open the window command line and enter `mysql -u root -p`
-- Set up database by following these codes:
+* Download Node.js at [Node](https://nodejs.org/en/download)
+* Download XAMPP at [XAMPP](https://www.apachefriends.org/download.html)
+* Download Visual Studio Code or any text editor/IDE of your choice
+* Copy our repository link [Extremis](https://github.com/JakeDongwanKang/2800-202210-BBY15.git)
+* Clone the repository onto your machine and in command line navigate to the repository
+* Run ``cd 2800-202210-BBY15`` and open the app on VSC by typing ``. code ``
+* Run the command with this codes: ``npm install express express-session mysql2``
+* Run XAMPP and start mysql or you can use any mysql software
+* Open the window command line and enter ``mysql -u root -p``
+* Set up database by following these codes:
 
-    `CREATE DATABASE IF NOT EXISTS COMP2800;
-    USE COMP2800;`
+    ``CREATE DATABASE IF NOT EXISTS COMP2800;
+    USE COMP2800;``
 
-    `CREATE TABLE IF NOT EXISTS BBY_15_User (
+    ``CREATE TABLE IF NOT EXISTS BBY_15_User (
     user_id int NOT NULL AUTO_INCREMENT,
     first_name varchar(25) NOT NULL,
     last_name varchar(25) NOT NULL,
@@ -140,9 +140,9 @@ It has the following subfolders and files:
     admin_role boolean NOT NULL,
     join_date datetime,
     num_posts int,
-    PRIMARY KEY (user_id));`
+    PRIMARY KEY (user_id));``
 
-    `CREATE TABLE IF NOT EXISTS BBY_15_Post (
+    ``CREATE TABLE IF NOT EXISTS BBY_15_Post (
     post_id int NOT NULL AUTO_INCREMENT,
     user_id int NOT NULL,
     posted_time datetime NOT NULL,
@@ -152,26 +152,26 @@ It has the following subfolders and files:
     location varchar(60),
     post_status varchar(10) NOT NULL,
     weather_type varchar(20),
-    PRIMARY KEY (post_id));`
+    PRIMARY KEY (post_id));``
 
-    `CREATE TABLE IF NOT EXISTS BBY_15_Post_Images (
+    1`CREATE TABLE IF NOT EXISTS BBY_15_Post_Images (
     image_id int NOT NULL AUTO_INCREMENT,
     post_id int NOT NULL,
     image_location varchar(150),
     PRIMARY KEY (image_id),
-    FOREIGN KEY (post_id) REFERENCES BBY_15_Post(post_id) ON DELETE CASCADE);`
+    FOREIGN KEY (post_id) REFERENCES BBY_15_Post(post_id) ON DELETE CASCADE);``
 
-    INSERT INTO BBY_15_User (first_name, last_name, email, user_password, admin_role, join_date, num_posts) VALUES 
+    ``INSERT INTO BBY_15_User (first_name, last_name, email, user_password, admin_role, join_date, num_posts) VALUES 
     ('Joe', 'Smith', 'joesmith@email.ca', 'password', FALSE, 20220503160135, 0),
-    ('Admin', 'Admin', 'admin@email.ca', 'password', TRUE, 20220503160212, 0);
+    ('Admin', 'Admin', 'admin@email.ca', 'password', TRUE, 20220503160212, 0);``
 
-    `INSERT INTO BBY_15_Post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES
-    (1, 20220516220604, "Bad weather here", "Weather", "weather condition", "Here", "approved", "Bad");`
+    ``INSERT INTO BBY_15_Post (user_id, posted_time, post_content, post_title, post_type, location, post_status, weather_type) VALUES
+    (1, 20220516220604, "Bad weather here", "Weather", "weather condition", "Here", "approved", "Bad");``
 
-- Run the web app locally by executing `extremis-app.js` in command line
-- Open a web browser (Firefox or Chrome is recommended)
-- Go to the http://localhost:8000 to view the app
-- App may be hosted by the user in any way they wish, our group used [Heroku](https://devcenter.heroku.com/articles/deploying-nodejs) and set our GitHub repo to automatically deploy to Heroku. 
+* Run the web app locally by executing `extremis-app.js` in command line
+* Open a web browser (Firefox or Chrome is recommended)
+* Go to the http://localhost:8000 to view the app
+* App may be hosted by the user in any way they wish, our group used [Heroku](https://devcenter.heroku.com/articles/deploying-nodejs) and set our GitHub repo to automatically deploy to Heroku. 
 
 ```
 
