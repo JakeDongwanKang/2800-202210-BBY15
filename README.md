@@ -198,10 +198,14 @@ Here is some of core features of our application
 ## Credits, References, and Licence
 We want to say thank you to Arron and Jason for their examples and lectures on COMP2537
 Thanks to amazing resources and reference that helped us to create this application:
-* [Flaticon](https://www.flaticon.com/)
-* [Fontawesome](https://fontawesome.com/)
-* [Favicon](https://favicon.io/)
-* Logos created by Jake Dongwan Kang and Vincent Lam.
+* Images and Icons:
+- [Flaticon](https://www.flaticon.com/)
+- [Favicon](https://favicon.io/)
+* Font:
+- [Fontawesome](https://fontawesome.com/)
+- [Google font](https://fonts.google.com/)
+* Logos:
+- Created by Jake Dongwan Kang and Vincent Lam.
 
 ## Test Plan
 * Tests on the website were done by checking database values after logins and registrations.
@@ -215,4 +219,5 @@ Team BBY15 is made up of 4 students in the BCIT Computer Systems Technology Dipl
 - Jake Dongwan Kang (CST Term 2) - [mas7253@gmail.com](mas7253@gmail.com) 
 - Anh Nguyen (CST Term 1) - [ngocanhnt269@gmail.com](ngocanhnt269@gmail.com) 
 - Linh Nguyen (CST Term 1) - [k.linh2210@gmail.com](k.linh2210@gmail.com) 
+
 
