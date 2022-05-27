@@ -5,12 +5,12 @@
  * We found some syntax and codes on this website that I can use to create a hambuger menu.
  * https://www.educba.com/hamburger-menu-javascript/
  */
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
 
 toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active')
-})
+    navbarLinks.classList.toggle('active');
+});
 
 /**
  * Sends the user data from the client side to the server side for authentication.
@@ -118,7 +118,7 @@ async function sendDataToDelete(e) {
             }
             document.querySelector("#err-popup").style.display = "none";
         } catch (error) {}
-    })
+    });
 }
 
 //This for loop adds the event listeners to the delete user button
@@ -166,7 +166,7 @@ async function sendDataToMakeUser(e) {
             }
             document.querySelector("#err-popup").style.display = "none";
         } catch (error) {}
-    })
+    });
 }
 
 //This data sends the user data from the client side to the server side so that the specified regular user can become admin user.
@@ -196,7 +196,7 @@ async function sendDataToMakeAdmin(e) {
             }
             document.querySelector("#err-popup").style.display = "none";
         } catch (error) {}
-    })
+    });
 }
 
 /**
@@ -204,4 +204,4 @@ async function sendDataToMakeAdmin(e) {
  */
 document.getElementById("cancel2").addEventListener("click", function () {
     document.querySelector("#err-popup").style.display = "none";
-})
+});

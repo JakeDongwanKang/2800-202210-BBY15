@@ -5,15 +5,13 @@
  * We found some syntax and codes on this website that I can use to create a hambuger menu.
  * https://www.educba.com/hamburger-menu-javascript/
  */
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
 
 toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active')
-})
+    navbarLinks.classList.toggle('active');
+});
 
-
-const dropdown = document.querySelector(".dropdown");
 const select = document.querySelector(".select");
 const caret = document.querySelector(".caret");
 const menu = document.querySelector(".menu");
@@ -138,7 +136,7 @@ for (let i = 0; i < postStatus.length; i++) {
         children[2].style.display = "inline-block";
         children[3].style.display = "inline-block";
         children[4].style.display = "inline-block";
-    })
+    });
 }
 
 
@@ -270,10 +268,10 @@ function expandImage(e) {
  */
 document.querySelector('.popup-image span').onclick = () => {
     document.querySelector('.popup-image').style.display = "none";
-}
+};
 
 document.body.onkeydown = function (e) {
     if (e.which == 27) {
         document.querySelector('.popup-image').style.display = "none";
     }
-}
+};

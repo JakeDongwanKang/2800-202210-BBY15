@@ -5,15 +5,13 @@
  * We found some syntax and codes on this website that I can use to create a hambuger menu.
  * https://www.educba.com/hamburger-menu-javascript/
  */
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
 
 toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active')
-})
+    navbarLinks.classList.toggle('active');
+});
 
-
-const dropdown = document.querySelector(".dropdown");
 const select = document.querySelector(".select");
 const caret = document.querySelector(".caret");
 const menu = document.querySelector(".menu");
@@ -127,7 +125,7 @@ async function sendData(data) {
  * Send user's text input to server to store these data into database.
  * Display an error message if user did not fill in required fields.
  */
-document.getElementById("create").addEventListener("click", function (e) {
+document.getElementById("create").addEventListener("click", function () {
     let postType = document.getElementById("postType").innerText;
     let weatherType;
     let postTitle = document.getElementById("postTitle").value;
@@ -188,7 +186,7 @@ document.getElementById("keep").addEventListener("click", function () {
             weatherType: weatherType.trim()
         });
     }
-})
+});
 
 /**
  * If users click on "Cancel" button in popup message, hide the popup message so that users can edit all input.
@@ -197,7 +195,7 @@ document.getElementById("cancel2").addEventListener("click", function () {
     document.querySelector("#err-popup").style.display = "none";
     // All images stored in formData files will be deleted to avoid appending repetitive images
     formData.delete('files');
-})
+});
 
 /**
  * Removes the error message when user enters input.
@@ -209,9 +207,9 @@ function removeErrorMsg() {
 }
 
 // Go to timeline when user clicks on "Cancel"
-document.getElementById("cancel").addEventListener("click", function (e) {
+document.getElementById("cancel").addEventListener("click", function () {
     window.location.replace("/timeline");
-})
+});
 
 
 /**
@@ -251,7 +249,7 @@ imagesUpload.addEventListener("change", function () {
             let img = document.createElement("img");
             img.setAttribute("src", reader.result);
             figure.insertBefore(img, figCaption);
-        })
+        });
         imageContainer.appendChild(figure);
         reader.readAsDataURL(imagesUpload.files[i]);
     }
@@ -262,15 +260,18 @@ imagesUpload.addEventListener("change", function () {
  * and Geeks for Geeks (https://www.geeksforgeeks.org/how-to-get-city-name-by-using-geolocation/)
  * with changes and adjustments made by Vincent.
  */
+// Gets coordinates
 function getLocation() {
     navigator.geolocation.getCurrentPosition(showPosition);
 }
 
+// Passes coordiantes to API
 function showPosition(position) {
     var coordinates = [position.coords.latitude, position.coords.longitude];
     getCity(coordinates);
 }
 
+// Finds city based on given coordinates
 function getCity(coordinates) {
     var xhr = new XMLHttpRequest();
     var lat = coordinates[0];
@@ -282,7 +283,7 @@ function getCity(coordinates) {
     xhr.send();
     xhr.onreadystatechange = processRequest;
 
-    function processRequest(e) {
+    function processRequest() {
         if (xhr.readyState == 4 && xhr.status == 200) {
             var response = JSON.parse(xhr.responseText);
             var city = response.address.city;

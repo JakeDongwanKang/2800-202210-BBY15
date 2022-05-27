@@ -61,7 +61,7 @@ if (isHeroku) {
     app.listen(port, function () {});
     const {
         uploadFile
-    } = require('./s3')
+    } = require('./s3');
 } else {
     var connection = mysql.createPool(connectionLocal);
     let port = 8000;
@@ -171,11 +171,11 @@ app.get("/user-list", function (req, res) {
                 </tr></head>`;
                 for (let i = 0; i < results.length; i++) {
 
-                    user_list += ("<tbody><tr><td class='id'>" + results[i]['user_id'] +
-                        "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i]['first_name'] +
-                        "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i]['last_name'] +
-                        "</span></td><td class='email'><div class='material-icons'>edit</div><span>" + results[i]['email'] +
-                        "</span></td><td class='password'><div class='material-icons'>edit</div><span>" + results[i]['user_password'] +
+                    user_list += ("<tbody><tr><td class='id'>" + results[i].user_id +
+                        "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i].first_name +
+                        "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i].last_name +
+                        "</span></td><td class='email'><div class='material-icons'>edit</div><span>" + results[i].email +
+                        "</span></td><td class='password'><div class='material-icons'>edit</div><span>" + results[i].user_password +
                         "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_admin'>Make Admin" +
                         "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
                         "</button></td></tr></tbody>"
@@ -184,7 +184,7 @@ app.get("/user-list", function (req, res) {
                 user_list_jsdom.window.document.getElementById("user-container").innerHTML = user_list;
                 res.send(user_list_jsdom.serialize());
             }
-        )
+        );
     } else {
         // if user has not logged in, redirect to login page
         res.redirect("/");
@@ -201,7 +201,7 @@ app.get("/edit", function (req, res) {
     } else {
         res.redirect("/");
     }
-})
+});
 
 // function for getting all admins for admin-list
 app.get("/admin-list", function (req, res) {
@@ -225,11 +225,11 @@ app.get("/admin-list", function (req, res) {
                 </tr></thead>`;
                 for (let i = 0; i < results.length; i++) {
                     if (req.session.user_id != results[i]['user_id']) {
-                        admin_list += ("<tr><td class='id'>" + results[i]['user_id'] +
-                            "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i]['first_name'] +
-                            "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i]['last_name'] +
-                            "</span></td><td class='email'><div class='material-icons'>edit</div><span>" + results[i]['email'] +
-                            "</span></td><td class='password'><div class='material-icons'>edit</div><span>" + results[i]['user_password'] +
+                        admin_list += ("<tr><td class='id'>" + results[i].user_id +
+                            "</td><td class='first_name'><div class='material-icons'>edit</div><span>" + results[i].first_name +
+                            "</span></td><td class='last_name'><div class='material-icons'>edit</div><span>" + results[i].last_name +
+                            "</span></td><td class='email'><div class='material-icons'>edit</div><span>" + results[i].email +
+                            "</span></td><td class='password'><div class='material-icons'>edit</div><span>" + results[i].user_password +
                             "</span></td><td class='role'>" + "<button type='button' class='role_switch_to_user'>Make User" +
                             "</button></td><td class='delete'>" + "<button type='button' class='deleteUser'>Delete" +
                             "</button></td></tr>"
@@ -239,7 +239,7 @@ app.get("/admin-list", function (req, res) {
                 admin_list_jsdom.window.document.getElementById("user-container").innerHTML = admin_list;
                 res.send(admin_list_jsdom.serialize());
             }
-        )
+        );
     } else {
         // if user has not logged in, redirect to login page
         res.redirect("/");
@@ -443,7 +443,7 @@ app.get("/profile", function (req, res) {
                         let userprofile = 'https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg';
                         if (results[i].profile_picture != null) {
                             userprofile = results[i].profile_picture;
-                        };
+                        }
                         var template = `   
                         </br>  
                         <div class="account-body"> 
@@ -556,7 +556,7 @@ if (!isHeroku) {
     // Store images in avatar folder in system if user is accessing through local host
     var storage_avatar = multer.diskStorage({
         destination: function (req, file, callback) {
-            callback(null, "./app/images/avatar/")
+            callback(null, "./app/images/avatar/");
         },
         filename: function (req, file, callback) {
             callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname.split('/').pop().trim());
@@ -565,7 +565,7 @@ if (!isHeroku) {
 } else {
     var storage_avatar = multer.diskStorage({
         destination: function (req, file, callback) {
-            callback(null, "")
+            callback(null, "");
         },
         filename: function (req, file, callback) {
             callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname);
@@ -579,14 +579,15 @@ const uploadAvatar = multer({
 //Upload the user profle into the database
 app.post('/upload-avatar', uploadAvatar.array("files"), async function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
+        var newPath;
         req.files[i].filename = req.files[i].originalname;
         if (!isHeroku) {
-            var newPath = req.files[i].path.substring(3);
+            newPath = req.files[i].path.substring(3);
         } else {
             // Upload image onto S3 bucket
             let folderName = "avatar/";
             const result = await s3.uploadFile(req.files[i], folderName);
-            var newPath = result.Location;
+            newPath = result.Location;
         }
 
         connection.query('UPDATE BBY_15_User SET profile_picture=? WHERE user_id=?',
