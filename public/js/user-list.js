@@ -1,8 +1,8 @@
 "use strict";
 
 /**
- * I found how to do the toggleButton on 1537 course and 1800 course. 
- * I found some syntax and codes on this website that I can use to create a hambuger menu.
+ * We found how to do the toggleButton on 1537 course and 1800 course. 
+ * We found some syntax and codes on this website that I can use to create a hambuger menu.
  * https://www.educba.com/hamburger-menu-javascript/
  */
 const toggleButton = document.getElementsByClassName('toggle-button')[0]
@@ -56,7 +56,7 @@ function editCell(e) {
     text_box.addEventListener("keyup", function (e) {
         if (e.which == 13) { //recognize enter key
             let val = text_box.value;
-            if(val === "") {
+            if (val === "") {
                 let filled_box = document.createElement("span"); //creates the HTML for after done editing
                 filled_box.addEventListener("click", editCell); //makes thing clickable for next time want to edit
                 filled_box.innerHTML = span_text;
@@ -69,7 +69,7 @@ function editCell(e) {
                 filled_box.innerHTML = val;
                 parent.innerHTML = "<div class='material-icons'>edit</div>"; //clears parent node pointer except for edit icon
                 parent.appendChild(filled_box);
-                if(regex.test(parent.parentNode.querySelector(".email :nth-child(2)").innerHTML)) {
+                if (regex.test(parent.parentNode.querySelector(".email :nth-child(2)").innerHTML)) {
                     let dataToSend = {
                         id: parent.parentNode.querySelector(".id").innerHTML,
                         firstName: parent.parentNode.querySelector(".first_name :nth-child(2)").innerHTML.trim(),
