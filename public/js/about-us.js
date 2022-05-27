@@ -3,15 +3,15 @@
  * we found some syntax and codes on this website that I can use to create a hambuger menu.
  * https://www.educba.com/hamburger-menu-javascript/
  */
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
 
 toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active')
-})
+    navbarLinks.classList.toggle('active');
+});
 
 function changeImg() {
-    document.getElementById("ghibli-event").addEventListener("click", function (e) {
+    document.getElementById("ghibli-event").addEventListener("click", function () {
         var image = document.getElementById('myImg');
         if (image.src.match("/assets/team_name_drawing.png")) {
             image.src = "/assets/team_ghibli_drawing.png";

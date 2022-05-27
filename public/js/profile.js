@@ -7,12 +7,12 @@
 
 "use strict";
 //Hambuger menu
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
 
 toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active')
-})
+    navbarLinks.classList.toggle('active');
+});
 
 //Send data to server, then either create or execute an error message.
 async function sendData(data) {
@@ -38,7 +38,7 @@ async function sendData(data) {
 }
 
 //Send the update information of users to server for authentication
-document.getElementById("updateAccount").addEventListener("click", function (e) {
+document.getElementById("updateAccount").addEventListener("click", function () {
     let firstName = document.getElementById("firstName").value.trim();
     let lastName = document.getElementById("lastName").value.trim();
     let email = document.getElementById("userEmail").value.trim();
@@ -58,9 +58,9 @@ document.getElementById("updateAccount").addEventListener("click", function (e) 
 });
 
 // Go to main page when user clicks on "Cancel"
-document.getElementById("cancel").addEventListener("click", function (e) {
+document.getElementById("cancel").addEventListener("click", function () {
     window.location.replace("/main");
-})
+});
 
 // function to store imagines to the database
 const upload_avatar = document.getElementById("upload-images");
@@ -79,14 +79,13 @@ function uploadImages(e) {
         body: formData,
     };
     fetch("/upload-avatar", options)
-        .then(function (res) {}).catch(function (err) {
-            ("Error:", err)
+        .then(function () {}).catch(function (err) {
+            ("Error:", err);
         });
-};
+}
 
 //Function to check the password is matched or not
 function validate_password() {
-
     var pass = document.getElementById('userPassword').value.trim();
     var confirm_pass = document.getElementById('userConfirmPassword').value.trim();
     if (pass != confirm_pass) {
@@ -115,7 +114,7 @@ document.getElementById("reset").addEventListener("click", function () {
     document.querySelector("#firstName").value = oldFirstName;
     document.querySelector("#lastName").value = oldLastName;
     document.querySelector("#userPassword").value = oldPassword;
-})
+});
 
 // Display/Hide password (https://www.csestack.org/hide-show-password-eye-icon-html-javascript/)
 var togglePasswords = document.querySelectorAll('.togglePassword');

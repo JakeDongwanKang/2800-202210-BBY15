@@ -34,7 +34,7 @@ async function sendData(data) {
 
 
 //Send user's email and password to server for authentication
-document.getElementById("signUpButton").addEventListener("click", function (e) {
+document.getElementById("signUpButton").addEventListener("click", function () {
     let firstName = document.getElementById("firstName").value.trim();
     let lastName = document.getElementById("lastName").value.trim();
     let email = document.getElementById("userEmail").value.trim();
@@ -61,9 +61,9 @@ function removeErrorMsg() {
 }
 
 // Go to sign-up when user clicks on "Login Now!"
-document.getElementById("log-in-link").addEventListener("click", function (e) {
+document.getElementById("log-in-link").addEventListener("click", function () {
     window.location.replace("/");
-})
+});
 
 //Function to check the password is matched or not made by Anh
 function validate_password() {

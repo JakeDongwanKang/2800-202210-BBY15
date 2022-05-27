@@ -5,12 +5,12 @@
  * We found some syntax and codes on this website that I can use to create a hambuger menu.
  * https://www.educba.com/hamburger-menu-javascript/
  */
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
 
 toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active')
-})
+    navbarLinks.classList.toggle('active');
+});
 
 /**
  * Sends the user data from the client side to the server side for authentication.
@@ -46,7 +46,7 @@ async function sendData(data) {
 
 
 //Send user's email and password to server for authentication
-document.getElementById("signUpButton").addEventListener("click", function (e) {
+document.getElementById("signUpButton").addEventListener("click", function () {
     let firstName = document.getElementById("firstName").value;
     let lastName = document.getElementById("lastName").value;
     let email = document.getElementById("userEmail").value;
@@ -71,9 +71,9 @@ function removeErrorMsg() {
 }
 
 // Go to dashboard when user clicks on "Cancel"
-document.getElementById("cancel").addEventListener("click", function (e) {
+document.getElementById("cancel").addEventListener("click", function() {
     window.location.replace("/dashboard");
-})
+});
 
 //Function to check the password is matched or not made by Anh
 function validate_password() {

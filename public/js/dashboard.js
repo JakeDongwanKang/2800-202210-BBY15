@@ -5,17 +5,17 @@
  * We found some syntax and codes on this website that I can use to create a hambuger menu.
  * https://www.educba.com/hamburger-menu-javascript/
  */
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
 
 toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active')
-})
+    navbarLinks.classList.toggle('active');
+});
 
-document.getElementById("manage-users").addEventListener("click", function (e) {
+document.getElementById("manage-users").addEventListener("click", function () {
     window.location.replace("/user-list");
-})
+});
 
-document.getElementById("manage-admins").addEventListener("click", function (e) {
+document.getElementById("manage-admins").addEventListener("click", function () {
     window.location.replace("/admin-list");
-})
+});

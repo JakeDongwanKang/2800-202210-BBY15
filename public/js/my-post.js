@@ -8,12 +8,12 @@
 "use strict";
 
 //Hamburger menu
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
-const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('navbar-links')[0];
 
 toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active')
-})
+    navbarLinks.classList.toggle('active');
+});
 
 //Send the update of texts on each post
 async function sendData(data) {
@@ -40,7 +40,6 @@ for (let i = 0; i < records.length; i++) {
 
 //This function helps the user can edit the Cell and get the values readied to send to the serer side.
 function editCell(e) {
-
     let span_text = e.target.innerHTML;
     let parent = e.target.parentNode; //gets parent, so we know which user we're editing
     e.target.remove();
@@ -101,11 +100,11 @@ function editContent(e) {
                     post_content: newValue
                 });
             }
-        })
+        });
     }
 }
 
-
+// Passes post text info from editContent to server side to update database
 async function sendContent(data) {
     try {
         let responseObject = await fetch("/update-post-content", {
@@ -148,7 +147,7 @@ async function sendDataToDelete(e) {
 
             if (parsedJSON.status == "success") {
                 e.target.parentNode.parentNode.parentNode.remove();
-                window.location.replace("/my-post")
+                window.location.replace("/my-post");
             }
             document.querySelector("#err-popup").style.display = "none";
         } catch (error) {}
@@ -184,7 +183,7 @@ async function sendDataToDeleteImage(e) {
         let parsedJSON = await responseObject.json();
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
-            window.location.replace("/my-post")
+            window.location.replace("/my-post");
         }
     } catch (error) {}
 }
@@ -214,10 +213,10 @@ async function uploadImages(e) {
         body: formData,
     };
     // now use fetch
-    await fetch("/change-images-post", options).then(function (res) {
+    await fetch("/change-images-post", options).then(function () {
         window.location.replace("/my-post");
     }).catch(function (err) {
-        ("Error:", err)
+        ("Error:", err);
     });
 }
 
@@ -239,7 +238,7 @@ async function sendDataToaddImage(e) {
         let parsedJSON = await responseObject.json();
         if (parsedJSON.status == "success") {
             parent.parentNode.remove();
-            window.location.replace("/my-post")
+            window.location.replace("/my-post");
         }
     } catch (error) {}
 }
@@ -249,4 +248,4 @@ async function sendDataToaddImage(e) {
  */
 document.getElementById("cancel2").addEventListener("click", function () {
     document.querySelector("#err-popup").style.display = "none";
-})
+});
