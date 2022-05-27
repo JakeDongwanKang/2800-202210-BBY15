@@ -15,16 +15,16 @@ Team BBY15 is made up of 4 students in the BCIT Computer Systems Technology Dipl
 	
 ## Technologies
 This Extremis app is made possible because of amazing people that created:
-* HTML5 for allwong us to create and structure sections, headings, links, paragraphs, and more, on a website using various tags and elements.
+* HTML5 for allowing us to create and structure sections, headings, links, paragraphs, and more, on a website using various tags and elements.
 * CSS for allowing us to style our webapp
-* Node.js for allowing us to use Javascript on the server.
+* Node.js with all the node-modules for allowing us to use Javascript on the server.
 * Express.js for allowing us to easily write a server for our application.
 * Heroku for allowing us to host our app for free.
 * JavaScript for allowing us to implement complex features on web pages.
-* TinyMCE for allowing us to use the editor free.
+* TinyMCE for allowing us to use the text editor free.
 * OpenWeather API for allowing us to receive all essential weather data for a specific location by making only one API call.
 * LocationIQ API for allowing us to access maps, nearby points of interest and nearby countries.
-* Amazon S3 for allowing us to upload images.
+* Amazon S3 for allowing us to upload images for free.
 * MySQL for for allowing us to have a database for free.
 
 Thank you for making these resources free so it's possible for us to create applications with ease!
@@ -56,13 +56,13 @@ Content of the project folder:
 ```
  Top level of project folder: 
 ├── .gitignore                          # Git ignore file
-├── extremis-app                        # server file
+├── extremis-app.js                     # server file
 ├── index.js                 
 ├── Procifile                           # procfile file tells Heroku how to run the application
 ├── package-lock.json
 ├── Package.json 
-├── .env
-├── s3.js            
+├── .env				# .env stores the information of the Amazon S3 service needed to upload images
+├── s3.js            			# this file contains javascript function to upload images onto Amazon S3
 └── README.md               
 
 It has the following subfolders and files:
