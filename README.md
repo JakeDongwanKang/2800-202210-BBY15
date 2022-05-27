@@ -5,7 +5,7 @@
 * [Contents](#content)
 * [Guide](#guide)
 * [Features](#features)
-* [Credits, References, and Licences](#reference)
+* [Credits, References, and Lisences](#references)
 * [Test Plan](#test)
 * [Contact Us](#contact)
 
@@ -194,7 +194,7 @@ ADMIN USERS:
 - Post management
 - Add new users to web app
 
-## Credits, References, and Licence
+## References
 We want to say thank you to Arron and Jason for their examples and lectures on COMP2537
 Thanks to amazing resources and reference that helped us to create this application:
 Images and Icons:
