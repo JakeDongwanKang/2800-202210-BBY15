@@ -338,7 +338,7 @@ app.post("/add-user", function (req, res) {
     let lastName = req.body.lastName;
     let signupemail = req.body.email;
     let signuppassword = req.body.password;
-    let regex = new RegExp("^[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
+    let regex = new RegExp("[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
 
     //Checking to see if any columns in the sign-up page is NULL : if they are, the account cannot be made.
     if (!firstName || !lastName || !signupemail || !signuppassword) {
@@ -386,7 +386,7 @@ app.post("/add-user-as-admin", function (req, res) {
     let lastName = req.body.lastName;
     let signupemail = req.body.email;
     let signuppassword = req.body.password;
-    let regex = new RegExp("^[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
+    let regex = new RegExp("[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
 
     //Checking to see if any columns in the sign-up page is NULL : if they are, the account cannot be made.
     if (!firstName || !lastName || !signupemail || !signuppassword) {
@@ -537,7 +537,7 @@ const uploadAvatar = multer({
 app.post("/profile", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    let regex = new RegExp("^[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
+    let regex = new RegExp("[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
 
     if (!regex.test(req.body.email)) {
         res.send({
@@ -598,7 +598,7 @@ app.get("/logout", function (req, res) {
 app.post('/update-user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    let regex = new RegExp("^[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
+    let regex = new RegExp("[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
     if (!regex.test(req.body.email)) {
         res.send({
             status: "invalid email",
