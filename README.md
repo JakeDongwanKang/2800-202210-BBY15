@@ -185,29 +185,26 @@ Here is the guideline on how to run our project:
 How to use our application? 
 Here is some of core features of our application.
 REGULAR USER:
-* Get real-time weather conditions
-* Create posts about weather conditions, supplies, safe places with images
-* Edit posts
+    * Get real-time weather conditions
+    * Create posts about weather conditions, supplies, safe places with images
+    * Edit posts
 ADMIN USERS:
-* User management
-* Other admin management
-* Post management
-* Add new users to web app
+    * User management
+    * Other admin management
+    * Post management
+    * Add new users to web app
 
 ## References
 We want to say thank you to Arron and Jason for their examples and lectures on COMP2537
 Thanks to amazing resources and reference that helped us to create this application:
 Images and Icons:
-
-* [Flaticon](https://www.flaticon.com/)
-* [Favicon](https://favicon.io/)
+    * [Flaticon](https://www.flaticon.com/)
+    * [Favicon](https://favicon.io/)
 Fonts:
-
-* [Fontawesome](https://fontawesome.com/)
-* [Google font](https://fonts.google.com/)
+    * [Fontawesome](https://fontawesome.com/)
+    * [Google font](https://fonts.google.com/)
 Logos:
-
-* Created by Jake Dongwan Kang and Vincent Lam.
+    * Created by Jake Dongwan Kang and Vincent Lam.
 
 ## Test
 * Tests on the website were done by checking database values after logins and registrations.
