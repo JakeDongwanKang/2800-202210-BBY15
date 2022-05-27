@@ -50,7 +50,7 @@ function editCell(e) {
     let span_text = e.target.innerHTML;
     let parent = e.target.parentNode; //gets parent, so we know which user we're editing
     let text_box = document.createElement("input"); //creates the text box for accepting changes
-    let regex = new RegExp("^[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
+    let regex = new RegExp("[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
 
     text_box.value = span_text;
     text_box.addEventListener("keyup", function (e) {
