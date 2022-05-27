@@ -15,7 +15,7 @@ Team BBY15 is made up of 4 students in the BCIT Computer Systems Technology Dipl
 	
 ## Technologies
 This Extremis app is made possible because of amazing people that created:
-* HTML5 for allwing us to create and structure sections, headings, links, paragraphs, and more, on a website using various tags and elements.
+* HTML5 for allwong us to create and structure sections, headings, links, paragraphs, and more, on a website using various tags and elements.
 * CSS for allowing us to style our webapp
 * Node.js for allowing us to use Javascript on the server.
 * Express.js for allowing us to easily write a server for our application.
@@ -36,9 +36,10 @@ Thank you for making these resources free so it's possible for us to create appl
     Users can create posts to announce weather locations in their area, potential safe shelters, track supplies or if the user needs help evacuating.
     Users can upload images in their posts. Users can also edit/ delete their posts, add/delete images to their posts later. We also provide admin privileges including user management, admin management, and post management.
 
-- How our repo is organized
-* App - that holds all html files and images.
-* Public - that holds all of the static resources such as assets, css, and javascript files.
+- How our repo is organized?
+We have two main folders: 
+    * App - that holds all of the static resources html files and images (avatars and post images that imports by users).
+    * Public - that holds all of the static resources such as assets, css, and javascript files.
 
 ## Test Plan
 - Tests on the website were done by checking database values after logins and registrations.
@@ -52,10 +53,10 @@ Content of the project folder:
 
 ```
  Top level of project folder: 
-├── .gitignore               # Git ignore file
-├── extremis-app             # server file
-├── index.html
-├── Procifile
+├── .gitignore                          # Git ignore file
+├── extremis-app                        # server file
+├── index.js                 
+├── Procifile                           # procfile file tells Heroku how to run the application
 ├── package-lock.json
 ├── Package.json            
 └── README.md               
@@ -63,27 +64,69 @@ Content of the project folder:
 It has the following subfolders and files:
 
 ├── public
-|     ├── assets                     # Folder for images
-|     ├── css                        # Folder for styles    
-|     └── js                         # Folder for scripts
-|
-├── app
-      ├── html                       # Folder for pages      
-      └── images 
-            ├── avatar               # Folder for avatar    
-            └── post-images          # Folder for post images       
+|       ├── assets                      # Folder for images
+|       ├── css                         # Folder for styles 
+|       |     ├── about-us.css
+|       |     ├── add-user.css              
+|       |     ├── create-post.css            
+|       |     ├── dashboard.css              
+|       |     ├── login.css               
+|       |     ├── main.css
+|       |     ├── my-post.css
+|       |     ├── post-list.css             
+|       |     ├── profile.css        
+|       |     ├── sign-up.css             
+|       |     ├── timeline.css              
+|       |     ├── user-list.css
+|       |     └── weather-forecast.css                        
+|       └── js                           # Folder for scripts
+|           ├── about-us.js
+|           ├── add-user.js               
+|           ├── create-post.js            
+|           ├── dashboard.js                 
+|           ├── login.js               
+|           ├── main.js
+|           ├── my-post.js
+|           ├── post-list.js             
+|           ├── profile.js           
+|           ├── sign-up.js              
+|           ├── timeline.js              
+|           ├── user-list.js
+|           └── weather-forecast.js
+└── app
+     ├── html                              # Folder for pages  
+     |      ├── about-us.html
+     |      ├── add-user.html 
+     |      ├── add-admin.html             
+     |      ├── create-post.html            
+     |      ├── dashboard.html                 
+     |      ├── error-page.html   
+     |      ├── login.html               
+     |      ├── main.html
+     |      ├── my-post.html
+     |      ├── post-list.html             
+     |      ├── profile.html           
+     |      ├── sign-up.html              
+     |      ├── timeline.html              
+     |      ├── user-list.html
+     |      └── weather-forecast.html                          
+     └── images 
+            ├── avatar                      # Folder for avatar    
+            └── post-images                 # Folder for post images       
 
 
-## Guide
+## Guide start
 - Download Node.js at [Node](https://nodejs.org/en/download)
 - Download XAMPP at [XAMPP](https://www.apachefriends.org/download.html)
 - Download Visual Studio Code or any text editor/IDE of your choice
 - Copy our repository link [Extremis](https://github.com/JakeDongwanKang/2800-202210-BBY15.git)
 - Clone the repository onto your machine and in command line navigate to the repository
-- Run the command `npm install express express-session mysql2`
+- Run `cd 2800-202210-BBY15` and open the app on VSC by typing `. code `
+- Run the command with this codes: `npm install express express-session mysql2`
 - Run XAMPP and start mysql or you can use any mysql software
 - Open the window command line and enter `mysql -u root -p`
 - Set up database by following these codes:
+
     `CREATE DATABASE IF NOT EXISTS COMP2800;
     USE COMP2800;`
 
@@ -128,7 +171,7 @@ It has the following subfolders and files:
 - Run the web app locally by executing `extremis-app.js` in command line
 - Open a web browser (Firefox or Chrome is recommended)
 - Go to the http://localhost:8000 to view the app
-- App may be hosted by the user in any way they wish, we used [Heroku](https://devcenter.heroku.com/articles/deploying-nodejs) and set our GitHub repo to automatically deploy to Heroku. A guide to auto-deploying onto Heroku from GitHub can be found here
+- App may be hosted by the user in any way they wish, our group used [Heroku](https://devcenter.heroku.com/articles/deploying-nodejs) and set our GitHub repo to automatically deploy to Heroku. 
 
 ```
 
