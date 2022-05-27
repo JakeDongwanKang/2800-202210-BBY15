@@ -112,6 +112,7 @@ async function sendDataToDelete(e) {
             let parsedJSON = await responseObject.json();
             if (parsedJSON.status == "success") {
                 parent.parentNode.remove();
+                document.getElementById("emptyError").innerHTML = `<small style="color:green;">*Changes saved*</small>`;
             }
             document.querySelector("#err-popup").style.display = "none";
         } catch (error) {}
@@ -159,6 +160,7 @@ async function sendDataToMakeUser(e) {
             let parsedJSON = await responseObject.json();
             if (parsedJSON.status == "success") {
                 parent.parentNode.remove();
+                document.getElementById("emptyError").innerHTML = `<small style="color:green;">*Changes saved*</small>`;
             }
             document.querySelector("#err-popup").style.display = "none";
         } catch (error) {}
@@ -188,6 +190,7 @@ async function sendDataToMakeAdmin(e) {
             let parsedJSON = await responseObject.json();
             if (parsedJSON.status == "success") {
                 parent.parentNode.remove();
+                document.getElementById("emptyError").innerHTML = `<small style="color:green;">*Changes saved*</small>`;
             }
             document.querySelector("#err-popup").style.display = "none";
         } catch (error) {}
