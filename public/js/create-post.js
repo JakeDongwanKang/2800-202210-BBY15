@@ -286,7 +286,7 @@ function getCity(coordinates) {
         if (xhr.readyState == 4 && xhr.status == 200) {
             var response = JSON.parse(xhr.responseText);
             var city = response.address.city;
-            document.getElementById("postLocation").value = city + " " + lat + ", " + lng;
+            document.getElementById("postLocation").value = city;
             return;
         }
     }
