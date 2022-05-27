@@ -31,8 +31,12 @@ async function sendData(data) {
             body: JSON.stringify(data)
         });
         let parsedJSON = await responseObject.json();
-        if(parsedJSON.status == "fail") {
+        if (parsedJSON.status == "fail") {
             document.getElementById("emptyError").innerHTML = "<small>*Every column has to be filled*</small>";
+        } else if (parsedJSON.status == "duplicate") {
+            document.getElementById("emptyError").innerHTML = "<small>*This email is already registered to an account*</small>";
+        } else if (parsedJSON.status == "invalid email") {
+            document.getElementById("emptyError").innerHTML = "<small>*Invalid email address*</small>";
         } else {
             window.location.replace("/dashboard");
         }
@@ -61,6 +65,7 @@ document.getElementById("signUpButton").addEventListener("click", function(e) {
 //This function removes the error message once one of the columns are clicked.
 function removeErrorMsg() {
     document.getElementById("emptyError").innerHTML = "";
+    document.getElementById("signUpButton").style.disabled = true;
 }
 
 // Go to dashboard when user clicks on "Cancel"
@@ -68,14 +73,33 @@ document.getElementById("cancel").addEventListener("click", function (e) {
     window.location.replace("/dashboard");
 })
 
+//Function to check the password is matched or not made by Anh
+function validate_password() {
+    var pass = document.getElementById('userPassword').value.trim();
+    var confirm_pass = document.getElementById('userConfirmPassword').value.trim();
+    if (pass != confirm_pass) {
+        document.getElementById('wrong_pass_alert').style.color = 'red';
+        document.getElementById('wrong_pass_alert').innerHTML = '☒ Please enter the same password';
+        document.getElementById('signUpButton').disabled = true;
+        document.getElementById('signUpButton').style.opacity = (0.4);
+    } else {
+        document.getElementById('wrong_pass_alert').style.color = 'green';
+        document.getElementById('wrong_pass_alert').innerHTML =
+            '🗹 Password Matched';
+        document.getElementById('signUpButton').disabled = false;
+        document.getElementById('signUpButton').style.opacity = (1);
+    }
+}
+
 // Display/Hide password (https://www.csestack.org/hide-show-password-eye-icon-html-javascript/)
-const togglePassword = document.querySelector('#togglePassword');
-  const password = document.querySelector('#userPassword');
- 
-  togglePassword.addEventListener('click', function (e) {
-    // toggle the type attribute
-    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-    password.setAttribute('type', type);
-    // toggle the eye slash icon
-    this.classList.toggle('fa-eye-slash');
-});
+var togglePasswords = document.querySelectorAll('.togglePassword');
+for (let i = 0; i < togglePasswords.length; i++) {
+    togglePasswords[i].addEventListener('click', function (e) {
+        const password = e.target.previousElementSibling;
+        // toggle the type attribute
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        // toggle the eye slash icon
+        this.classList.toggle('fa-eye-slash');
+    });
+}

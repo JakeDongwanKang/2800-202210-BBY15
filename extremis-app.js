@@ -350,7 +350,7 @@ app.post("/add-user", function (req, res) {
             connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
                 [req.body.firstName, req.body.lastName, req.body.email, req.body.password],
                 function (error, results, fields) {
-                    if (!results) {
+                    if (error && error.errno==1062) {
                         res.send({
                             status: "duplicate",
                             msg: "This email is already registered to an account."
@@ -399,10 +399,17 @@ app.post("/add-user-as-admin", function (req, res) {
             connection.query('INSERT INTO BBY_15_User (first_name, last_name, email, user_password) VALUES (?, ?, ?, ?)',
                 [req.body.firstName, req.body.lastName, req.body.email, req.body.password, ],
                 function (error, results, fields) {
-                    res.send({
-                        status: "success",
-                        msg: "Record added."
-                    });
+                    if (error && error.errno==1062) {
+                        res.send({
+                            status: "duplicate",
+                            msg: "This email is already registered to an account."
+                        });
+                    } else {
+                        res.send({
+                            status: "success",
+                            msg: "Record added."
+                        });
+                    }
                 });
         }
     }
@@ -586,26 +593,30 @@ app.post('/update-user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     let regex = new RegExp("^[^.]+([p{L|M|N|P|S} ]*)+[^\.]@[^\.]+([p{L|M|N|P|S} ]*).+[^\.]$");
-    if (!regex.test(req.body.email)) {
-        res.send({
-            status: "invalid email",
-            msg: "This email is invalid."
-        });
-    } else {
-        connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ? WHERE user_id = ?',
+        if (!regex.test(req.body.email)) {
+            res.send({
+                status: "invalid email",
+                msg: "This email is invalid."
+            });
+        } else {
+            connection.query('UPDATE BBY_15_User SET first_name = ?, last_name = ?, email = ?, user_password = ? WHERE user_id = ?',
             [req.body.firstName, req.body.lastName, req.body.email, req.body.password, parseInt(req.body.id)],
             function (error, results, fields) {
-                if (error) {
-                    console.log(error);
-                }
-                res.send({
+                if (error && error.errno==1062) {
+                    res.send({
+                        status: "duplicate",
+                        msg: "This email is already registered to an account."
+                    });
+                } else {
+                    console.log(results);
+                    res.send({
                     status: "success",
                     msg: "Recorded updated."
                 });
+            }
             });
-    }
+        }
 });
-
 /** POST: we are changing stuff on the server!!!
  *  This user allows admins to click on delete user button to delete the user in the following row.
  */
