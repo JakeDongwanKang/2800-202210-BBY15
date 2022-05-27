@@ -200,6 +200,24 @@ button {
     border-radius: 50px;
 }
 
+span{
+    cursor: pointer;
+}
+
+#reminder {
+    width: 130px;
+    background-color: #3477F9;
+    color:#ffffff;
+    right: 45%;
+    top:50%;
+    position: fixed;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 10px;
+    display: none;
+    font-size: 14px;
+}
+
 /* Popup message starts */
 #err-popup {
     position: fixed;

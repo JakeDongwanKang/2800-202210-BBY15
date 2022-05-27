@@ -160,6 +160,9 @@ input:hover {
   background-color: #3477F9;
   color: #ffffff;
   outline: none;
+}
+
+#cancel{
   cursor: pointer;
 }
 

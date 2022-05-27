@@ -59,7 +59,9 @@ if (isHeroku) {
     var connection = mysql.createPool(connectionHeroku);
     let port = process.env.PORT || 3000;
     app.listen(port, function () {});
-
+    const {
+        uploadFile
+    } = require('./s3')
 } else {
     var connection = mysql.createPool(connectionLocal);
     let port = 8000;
@@ -461,7 +463,7 @@ app.get("/profile", function (req, res) {
                                 <div class="form-group">
                                     <label for="firstName">First Name
                                         <div class="tooltip">&#x270e;
-                                            <span class="tooltiptext">Editable</span>
+                                            <p class="tooltiptext">Click on text to edit</p>
                                         </div>  
                                     </label>
                                     <input type="text" class="um-input" id="firstName" value=${firstname}> 
@@ -469,7 +471,7 @@ app.get("/profile", function (req, res) {
                                 <div class="form-group">
                                     <label for="lastName">Last Name
                                         <div class="tooltip">&#x270e;
-                                            <span class="tooltiptext">Editable</span>
+                                            <p class="tooltiptext">Click on text to edit</p>
                                         </div> 
                                     </label>
                                     <input type="text" class="um-input" id="lastName" value=${lastname}>
@@ -481,7 +483,7 @@ app.get("/profile", function (req, res) {
                                 <div class="form-group">
                                     <label for="password">Password
                                         <div class="tooltip">&#x270e;
-                                            <span class="tooltiptext">Editable</span>
+                                            <p class="tooltiptext">Click on text to edit</p>
                                         </div> 
                                     </label>
                                     <input type="password" id="userPassword" required="required"value=${password} />
@@ -490,7 +492,7 @@ app.get("/profile", function (req, res) {
                                 <div class="form-group">
                                     <label for="password">Confirm password
                                         <div class="tooltip">&#x270e;
-                                            <span class="tooltiptext">Editable</span>
+                                            <p class="tooltiptext">Click on text to edit</p>
                                         </div> 
                                     </label>
                                     <input type="password" id="userConfirmPassword" required="required"
@@ -521,18 +523,6 @@ app.get("/profile", function (req, res) {
     }
 });
 
-const storage_avatar = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, "./app/images/avatar/")
-    },
-    filename: function (req, file, callback) {
-        callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname.split('/').pop().trim());
-    }
-});
-const uploadAvatar = multer({
-    storage: storage_avatar
-});
-
 //Store user update information and avatar
 app.post("/profile", function (req, res) {
     res.setHeader('Content-Type', 'application/json');
@@ -561,13 +551,46 @@ app.post("/profile", function (req, res) {
     }
 });
 
+// Set up the storage and file name for uploaded images
+if (!isHeroku) {
+    // Store images in avatar folder in system if user is accessing through local host
+    var storage_avatar = multer.diskStorage({
+        destination: function (req, file, callback) {
+            callback(null, "./app/images/avatar/")
+        },
+        filename: function (req, file, callback) {
+            callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname.split('/').pop().trim());
+        }
+    });
+} else {
+    var storage_avatar = multer.diskStorage({
+        destination: function (req, file, callback) {
+            callback(null, "")
+        },
+        filename: function (req, file, callback) {
+            callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname);
+        }
+    });
+}
+const uploadAvatar = multer({
+    storage: storage_avatar
+});
+
 //Upload the user profle into the database
-app.post('/upload-avatar', uploadAvatar.array("files"), function (req, res) {
+app.post('/upload-avatar', uploadAvatar.array("files"), async function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
-        let newpath = req.files[i].path.substring(3);
+        if (!isHeroku) {
+            var newPath = req.files[i].path.substring(3);
+        } else {
+            // Upload image onto S3 bucket
+            let folderName = "avatar/";
+            const result = await s3.uploadFile(req.files[i], folderName);
+            var newPath = result.Location;
+        }
+
         connection.query('UPDATE BBY_15_User SET profile_picture=? WHERE user_id=?',
-            [newpath, req.session.user_id],
+            [newPath, req.session.user_id],
             function (error, results, fields) {
                 res.send({
                     status: "success",
@@ -614,7 +637,6 @@ app.post('/update-user', function (req, res) {
                         msg: "This email is already registered to an account."
                     });
                 } else {
-                    console.log(results);
                     res.send({
                         status: "success",
                         msg: "Recorded updated."
@@ -754,23 +776,44 @@ app.post("/add-post", function (req, res) {
  * Store images information into the database. These images are uploaded by users when they create a post.
  * The following codes follow Instructor Arron's example with changes and adjustments made by Linh.
  */
-const storage_post_images = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, "./app/images/post-images/")
-    },
-    filename: function (req, file, callback) {
-        callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname);
-    }
-});
-const uploadPostImages = multer({
+var s3 = require('./s3');
+if (!isHeroku) {
+    // Store images in post-images folder in system if user is accessing through local host
+    var storage_post_images = multer.diskStorage({
+        destination: function (req, file, callback) {
+            callback(null, "./app/images/post-images/")
+        },
+        filename: function (req, file, callback) {
+            callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname);
+        }
+    });
+
+} else {
+    var storage_post_images = multer.diskStorage({
+        destination: function (req, file, callback) {
+            callback(null, "")
+        },
+        filename: function (req, file, callback) {
+            callback(null, req.session.user_id + "AT" + Date.now() + "AND" + file.originalname);
+        }
+    });
+}
+var uploadPostImages = multer({
     storage: storage_post_images
 });
 
-app.post('/upload-post-images', uploadPostImages.array("files"), function (req, res) {
+app.post('/upload-post-images', uploadPostImages.array("files"), async function (req, res) {
     if (req.files.length > 0) {
         for (let i = 0; i < req.files.length; i++) {
             req.files[i].filename = req.files[i].originalname;
-            let newpathImages = req.files[i].path.substring(3);
+            if (!isHeroku) {
+                var newpathImages = req.files[i].path.substring(3);
+            } else {
+                // Upload image onto S3 bucket
+                let folderName = "post-images/"
+                const result = await s3.uploadFile(req.files[i], folderName);
+                var newpathImages = result.Location;
+            }
 
             connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
                 [req.session.postID, newpathImages],
@@ -890,13 +933,18 @@ app.post('/search-timeline', function (req, res) {
                     for (var i = 0; i < results.length; i++) {
                         let firstName = results[i].first_name;
                         let lastName = results[i].last_name;
-                        let profilePic = results[i].profile_picture;
                         let postTime = results[i].posted_time;
                         let contentPost = results[i].post_content;
                         let postTitle = results[i].post_title;
                         let postlocation = results[i].location;
                         let typeWeather = results[i].weather_type;
                         let postImages = results[i].image_location;
+                        let profilePic;
+                        if (results[i].profile_picture != null) {
+                            profilePic = results[i].profile_picture;
+                        } else {
+                            profilePic = "https://extremis-bby15.s3.ca-central-1.amazonaws.com/default-profile.jpg";
+                        }
                         template += `   
                     </br>  
                     <div class="post_content">
@@ -1083,22 +1131,22 @@ app.get("/my-post", function (req, res) {
                                             <p class="post_status"><u>Post status:</u> ` + postStatus + `</p> </br>                                            
                                             <u>Weather Type:</u>  
                                             <div class="tooltip">&#x270e;
-                                                <span class="tooltiptext">Editable</span>
+                                                <p class="tooltiptext">Click on text to edit</p>
                                             </div>    
                                             <h3 class="weather_type"><span>` + typeWeather + `</span></h3><br>
                                             <u>Title:</u>
                                             <div class="tooltip">&#x270e;
-                                                <span class="tooltiptext">Editable</span>
+                                                <p class="tooltiptext">Click on text to edit</p>
                                             </div>      
                                             <h4 class="post_title"><span>` + postTitle + `</span></h4><br> 
                                             <u>Location:</u> 
                                             <div class="tooltip">&#x270e;
-                                                <span class="tooltiptext">Editable</span>
+                                                <p class="tooltiptext">Click on text to edit</p>
                                             </div>             
                                             <p class="location"><span>` + postlocation + `</span></p><br> 
                                             <u>Description:</u> 
                                             <div class="tooltip">&#x270e;
-                                                <span class="tooltiptext">Editable</span>
+                                                <p class="tooltiptext">Click on text to edit</p>
                                             </div>        
                                             </br><div class="post_content" onclick="editContent(this)">` + contentPost + `</div>
                                             <form class="upload-images">
@@ -1196,10 +1244,18 @@ app.post("/change-images-post-data", function (req, res) {
  * Redirect to the my post and update the new images if user changes post's images
  * The following codes follow Instructor Arron's example with changes and adjustments made by Anh Nguyen.
  */
-app.post("/change-images-post", uploadPostImages.array("files"), function (req, res) {
+app.post("/change-images-post", uploadPostImages.array("files"), async function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
-        let newpath = req.files[i].path.substring(3);
+        if (!isHeroku) {
+            var newpath = req.files[i].path.substring(3);
+        } else {
+            // Upload image onto S3 bucket
+            let folderName = "post-images/"
+            const result = await s3.uploadFile(req.files[i], folderName);
+            var newpath = result.Location;
+        }
+
         connection.query('INSERT INTO BBY_15_Post_Images (post_id, image_location) VALUES (?, ?)',
             [req.session.postID, newpath],
             function (error, results, fields) {

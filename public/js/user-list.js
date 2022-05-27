@@ -54,7 +54,9 @@ function editCell(e) {
 
     text_box.value = span_text;
     text_box.addEventListener("keyup", function (e) {
+        document.getElementById("reminder").style.display = "block";
         if (e.which == 13) { //recognize enter key
+            document.getElementById("reminder").style.display = "none";
             let val = text_box.value;
             if (val === "") {
                 let filled_box = document.createElement("span"); //creates the HTML for after done editing
