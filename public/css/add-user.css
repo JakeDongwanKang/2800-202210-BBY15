@@ -156,6 +156,10 @@ input:hover {
   cursor: pointer;
 }
 
+#cancel{
+  cursor: pointer;
+}
+
 footer {
   left: 0;
   bottom: 0;
