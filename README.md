@@ -30,6 +30,7 @@ This Extremis app is made possible because of amazing people that created:
 Thank you for making these resources free so it's possible for us to create applications with ease!
 
 ## Overview
+- The link for our project: [Extremis](https://extremis-bby15.herokuapp.com) for our amazing website
 - What did we made?
     We developed Extremis, a web app designed to tackle numerous extreme weather conditions safely and efficiently.
     Our webapp can access or provide information on current weather conditions. 
@@ -59,7 +60,9 @@ Content of the project folder:
 ├── index.js                 
 ├── Procifile                           # procfile file tells Heroku how to run the application
 ├── package-lock.json
-├── Package.json            
+├── Package.json 
+├── .env
+├── s3.js            
 └── README.md               
 
 It has the following subfolders and files:
@@ -172,7 +175,7 @@ It has the following subfolders and files:
     (1, 20220516220604, "Bad weather here", "Weather", "weather condition", "Here", "approved", "Bad");`
 
 - Run the web app locally by executing `extremis-app.js` in command line
-- Open a web browser (Firefox or Chrome is recommended)
+- Open a web browser (Firefox or Chrome or Microsoft Edge is recommended)
 - Go to the http://localhost:8000 to view the app
 - App may be hosted by the user in any way they wish, our group used [Heroku](https://devcenter.heroku.com/articles/deploying-nodejs) 
     and set our GitHub repo to automatically deploy to Heroku. 
